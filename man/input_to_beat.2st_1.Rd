@@ -47,8 +47,8 @@ target_vars <- c("income_hh",
                  "active",
                  "inactive",
                  "unemployed")         # target variables
-deff_vars <- "stratum"                 # stratification variables to be used when calculating deff and effst 
-                                       #    (n.b: must coincide or be a subset of variables of stratification)
+deff_vars <- "stratum"    # stratification variables for calculating deff and effst 
+                          # (n.b: must coincide or be a subset of variables of stratification)
 id_PSU <- c("municipality")            # identification variable of PSUs
 id_SSU <- c("id_hh")                   # identification variable of SSUs
 domain_vars <- c("region")             # domain variables
