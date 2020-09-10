@@ -50,7 +50,7 @@ des_file=design, psu_file=PSU_strat,rho=rho)
 allocation2st_1$alloc
 # with these precision constraints 
 errors
-# and these expacted coefficient of variaction
+# and these expected coefficient of variation
 allocation2st_1$expected
 
 # Now, fit the output of beat.2st to allocation, that is
