@@ -1,0 +1,27 @@
+---
+output: github_document
+keep_md: TRUE
+---
+
+<!-- NEWS.md is generated from NEWS.Rmd. Please edit NEWS.Rmd file -->
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "README-"
+)
+```
+
+# R2BEAT 1.0.2
+
+## Major changes
+
+* Added two functions ('input_to_beat.2st_1' and 'input_to_beat.2st_2') to prepare inputs for the allocation step
+
+* Added function 'StratSel' executing the PSU selection step
+
+* Fixed some bugs 
+
+# R2BEAT 1.0.1  
+ 
