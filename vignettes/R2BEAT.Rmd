@@ -28,7 +28,6 @@ vignette: >
 options(width=400)
 knitr::opts_chunk$set(echo = TRUE, fig.width=6, fig.height=4)
 # Install ReGenesees if not already installed
-require(devtools)
 if(!require(ReGenesees)){
     devtools::install_github("DiegoZardetto/ReGenesees")
   }

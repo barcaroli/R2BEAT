@@ -8,7 +8,6 @@ input_to_beat.2st_1 <- function (RGdes, RGcal, id_PSU, id_SSU, strata_vars, targ
           domain_vars) 
 {
   if(!require(ReGenesees)){
-    require(devtools)
     devtools::install_github("DiegoZardetto/ReGenesees")
   }
   library(ReGenesees)
