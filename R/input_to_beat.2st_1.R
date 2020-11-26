@@ -7,6 +7,10 @@
 input_to_beat.2st_1 <- function (RGdes, RGcal, id_PSU, id_SSU, strata_vars, target_vars, deff_vars, 
           domain_vars) 
 {
+  if(!require(ReGenesees)){
+    devtools::install_github("DiegoZardetto/ReGenesees")
+  }
+  library(ReGenesees)
   ################### control of categorical target variables ######
   for (i in (1:length(target_vars))) {
     tvi <- target_vars[i]
