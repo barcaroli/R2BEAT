@@ -28,17 +28,14 @@ vignette: >
 options(width=400)
 knitr::opts_chunk$set(echo = TRUE, fig.width=6, fig.height=4)
 # Install ReGenesees if not already installed
+require(devtools)
 if(!require(ReGenesees)){
-    require(devtools)
     devtools::install_github("DiegoZardetto/ReGenesees")
   }
 library(ReGenesees)
 library(R2BEAT)
 library(plyr)
 library(sampling)
-# source("beat.2st.R")
-# library(FS4)
-# source("StratSel.R")
 options(warn=-1)
 options(scipen=9999)
 ```
