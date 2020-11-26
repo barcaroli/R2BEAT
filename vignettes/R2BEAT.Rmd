@@ -29,6 +29,7 @@ options(width=400)
 knitr::opts_chunk$set(echo = TRUE, fig.width=6, fig.height=4)
 # Install ReGenesees if not already installed
 if(!require(ReGenesees)){
+    require(devtools)
     devtools::install_github("DiegoZardetto/ReGenesees")
   }
 library(ReGenesees)
