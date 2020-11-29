@@ -98,13 +98,13 @@ input_to_beat.2st_1 <- function (RGdes, RGcal, id_PSU, id_SSU, strata_vars, targ
     eval(parse(text=st))
     if (sw == FALSE) {
       Mi <- NULL
-      st <- paste0("Mi <- svystat(RGcal,kind ='TM',estimator='Mean',y= ~", 
+      st <- paste0("Mi <- ReGenesees::svystat(RGcal,kind ='TM',estimator='Mean',y= ~", 
                  tvi, ",by= ~", sv2, ",forGVF=FALSE)")
       eval(parse(text = st))
       M <- cbind(M,Mi[,length(strata_vars)+1])
     }
     if (sw == TRUE) {
-      st <- paste0("Mi <- svystat(RGcal,kind ='TM',estimator='Mean',y= ~", 
+      st <- paste0("Mi <- ReGenesees::svystat(RGcal,kind ='TM',estimator='Mean',y= ~", 
                    tvi, ",by= ~", sv2, ",forGVF=FALSE)")
       eval(parse(text = st))
       M <- cbind(M,Mi[,length(strata_vars)+2])
@@ -176,7 +176,7 @@ input_to_beat.2st_1 <- function (RGdes, RGcal, id_PSU, id_SSU, strata_vars, targ
     st <- paste0("sw <- class(RGcal$variables$",tvi,") == 'factor'")
     eval(parse(text=st))
     if (sw == FALSE) {
-        st <- paste0("deffi <- svystat(RGdes,kind ='TM',estimator='Mean',y= ~", 
+        st <- paste0("deffi <- ReGenesees::svystat(RGdes,kind ='TM',estimator='Mean',y= ~", 
                tvi, ",by=~", dv, ",deff=TRUE,forGVF=TRUE)")
         eval(parse(text = st))
         for (j in 1:nrow(deffi)) {
@@ -191,7 +191,7 @@ input_to_beat.2st_1 <- function (RGdes, RGcal, id_PSU, id_SSU, strata_vars, targ
         deff <- rbind(deff,deffi)
     }
     if (sw == TRUE) {
-        st <- paste0("deffi <- svystat(RGdes,kind ='TM',estimator='Mean',y= ~", 
+        st <- paste0("deffi <- ReGenesees::svystat(RGdes,kind ='TM',estimator='Mean',y= ~", 
                tvi, ",by=~", dv, ",deff=TRUE,forGVF=TRUE)")
         eval(parse(text = st))
         for (j in 1:nrow(deffi)) {
@@ -259,7 +259,7 @@ input_to_beat.2st_1 <- function (RGdes, RGcal, id_PSU, id_SSU, strata_vars, targ
     st <- paste0("sw <- class(RGcal$variables$",tvi,") == 'factor'")
     eval(parse(text=st))
     if (sw == FALSE) {
-        st <- paste0("effsti <- svystat(RGcal,kind ='TM',estimator='Mean',y= ~", 
+        st <- paste0("effsti <- ReGenesees::svystat(RGcal,kind ='TM',estimator='Mean',y= ~", 
                tvi, ",by=~", dv, ",deff=TRUE,forGVF=TRUE)")
         eval(parse(text = st))
         for (j in 1:nrow(effsti)) {
@@ -274,7 +274,7 @@ input_to_beat.2st_1 <- function (RGdes, RGcal, id_PSU, id_SSU, strata_vars, targ
         effst <- rbind(effst,effsti)
     }
     if (sw == TRUE) {
-        st <- paste0("effsti <- svystat(RGdes,kind ='TM',estimator='Mean',y= ~", 
+        st <- paste0("effsti <- ReGenesees::svystat(RGdes,kind ='TM',estimator='Mean',y= ~", 
                tvi, ",by=~", dv, ",deff=TRUE,forGVF=TRUE)")
         eval(parse(text = st))
         for (j in 1:nrow(effsti)) {
