@@ -99,9 +99,9 @@ input_to_beat.2st_1 <- function (RGdes, RGcal, id_PSU, id_SSU, strata_vars, targ
       Mi <- NULL
       if (requireNamespace("ReGenesees", quietly = TRUE)) {
         st <- paste0("Mi <- ReGenesees::svystat(RGcal,kind ='TM',estimator='Mean',y= ~", 
-                     tvi, ",by= ~", sv2, ",forGVF=FALSE)")
+                   tvi, ",by= ~", sv2, ",forGVF=FALSE)")
         eval(parse(text = st))
-        }
+      }
       M <- cbind(M,Mi[,length(strata_vars)+1])
     }
     if (sw == TRUE) {
@@ -109,8 +109,8 @@ input_to_beat.2st_1 <- function (RGdes, RGcal, id_PSU, id_SSU, strata_vars, targ
         st <- paste0("Mi <- ReGenesees::svystat(RGcal,kind ='TM',estimator='Mean',y= ~", 
                      tvi, ",by= ~", sv2, ",forGVF=FALSE)")
         eval(parse(text = st))
+        M <- cbind(M,Mi[,length(strata_vars)+2])
       }
-      M <- cbind(M,Mi[,length(strata_vars)+2])
     }
     colnames(M)[1+i] <- paste0("M",i)
   }
@@ -181,9 +181,10 @@ input_to_beat.2st_1 <- function (RGdes, RGcal, id_PSU, id_SSU, strata_vars, targ
     if (sw == FALSE) {
         if (requireNamespace("ReGenesees", quietly = TRUE)) {
           st <- paste0("deffi <- ReGenesees::svystat(RGdes,kind ='TM',estimator='Mean',y= ~", 
-                       tvi, ",by=~", dv, ",deff=TRUE,forGVF=TRUE)")
+                 tvi, ",by=~", dv, ",deff=TRUE,forGVF=TRUE)")
           eval(parse(text = st))
         }
+        
         for (j in 1:nrow(deffi)) {
           st <- paste0("deffi$", deff_vars, "[j] <- substr(deffi$name[j],1,(gregexpr(pattern =':',deffi$name[j])[[1]][1])-1)")
           eval(parse(text = st))
@@ -198,8 +199,8 @@ input_to_beat.2st_1 <- function (RGdes, RGcal, id_PSU, id_SSU, strata_vars, targ
     if (sw == TRUE) {
         if (requireNamespace("ReGenesees", quietly = TRUE)) {
           st <- paste0("deffi <- ReGenesees::svystat(RGdes,kind ='TM',estimator='Mean',y= ~", 
-                       tvi, ",by=~", dv, ",deff=TRUE,forGVF=TRUE)")
-          eval(parse(text = st))
+                 tvi, ",by=~", dv, ",deff=TRUE,forGVF=TRUE)")
+        eval(parse(text = st))
         }
         for (j in 1:nrow(deffi)) {
           st <- paste0("deffi$", deff_vars, "[j] <- substr(deffi$name[j],1,(gregexpr(pattern =':',deffi$name[j])[[1]][1])-1)")
@@ -268,7 +269,7 @@ input_to_beat.2st_1 <- function (RGdes, RGcal, id_PSU, id_SSU, strata_vars, targ
     if (sw == FALSE) {
         if (requireNamespace("ReGenesees", quietly = TRUE)) {
           st <- paste0("effsti <- ReGenesees::svystat(RGcal,kind ='TM',estimator='Mean',y= ~", 
-                       tvi, ",by=~", dv, ",deff=TRUE,forGVF=TRUE)")
+                 tvi, ",by=~", dv, ",deff=TRUE,forGVF=TRUE)")
           eval(parse(text = st))
         }
         for (j in 1:nrow(effsti)) {
@@ -283,13 +284,13 @@ input_to_beat.2st_1 <- function (RGdes, RGcal, id_PSU, id_SSU, strata_vars, targ
         effst <- rbind(effst,effsti)
     }
     if (sw == TRUE) {
+        if (requireNamespace("ReGenesees", quietly = TRUE)) {
           st <- paste0("effsti <- ReGenesees::svystat(RGdes,kind ='TM',estimator='Mean',y= ~", 
-                       tvi, ",by=~", dv, ",deff=TRUE,forGVF=TRUE)")
+                 tvi, ",by=~", dv, ",deff=TRUE,forGVF=TRUE)")
           eval(parse(text = st))
         }
         for (j in 1:nrow(effsti)) {
           st <- paste0("effsti$", deff_vars, "[j] <- substr(effsti$name[j],1,(gregexpr(pattern =':',effsti$name[j])[[1]][1])-1)")
-
           eval(parse(text = st))
         }
         effsti$label <- paste0("EFFST",i)
