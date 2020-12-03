@@ -5,6 +5,7 @@ Description: Multivariate optimal allocation for different domains in one and tw
 Version: 1.0.2
 Depends: R (>= 3.5.0), plyr, sampling, devtools
 Suggests: knitr, rmarkdown, bookdown
+Author: Stefano Falorsi,Andrea Fasulo,Alessio Guandalini,Daniela Pagliuca,Marco Dionisio Terribili,Giulio Barcaroli,Raffaella Cianchetta 
 Authors@R: c(person("Andrea", "Fasulo", role = c("aut", "cre"),
                      email = "fasulo@istat.it"),
               person("Stefano", "Falorsi", role = "aut",
