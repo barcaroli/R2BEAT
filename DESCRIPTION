@@ -23,4 +23,4 @@ Encoding: UTF-8
 URL: https://barcaroli.github.io/R2BEAT/
 VignetteBuilder: knitr
 BugReports: https://github.com/barcaroli/R2BEAT/issues
-Additional_repositories: http://ghrr.github.io/drat
+
