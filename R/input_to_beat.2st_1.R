@@ -7,12 +7,12 @@
 input_to_beat.2st_1 <- function (RGdes, RGcal, id_PSU, id_SSU, strata_vars, target_vars, deff_vars, 
                                  domain_vars) 
 {
-  if ( !require(ReGenesees) ){    
+  if ( !require(ReGenesees) ){  
     devtools::install_github("DiegoZardetto/ReGenesees")
     # install.packages(
-      # "ReGenesees", 
-      # repos="http://ghrr.github.io/drat", 
-      # type="source"
+    #   "ReGenesees", 
+    #   repos="http://ghrr.github.io/drat", 
+    #   type="source"
     # )
     library(ReGenesees)
   }
@@ -204,7 +204,7 @@ input_to_beat.2st_1 <- function (RGdes, RGcal, id_PSU, id_SSU, strata_vars, targ
         eval(parse(text = st))
       }
       deffi$label <- paste0("DEFF",i)
-      deffi <- deffi[,c(strata_vars,"DEFF","label")]
+      deffi <- deffi[,c(deff_vars,"DEFF","label")]
       deffi$DEFF <- ifelse(is.nan(deffi$DEFF), 1, deffi$DEFF)
       deffi$DEFF <- round(deffi$DEFF,6)
       deffi$DEFF <- ifelse(deffi$DEFF == 0, 1, deffi$DEFF)
@@ -256,7 +256,7 @@ input_to_beat.2st_1 <- function (RGdes, RGcal, id_PSU, id_SSU, strata_vars, targ
   st <- paste0("b <- aggregate(b_nar ~ ", dv, ",deff,FUN=mean)")
   eval(parse(text = st))
   
-  ###################? calculation of effst
+  ################### calculation of effst
   
   effst <- NULL
   for (i in (1:length(target_vars))) {
@@ -287,7 +287,7 @@ input_to_beat.2st_1 <- function (RGdes, RGcal, id_PSU, id_SSU, strata_vars, targ
         eval(parse(text = st))
       }
       effsti$label <- paste0("EFFST",i)
-      effsti <- effsti[,c(strata_vars,"DEFF","label")]
+      effsti <- effsti[,c(deff_vars,"DEFF","label")]
       effsti$DEFF <- ifelse(is.nan(effsti$DEFF), 1, effsti$DEFF)
       effsti$DEFF <- round(effsti$DEFF,6)
       effsti$DEFF <- ifelse(effsti$DEFF == 0, 1, effsti$DEFF)
@@ -317,9 +317,13 @@ input_to_beat.2st_1 <- function (RGdes, RGcal, id_PSU, id_SSU, strata_vars, targ
     colnames(ef)[2] <- paste("EFFST", i, sep = "")
     e <- merge(e, ef)
   }
-  e <- merge(strata[, c("STRATUM", paste0(deff_vars))], e)
+  ################################################################################
+  # e <- merge(strata[, c("STRATUM", paste0(deff_vars))], e)
+  ################################################################################
   d <- merge(d, b, by = paste0(deff_vars))
-  d <- merge(strata[, c("STRATUM", paste0(deff_vars))], d)
+  ################################################################################
+  # d <- merge(strata[, c("STRATUM", paste0(deff_vars))], d)
+  ################################################################################
   rho <- d
   for (i in (1:length(target_vars))) {
     st <- paste0("rho$RHO_AR", i, " <- 1")
