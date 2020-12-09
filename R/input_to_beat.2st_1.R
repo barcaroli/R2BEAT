@@ -5,14 +5,15 @@
 #-----------------------------------------------------------
 
 input_to_beat.2st_1 <- function (RGdes, RGcal, id_PSU, id_SSU, strata_vars, target_vars, deff_vars, 
-          domain_vars) 
+                                 domain_vars) 
 {
   if ( !require(ReGenesees) ){    
-    install.packages(
-      "ReGenesees", 
-      repos="http://ghrr.github.io/drat", 
-      type="source"
-    )
+    devtools::install_github("DiegoZardetto/ReGenesees")
+    # install.packages(
+      # "ReGenesees", 
+      # repos="http://ghrr.github.io/drat", 
+      # type="source"
+    # )
     library(ReGenesees)
   }
   ################### control of categorical target variables ######
@@ -103,7 +104,7 @@ input_to_beat.2st_1 <- function (RGdes, RGcal, id_PSU, id_SSU, strata_vars, targ
     if (sw == FALSE) {
       Mi <- NULL
       st <- paste0("Mi <- ReGenesees:::svystat(RGcal,kind ='TM',estimator='Mean',y= ~", 
-                 tvi, ",by= ~", sv2, ",forGVF=FALSE)")
+                   tvi, ",by= ~", sv2, ",forGVF=FALSE)")
       eval(parse(text = st))
       M <- cbind(M,Mi[,length(strata_vars)+1])
     }
@@ -115,7 +116,7 @@ input_to_beat.2st_1 <- function (RGdes, RGcal, id_PSU, id_SSU, strata_vars, targ
     }
     colnames(M)[1+i] <- paste0("M",i)
   }
-
+  
   ####### Compute standard deviation for each target variable
   S <- NULL
   S$STRATUM <- ssize$STRATUM
@@ -142,7 +143,7 @@ input_to_beat.2st_1 <- function (RGdes, RGcal, id_PSU, id_SSU, strata_vars, targ
       eval(parse(text=st))
     }
   }
-      
+  
   ################# strata dataframe                                                                           # 1 + length(target_vars))])
   strata <- NULL
   strata <- merge(N, ssize, by = c("STRATUM"))
@@ -180,35 +181,35 @@ input_to_beat.2st_1 <- function (RGdes, RGcal, id_PSU, id_SSU, strata_vars, targ
     st <- paste0("sw <- class(RGcal$variables$",tvi,") == 'factor'")
     eval(parse(text=st))
     if (sw == FALSE) {
-        st <- paste0("deffi <- ReGenesees:::svystat(RGdes,kind ='TM',estimator='Mean',y= ~", 
-               tvi, ",by=~", dv, ",deff=TRUE,forGVF=TRUE)")
+      st <- paste0("deffi <- ReGenesees:::svystat(RGdes,kind ='TM',estimator='Mean',y= ~", 
+                   tvi, ",by=~", dv, ",deff=TRUE,forGVF=TRUE)")
+      eval(parse(text = st))
+      for (j in 1:nrow(deffi)) {
+        st <- paste0("deffi$", deff_vars, "[j] <- substr(deffi$name[j],1,(gregexpr(pattern =':',deffi$name[j])[[1]][1])-1)")
         eval(parse(text = st))
-        for (j in 1:nrow(deffi)) {
-          st <- paste0("deffi$", deff_vars, "[j] <- substr(deffi$name[j],1,(gregexpr(pattern =':',deffi$name[j])[[1]][1])-1)")
-          eval(parse(text = st))
-        }
-        deffi$label <- paste0("DEFF", i)
-        deffi <- deffi[,c(deff_vars,"DEFF","label")]
-        deffi$DEFF <- ifelse(is.nan(deffi$DEFF), 1, deffi$DEFF)
-        deffi$DEFF <- round(deffi$DEFF,6)
-        deffi$DEFF <- ifelse(deffi$DEFF == 0, 1, deffi$DEFF)
-        deff <- rbind(deff,deffi)
+      }
+      deffi$label <- paste0("DEFF", i)
+      deffi <- deffi[,c(deff_vars,"DEFF","label")]
+      deffi$DEFF <- ifelse(is.nan(deffi$DEFF), 1, deffi$DEFF)
+      deffi$DEFF <- round(deffi$DEFF,6)
+      deffi$DEFF <- ifelse(deffi$DEFF == 0, 1, deffi$DEFF)
+      deff <- rbind(deff,deffi)
     }
     if (sw == TRUE) {
-        st <- paste0("deffi <- ReGenesees:::svystat(RGdes,kind ='TM',estimator='Mean',y= ~", 
-               tvi, ",by=~", dv, ",deff=TRUE,forGVF=TRUE)")
+      st <- paste0("deffi <- ReGenesees:::svystat(RGdes,kind ='TM',estimator='Mean',y= ~", 
+                   tvi, ",by=~", dv, ",deff=TRUE,forGVF=TRUE)")
+      eval(parse(text = st))
+      for (j in 1:nrow(deffi)) {
+        st <- paste0("deffi$", deff_vars, "[j] <- substr(deffi$name[j],1,(gregexpr(pattern =':',deffi$name[j])[[1]][1])-1)")
         eval(parse(text = st))
-        for (j in 1:nrow(deffi)) {
-          st <- paste0("deffi$", deff_vars, "[j] <- substr(deffi$name[j],1,(gregexpr(pattern =':',deffi$name[j])[[1]][1])-1)")
-          eval(parse(text = st))
-        }
-        deffi$label <- paste0("DEFF",i)
-        deffi <- deffi[,c(strata_vars,"DEFF","label")]
-        deffi$DEFF <- ifelse(is.nan(deffi$DEFF), 1, deffi$DEFF)
-        deffi$DEFF <- round(deffi$DEFF,6)
-        deffi$DEFF <- ifelse(deffi$DEFF == 0, 1, deffi$DEFF)
-        deff <- rbind(deff,deffi[c((nrow(deffi)/2+1):nrow(deffi)),])
-     }
+      }
+      deffi$label <- paste0("DEFF",i)
+      deffi <- deffi[,c(strata_vars,"DEFF","label")]
+      deffi$DEFF <- ifelse(is.nan(deffi$DEFF), 1, deffi$DEFF)
+      deffi$DEFF <- round(deffi$DEFF,6)
+      deffi$DEFF <- ifelse(deffi$DEFF == 0, 1, deffi$DEFF)
+      deff <- rbind(deff,deffi[c((nrow(deffi)/2+1):nrow(deffi)),])
+    }
   }
   
   ids <- NULL
@@ -234,12 +235,12 @@ input_to_beat.2st_1 <- function (RGdes, RGcal, id_PSU, id_SSU, strata_vars, targ
       st <- paste0(st, "b_nar$", deff_vars[i], ")")
   }
   eval(parse(text=st))
-
+  
   deff$progr <- c(1:nrow(deff))
   deff <- merge(deff, b_nar, by = deff_vars,sort=FALSE)
   deff <- deff[order(deff$progr),]
   deff$progr <- NULL
-
+  
   for (i in 1:length(deff_vars)) {
     st <- paste0("d=data.frame(", deff_vars[i], "=unique(deff[,paste0(deff_vars)]))")
     eval(parse(text = st))
@@ -263,35 +264,35 @@ input_to_beat.2st_1 <- function (RGdes, RGcal, id_PSU, id_SSU, strata_vars, targ
     st <- paste0("sw <- class(RGcal$variables$",tvi,") == 'factor'")
     eval(parse(text=st))
     if (sw == FALSE) {
-        st <- paste0("effsti <- ReGenesees:::svystat(RGcal,kind ='TM',estimator='Mean',y= ~", 
-               tvi, ",by=~", dv, ",deff=TRUE,forGVF=TRUE)")
+      st <- paste0("effsti <- ReGenesees:::svystat(RGcal,kind ='TM',estimator='Mean',y= ~", 
+                   tvi, ",by=~", dv, ",deff=TRUE,forGVF=TRUE)")
+      eval(parse(text = st))
+      for (j in 1:nrow(effsti)) {
+        st <- paste0("effsti$", deff_vars, "[j] <- substr(effsti$name[j],1,(gregexpr(pattern =':',effsti$name[j])[[1]][1])-1)")
         eval(parse(text = st))
-        for (j in 1:nrow(effsti)) {
-          st <- paste0("effsti$", deff_vars, "[j] <- substr(effsti$name[j],1,(gregexpr(pattern =':',effsti$name[j])[[1]][1])-1)")
-          eval(parse(text = st))
-        }
-        effsti$label <- paste0("EFFST", i)
-        effsti <- effsti[,c(deff_vars,"DEFF","label")]
-        effsti$DEFF <- ifelse(is.nan(effsti$DEFF), 1, effsti$DEFF)
-        effsti$DEFF <- round(effsti$DEFF,6)
-        effsti$DEFF <- ifelse(effsti$DEFF == 0, 1, effsti$DEFF)
-        effst <- rbind(effst,effsti)
+      }
+      effsti$label <- paste0("EFFST", i)
+      effsti <- effsti[,c(deff_vars,"DEFF","label")]
+      effsti$DEFF <- ifelse(is.nan(effsti$DEFF), 1, effsti$DEFF)
+      effsti$DEFF <- round(effsti$DEFF,6)
+      effsti$DEFF <- ifelse(effsti$DEFF == 0, 1, effsti$DEFF)
+      effst <- rbind(effst,effsti)
     }
     if (sw == TRUE) {
-        st <- paste0("effsti <- ReGenesees:::svystat(RGdes,kind ='TM',estimator='Mean',y= ~", 
-               tvi, ",by=~", dv, ",deff=TRUE,forGVF=TRUE)")
+      st <- paste0("effsti <- ReGenesees:::svystat(RGdes,kind ='TM',estimator='Mean',y= ~", 
+                   tvi, ",by=~", dv, ",deff=TRUE,forGVF=TRUE)")
+      eval(parse(text = st))
+      for (j in 1:nrow(effsti)) {
+        st <- paste0("effsti$", deff_vars, "[j] <- substr(effsti$name[j],1,(gregexpr(pattern =':',effsti$name[j])[[1]][1])-1)")
         eval(parse(text = st))
-        for (j in 1:nrow(effsti)) {
-          st <- paste0("effsti$", deff_vars, "[j] <- substr(effsti$name[j],1,(gregexpr(pattern =':',effsti$name[j])[[1]][1])-1)")
-          eval(parse(text = st))
-        }
-        effsti$label <- paste0("EFFST",i)
-        effsti <- effsti[,c(strata_vars,"DEFF","label")]
-        effsti$DEFF <- ifelse(is.nan(effsti$DEFF), 1, effsti$DEFF)
-        effsti$DEFF <- round(effsti$DEFF,6)
-        effsti$DEFF <- ifelse(effsti$DEFF == 0, 1, effsti$DEFF)
-        effst <- rbind(effst,effsti[c((nrow(effsti)/2+1):nrow(effsti)),])
-     }
+      }
+      effsti$label <- paste0("EFFST",i)
+      effsti <- effsti[,c(strata_vars,"DEFF","label")]
+      effsti$DEFF <- ifelse(is.nan(effsti$DEFF), 1, effsti$DEFF)
+      effsti$DEFF <- round(effsti$DEFF,6)
+      effsti$DEFF <- ifelse(effsti$DEFF == 0, 1, effsti$DEFF)
+      effst <- rbind(effst,effsti[c((nrow(effsti)/2+1):nrow(effsti)),])
+    }
   }
   
   # effst$DEFF <- ifelse(is.nan(effst$DEFF), 1, effst$DEFF)
