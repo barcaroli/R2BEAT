@@ -323,11 +323,11 @@ input_to_beat.2st_1 <- function (RGdes, RGcal, id_PSU, id_SSU, strata_vars, targ
     e <- merge(e, ef)
   }
   ################################################################################
-  e <- merge(strata[, c("STRATUM", paste0(deff_vars))], e)
+  e <- merge(strata[, c("STRATUM", paste0(strata_vars))], e)
   ################################################################################
   d <- merge(d, b, by = paste0(deff_vars))
   ################################################################################
-  d <- merge(strata[, c("STRATUM", paste0(deff_vars))], d)
+  d <- merge(strata[, c("STRATUM", paste0(strata_vars))], d)
   ################################################################################
   rho <- d
   for (i in (1:length(target_vars))) {
