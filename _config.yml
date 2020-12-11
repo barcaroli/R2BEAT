@@ -1,0 +1,8 @@
+theme: jekyll-theme-minimal
+title: R2BEAT
+description: Multistage Allocation
+url: https://github.com/barcaroli/R2BEAT
+author: Giulio Barcaroli
+plugins:
+  - jekyll-seo-tag
+google_analytics: UA-156656860-1

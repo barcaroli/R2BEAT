@@ -38,6 +38,8 @@
 
 
 
+  <link href="../extra.css" rel="stylesheet">
+  
 
 <meta property="og:title" content="Stratification and selection — StratSel" />
 <meta property="og:description" content="Merge two data frames (whatever PSU population and allocation data frames) and then compute stratification and selection of a fixed number of sample PSUs (Primary Sampling Units) for stratum using the Sampford's method (unequal probabilities, without replacement, fixed sample size), implemented by the UPsampford function of R package sampling. About the stratification, the function realizes for each domain estimation, the computation of a size threshold for a given size PSU. PSUs with measure of size that exceeds a calculated threshold are identify like SR (Self Representative) and each constitutes a stratum by itself, so they come into the sample with probability equal to one. The remaining NSR (Non Self Representative) PSUs are ordered for the measure of size and divided into stratum having size approximately constant to the corrected threshold and with PSUs having sizes as homogeneous as possible.
@@ -125,9 +127,9 @@ If the number of NSR PSUs in each stratum is greater than the number of sample P
 If the number of NSR PSUs in each stratum is greater than the number of sample PSUs for each stratum, then it is indispensable to define the vector of the inclusion probabilities (pik), argument of UPsampford function, vice versa NSR PSUs will become SR PSUs. If some pik values are greater than 1, pik is newly calculated, for those PSUs belonging to the same domain and stratum of the PSUs having pik &gt;1, until pik values will be all less than 1, then applies the UPsampford function.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>StratSel</span>(<span class='no'>dataPop</span>, <span class='no'>idpsu</span>, <span class='no'>dom</span>, <span class='no'>final_pop</span>, <span class='no'>size</span>, <span class='no'>PSUsamplestratum</span>, <span class='no'>min_sample</span>,
-                <span class='kw'>min_sample_index</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>dataAll</span>, <span class='no'>domAll</span>, <span class='no'>f_sample</span>,
-                <span class='kw'>planned_min_sample</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>launch</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>StratSel</span>(<span class='kw'>dataPop</span>, <span class='kw'>idpsu</span>, <span class='kw'>dom</span>, <span class='kw'>final_pop</span>, <span class='kw'>size</span>, <span class='kw'>PSUsamplestratum</span>, <span class='kw'>min_sample</span>, 
+    min_sample_index = <span class='fl'>FALSE</span>, <span class='kw'>dataAll</span>, <span class='kw'>domAll</span>, <span class='kw'>f_sample</span>,
+    planned_min_sample = <span class='kw'>NULL</span>, launch = <span class='fl'>TRUE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -194,6 +196,9 @@ If the number of NSR PSUs in each stratum is greater than the number of sample P
 
     <p>An object of class <code>list</code> or <code>data.frame</code> depending from argument <code>launch</code>. If launch = <code>TRUE</code> the only output is, at domain level, a data frame of the Self Representative (SR) PSUs and of the Non Self Representative (NSR) PSUs before stratification. If launch = <code>FALSE</code> the output is a <code>list</code> composed by four members of <code>data.frame</code> class. The first component, at domain level, is the same data frame obtained if launch = <code>TRUE</code>. The second element
 is, at domain level, a data frame of SR and NSR PSUs after stratification, with their totals like the first output, but with additional information such as the final units sample size distinctly for SR and NSR PSUs and their mean. The third component is a data frame that supply, for each stratum, the number of sample PSUs selected and the total number of PSUs. The fourth element provides, for each PSU, some information like the inclusion probability and the sampling fraction.</p>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Raffaella Cianchetta</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>S. Falorsi A. Russo (2001), Il disegno di rilevazione per indagini Panel sulle famiglie, <em>Rivista di Statistica Ufficiale, N. 3</em>, p. 55-90.<br />
@@ -203,50 +208,51 @@ http://CRAN.R-project.org/package=sampling.<br /></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Start StratSel</span>
-<span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='fu'><a href='https://rdrr.io/r/base/load.html'>load</a></span>(<span class='no'>FS4</span>)
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>population</span>)
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>allocation</span>)
+<span class='co'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='fu'><a href='https://rdrr.io/r/base/load.html'>load</a></span>(<span class='kw'>FS4</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>population</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>allocation</span>)
 
 <span class='co'># The function with a fixed number of final sample units (min_sample= 8) </span>
 <span class='co'># to observe in each PSU and partial launch of the procedure with</span>
 <span class='co'># only one output data frame(see 'Value')   </span>
-<span class='no'>Output_list</span> <span class='kw'>&lt;-</span> <span class='fu'>StratSel</span>(<span class='kw'>dataPop</span><span class='kw'>=</span> <span class='no'>population</span>, <span class='kw'>idpsu</span><span class='kw'>=</span> ~ <span class='no'>comune_num</span>, <span class='kw'>dom</span><span class='kw'>=</span> ~ <span class='no'>dom</span>,
-               <span class='kw'>final_pop</span><span class='kw'>=</span> ~ <span class='no'>fam</span>, <span class='kw'>size</span><span class='kw'>=</span> ~ <span class='no'>pop</span>, <span class='kw'>PSUsamplestratum</span><span class='kw'>=</span> <span class='fl'>6</span>, <span class='kw'>min_sample</span><span class='kw'>=</span> <span class='fl'>8</span>,
-               <span class='kw'>min_sample_index</span><span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>dataAll</span><span class='kw'>=</span> <span class='no'>allocation</span>, <span class='kw'>domAll</span><span class='kw'>=</span> ~ <span class='no'>dom</span>,
-               <span class='kw'>f_sample</span><span class='kw'>=</span> ~ <span class='no'>campdom</span>, <span class='kw'>planned_min_sample</span><span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>launch</span><span class='kw'>=</span> <span class='fl'>TRUE</span>)
-
+<span class='kw'>Output_list</span> <span class='op'>&lt;-</span> <span class='fu'>StratSel</span>(dataPop= <span class='kw'>population</span>, idpsu= <span class='op'>~</span> <span class='kw'>comune_num</span>, dom= <span class='op'>~</span> <span class='kw'>dom</span>,
+               final_pop= <span class='op'>~</span> <span class='kw'>fam</span>, size= <span class='op'>~</span> <span class='kw'>pop</span>, PSUsamplestratum= <span class='fl'>6</span>, min_sample= <span class='fl'>8</span>,
+               min_sample_index= <span class='fl'>FALSE</span>, dataAll= <span class='kw'>allocation</span>, domAll= <span class='op'>~</span> <span class='kw'>dom</span>,
+               f_sample= <span class='op'>~</span> <span class='kw'>campdom</span>, planned_min_sample= <span class='kw'>NULL</span>, launch= <span class='fl'>TRUE</span>)
+         
 <span class='co'># It can also be written as below due to default values:</span>
-<span class='no'>Output_list</span> <span class='kw'>&lt;-</span> <span class='fu'>StratSel</span>(<span class='kw'>dataPop</span><span class='kw'>=</span> <span class='no'>population</span>, <span class='kw'>idpsu</span><span class='kw'>=</span> ~ <span class='no'>comune_num</span>, <span class='kw'>dom</span><span class='kw'>=</span> ~ <span class='no'>dom</span>,
-               <span class='kw'>final_pop</span><span class='kw'>=</span> ~ <span class='no'>fam</span>, <span class='kw'>size</span><span class='kw'>=</span> ~ <span class='no'>pop</span>, <span class='kw'>PSUsamplestratum</span><span class='kw'>=</span> <span class='fl'>6</span>, <span class='kw'>min_sample</span><span class='kw'>=</span> <span class='fl'>8</span>,
-               <span class='kw'>dataAll</span><span class='kw'>=</span> <span class='no'>allocation</span>, <span class='kw'>domAll</span><span class='kw'>=</span> ~ <span class='no'>dom</span>, <span class='kw'>f_sample</span><span class='kw'>=</span> ~ <span class='no'>campdom</span>)
+<span class='kw'>Output_list</span> <span class='op'>&lt;-</span> <span class='fu'>StratSel</span>(dataPop= <span class='kw'>population</span>, idpsu= <span class='op'>~</span> <span class='kw'>comune_num</span>, dom= <span class='op'>~</span> <span class='kw'>dom</span>,
+               final_pop= <span class='op'>~</span> <span class='kw'>fam</span>, size= <span class='op'>~</span> <span class='kw'>pop</span>, PSUsamplestratum= <span class='fl'>6</span>, min_sample= <span class='fl'>8</span>, 
+               dataAll= <span class='kw'>allocation</span>, domAll= <span class='op'>~</span> <span class='kw'>dom</span>, f_sample= <span class='op'>~</span> <span class='kw'>campdom</span>)
 
 
 <span class='co'># The function with a fixed number of final sample units (min_sample= 8)</span>
 <span class='co'># to observe in each PSU and full launch of the procedure with </span>
 <span class='co'># the output list composed of four data frames(see 'Value')   </span>
-<span class='no'>Output_list</span> <span class='kw'>&lt;-</span> <span class='fu'>StratSel</span>(<span class='kw'>dataPop</span><span class='kw'>=</span> <span class='no'>population</span>, <span class='kw'>idpsu</span><span class='kw'>=</span> ~ <span class='no'>comune_num</span>, <span class='kw'>dom</span><span class='kw'>=</span> ~ <span class='no'>dom</span>,
-               <span class='kw'>final_pop</span><span class='kw'>=</span> ~ <span class='no'>fam</span>,  <span class='kw'>size</span><span class='kw'>=</span> ~ <span class='no'>pop</span>, <span class='kw'>PSUsamplestratum</span><span class='kw'>=</span> <span class='fl'>6</span>, <span class='kw'>min_sample</span><span class='kw'>=</span> <span class='fl'>8</span>,
-               <span class='kw'>dataAll</span><span class='kw'>=</span> <span class='no'>allocation</span>, <span class='kw'>domAll</span><span class='kw'>=</span> ~ <span class='no'>dom</span>, <span class='kw'>f_sample</span><span class='kw'>=</span> ~ <span class='no'>campdom</span>, <span class='kw'>launch</span><span class='kw'>=</span> <span class='fl'>FALSE</span>)
-
+<span class='kw'>Output_list</span> <span class='op'>&lt;-</span> <span class='fu'>StratSel</span>(dataPop= <span class='kw'>population</span>, idpsu= <span class='op'>~</span> <span class='kw'>comune_num</span>, dom= <span class='op'>~</span> <span class='kw'>dom</span>,
+               final_pop= <span class='op'>~</span> <span class='kw'>fam</span>,  size= <span class='op'>~</span> <span class='kw'>pop</span>, PSUsamplestratum= <span class='fl'>6</span>, min_sample= <span class='fl'>8</span>, 
+               dataAll= <span class='kw'>allocation</span>, domAll= <span class='op'>~</span> <span class='kw'>dom</span>, f_sample= <span class='op'>~</span> <span class='kw'>campdom</span>, launch= <span class='fl'>FALSE</span>)
+         
 
 <span class='co'># The function with a variable number of final sample units (planned_min_sample= </span>
 <span class='co'># ~ planned_final_sample) and partial launch of the procedure</span>
-<span class='no'>Output_list</span> <span class='kw'>&lt;-</span> <span class='fu'>StratSel</span>(<span class='kw'>dataPop</span><span class='kw'>=</span> <span class='no'>population</span>, <span class='kw'>idpsu</span><span class='kw'>=</span> ~ <span class='no'>comune_num</span>, <span class='kw'>dom</span><span class='kw'>=</span> ~ <span class='no'>dom</span>,
-               <span class='kw'>final_pop</span><span class='kw'>=</span> ~ <span class='no'>fam</span>, <span class='kw'>size</span><span class='kw'>=</span> ~ <span class='no'>pop</span>, <span class='kw'>PSUsamplestratum</span><span class='kw'>=</span> <span class='fl'>6</span>, <span class='kw'>min_sample</span><span class='kw'>=</span> <span class='kw'>NULL</span>,
-               <span class='kw'>min_sample_index</span><span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>dataAll</span><span class='kw'>=</span> <span class='no'>allocation</span>, <span class='kw'>domAll</span><span class='kw'>=</span> ~ <span class='no'>dom</span>,
-               <span class='kw'>f_sample</span><span class='kw'>=</span> ~ <span class='no'>campdom</span>, <span class='kw'>planned_min_sample</span><span class='kw'>=</span> ~ <span class='no'>planned_final_sample</span>)
+<span class='kw'>Output_list</span> <span class='op'>&lt;-</span> <span class='fu'>StratSel</span>(dataPop= <span class='kw'>population</span>, idpsu= <span class='op'>~</span> <span class='kw'>comune_num</span>, dom= <span class='op'>~</span> <span class='kw'>dom</span>, 
+               final_pop= <span class='op'>~</span> <span class='kw'>fam</span>, size= <span class='op'>~</span> <span class='kw'>pop</span>, PSUsamplestratum= <span class='fl'>6</span>, min_sample= <span class='kw'>NULL</span>,
+               min_sample_index= <span class='fl'>TRUE</span>, dataAll= <span class='kw'>allocation</span>, domAll= <span class='op'>~</span> <span class='kw'>dom</span>,
+               f_sample= <span class='op'>~</span> <span class='kw'>campdom</span>, planned_min_sample= <span class='op'>~</span> <span class='kw'>planned_final_sample</span>)
 
-
+         
 <span class='co'># The function with a variable number of final sample units (planned_min_sample=</span>
 <span class='co'># ~ planned_final_sample) and full launch of the procedure with the output list </span>
-<span class='co'>#composed of four data frames		</span>
-<span class='no'>Output_list</span> <span class='kw'>&lt;-</span> <span class='fu'>StratSel</span>(<span class='kw'>dataPop</span><span class='kw'>=</span> <span class='no'>population</span>, <span class='kw'>idpsu</span><span class='kw'>=</span> ~ <span class='no'>comune_num</span>, <span class='kw'>dom</span><span class='kw'>=</span> ~ <span class='no'>dom</span>,
-               <span class='kw'>final_pop</span><span class='kw'>=</span> ~ <span class='no'>fam</span>, <span class='kw'>size</span><span class='kw'>=</span> ~ <span class='no'>pop</span>, <span class='kw'>PSUsamplestratum</span><span class='kw'>=</span> <span class='fl'>6</span>, <span class='kw'>min_sample</span><span class='kw'>=</span> <span class='kw'>NULL</span>,
-               <span class='kw'>min_sample_index</span><span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>dataAll</span><span class='kw'>=</span> <span class='no'>allocation</span>, <span class='kw'>domAll</span><span class='kw'>=</span> ~ <span class='no'>dom</span>,
-               <span class='kw'>f_sample</span><span class='kw'>=</span> ~ <span class='no'>campdom</span>, <span class='kw'>planned_min_sample</span><span class='kw'>=</span> ~ <span class='no'>planned_final_sample</span>,
-               <span class='kw'>launch</span><span class='kw'>=</span> <span class='fl'>FALSE</span>)
-}</div></pre>
+<span class='co'>#composed of four data frames    </span>
+<span class='kw'>Output_list</span> <span class='op'>&lt;-</span> <span class='fu'>StratSel</span>(dataPop= <span class='kw'>population</span>, idpsu= <span class='op'>~</span> <span class='kw'>comune_num</span>, dom= <span class='op'>~</span> <span class='kw'>dom</span>, 
+               final_pop= <span class='op'>~</span> <span class='kw'>fam</span>, size= <span class='op'>~</span> <span class='kw'>pop</span>, PSUsamplestratum= <span class='fl'>6</span>, min_sample= <span class='kw'>NULL</span>,
+               min_sample_index= <span class='fl'>TRUE</span>, dataAll= <span class='kw'>allocation</span>, domAll= <span class='op'>~</span> <span class='kw'>dom</span>,
+               f_sample= <span class='op'>~</span> <span class='kw'>campdom</span>, planned_min_sample= <span class='op'>~</span> <span class='kw'>planned_final_sample</span>,
+               launch= <span class='fl'>FALSE</span>)     
+}
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -262,7 +268,7 @@ http://CRAN.R-project.org/package=sampling.<br /></p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -38,6 +38,8 @@
 
 
 
+  <link href="../extra.css" rel="stylesheet">
+  
 
 <meta property="og:title" content="Sampling design variables — design" />
 <meta property="og:description" content="Example data frame containing variables for describing the sampling design." />
@@ -123,12 +125,12 @@
     <p>Example data frame containing variables for describing the sampling design.</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>beat.example</span>)</pre>
+    <pre class="usage"><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>beat.example</span>)</pre>
 
 
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p>The design data frame contains a row per each stratum with the following variables:</p><dl'>
+    <p>The design data frame contains a row per each stratum with the following variables:</p><dl>
     <dt>STRATUM</dt><dd><p>Identifier of the stratum (numeric)</p></dd> 
     <dt>STRAT_MOS</dt><dd><p>Measure of size of the stratum (numeric)</p></dd>     
     <dt>DELTA</dt><dd><p>The average size of Secondary Stage Units (SSU) in the strata. With respect to the sample on which we are interested in, it could be equal or greater than 1 (numeric). See details for a depth explanation.</p></dd> 
@@ -142,15 +144,16 @@
 <p>The sample design can be defined through a measure of size of the stratum, the average size of each SSU (&gt;=1) and the minimum number of SSU to be selected in each PSU.
 In particular, if SSU are not cluster DELTA=1 and the sample size determined will be given in term of SSU.
 Instead, when SSUs are, in turn, clusters (for instance, households composed by individuals), defining DELTA equal to the average size of SSUs, enables to derive a sample in term of individuals.</p>
-<p>Furthermore, modifying the MINIMUM it is possible to tune the number of PSU in the sample (see the example in <a href='beth1.html'>beat.1st</a>). 
+<p>Furthermore, modifying the MINIMUM it is possible to tune the number of PSU in the sample (see the example in <a href='beat.1st.html'>beat.1st</a>). 
 In fact, considering the same sample size, increasing the MINIMUM, less PSU will be involved in the sample, but worst estimates in term of expected coefficient of variations will be provided.
 On the contrary, decreasing the MINIMUM, more PSU will be involved in the sample and better estimates will be obtained.
 Instead, increasing the MINIMUM for obtaining the same expected errors, requests less PSU, but much more SSU. The contrary occurs decreasing the MINIMUM.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Load example data</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>beat.example</span>)
-<span class='no'>design</span></div><div class='output co'>#&gt;    STRATUM STRAT_MOS DELTA MINIMUM
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>beat.example</span>)
+<span class='kw'>design</span>
+</div><div class='output co'>#&gt;    STRATUM STRAT_MOS DELTA MINIMUM
 #&gt; 1        1   2302353     1      48
 #&gt; 2        2    179562     1      48
 #&gt; 3        3    371802     1      48
@@ -167,7 +170,8 @@ Instead, increasing the MINIMUM for obtaining the same expected errors, requests
 #&gt; 14      14    183169     1      48
 #&gt; 15      15   3156694     1      48
 #&gt; 16      16   1098740     1      48
-#&gt; 17      17   1256025     1      48</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='no'>design</span>)</div><div class='output co'>#&gt; 'data.frame':	17 obs. of  4 variables:
+#&gt; 17      17   1256025     1      48</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='kw'>design</span>)
+</div><div class='output co'>#&gt; 'data.frame':	17 obs. of  4 variables:
 #&gt;  $ STRATUM  : int  1 2 3 4 5 6 7 8 9 10 ...
 #&gt;  $ STRAT_MOS: int  2302353 179562 371802 592303 221687 440613 128230 222648 287906 882718 ...
 #&gt;  $ DELTA    : num  1 1 1 1 1 1 1 1 1 1 ...
@@ -187,7 +191,7 @@ Instead, increasing the MINIMUM for obtaining the same expected errors, requests
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

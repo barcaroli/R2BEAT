@@ -38,6 +38,8 @@
 
 
 
+  <link href="../extra.css" rel="stylesheet">
+  
 
 <meta property="og:title" content="Compute one stage multivariate optimal allocation. — beat.1st" />
 <meta property="og:description" content="Compute multivariate optimal allocation for different domains in one stage stratified sample design" />
@@ -123,7 +125,7 @@
     <p>Compute multivariate optimal allocation for different domains in one stage stratified sample design</p>
     </div>
 
-    <pre class="usage"><span class='fu'>beat.1st</span>(<span class='no'>stratif</span>, <span class='no'>errors</span>, <span class='kw'>minnumstrat</span><span class='kw'>=</span><span class='fl'>2</span>, <span class='kw'>maxiter</span><span class='kw'>=</span><span class='fl'>200</span>, <span class='kw'>maxiter1</span><span class='kw'>=</span><span class='fl'>25</span>, <span class='kw'>epsilon</span><span class='kw'>=</span><span class='fl'>10</span>^(-<span class='fl'>11</span>))</pre>
+    <pre class="usage"><span class='fu'>beat.1st</span>(<span class='kw'>stratif</span>, <span class='kw'>errors</span>, minnumstrat=<span class='fl'>2</span>, maxiter=<span class='fl'>200</span>, maxiter1=<span class='fl'>25</span>, epsilon=<span class='fl'>10</span><span class='op'>^</span>(<span class='op'>-</span><span class='fl'>11</span>))</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -181,22 +183,27 @@ The generalized Bethel’s algorithm allows to determine the optimal sample size
   <em>Journal of the Royal Statistical Society</em>, 97(4): 558-625.</p>  
 <p>Tschuprow, A. A. (1923). On the mathematical expectation of the moments of frequency distributions in the case of correlated observation. 
   (Chapters 4-6). <em>Metron</em>, 2: 646-683.</p>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Developed by Stefano Falorsi, Andrea Fasulo, Alessio Guandalini, Daniela Pagliuca, Marco D. Terribili.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Load example data</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>beat.example</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>beat.example</span>)
 
 <span class='co'>## Example 1</span>
 <span class='co'># Allocate the sample</span>
-<span class='no'>allocation_1</span> <span class='kw'>&lt;-</span> <span class='fu'>beat.1st</span>(<span class='kw'>stratif</span><span class='kw'>=</span><span class='no'>strata</span>, <span class='kw'>errors</span><span class='kw'>=</span><span class='no'>errors</span>)
+<span class='kw'>allocation_1</span> <span class='op'>&lt;-</span> <span class='fu'>beat.1st</span>(stratif=<span class='kw'>strata</span>, errors=<span class='kw'>errors</span>)
 
 <span class='co'># The total sample size is</span>
-<span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span>(<span class='no'>allocation_1</span>$<span class='no'>n</span>)</div><div class='output co'>#&gt; [1] 6858</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span>(<span class='kw'>allocation_1</span><span class='op'>$</span><span class='kw'>n</span>)
+</div><div class='output co'>#&gt; [1] 6858</div><div class='input'>
 <span class='co'>## Example 2</span>
 <span class='co'># Assume 5700 units is the maximum sample size to stick to our budget.</span>
 <span class='co'># Looking at allocation_1$sensitivity we can see that most of the </span>
 <span class='co'># sensitivity is in DOM1 for REG1 and REG2 due to V1.</span>
-<span class='no'>allocation_1</span>$<span class='no'>sensitivity</span></div><div class='output co'>#&gt;    Type Dom Var Planned CV Actual CV Sensitivity 10%
+<span class='kw'>allocation_1</span><span class='op'>$</span><span class='kw'>sensitivity</span>
+</div><div class='output co'>#&gt;    Type Dom Var Planned CV Actual CV Sensitivity 10%
 #&gt; 1  DOM1   1  V1       0.10    0.1000             925
 #&gt; 2  DOM1   1  V2       0.99    0.1100               1
 #&gt; 3  DOM1   2  V1       0.10    0.0999             446
@@ -213,21 +220,23 @@ The generalized Bethel’s algorithm allows to determine the optimal sample size
 #&gt; 14 DOM2   5  V2       0.99    0.3717               1
 #&gt; 15 DOM2   6  V1       0.99    0.1268               1
 #&gt; 16 DOM2   6  V2       0.99    0.2186               1</div><div class='input'><span class='co'># We can relax the constraints increasing the expected coefficients of variation for X1 by 10%</span>
-<span class='no'>errors1</span> <span class='kw'>&lt;-</span> <span class='no'>errors</span>
-<span class='no'>errors1</span>[<span class='fl'>1</span>,<span class='fl'>2</span>] <span class='kw'>&lt;-</span> <span class='no'>errors</span>[<span class='fl'>1</span>,<span class='fl'>2</span>]+<span class='no'>errors</span>[<span class='fl'>1</span>,<span class='fl'>2</span>]*<span class='fl'>0.1</span>
+<span class='kw'>errors1</span> <span class='op'>&lt;-</span> <span class='kw'>errors</span> 
+<span class='kw'>errors1</span>[<span class='fl'>1</span>,<span class='fl'>2</span>] <span class='op'>&lt;-</span> <span class='kw'>errors</span>[<span class='fl'>1</span>,<span class='fl'>2</span>]<span class='op'>+</span><span class='kw'>errors</span>[<span class='fl'>1</span>,<span class='fl'>2</span>]<span class='op'>*</span><span class='fl'>0.1</span>
 
 <span class='co'># Try the new allocation </span>
-<span class='no'>allocation_2</span> <span class='kw'>&lt;-</span> <span class='fu'>beat.1st</span>(<span class='kw'>stratif</span><span class='kw'>=</span><span class='no'>strata</span>, <span class='kw'>errors</span><span class='kw'>=</span><span class='no'>errors1</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span>(<span class='no'>allocation_2</span>$<span class='no'>n</span>)</div><div class='output co'>#&gt; [1] 5671</div><div class='input'>
+<span class='kw'>allocation_2</span> <span class='op'>&lt;-</span> <span class='fu'>beat.1st</span>(stratif=<span class='kw'>strata</span>, errors=<span class='kw'>errors1</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span>(<span class='kw'>allocation_2</span><span class='op'>$</span><span class='kw'>n</span>)
+</div><div class='output co'>#&gt; [1] 5671</div><div class='input'>
 <span class='co'>## Example 3</span>
 <span class='co'># On the contrary, if we tighten the constraints decreasing the expected coefficients of variation </span>
 <span class='co'># for X1 by 10%</span>
-<span class='no'>errors2</span> <span class='kw'>&lt;-</span> <span class='no'>errors</span>
-<span class='no'>errors2</span>[<span class='fl'>1</span>,<span class='fl'>2</span>] <span class='kw'>&lt;-</span> <span class='no'>errors</span>[<span class='fl'>1</span>,<span class='fl'>2</span>]-<span class='no'>errors</span>[<span class='fl'>1</span>,<span class='fl'>2</span>]*<span class='fl'>0.1</span>
+<span class='kw'>errors2</span> <span class='op'>&lt;-</span> <span class='kw'>errors</span> 
+<span class='kw'>errors2</span>[<span class='fl'>1</span>,<span class='fl'>2</span>] <span class='op'>&lt;-</span> <span class='kw'>errors</span>[<span class='fl'>1</span>,<span class='fl'>2</span>]<span class='op'>-</span><span class='kw'>errors</span>[<span class='fl'>1</span>,<span class='fl'>2</span>]<span class='op'>*</span><span class='fl'>0.1</span>
 
 <span class='co'># The new allocation leads to a larger sample than the first example </span>
-<span class='no'>allocation_3</span> <span class='kw'>&lt;-</span> <span class='fu'>beat.1st</span>(<span class='kw'>stratif</span><span class='kw'>=</span><span class='no'>strata</span>, <span class='kw'>errors</span><span class='kw'>=</span><span class='no'>errors2</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span>(<span class='no'>allocation_3</span>$<span class='no'>n</span>)</div><div class='output co'>#&gt; [1] 8463</div></pre>
+<span class='kw'>allocation_3</span> <span class='op'>&lt;-</span> <span class='fu'>beat.1st</span>(stratif=<span class='kw'>strata</span>, errors=<span class='kw'>errors2</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span>(<span class='kw'>allocation_3</span><span class='op'>$</span><span class='kw'>n</span>)
+</div><div class='output co'>#&gt; [1] 8463</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -243,7 +252,7 @@ The generalized Bethel’s algorithm allows to determine the optimal sample size
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -38,6 +38,8 @@
 
 
 
+  <link href="../extra.css" rel="stylesheet">
+  
 
 <meta property="og:title" content="Input dataframes for R2BEAT two-stages sample design — input_to_beat.2st_1" />
 <meta property="og:description" content="Prepares the following input dataframes for R2BEAT two-stages sample design starting from ReGenesees design and/or calibrated objects:
@@ -131,14 +133,14 @@
 4. rho</p>
     </div>
 
-    <pre class="usage"><span class='fu'>input_to_beat.2st_1</span>(<span class='no'>RGdes</span>,
-                        <span class='no'>RGcal</span>,
-                        <span class='no'>id_PSU</span>,
-                        <span class='no'>id_SSU</span>,
-                        <span class='no'>strata_vars</span>,
-                        <span class='no'>target_vars</span>,
-                        <span class='no'>deff_vars</span>,
-                        <span class='no'>domain_vars</span>)</pre>
+    <pre class="usage"><span class='fu'>input_to_beat.2st_1</span>(<span class='kw'>RGdes</span>,
+                        <span class='kw'>RGcal</span>,
+                        <span class='kw'>id_PSU</span>,
+                        <span class='kw'>id_SSU</span>,
+                        <span class='kw'>strata_vars</span>,
+                        <span class='kw'>target_vars</span>,
+                        <span class='kw'>deff_vars</span>,
+                        <span class='kw'>domain_vars</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -177,39 +179,43 @@
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Giulio Barcaroli</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>R2BEAT</span>)
+    <pre class="examples"><div class='input'><span class='co'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://barcaroli.github.io/R2BEAT'>R2BEAT</a></span>)
 
 <span class='fu'><a href='https://rdrr.io/r/base/load.html'>load</a></span>(<span class='st'>"R2BEAT_ReGenesees.RData"</span>)   <span class='co'># ReGenesees design and calibration objects plus PSU data</span>
 
-<span class='no'>RGdes</span> <span class='kw'>&lt;-</span> <span class='no'>des</span>                           <span class='co'># ReGenesees design object</span>
-<span class='no'>RGcal</span> <span class='kw'>&lt;-</span> <span class='no'>cal</span>                           <span class='co'># ReGenesees calibrated object</span>
+<span class='kw'>RGdes</span> <span class='op'>&lt;-</span> <span class='kw'>des</span>                           <span class='co'># ReGenesees design object</span>
+<span class='kw'>RGcal</span> <span class='op'>&lt;-</span> <span class='kw'>cal</span>                           <span class='co'># ReGenesees calibrated object</span>
 
-<span class='no'>strata_vars</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"stratum"</span>)            <span class='co'># variables of stratification</span>
-<span class='no'>target_vars</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"income_hh"</span>,
+<span class='kw'>strata_vars</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"stratum"</span>)            <span class='co'># variables of stratification</span>
+<span class='kw'>target_vars</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"income_hh"</span>,
                  <span class='st'>"active"</span>,
                  <span class='st'>"inactive"</span>,
                  <span class='st'>"unemployed"</span>)         <span class='co'># target variables</span>
-<span class='no'>deff_vars</span> <span class='kw'>&lt;-</span> <span class='st'>"stratum"</span>                 <span class='co'># stratification variables to be used when calculating deff and effst </span>
-                                       <span class='co'>#    (n.b: must coincide or be a subset of variables of stratification)</span>
-<span class='no'>id_PSU</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"municipality"</span>)            <span class='co'># identification variable of PSUs</span>
-<span class='no'>id_SSU</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"id_hh"</span>)                   <span class='co'># identification variable of SSUs</span>
-<span class='no'>domain_vars</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"region"</span>)             <span class='co'># domain variables</span>
-<span class='no'>inp1</span> <span class='kw'>&lt;-</span> <span class='fu'>input_to_beat.2st_1</span>(<span class='no'>RGdes</span>,
-                            <span class='no'>RGcal</span>,
-                            <span class='no'>id_PSU</span>,
-                            <span class='no'>id_SSU</span>,
-                            <span class='no'>strata_vars</span>,
-                            <span class='no'>target_vars</span>,
-                            <span class='no'>deff_vars</span>,
-                            <span class='no'>domain_vars</span>)
-<span class='no'>inp1</span>$<span class='no'>strata</span>
-<span class='no'>inp1</span>$<span class='no'>deff</span>
-<span class='no'>inp1</span>$<span class='no'>effst</span>
-<span class='no'>inp1</span>$<span class='no'>rho</span>
-}</div></pre>
+<span class='kw'>deff_vars</span> <span class='op'>&lt;-</span> <span class='st'>"stratum"</span>    <span class='co'># stratification variables for calculating deff and effst </span>
+                          <span class='co'># (n.b: must coincide or be a subset of variables of stratification)</span>
+<span class='kw'>id_PSU</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"municipality"</span>)            <span class='co'># identification variable of PSUs</span>
+<span class='kw'>id_SSU</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"id_hh"</span>)                   <span class='co'># identification variable of SSUs</span>
+<span class='kw'>domain_vars</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"region"</span>)             <span class='co'># domain variables</span>
+<span class='kw'>inp1</span> <span class='op'>&lt;-</span> <span class='fu'>input_to_beat.2st_1</span>(<span class='kw'>RGdes</span>,
+                            <span class='kw'>RGcal</span>,
+                            <span class='kw'>id_PSU</span>,
+                            <span class='kw'>id_SSU</span>,
+                            <span class='kw'>strata_vars</span>,
+                            <span class='kw'>target_vars</span>,
+                            <span class='kw'>deff_vars</span>,
+                            <span class='kw'>domain_vars</span>)              
+<span class='kw'>inp1</span><span class='op'>$</span><span class='kw'>strata</span>
+<span class='kw'>inp1</span><span class='op'>$</span><span class='kw'>deff</span>
+<span class='kw'>inp1</span><span class='op'>$</span><span class='kw'>effst</span>
+<span class='kw'>inp1</span><span class='op'>$</span><span class='kw'>rho</span>
+}
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -225,7 +231,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

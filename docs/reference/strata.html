@@ -38,6 +38,8 @@
 
 
 
+  <link href="../extra.css" rel="stylesheet">
+  
 
 <meta property="og:title" content="Strata characteristics — strata" />
 <meta property="og:description" content="Example data frame containing information on strata characteristics." />
@@ -123,12 +125,12 @@
     <p>Example data frame containing information on strata characteristics.</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>beat.example</span>)</pre>
+    <pre class="usage"><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>beat.example</span>)</pre>
 
 
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p>The Strata data frame contains a row per each stratum with the following variables:</p><dl'>
+    <p>The Strata data frame contains a row per each stratum with the following variables:</p><dl>
     <dt>STRATUM</dt><dd><p>Identifier of the stratum (numeric).</p></dd> 
     <dt>N</dt><dd><p>Stratum population size (numeric).</p></dd> 
     <dt>M1</dt><dd><p>Mean in the stratum of the first variable (numeric).</p></dd>
@@ -150,8 +152,9 @@
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Load example data</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>beat.example</span>)
-<span class='no'>strata</span></div><div class='output co'>#&gt;    STRATUM       N DOM1  DOM2         M1         M2 COST CENS        S1
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>beat.example</span>)
+<span class='kw'>strata</span>
+</div><div class='output co'>#&gt;    STRATUM       N DOM1  DOM2         M1         M2 COST CENS        S1
 #&gt; 1        1 2302353 REG1 PROV1 0.02097409 0.01732549    1    0 0.1432975
 #&gt; 2        2  179562 REG1 PROV2 0.02304681 0.01997698    1    0 0.1500522
 #&gt; 3        3  371802 REG2 PROV3 0.02284502 0.01894097    1    0 0.1494093
@@ -186,7 +189,8 @@
 #&gt; 14 0.1121851
 #&gt; 15 0.1359583
 #&gt; 16 0.1068424
-#&gt; 17 0.1279655</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='no'>strata</span>)</div><div class='output co'>#&gt; 'data.frame':	17 obs. of  10 variables:
+#&gt; 17 0.1279655</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='kw'>strata</span>)
+</div><div class='output co'>#&gt; 'data.frame':	17 obs. of  10 variables:
 #&gt;  $ STRATUM: int  1 2 3 4 5 6 7 8 9 10 ...
 #&gt;  $ N      : int  2302353 179562 371802 592303 221687 440613 128230 222648 287906 882718 ...
 #&gt;  $ DOM1   : Factor w/ 2 levels "REG1","REG2": 1 1 2 2 2 2 2 2 2 2 ...
@@ -212,7 +216,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

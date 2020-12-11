@@ -38,6 +38,8 @@
 
 
 
+  <link href="../extra.css" rel="stylesheet">
+  
 
 <meta property="og:title" content="Information on Primary Stage Units (PSUs) stratification — PSU_strat" />
 <meta property="og:description" content="Example data frame containing information on Primary Stage Units (PSUs) stratification." />
@@ -123,12 +125,12 @@
     <p>Example data frame containing information on Primary Stage Units (PSUs) stratification.</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>beat.example</span>)</pre>
+    <pre class="usage"><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>beat.example</span>)</pre>
 
 
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p>The PSU_strat data frame contains a row for each Primary Stage Units (PSUs) with the following variables:</p><dl'>
+    <p>The PSU_strat data frame contains a row for each Primary Stage Units (PSUs) with the following variables:</p><dl>
     <dt>STRATUM</dt><dd><p>Identifier of the stratum (numeric)</p></dd> 
 <dt>PSU_MOS</dt><dd><p>Measure of size of the primary stage unit (numeric)</p></dd> 
 <dt>PSU_ID</dt><dd><p>Identifier of the primary stage unit (numeric)</p></dd> 
@@ -141,8 +143,9 @@
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Load example data</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>beat.example</span>)
-<span class='no'>PSU_strat</span></div><div class='output co'>#&gt;      STRATUM PSU_MOS PSU_ID
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>beat.example</span>)
+<span class='kw'>PSU_strat</span>
+</div><div class='output co'>#&gt;      STRATUM PSU_MOS PSU_ID
 #&gt; 1          1    2591      1
 #&gt; 2          1    3808      2
 #&gt; 3          1     465      3
@@ -2463,7 +2466,8 @@
 #&gt; 2318      17    1953    203
 #&gt; 2319      17    8259    204
 #&gt; 2320      17    1110    205
-#&gt; 2321      17    4707    206</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='no'>PSU_strat</span>)</div><div class='output co'>#&gt; 'data.frame':	2321 obs. of  3 variables:
+#&gt; 2321      17    4707    206</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='kw'>PSU_strat</span>)
+</div><div class='output co'>#&gt; 'data.frame':	2321 obs. of  3 variables:
 #&gt;  $ STRATUM: int  1 1 1 1 1 1 1 1 1 1 ...
 #&gt;  $ PSU_MOS: int  2591 3808 465 1778 713 6378 271 17097 2010 521 ...
 #&gt;  $ PSU_ID : int  1 2 3 4 5 6 7 8 9 10 ...</div></pre>
@@ -2482,7 +2486,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -38,6 +38,8 @@
 
 
 
+  <link href="../extra.css" rel="stylesheet">
+  
 
 <meta property="og:title" content="Starting values for the Design Effect (\(deft\)) — deft_start" />
 <meta property="og:description" content="Example data frame containing the starting values for the Design Effect (\(deft\)) ." />
@@ -123,12 +125,12 @@
     <p>Example data frame containing the starting values for the Design Effect (\(deft\)) .</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>beat.example</span>)</pre>
+    <pre class="usage"><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>beat.example</span>)</pre>
 
 
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p>The Design Effect data frame contains a row per each stratum with the following variables:</p><dl'>
+    <p>The Design Effect data frame contains a row per each stratum with the following variables:</p><dl>
     <dt>STRATUM</dt><dd><p>Identifier of the stratum (numeric).</p></dd> 
     <dt>DEFT1</dt><dd><p>Starting values for the Design Effect in the stratum of the first variable (numeric).</p></dd>
     <dt>DEFTj</dt><dd><p>Starting values for the Design Effect in the stratum of the j-th variable (numeric).</p></dd>
@@ -156,8 +158,9 @@ In practice, higher is the intraclass correlation, higher will be the design eff
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Load example data</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>beat.example</span>)
-<span class='no'>deft_start</span></div><div class='output co'>#&gt;    STRATUM DEFT1 DEFT2
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>beat.example</span>)
+<span class='kw'>deft_start</span>
+</div><div class='output co'>#&gt;    STRATUM DEFT1 DEFT2
 #&gt; 1        1   1.1   1.1
 #&gt; 2        2   1.1   1.1
 #&gt; 3        3   1.1   1.1
@@ -174,7 +177,8 @@ In practice, higher is the intraclass correlation, higher will be the design eff
 #&gt; 14      14   1.1   1.1
 #&gt; 15      15   1.1   1.1
 #&gt; 16      16   1.1   1.1
-#&gt; 17      17   1.1   1.1</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='no'>deft_start</span>)</div><div class='output co'>#&gt; 'data.frame':	17 obs. of  3 variables:
+#&gt; 17      17   1.1   1.1</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='kw'>deft_start</span>)
+</div><div class='output co'>#&gt; 'data.frame':	17 obs. of  3 variables:
 #&gt;  $ STRATUM: int  1 2 3 4 5 6 7 8 9 10 ...
 #&gt;  $ DEFT1  : num  1.1 1.1 1.1 1.1 1.1 1.1 1.1 1.1 1.1 1.1 ...
 #&gt;  $ DEFT2  : num  1.1 1.1 1.1 1.1 1.1 1.1 1.1 1.1 1.1 1.1 ...</div></pre>
@@ -193,7 +197,7 @@ In practice, higher is the intraclass correlation, higher will be the design eff
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
