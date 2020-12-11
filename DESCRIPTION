@@ -4,7 +4,7 @@ Title: Multistage Allocation
 Description: Multivariate optimal allocation for different domains in one and two stages stratified sample design.R2BEAT extends the Neyman (1934) – Tschuprow (1923) allocation method to the case of several variables, adopting a generalization of the Bethel’s proposal (1989). R2BEAT develops this methodology but, moreover, it allows to determine the sample allocation in the multivariate and multi-domains case of estimates for two-stage stratified samples. 
 Version: 1.0.2
 Depends: R (>= 3.5.0), plyr, sampling, devtools
-Suggests: knitr, rmarkdown, bookdown
+Suggests: knitr, rmarkdown, bookdown, ReGenesees
 Author: Stefano Falorsi,Andrea Fasulo,Alessio Guandalini,Daniela Pagliuca,Marco Dionisio Terribili,Giulio Barcaroli,Raffaella Cianchetta 
 Authors@R: c(person("Andrea", "Fasulo", role = c("aut", "cre"),
                      email = "fasulo@istat.it"),

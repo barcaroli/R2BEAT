@@ -7,15 +7,20 @@
 input_to_beat.2st_1 <- function (RGdes, RGcal, id_PSU, id_SSU, strata_vars, target_vars, deff_vars, 
                                  domain_vars) 
 {
-  if ( !require(ReGenesees) ){  
-    devtools::install_github("DiegoZardetto/ReGenesees")
-    # install.packages(
-    #   "ReGenesees", 
-    #   repos="http://ghrr.github.io/drat", 
-    #   type="source"
-    # )
-    library(ReGenesees)
+  #warning("The non-CRAN package, ReGenesees, is needed.")
+  # Add this line to NAMESPACE when ReGenesees is on CRAN
+  #importFrom(ReGenesees,svystat)
+  # and add ReGenesees to Depends in DESCRIPTION
+  
+  if (requireNamespace("ReGenesees", quietly = TRUE)) {
+    svystat    <- ReGenesees::svystat
+  } else {
+    stop("The package ReGenesees is needed. \nInstall it by executing the following: \ndevtools::install_github('DiegoZardetto/ReGenesees'")
   }
+  # if ( !require(ReGenesees) ){  
+  #   devtools::install_github("DiegoZardetto/ReGenesees")
+  #   library(ReGenesees)
+  # }
   ################### control of categorical target variables ######
   for (i in (1:length(target_vars))) {
     tvi <- target_vars[i]
@@ -103,13 +108,13 @@ input_to_beat.2st_1 <- function (RGdes, RGcal, id_PSU, id_SSU, strata_vars, targ
     eval(parse(text=st))
     if (sw == FALSE) {
       Mi <- NULL
-      st <- paste0("Mi <- ReGenesees:::svystat(RGcal,kind ='TM',estimator='Mean',y= ~", 
+      st <- paste0("Mi <- svystat(RGcal,kind ='TM',estimator='Mean',y= ~", 
                    tvi, ",by= ~", sv2, ",forGVF=FALSE)")
       eval(parse(text = st))
       M <- cbind(M,Mi[,length(strata_vars)+1])
     }
     if (sw == TRUE) {
-      st <- paste0("Mi <- ReGenesees:::svystat(RGcal,kind ='TM',estimator='Mean',y= ~", 
+      st <- paste0("Mi <- svystat(RGcal,kind ='TM',estimator='Mean',y= ~", 
                    tvi, ",by= ~", sv2, ",forGVF=FALSE)")
       eval(parse(text = st))
       M <- cbind(M,Mi[,length(strata_vars)+2])
@@ -181,7 +186,7 @@ input_to_beat.2st_1 <- function (RGdes, RGcal, id_PSU, id_SSU, strata_vars, targ
     st <- paste0("sw <- class(RGcal$variables$",tvi,") == 'factor'")
     eval(parse(text=st))
     if (sw == FALSE) {
-      st <- paste0("deffi <- ReGenesees:::svystat(RGdes,kind ='TM',estimator='Mean',y= ~", 
+      st <- paste0("deffi <- svystat(RGdes,kind ='TM',estimator='Mean',y= ~", 
                    tvi, ",by=~", dv, ",deff=TRUE,forGVF=TRUE)")
       eval(parse(text = st))
       for (j in 1:nrow(deffi)) {
@@ -196,7 +201,7 @@ input_to_beat.2st_1 <- function (RGdes, RGcal, id_PSU, id_SSU, strata_vars, targ
       deff <- rbind(deff,deffi)
     }
     if (sw == TRUE) {
-      st <- paste0("deffi <- ReGenesees:::svystat(RGdes,kind ='TM',estimator='Mean',y= ~", 
+      st <- paste0("deffi <- svystat(RGdes,kind ='TM',estimator='Mean',y= ~", 
                    tvi, ",by=~", dv, ",deff=TRUE,forGVF=TRUE)")
       eval(parse(text = st))
       for (j in 1:nrow(deffi)) {
@@ -264,7 +269,7 @@ input_to_beat.2st_1 <- function (RGdes, RGcal, id_PSU, id_SSU, strata_vars, targ
     st <- paste0("sw <- class(RGcal$variables$",tvi,") == 'factor'")
     eval(parse(text=st))
     if (sw == FALSE) {
-      st <- paste0("effsti <- ReGenesees:::svystat(RGcal,kind ='TM',estimator='Mean',y= ~", 
+      st <- paste0("effsti <- svystat(RGcal,kind ='TM',estimator='Mean',y= ~", 
                    tvi, ",by=~", dv, ",deff=TRUE,forGVF=TRUE)")
       eval(parse(text = st))
       for (j in 1:nrow(effsti)) {
@@ -279,7 +284,7 @@ input_to_beat.2st_1 <- function (RGdes, RGcal, id_PSU, id_SSU, strata_vars, targ
       effst <- rbind(effst,effsti)
     }
     if (sw == TRUE) {
-      st <- paste0("effsti <- ReGenesees:::svystat(RGdes,kind ='TM',estimator='Mean',y= ~", 
+      st <- paste0("effsti <- svystat(RGdes,kind ='TM',estimator='Mean',y= ~", 
                    tvi, ",by=~", dv, ",deff=TRUE,forGVF=TRUE)")
       eval(parse(text = st))
       for (j in 1:nrow(effsti)) {
