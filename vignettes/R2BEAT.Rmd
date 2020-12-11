@@ -28,8 +28,10 @@ vignette: >
 options(width=400)
 knitr::opts_chunk$set(echo = TRUE, fig.width=6, fig.height=4)
 # Install ReGenesees if not already installed
-if(!require(ReGenesees)){
-    devtools::install_github("DiegoZardetto/ReGenesees")
+  if (requireNamespace("ReGenesees", quietly = TRUE)) {
+    svystat    <- ReGenesees::svystat
+  } else {
+    stop("The package ReGenesees is needed. \nInstall it by executing the following: \ndevtools::install_github('DiegoZardetto/ReGenesees'")
   }
 library(ReGenesees)
 library(R2BEAT)
