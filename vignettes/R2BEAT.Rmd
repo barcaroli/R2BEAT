@@ -242,7 +242,29 @@ inp2 <- input_to_beat.2st_2(psu,
 head(inp2$psu_file)
 head(inp2$des_file)
 ```
-  
+
+# Check the coherence of populations in strata and PSUs 
+
+It may happen that the population in strata (variable 'N' in 'inp1$strata' dataset) and the one derived by the PSU dataset (variable 'STRAT_MOS' in 'inp2$des_file' dataset) are not the same.
+
+We can check it by applying the function 'check_input' in this way:
+
+```{r}
+newstrata <- check_input(strata=inp1$strata,
+                         des=inp2$des_file,
+                         strata_var_strata="STRATUM",
+                         strata_var_des="STRATUM")
+
+```
+
+Together with the print of the differences between the two populations, the function produces a new version of the strata dataset, where the population has been changed to the one derived by the PSUs dataset.
+
+It is preferable to use this new version:
+
+```{r}
+inp1$strata <- newstrata
+```
+
 
 
 # Optimal allocation of units in each stratum 
