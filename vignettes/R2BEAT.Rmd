@@ -245,7 +245,7 @@ head(inp2$des_file)
 
 # Check the coherence of populations in strata and PSUs 
 
-It may happen that the population in strata (variable 'N' in 'inp1$strata' dataset) and the one derived by the PSU dataset (variable 'STRAT_MOS' in 'inp2$des_file' dataset) are not the same.
+It may happen that the population in strata (variable 'N' in 'inp1\$strata' dataset) and the one derived by the PSU dataset (variable 'STRAT_MOS' in 'inp2\$des_file' dataset) are not the same.
 
 We can check it by applying the function 'check_input' in this way:
 
