@@ -1,7 +1,7 @@
 \name{check_input}
 \alias{check_input}
 \title{
-Check of coherence in the input for the allocation step
+Check of coherence in the inputs for the allocation step
 }
 \description{
 Checks the coherence between the population in the strata dataset and the population calculated by the PSUs dataset
