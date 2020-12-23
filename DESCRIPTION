@@ -1,4 +1,4 @@
-Package: R2BEAT
+Package: R2BEAT 
 Type: Package
 Title: Multistage Sampling Allocation and PSU selection
 Description: Multivariate optimal allocation for different domains in one and two stages 
