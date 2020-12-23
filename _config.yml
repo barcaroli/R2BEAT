@@ -1,6 +1,6 @@
 theme: jekyll-theme-minimal
 title: R2BEAT
-description: Multistage Allocation
+description: Multistage Sampling Allocation and PSU selection
 url: https://github.com/barcaroli/R2BEAT
 author: Giulio Barcaroli
 plugins:
