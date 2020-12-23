@@ -31,7 +31,7 @@ knitr::opts_chunk$set(echo = TRUE, fig.width=6, fig.height=4)
   if (requireNamespace("ReGenesees", quietly = TRUE)) {
     svystat    <- ReGenesees::svystat
   } else {
-    stop("The package ReGenesees is needed. \nInstall it by executing the following: \ndevtools::install_github('DiegoZardetto/ReGenesees'")
+    stop("The package ReGenesees is needed. \nInstall it by executing the following: \ndevtools::install_github('DiegoZardetto/ReGenesees')")
   }
 library(ReGenesees)
 library(R2BEAT)
@@ -41,18 +41,15 @@ options(warn=-1)
 options(scipen=9999)
 ```
 
-This vignette describes a generalized procedure making use of methods implemented in two R packages developed in the Italian National Institute:
+This vignette describes a generalized procedure making use of the methods implemented in the R package developed in the Italian National Institute, namely R2BEAT ("Multistage Sampling Allocation and PSU selection").
 
-1. R2BEAT ("Multivariate optimal allocation for different domains in one and two stages stratified sample design")
-2. FS4 ("First Stage Stratification and Selection in Sampling")
-
-The first package allows to determine the optimal allocation of both Primary Stage Units (PSUs) and Secondary Stage Units (SSU), while the second one performs a selection of the PSUs such that the final sample of SSU if of the self-weigthing type, i.e. the total inclusion probabilities (as resulting from the product between the inclusion probabilities of the PSUs and those of the SSUs) are near equal for all SSUs.
+This package allows to determine the optimal allocation of both Primary Stage Units (PSUs) and Secondary Stage Units (SSU), and also to perform a selection of the PSUs such that the final sample of SSU is of the self-weighting type, i.e. the total inclusion probabilities (as resulting from the product between the inclusion probabilities of the PSUs and those of the SSUs) are near equal for all SSUs.
 
 This general flow assumes that at least a previous round of the survey, whose sampling design has to be optimized, is available, and is characterized by the following steps:
 
 # Use of ReGenesees
 
-Perform externally the definition of the sample design, and possibly of the calibration step, using the R package ReGenesees (also developed in Istat), and make the design object and the calibrated object available. Moreover, check the presence of lonely strata:
+Perform externally the definition of the sample design, and possibly of the calibration step, using the R package ReGenesees, and make the design object and the calibrated object available. 
 
 ```{r}
 load("R2BEAT_ReGenesees.RData")   # ReGenesees design object
@@ -317,7 +314,7 @@ alloc$expected
 
 # Selection of PSUs
 
-Using the function 'StratSel' in 'FS4' package execute the selection of PSU in strata:
+Using the function 'StratSel' execute the selection of PSU in strata:
 
 ```{r}
 allocat <- alloc$alloc[-nrow(alloc$alloc),]
