@@ -175,19 +175,46 @@
 <span class="co"># 21         20     36     155       191 15147</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span>(<span class="kw">allocation</span>)
 <span class="co"># Selection of PSUs</span>
-<span class="kw">sample_PSU</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/StratSel.html">StratSel</a></span>(dataPop= <span class="kw">PSU_strat</span>,
-                       idpsu= <span class="op">~</span> <span class="kw">PSU_ID</span>, 
-                       dom= <span class="op">~</span> <span class="kw">STRATUM</span>, 
-                       final_pop= <span class="op">~</span> <span class="kw">PSU_MOS</span>, 
-                       size= <span class="op">~</span> <span class="kw">PSU_MOS</span>, 
-                       PSUsamplestratum= <span class="fl">1</span>, 
-                       min_sample= <span class="fl">2</span>, 
-                       min_sample_index= <span class="fl">FALSE</span>, 
-                       dataAll=<span class="kw">allocation</span><span class="op">$</span><span class="kw">alloc</span>,
-                       domAll= <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="kw">STRATUM</span>), 
-                       f_sample= <span class="op">~</span> <span class="kw">ALLOC</span>, 
-                       planned_min_sample= <span class="kw">NULL</span>, 
+<span class="kw">allocat</span> <span class="op">&lt;-</span> <span class="kw">allocation</span><span class="op">$</span><span class="kw">alloc</span>[<span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="kw">allocation</span><span class="op">$</span><span class="kw">alloc</span>),]
+<span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span>(<span class="kw">allocat</span>)
+<span class="kw">allocat</span><span class="op">$</span><span class="kw">STRATUM</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span>(<span class="kw">allocat</span><span class="op">$</span><span class="kw">STRATUM</span>)<span class="op">*</span><span class="fl">100</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span>(<span class="kw">allocat</span><span class="op">$</span><span class="kw">STRATUM</span>)
+<span class="kw">PSU_strat</span><span class="op">$</span><span class="kw">STRATUM</span> <span class="op">&lt;-</span> <span class="kw">PSU_strat</span><span class="op">$</span><span class="kw">STRATUM</span><span class="op">*</span><span class="fl">100</span>
+<span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span>(<span class="kw">PSU_strat</span><span class="op">$</span><span class="kw">STRATUM</span>)
+<span class="kw">sampled_PSU</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/StratSel.html">StratSel</a></span>(dataPop= <span class="kw">PSU_strat</span>,
+                       idpsu= <span class="op">~</span> <span class="kw">PSU_ID</span>,
+                       dom= <span class="op">~</span> <span class="kw">STRATUM</span>,
+                       final_pop= <span class="op">~</span> <span class="kw">PSU_MOS</span>,
+                       size= <span class="op">~</span> <span class="kw">PSU_MOS</span>,
+                       PSUsamplestratum= <span class="fl">1</span>,
+                       min_sample= <span class="fl">2</span>,
+                       min_sample_index= <span class="fl">FALSE</span>,
+                       dataAll=<span class="kw">allocat</span>,
+                       domAll= <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="kw">STRATUM</span>),
+                       f_sample= <span class="op">~</span> <span class="kw">ALLOC</span>,
+                       planned_min_sample= <span class="kw">NULL</span>,
                        launch= <span class="kw">F</span>)
+<span class="kw">sampled_PSU</span>[[<span class="fl">2</span>]]
+<span class="co">#    Domain SRdom nSRdom SRdom+nSRdom SR_PSU_final_sample_unit NSR_PSU_final_sample_unit</span>
+<span class="co"># 1     100   275     16          291                     8861                        36</span>
+<span class="co"># 2     200    61     10           71                      377                        28</span>
+<span class="co"># 3     300    18     20           38                       55                         8</span>
+<span class="co"># 4     400    45     40           85                      447                        41</span>
+<span class="co"># 5     500    10     21           31                      205                        67</span>
+<span class="co"># 6     600    18     37           55                       59                        33</span>
+<span class="co"># 7     700    18     13           31                     1304                        20</span>
+<span class="co"># 8     800    14     12           26                      545                        67</span>
+<span class="co"># 9     900    21     12           33                      867                        55</span>
+<span class="co"># 10   1000    25     13           38                      918                        23</span>
+<span class="co"># 11   1100    11      4           15                      106                        41</span>
+<span class="co"># 12   1200    81     19          100                      198                        85</span>
+<span class="co"># 13   1300    53     31           84                       65                        43</span>
+<span class="co"># 14   1400    20     15           35                      144                        74</span>
+<span class="co"># 15   1500   115      8          123                       68                        28</span>
+<span class="co"># 16   1600   132     31          163                      132                        24</span>
+<span class="co"># 17   1700   142     24          166                      116                        25</span>
+<span class="co"># 18  Total  1059    326         1385                    14467                       698</span>
+<span class="co"># 19   Mean                                                851                        41</span>
 </pre></div>
 </div>
 </div>
