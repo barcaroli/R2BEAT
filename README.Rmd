@@ -109,18 +109,45 @@ allocation <- beat.2st(stratif=strata,
 # 21         20     36     155       191 15147
 str(allocation)
 # Selection of PSUs
-sample_PSU <- StratSel(dataPop= PSU_strat,
-                       idpsu= ~ PSU_ID, 
-                       dom= ~ STRATUM, 
-                       final_pop= ~ PSU_MOS, 
-                       size= ~ PSU_MOS, 
-                       PSUsamplestratum= 1, 
-                       min_sample= 2, 
-                       min_sample_index= FALSE, 
-                       dataAll=allocation$alloc,
-                       domAll= ~ factor(STRATUM), 
-                       f_sample= ~ ALLOC, 
-                       planned_min_sample= NULL, 
+allocat <- allocation$alloc[-nrow(allocation$alloc),]
+str(allocat)
+allocat$STRATUM <- as.character(as.numeric(allocat$STRATUM)*100)
+unique(allocat$STRATUM)
+PSU_strat$STRATUM <- PSU_strat$STRATUM*100
+unique(PSU_strat$STRATUM)
+sampled_PSU <- StratSel(dataPop= PSU_strat,
+                       idpsu= ~ PSU_ID,
+                       dom= ~ STRATUM,
+                       final_pop= ~ PSU_MOS,
+                       size= ~ PSU_MOS,
+                       PSUsamplestratum= 1,
+                       min_sample= 2,
+                       min_sample_index= FALSE,
+                       dataAll=allocat,
+                       domAll= ~ factor(STRATUM),
+                       f_sample= ~ ALLOC,
+                       planned_min_sample= NULL,
                        launch= F)
+sampled_PSU[[2]]
+#    Domain SRdom nSRdom SRdom+nSRdom SR_PSU_final_sample_unit NSR_PSU_final_sample_unit
+# 1     100   275     16          291                     8861                        36
+# 2     200    61     10           71                      377                        28
+# 3     300    18     20           38                       55                         8
+# 4     400    45     40           85                      447                        41
+# 5     500    10     21           31                      205                        67
+# 6     600    18     37           55                       59                        33
+# 7     700    18     13           31                     1304                        20
+# 8     800    14     12           26                      545                        67
+# 9     900    21     12           33                      867                        55
+# 10   1000    25     13           38                      918                        23
+# 11   1100    11      4           15                      106                        41
+# 12   1200    81     19          100                      198                        85
+# 13   1300    53     31           84                       65                        43
+# 14   1400    20     15           35                      144                        74
+# 15   1500   115      8          123                       68                        28
+# 16   1600   132     31          163                      132                        24
+# 17   1700   142     24          166                      116                        25
+# 18  Total  1059    326         1385                    14467                       698
+# 19   Mean                                                851                        41
 ```
 
