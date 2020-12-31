@@ -96,7 +96,7 @@ sampled_PSU <- StratSel(dataPop= PSU_strat,
                        final_pop= ~ PSU_MOS,
                        size= ~ PSU_MOS,
                        PSUsamplestratum= 1,
-                       min_sample= 2,
+                       min_sample= 12,
                        min_sample_index= FALSE,
                        dataAll=allocat,
                        domAll= ~ factor(STRATUM),
@@ -104,4 +104,4 @@ sampled_PSU <- StratSel(dataPop= PSU_strat,
                        planned_min_sample= NULL,
                        launch= F)
 sampled_PSU[[2]]
-
+head(sampled_PSU[[4]])
