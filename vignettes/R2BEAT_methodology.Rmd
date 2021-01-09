@@ -1,5 +1,5 @@
 ---
-title: "R2BEAT methodology and use"
+title: "R2BEAT methodology and use" 
 output: 
   bookdown::html_document2:
     df_print: kable

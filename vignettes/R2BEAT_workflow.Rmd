@@ -1,5 +1,5 @@
 ---
-title: "R2BEAT two-stage sampling design workflow" 
+title: "R2BEAT two-stage sampling design workflow"  
 date: "`r Sys.Date()` <br>  <br> <br>"
 output: 
   bookdown::html_document2:
