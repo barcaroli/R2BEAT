@@ -36,7 +36,7 @@ In particular, the variances of the target variables or at least proxy variables
 The main idea for optimal allocation is that strata with larger size and larger variability with respect to the target variables need more sample size to provide better estimates.
 Since, in our case, data from previous surveys occasions were available, an optimal allocation could be deployed.
 
-*R2BEAT* extends the Neyman (@neyman)  Tschuprow (@tschprow) allocation method to the case of several variables, adopting a generalization of the Bethel's proposal (@bethel1989). Besides, enables the determination of optimal sample allocation for two-stage stratified samples, by using the function *beat.2st.*
+*R2BEAT* extends the Neyman (@neyman) - Tschuprow (@tschprow) allocation method to the case of several variables, adopting a generalization of the Bethel's proposal (@bethel1989). Besides, enables the determination of optimal sample allocation for two-stage stratified samples, by using the function *beat.2st.*
 
 Before using this function, a preliminary step is needed.
 In fact, it is necessary to define some parameters for performing the function (see the package documentation for the input formats).
