@@ -1,5 +1,5 @@
 ---
-title: "Two-stage sampling design workflow" 
+title: "R2BEAT two-stage sampling design workflow" 
 date: "`r Sys.Date()` <br>  <br> <br>"
 output: 
   bookdown::html_document2:
@@ -18,7 +18,7 @@ bibliography:
 link-citations: yes
 linkcolor: red
 vignette: >
-  %\VignetteIndexEntry{Two-stage sampling design workflow}
+  %\VignetteIndexEntry{R2BEAT two-stage sampling design workflow}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 ---
