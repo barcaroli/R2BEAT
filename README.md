@@ -37,10 +37,12 @@ stratified sampling designs and incomplete stratified sampling designs
 (<a href="https://www.istat.it/en/methods-and-tools/methods-and-it-tools/design/design-tools/multiwaysampleallocation" class="uri">https://www.istat.it/en/methods-and-tools/methods-and-it-tools/design/design-tools/multiwaysampleallocation</a>).
 
 For a complete illustration of the methodology see the vignette “R2BEAT
-methodology and use”.
+methodology and use”
+(<a href="https://barcaroli.github.io/R2BEAT/articles/R2BEAT_methodology.html" class="uri">https://barcaroli.github.io/R2BEAT/articles/R2BEAT_methodology.html</a>).
 
 A complete example is illustrated in the vignette “Two-stage sampling
-design workflow”.
+design workflow”
+(<a href="https://barcaroli.github.io/R2BEAT/articles/R2BEAT_workflow.html" class="uri">https://barcaroli.github.io/R2BEAT/articles/R2BEAT_workflow.html</a>).
 
 ## Installation
 
