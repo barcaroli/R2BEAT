@@ -18,7 +18,7 @@ bibliography:
 link-citations: yes
 linkcolor: red
 vignette: >
-  %\VignetteIndexEntry{R2BEAT}
+  %\VignetteIndexEntry{Two-stage sampling design workflow}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 ---
