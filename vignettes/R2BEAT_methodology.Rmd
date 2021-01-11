@@ -51,7 +51,7 @@ In particular:
 7. mean of each target variables in each strata (*M*, $\hat{p}$ or $\hat{x}$);
 8. estimated population standard deviation of each target variable in each stratum (*S*, $\hat{S}$);
 9. intra-class correlation coefficients for each target variable in each stratum (*RHO*, $\hat{\rho}$);
-10. estimator effect for each target variable in each stratum (*EFFST*, $$\widehat{effst}$).
+10. estimator effect for each target variable in each stratum (*EFFST*, $\widehat{effst}$).
 
 
 To better understand the optimal allocation, a few words on points 7-10 are necessary.
@@ -74,7 +74,7 @@ While, in the case of a quantitative variable, it is equal to
 where $\hat{M}_i^2 = \frac{\sum_{k \in s} y_{ik}^2 \ w_k}{N}$ and $\hat{\bar{Y}}_i = \frac{ \sum_{k \in s} y_{ik} \ w_k}{N}$ are the quadratic mean and the arithmetic mean estimated on sample data of the previous occasion(s) of the survey, respectively, with $y_{ik}$ the value of the target variable $i$ observed on the unit $k$, $w_k$ the corresponding sampling weight and $N$ the population size.
 
 A crucial statistic for the optimal sample allocation in two-stage sampling design is the intra-class correlation coefficient, $\hat{\rho}$. 
-Due to logistics, in household surveys the sample is not wide-spread in the whole country, but often ``clusterised" in PSUs and, then, in SSUs (clusters of family members). 
+Due to logistics, in household surveys the sample is not wide-spread in the whole country, but often 'clusterised' in PSUs and, then, in SSUs (clusters of family members). 
 If the units of clusters are too similar to each another, it is not efficient to collect too many units from the same cluster.
 Anyway, sometimes a small lost in efficiency of the estimates is accepted, because it is paid off by a gain in the organization of the survey and, moreover, by cost reduction.
 
