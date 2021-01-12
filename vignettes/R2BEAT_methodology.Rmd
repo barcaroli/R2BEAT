@@ -120,7 +120,7 @@ where, for $SR$ and $NSR$ strata,
 	\item $\hat{\rho}_{i,SR}$ and $\hat{\rho}_{i,NSR}$ the intra-class correlation coefficient for the variable $i$;
 	\item $b_{SR}$ and $b_{NSR}$ are the average PSU size in terms of the final sampling units.
 \end{itemize} 
-Of course, if there are no $SR$ strata the expression \eqref{deff1} recurs. 
+
 The design effect is equal to 1 under the $srs$ design and increases for each additional stage of selection, due to intra-class correlation coefficient which is, usually, positive.
 It can be computed using the function *svystatTM* from *ReGenesees*, setting up the parameter *deff=TRUE*.
 
@@ -160,9 +160,9 @@ $$
 where $C$ is the global cost of the survey (if *COST* is equal to 1 in all the strata, $C=n$) and $\sigma\left(\hat{\bar{Y}}_{i,h}\right)$ is the error we expect to observe estimating the $Y_i$ variable in the stratum $h$ (expected errors), that must be lower than the precision constraints defined by the user.
 
 The solution is obtained with an iterative algorithm.
-Then, $\hat{S}$ (see, e.g, expression \eqref{S_dicho} and \eqref{S_quant}) is multiplied by the new design effect and the estimator effect and a new allocation is computed.
+Then, $\hat{S}$ is multiplied by the new design effect and the estimator effect and a new allocation is computed.
 The algorithm stops when the difference between two consecutive iterations is lower than a predefined threshold.
-At each step, an allocation is provided and the design effect is updated following the expression \eqref{deff2}.
+At each step, an allocation is provided and the design effect is updated.
 
 The package *R2BEAT* provides several outputs that help the evaluation of the allocation. 
 
@@ -174,7 +174,7 @@ Then, to find the optimal allocation it is necessary to tune the precision const
 
 Once performed the allocation step, the function *StratSel* allows to perform the selection of the Primary Stage Units (PSUs).
 
-The function carries out the stratification of the PSUs, for each estimation domain, according to a size threshold \eqref{threshold}. PSUs with measure of size exceeding the threshold are identified as SR (see also description in the previous section). 
+The function carries out the stratification of the PSUs, for each estimation domain, according to a size threshold. PSUs with measure of size exceeding the threshold are identified as SR (see also description in the previous section). 
 The remaining NSR PSUs are ordered by their measure of size and divided into strata whose sizes are approximately equal to the threshold multiplied by the number of PSUs to be selected in each stratum (*MINCS*). 
 In this way, strata are composed by PSUs having as equal as possible size. 
 For each PSU, *StratSel* determines the size of  final sample units on the basis of the size planned in input.
