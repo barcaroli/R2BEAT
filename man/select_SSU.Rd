@@ -11,11 +11,11 @@ Select sample of secondary stage units (SSU) from the population frame on the ba
 }
 
 \arguments{
- \item{df}{Dataframe containing sampling units (SSUs).}
- \item{PSU_code}{Identifier of each PSU in dataframe containing sampling units.}
- \item{SSU_code}{Identifier of each SSU in dataframe containing sampling units.}
- \item{PSU_sampled}{Dataframe containing selected PSUs.}
- \item{verbose}{Flag for producing output information while executing.}
+ \item{df}{Dataframe containing sampling units (SSUs)}
+ \item{PSU_code}{Identifier of each PSU in dataframe containing sampling units}
+ \item{SSU_code}{Identifier of each SSU in dataframe containing sampling units}
+ \item{PSU_sampled}{Dataframe containing selected PSUs}
+ \item{verbose}{Flag for producing output information while executing}
 }
 
 
