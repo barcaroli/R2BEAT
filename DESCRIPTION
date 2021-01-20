@@ -5,17 +5,17 @@ Description: Multivariate optimal allocation for different domains in one and tw
 Version: 1.0.3
 Depends: R (>= 3.5.0), plyr, sampling, devtools
 Suggests: knitr, rmarkdown, bookdown, ReGenesees
-Author: Stefano Falorsi,Andrea Fasulo,Alessio Guandalini,Daniela Pagliuca,Marco Dionisio Terribili,Giulio Barcaroli,Raffaella Cianchetta 
+Author: Andrea Fasulo,Giulio Barcaroli,Raffaella Cianchetta,Stefano Falorsi,Alessio Guandalini,Daniela Pagliuca,Marco Dionisio Terribili 
 Authors@R: c(person("Andrea", "Fasulo", role = c("aut", "cre"),
                      email = "fasulo@istat.it"),
+                                   person("Raffaella", "Cianchetta", role = "aut"),
+              person("Giulio", "Barcaroli", role = "aut"),
               person("Stefano", "Falorsi", role = "aut",
                      email = "stfalors@istat.it"),
               person("Alessio", "Guandalini", role = "aut",
                      email = "alessio.guandalini@istat.it"),
               person("Daniela", "Pagliuca", role = "aut"), 
-              person("Marco Dionisio","Terribili", role = "aut"),
-              person("Raffaella", "Cianchetta", role = "aut"),
-              person("Giulio", "Barcaroli", role = "aut")
+              person("Marco Dionisio","Terribili", role = "aut")
               )
 Maintainer: Andrea Fasulo <fasulo@istat.it>
 License: EUPL
