@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 select_SSU <- function (df, PSU_code, SSU_code, PSU_sampled, verbose = TRUE) 
 {
   select <- function(df, PSU_code, PSU_sampled) {
@@ -48,6 +49,7 @@ select_SSU <- function (df, PSU_code, SSU_code, PSU_sampled, verbose = TRUE)
   }
   return(samp)
 }
+=======
 #-----------------------------------------
 # Function to select 2nd stage units (SSU)
 #-----------------------------------------
@@ -96,3 +98,4 @@ select_SSU <- function(df,PSU_code,SSU_code,PSU_sampled,verbose=TRUE) {
   return(samp)
 }
 
+>>>>>>> 202629acea1042fff4f6757fa37c68b43c241586
