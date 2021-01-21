@@ -68,13 +68,13 @@ select_SSU <- function(df,PSU_code,SSU_code,PSU_sampled,verbose=TRUE) {
     }
     return(s)
   }
-  st <- paste0("frame <- frame[frame$",PSU_code," %in% PSU_sampled$PSU_ID, ]")
+  st <- paste0("df <- df[df$",PSU_code," %in% PSU_sampled$PSU_ID, ]")
   eval(parse(text=st))
-  st <- paste0("frame$municipality <- as.factor(frame$",PSU_code,")")
+  st <- paste0("df$municipality <- as.factor(df$",PSU_code,")")
   eval(parse(text=st))
-  st <- paste0("frame.split <- split(frame,frame$",PSU_code,",drop=TRUE)")
+  st <- paste0("df.split <- split(df,df$",PSU_code,",drop=TRUE)")
   eval(parse(text=st))  
-  samp <- sapply(frame.split,function(df) select(df,PSU_code,PSU_sampled))
+  samp <- sapply(df.split,function(df) select(df,PSU_code,PSU_sampled))
   samp <- data.frame(t(samp))
   st <- paste0("id_ind <- unlist(samp$",SSU_code,")")
   eval(parse(text=st))   
