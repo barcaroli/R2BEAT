@@ -25,7 +25,7 @@ vignette: >
 
 
 ```{r setup, include=FALSE}
-options(width=400)
+options(width=400) 
 knitr::opts_chunk$set(echo = TRUE, fig.width=6, fig.height=4)
 # Install ReGenesees if not already installed
   if (requireNamespace("ReGenesees", quietly = TRUE)) {
@@ -317,6 +317,7 @@ alloc$expected
 Using the function 'StratSel' execute the selection of PSU in strata:
 
 ```{r}
+set.seed(1234)
 allocat <- alloc$alloc[-nrow(alloc$alloc),]
 sample_2st <- StratSel(dataPop= inp2$psu_file,
                        idpsu= ~ PSU_ID, 
@@ -372,5 +373,54 @@ selected_PSU <- selected_PSU[selected_PSU$PSU_final_sample_unit > 0,]
 write.table(sample_2st[[4]],"Selected_PSUs.csv",sep=";",row.names=F,quote=F)
 head(selected_PSU)
 ```
+
+# Selection of SSUs
+
+Finally, we are able to select the Secondary Sample Units (the individuals) from the already selected PSUs (the municipalities). 
+First, we load the population frame:
+
+```{r}
+load("Frame_reduced.RData")
+```
+
+
+and we proceed to select the sample in this way:
+
+```{r}
+samp <- select_SSU(df=pop,
+                   PSU_code="municipality",
+                   SSU_code="id_ind",
+                   PSU_sampled=selected_PSU[selected_PSU$Sampled_PSU==1,],
+                   verbose=FALSE)
+```
+
+To check that the total amount is practically equal to what determined in the allocation step:
+
+```{r}
+nrow(samp)
+sum(allocat$ALLOC)
+```
+
+and that the sum of weights equalize population size:
+
+```{r}
+nrow(pop)
+sum(samp$we)
+```
+This is the distribution of weights:
+
+```{r}
+par(mfrow=c(1, 2))
+boxplot(samp$weight,col="orange")
+title("Weights distribution (total sample)",cex.main=0.7)
+boxplot(weight ~ region, data=samp,col="orange")
+title("Weights distribution by region",cex.main=0.7)
+boxplot(weight ~ province, data=samp,col="orange")
+title("Weights distribution by province",cex.main=0.7)
+boxplot(weight ~ stratum, data=samp,col="orange")
+title("Weights distribution by stratum",cex.main=0.7)
+```
+
+It can be seen that the sample is fully self-weighted inside strata, and approximately self-weighted in aggregations of strata, that is the result we wanted to obtain.
 
 
