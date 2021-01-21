@@ -579,7 +579,7 @@
 <a href="#selection-of-ssus" class="anchor"></a>Selection of SSUs</h1>
 <p>Finally, we are able to select the Secondary Sample Units (the individuals) from the already selected PSUs (the municipalities). First, we load the population frame:</p>
 <div class="sourceCode" id="cb56"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span>(<span class="st">"Frame_reduced.RData"</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span>(<span class="st">"Frame.RData"</span>)
 </pre></div>
 <p>and we proceed to select the sample in this way:</p>
 <div class="sourceCode" id="cb57"><pre class="downlit">
@@ -593,7 +593,7 @@
 <div class="sourceCode" id="cb58"><pre class="downlit">
 <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="kw">samp</span>)
 </pre></div>
-<pre><code>## [1] 6285</code></pre>
+<pre><code>## [1] 9460</code></pre>
 <div class="sourceCode" id="cb60"><pre class="downlit">
 <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span>(<span class="kw">allocat</span><span class="op">$</span><span class="kw">ALLOC</span>)
 </pre></div>
@@ -602,11 +602,11 @@
 <div class="sourceCode" id="cb62"><pre class="downlit">
 <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="kw">pop</span>)
 </pre></div>
-<pre><code>## [1] 1291454</code></pre>
+<pre><code>## [1] 2258507</code></pre>
 <div class="sourceCode" id="cb64"><pre class="downlit">
 <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span>(<span class="kw">samp</span><span class="op">$</span><span class="kw">we</span>)
 </pre></div>
-<pre><code>## [1] 1263880</code></pre>
+<pre><code>## [1] 2258507</code></pre>
 <p>This is the distribution of weights:</p>
 <div class="sourceCode" id="cb66"><pre class="downlit">
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span>(mfrow=<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>, <span class="fl">2</span>))
