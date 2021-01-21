@@ -38,18 +38,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">R2BEAT </a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.3</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
@@ -89,13 +83,12 @@
 
       
 
-      </header><script src="R2BEAT_workflow_files/header-attrs-2.5/header-attrs.js"></script><link href="R2BEAT_workflow_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet">
-<script src="R2BEAT_workflow_files/anchor-sections-1.0/anchor-sections.js"></script><div class="row">
+      </header><script src="R2BEAT_workflow_files/header-attrs-2.5/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>R2BEAT two-stage sampling design workflow</h1>
             
-            <h4 class="date">2021-01-11 <br><br><br>
+            <h4 class="date">2021-01-21 <br><br><br>
 </h4>
       
       <small class="dont-index">Source: <a href="https://github.com/barcaroli/R2BEAT/blob/master/vignettes/R2BEAT_workflow.Rmd"><code>vignettes/R2BEAT_workflow.Rmd</code></a></small>
@@ -497,6 +490,7 @@
 <a href="#selection-of-psus" class="anchor"></a>Selection of PSUs</h1>
 <p>Using the function ‘StratSel’ execute the selection of PSU in strata:</p>
 <div class="sourceCode" id="cb49"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="fl">1234</span>)
 <span class="kw">allocat</span> <span class="op">&lt;-</span> <span class="kw">alloc</span><span class="op">$</span><span class="kw">alloc</span>[<span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="kw">alloc</span><span class="op">$</span><span class="kw">alloc</span>),]
 <span class="kw">sample_2st</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/StratSel.html">StratSel</a></span>(dataPop= <span class="kw">inp2</span><span class="op">$</span><span class="kw">psu_file</span>,
                        idpsu= <span class="op">~</span> <span class="kw">PSU_ID</span>, 
@@ -572,13 +566,64 @@
 <span class="fu"><a href="https://rdrr.io/r/utils/write.table.html">write.table</a></span>(<span class="kw">sample_2st</span>[[<span class="fl">4</span>]],<span class="st">"Selected_PSUs.csv"</span>,sep=<span class="st">";"</span>,row.names=<span class="kw">F</span>,quote=<span class="kw">F</span>)
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="kw">selected_PSU</span>)
 </pre></div>
-<pre><code>##      Sampled_PSU        Pik Size_Stratum STRATUM PSU_ID PSU_MOS PSU_MOS.1 ALLOC threshold final_populationdom sampling_fraction SR SizeSR stratum N_PSU_Stratum PSU_final_sample_unit nSR
-## 1              1 1.00000000       146162    1000    330  146162    146162   160  61564.69              197007      0.0008121539  1 146162   10001             1                   119   0
-## 2              1 1.00000000        50845    1000    309   50845     50845   160  61564.69              197007      0.0008121539  1      0   10002             1                    41   0
-## 1100           1 0.36294083        99727    2000    304   36195     36195   172  76004.65              261456      0.0006578545  0      0   20001             3                    66   1
-## 7              1 0.21265470        80318    2000    318   17080     17080   172  76004.65              261456      0.0006578545  0      0   20002             4                    53   1
-## 12             1 0.16483031        81411    2000    317   13419     13419   172  76004.65              261456      0.0006578545  0      0   20003             6                    54   1
-## 24             1 0.03968466       115813    3000    295    4596      4596    47 123205.32              115813      0.0004058266  0      0   30001            26                    47   1</code></pre>
+<pre><code>##    Sampled_PSU        Pik Size_Stratum STRATUM PSU_ID PSU_MOS PSU_MOS.1 ALLOC threshold final_populationdom sampling_fraction SR SizeSR stratum N_PSU_Stratum PSU_final_sample_unit nSR
+## 1            1 1.00000000       146162    1000    330  146162    146162   160  61564.69              197007      0.0008121539  1 146162   10001             1                   119   0
+## 2            1 1.00000000        50845    1000    309   50845     50845   160  61564.69              197007      0.0008121539  1      0   10002             1                    41   0
+## 3            1 0.29456416        99727    2000    315   29376     29376   172  76004.65              261456      0.0006578545  0      0   20001             3                    66   1
+## 7            1 0.21265470        80318    2000    318   17080     17080   172  76004.65              261456      0.0006578545  0      0   20002             4                    53   1
+## 11           1 0.16948570        81411    2000    314   13798     13798   172  76004.65              261456      0.0006578545  0      0   20003             6                    54   1
+## 32           1 0.02738898       115813    3000    302    3172      3172    47 123205.32              115813      0.0004058266  0      0   30001            26                    47   1</code></pre>
+</div>
+<div id="selection-of-ssus" class="section level1">
+<h1 class="hasAnchor">
+<a href="#selection-of-ssus" class="anchor"></a>Selection of SSUs</h1>
+<p>Finally, we are able to select the Secondary Sample Units (the individuals) from the already selected PSUs (the municipalities). First, we load the population frame:</p>
+<div class="sourceCode" id="cb56"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span>(<span class="st">"Frame_reduced.RData"</span>)
+</pre></div>
+<p>and we proceed to select the sample in this way:</p>
+<div class="sourceCode" id="cb57"><pre class="downlit">
+<span class="kw">samp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/select_SSU.html">select_SSU</a></span>(df=<span class="kw">pop</span>,
+                   PSU_code=<span class="st">"municipality"</span>,
+                   SSU_code=<span class="st">"id_ind"</span>,
+                   PSU_sampled=<span class="kw">selected_PSU</span>[<span class="kw">selected_PSU</span><span class="op">$</span><span class="kw">Sampled_PSU</span><span class="op">==</span><span class="fl">1</span>,],
+                   verbose=<span class="fl">FALSE</span>)
+</pre></div>
+<p>To check that the total amount is practically equal to what determined in the allocation step:</p>
+<div class="sourceCode" id="cb58"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="kw">samp</span>)
+</pre></div>
+<pre><code>## [1] 6285</code></pre>
+<div class="sourceCode" id="cb60"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span>(<span class="kw">allocat</span><span class="op">$</span><span class="kw">ALLOC</span>)
+</pre></div>
+<pre><code>## [1] 9453</code></pre>
+<p>and that the sum of weights equalize population size:</p>
+<div class="sourceCode" id="cb62"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="kw">pop</span>)
+</pre></div>
+<pre><code>## [1] 1291454</code></pre>
+<div class="sourceCode" id="cb64"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span>(<span class="kw">samp</span><span class="op">$</span><span class="kw">we</span>)
+</pre></div>
+<pre><code>## [1] 1263880</code></pre>
+<p>This is the distribution of weights:</p>
+<div class="sourceCode" id="cb66"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span>(mfrow=<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>, <span class="fl">2</span>))
+<span class="fu"><a href="https://rdrr.io/r/graphics/boxplot.html">boxplot</a></span>(<span class="kw">samp</span><span class="op">$</span><span class="kw">weight</span>,col=<span class="st">"orange"</span>)
+<span class="fu"><a href="https://rdrr.io/r/graphics/title.html">title</a></span>(<span class="st">"Weights distribution (total sample)"</span>,cex.main=<span class="fl">0.7</span>)
+<span class="fu"><a href="https://rdrr.io/r/graphics/boxplot.html">boxplot</a></span>(<span class="kw">weight</span> <span class="op">~</span> <span class="kw">region</span>, data=<span class="kw">samp</span>,col=<span class="st">"orange"</span>)
+<span class="fu"><a href="https://rdrr.io/r/graphics/title.html">title</a></span>(<span class="st">"Weights distribution by region"</span>,cex.main=<span class="fl">0.7</span>)
+</pre></div>
+<p><img src="R2BEAT_workflow_files/figure-html/unnamed-chunk-34-1.png" width="576"></p>
+<div class="sourceCode" id="cb67"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/graphics/boxplot.html">boxplot</a></span>(<span class="kw">weight</span> <span class="op">~</span> <span class="kw">province</span>, data=<span class="kw">samp</span>,col=<span class="st">"orange"</span>)
+<span class="fu"><a href="https://rdrr.io/r/graphics/title.html">title</a></span>(<span class="st">"Weights distribution by province"</span>,cex.main=<span class="fl">0.7</span>)
+<span class="fu"><a href="https://rdrr.io/r/graphics/boxplot.html">boxplot</a></span>(<span class="kw">weight</span> <span class="op">~</span> <span class="kw">stratum</span>, data=<span class="kw">samp</span>,col=<span class="st">"orange"</span>)
+<span class="fu"><a href="https://rdrr.io/r/graphics/title.html">title</a></span>(<span class="st">"Weights distribution by stratum"</span>,cex.main=<span class="fl">0.7</span>)
+</pre></div>
+<p><img src="R2BEAT_workflow_files/figure-html/unnamed-chunk-34-2.png" width="576"></p>
+<p>It can be seen that the sample is fully self-weighted inside strata, and approximately self-weighted in aggregations of strata, that is the result we wanted to obtain.</p>
 </div>
   </div>
 
@@ -593,11 +638,11 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Andrea Fasulo, Stefano Falorsi, Alessio Guandalini, Daniela Pagliuca, Marco Dionisio Terribili, Raffaella Cianchetta, Giulio Barcaroli.</p>
+  <p>Developed by Andrea Fasulo, Raffaella Cianchetta, Giulio Barcaroli, Stefano Falorsi, Alessio Guandalini, Daniela Pagliuca, Marco Dionisio Terribili.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>
