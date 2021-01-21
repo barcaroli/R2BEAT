@@ -405,7 +405,7 @@ and that the sum of weights equalize population size:
 
 ```{r}
 nrow(pop)
-sum(samp$we)
+sum(samp$weight)
 ```
 This is the distribution of weights:
 
