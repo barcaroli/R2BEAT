@@ -380,7 +380,7 @@ Finally, we are able to select the Secondary Sample Units (the individuals) from
 First, we load the population frame:
 
 ```{r}
-load("Frame_reduced.RData")
+load("Frame.RData")
 ```
 
 
