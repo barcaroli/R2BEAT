@@ -5,14 +5,14 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>R2BEAT two-stage sampling design workflow • R2BEAT </title>
+<title>R2BEAT two-stage sampling design workflow starting from a previous survey • R2BEAT </title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
-<meta property="og:title" content="R2BEAT two-stage sampling design workflow">
+<meta property="og:title" content="R2BEAT two-stage sampling design workflow starting from a previous survey">
 <meta property="og:description" content="R2BEAT ">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -58,7 +58,10 @@
       <a href="../articles/R2BEAT_methodology.html">R2BEAT methodology and use</a>
     </li>
     <li>
-      <a href="../articles/R2BEAT_workflow.html">R2BEAT two-stage sampling design workflow</a>
+      <a href="../articles/R2BEAT_workflow.html">R2BEAT two-stage sampling design workflow starting from a previous survey</a>
+    </li>
+    <li>
+      <a href="../articles/R2BEAT_workflow_from_frame.html">R2BEAT two-stage sampling design workflow starting from the sampling frame</a>
     </li>
   </ul>
 </li>
@@ -86,9 +89,9 @@
       </header><script src="R2BEAT_workflow_files/header-attrs-2.5/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>R2BEAT two-stage sampling design workflow</h1>
+      <h1 data-toc-skip>R2BEAT two-stage sampling design workflow starting from a previous survey</h1>
             
-            <h4 class="date">2021-01-21 <br><br><br>
+            <h4 class="date">2021-01-27 <br><br><br>
 </h4>
       
       <small class="dont-index">Source: <a href="https://github.com/barcaroli/R2BEAT/blob/master/vignettes/R2BEAT_workflow.Rmd"><code>vignettes/R2BEAT_workflow.Rmd</code></a></small>
@@ -99,7 +102,7 @@
     
     
 <p>This vignette describes a generalized procedure making use of the methods implemented in the R package developed in the Italian National Institute, namely R2BEAT (“Multistage Sampling Allocation and PSU selection”).</p>
-<p>This package allows to determine the optimal allocation of both Primary Stage Units (PSUs) and Secondary Stage Units (SSU), and also to perform a selection of the PSUs such that the final sample of SSU is of the self-weighting type, i.e. the total inclusion probabilities (as resulting from the product between the inclusion probabilities of the PSUs and those of the SSUs) are near equal for all SSUs.</p>
+<p>This package allows to determine the optimal allocation of both Primary Stage Units (PSUs) and Secondary Stage Units (SSU), and also to perform a selection of the PSUs such that the final sample of SSU is of the self-weighting type, i.e. the total inclusion probabilities (as resulting from the product between the inclusion probabilities of the PSUs and those of the SSUs) are near equal for all SSUs, or at least those of minimum variability.</p>
 <p>This general flow assumes that at least a previous round of the survey, whose sampling design has to be optimized, is available, and is characterized by the following steps:</p>
 <div id="use-of-regenesees" class="section level1">
 <h1 class="hasAnchor">
@@ -332,7 +335,7 @@
 <ul>
 <li>stratum identifier</li>
 <li>PSU id</li>
-<li>PSU_MOS: number of selection units contained in a given PSU</li>
+<li>PSU_MOS: number of final selection units contained in a given PSU</li>
 </ul>
 <div class="sourceCode" id="cb32"><pre class="downlit">
 <span class="co"># psu &lt;- read.csv2("psu.csv") # Read the external file containing PSU information</span>
@@ -475,7 +478,7 @@
 ## 9  DOM2   2  26  1 14   67
 ## 13 DOM2   3 121  1 12    1</code></pre>
 <p>i.e., for each domain value and for each variable it is reported the gain in terms of reduction in the sample size if the corresponding precision constraint is reduced of 10%.</p>
-<p>This are the expected values of the coefficients of variation:</p>
+<p>These are the expected values of the coefficients of variation:</p>
 <div class="sourceCode" id="cb47"><pre class="downlit">
 <span class="kw">alloc</span><span class="op">$</span><span class="kw">expected</span>
 </pre></div>
