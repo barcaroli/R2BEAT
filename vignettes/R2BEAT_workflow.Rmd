@@ -43,7 +43,7 @@ options(scipen=9999)
 
 This vignette describes a generalized procedure making use of the methods implemented in the R package developed in the Italian National Institute, namely R2BEAT ("Multistage Sampling Allocation and PSU selection").
 
-This package allows to determine the optimal allocation of both Primary Stage Units (PSUs) and Secondary Stage Units (SSU), and also to perform a selection of the PSUs such that the final sample of SSU is of the self-weighting type, i.e. the total inclusion probabilities (as resulting from the product between the inclusion probabilities of the PSUs and those of the SSUs) are near equal for all SSUs.
+This package allows to determine the optimal allocation of both Primary Stage Units (PSUs) and Secondary Stage Units (SSU), and also to perform a selection of the PSUs such that the final sample of SSU is of the self-weighting type, i.e. the total inclusion probabilities (as resulting from the product between the inclusion probabilities of the PSUs and those of the SSUs) are near equal for all SSUs, or at least those of minimum variability.
 
 This general flow assumes that at least a previous round of the survey, whose sampling design has to be optimized, is available, and is characterized by the following steps:
 
@@ -220,7 +220,7 @@ Prepare the inputs related to the PSUs (function 'input_to_strat.2d_2'), that ar
 
   - stratum identifier
   - PSU id
-  - PSU_MOS: number of selection units contained in a given PSU
+  - PSU_MOS: number of final selection units contained in a given PSU
   
 ```{r}
 # psu <- read.csv2("psu.csv") # Read the external file containing PSU information
@@ -303,9 +303,9 @@ This is the sensitivity of the solution:
 alloc$sensitivity
 ```
 
-i.e., for each domain value and for each variable it is reported the gain in terms of reduction in the sample size if the corresponding precision constraint is reduced of 10%.
+i.e., for each domain value and for each variable it is reported the gain in terms of reduction in the sample size if the corresponding precision constraint is reduced of 10\%.
 
-This are the expected values of the coefficients of variation:
+These are the expected values of the coefficients of variation:
 
 ```{r}
 alloc$expected
