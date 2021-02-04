@@ -3,6 +3,8 @@
 
 [![CRAN](http://www.r-pkg.org/badges/version/R2BEAT)](https://cran.r-project.org/package=R2BEAT)
 [![Downloads](http://cranlogs.r-pkg.org/badges/R2BEAT?color=brightgreen)](http://www.r-pkg.org/pkg/R2BEAT)
+[![Mentioned in Awesome Official
+Statistics](https://awesome.re/mentioned-badge.svg)](http://www.awesomeofficialstatistics.org)
 
 # R2BEAT: Multistage Sampling Design and PSUs selection
 
@@ -21,27 +23,27 @@ evaluating the allocation. Its name stands for “R ‘to’ Bethel Extended
 Allocation for Two-stage”. It is an extension of another open-source
 software called *Mauss-R* (Multivariate Allocation of Units in Sampling
 Surveys), implemented by ISTAT researchers
-(<a href="https://www.istat.it/en/methods-and-tools/methods-and-it-tools/design/design-tools/mauss-r" class="uri">https://www.istat.it/en/methods-and-tools/methods-and-it-tools/design/design-tools/mauss-r</a>).
+(<https://www.istat.it/en/methods-and-tools/methods-and-it-tools/design/design-tools/mauss-r>).
 *Mauss-R* determines the optimal sample allocation in multivariate and
 multi-domains estimation, for one-stage stratified samples.
 
 To complete the suite of tools developed by Istat in order to cover the
 stratified sample design, we cite *SamplingStrata*
-(<a href="https://CRAN.R-project.org/package=SamplingStrata" class="uri">https://CRAN.R-project.org/package=SamplingStrata</a>),
-that allows to jointly optimize both the stratification of the sampling
-frame and the allocation, still in the multivariate multidomain case
-(only for one-stage designs), and *MultiWay.Sample.Allocation*, that
-allows to determine the optimal sample allocation for multi-way
-stratified sampling designs and incomplete stratified sampling designs
-(<a href="https://www.istat.it/en/methods-and-tools/methods-and-it-tools/design/design-tools/multiwaysampleallocation" class="uri">https://www.istat.it/en/methods-and-tools/methods-and-it-tools/design/design-tools/multiwaysampleallocation</a>).
+(<https://CRAN.R-project.org/package=SamplingStrata>), that allows to
+jointly optimize both the stratification of the sampling frame and the
+allocation, still in the multivariate multidomain case (only for
+one-stage designs), and *MultiWay.Sample.Allocation*, that allows to
+determine the optimal sample allocation for multi-way stratified
+sampling designs and incomplete stratified sampling designs
+(<https://www.istat.it/en/methods-and-tools/methods-and-it-tools/design/design-tools/multiwaysampleallocation>).
 
 For a complete illustration of the methodology see the vignette “R2BEAT
 methodology and use”
-(<a href="https://barcaroli.github.io/R2BEAT/articles/R2BEAT_methodology.html" class="uri">https://barcaroli.github.io/R2BEAT/articles/R2BEAT_methodology.html</a>).
+(<https://barcaroli.github.io/R2BEAT/articles/R2BEAT_methodology.html>).
 
 A complete example is illustrated in the vignette “Two-stage sampling
 design workflow”
-(<a href="https://barcaroli.github.io/R2BEAT/articles/R2BEAT_workflow.html" class="uri">https://barcaroli.github.io/R2BEAT/articles/R2BEAT_workflow.html</a>).
+(<https://barcaroli.github.io/R2BEAT/articles/R2BEAT_workflow.html>).
 
 ## Installation
 
