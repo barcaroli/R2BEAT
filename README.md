@@ -6,7 +6,7 @@
 [![Mentioned in Awesome Official
 Statistics](https://awesome.re/mentioned-badge.svg)](http://www.awesomeofficialstatistics.org)
 
-# R2BEAT: Multistage Sampling Design and PSUs selection
+# R2BEAT: Multistage Sampling Design and Sample Selection
 
 Multivariate optimal allocation for different domains in one and two
 stages stratified sample design. R2BEAT extends the Neyman (1934) –
