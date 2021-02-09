@@ -15,7 +15,7 @@ adopting a generalization of the Bethel’s proposal (1989). R2BEAT
 develops this methodology but, moreover, it allows to determine the
 sample allocation in the multivariate and multi-domains case of
 estimates for two-stage stratified samples. It also allows to perform
-Primary Stage Units selection.
+both Primary Stage Units and Secondary Stage Units selection.
 
 *R2BEAT* easily manages all the complexity due to the optimal sample
 allocation in two-stage sampling design and provides several outputs for
