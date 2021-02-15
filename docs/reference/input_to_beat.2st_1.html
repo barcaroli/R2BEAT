@@ -110,7 +110,10 @@
       <a href="../articles/R2BEAT_methodology.html">R2BEAT methodology and use</a>
     </li>
     <li>
-      <a href="../articles/R2BEAT_workflow.html">R2BEAT two-stage sampling design workflow</a>
+      <a href="../articles/R2BEAT_workflow.html">R2BEAT two-stage sampling design workflow starting from a previous survey</a>
+    </li>
+    <li>
+      <a href="../articles/R2BEAT_workflow_from_frame.html">R2BEAT two-stage sampling design workflow starting from the sampling frame</a>
     </li>
   </ul>
 </li>
@@ -153,6 +156,7 @@
 
     <pre class="usage"><span class='fu'>input_to_beat.2st_1</span>(<span class='kw'>RGdes</span>,
                         <span class='kw'>RGcal</span>,
+                        <span class='kw'>weight_var</span>,
                         <span class='kw'>id_PSU</span>,
                         <span class='kw'>id_SSU</span>,
                         <span class='kw'>strata_vars</span>,
@@ -170,6 +174,10 @@
     <tr>
       <th>RGcal</th>
       <td><p>ReGenesees calibrated object.</p></td>
+    </tr>
+    <tr>
+      <th>weight_var</th>
+      <td><p>name of the weight variable in the design object.</p></td>
     </tr>
     <tr>
       <th>id_PSU</th>
@@ -208,6 +216,7 @@
 <span class='fu'><a href='https://rdrr.io/r/base/load.html'>load</a></span>(<span class='st'>"R2BEAT_ReGenesees.RData"</span>)   <span class='co'># ReGenesees design and calibration objects plus PSU data</span>
 
 <span class='kw'>RGdes</span> <span class='op'>&lt;-</span> <span class='kw'>des</span>                           <span class='co'># ReGenesees design object</span>
+<span class='kw'>weight_var</span> <span class='op'>&lt;-</span> <span class='st'>"wgts"</span>                 <span class='co'># name of the weight variable</span>
 <span class='kw'>RGcal</span> <span class='op'>&lt;-</span> <span class='kw'>cal</span>                           <span class='co'># ReGenesees calibrated object</span>
 
 <span class='kw'>strata_vars</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"stratum"</span>)            <span class='co'># variables of stratification</span>
@@ -222,6 +231,7 @@
 <span class='kw'>domain_vars</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"region"</span>)             <span class='co'># domain variables</span>
 <span class='kw'>inp1</span> <span class='op'>&lt;-</span> <span class='fu'>input_to_beat.2st_1</span>(<span class='kw'>RGdes</span>,
                             <span class='kw'>RGcal</span>,
+                            <span class='kw'>weight_var</span>,
                             <span class='kw'>id_PSU</span>,
                             <span class='kw'>id_SSU</span>,
                             <span class='kw'>strata_vars</span>,
@@ -245,7 +255,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by Andrea Fasulo, Raffaella Cianchetta, Giulio Barcaroli, Stefano Falorsi, Alessio Guandalini, Daniela Pagliuca, Marco Dionisio Terribili.</p>
+  <p>Developed by Andrea Fasulo, Giulio Barcaroli, Raffaella Cianchetta, Stefano Falorsi, Alessio Guandalini, Daniela Pagliuca, Marco Dionisio Terribili.</p>
 </div>
 
 <div class="pkgdown">

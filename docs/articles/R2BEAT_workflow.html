@@ -91,7 +91,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>R2BEAT two-stage sampling design workflow starting from a previous survey</h1>
             
-            <h4 class="date">2021-01-27 <br><br><br>
+            <h4 class="date">2021-02-15 <br><br><br>
 </h4>
       
       <small class="dont-index">Source: <a href="https://github.com/barcaroli/R2BEAT/blob/master/vignettes/R2BEAT_workflow.Rmd"><code>vignettes/R2BEAT_workflow.Rmd</code></a></small>
@@ -254,7 +254,7 @@
 <div class="sourceCode" id="cb23"><pre class="downlit">
 <span class="kw">RGdes</span> <span class="op">&lt;-</span> <span class="kw">des</span>                           <span class="co"># ReGenesees design object</span>
 <span class="kw">RGcal</span> <span class="op">&lt;-</span> <span class="kw">cal</span>                           <span class="co"># ReGenesees calibrated object</span>
-
+<span class="kw">weight_var</span> <span class="op">&lt;-</span> <span class="st">"wgts"</span>
 <span class="kw">strata_vars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"stratum"</span>)            <span class="co"># variables of stratification</span>
 <span class="kw">target_vars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"income_hh"</span>,
                  <span class="st">"active"</span>,
@@ -267,6 +267,7 @@
 <span class="kw">domain_vars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"region"</span>)             <span class="co"># domain variables</span>
 <span class="kw">inp1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/input_to_beat.2st_1.html">input_to_beat.2st_1</a></span>(<span class="kw">RGdes</span>,
                             <span class="kw">RGcal</span>,
+                            <span class="kw">weight_var</span>,
                             <span class="kw">id_PSU</span>,
                             <span class="kw">id_SSU</span>,
                             <span class="kw">strata_vars</span>,
@@ -543,21 +544,21 @@
 <div class="sourceCode" id="cb52"><pre class="downlit">
 <span class="kw">des</span> <span class="op">&lt;-</span> <span class="kw">sample_2st</span>[[<span class="fl">2</span>]]
 <span class="kw">des</span> <span class="op">&lt;-</span> <span class="kw">des</span>[<span class="fl">1</span><span class="op">:</span>(<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="kw">des</span>)<span class="op">-</span><span class="fl">1</span>),]
-<span class="kw">strat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span>(<span class="kw">des</span><span class="op">$</span><span class="kw">Domain</span>[<span class="fl">1</span><span class="op">:</span>(<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="kw">des</span>)<span class="op">-</span><span class="fl">1</span>)])),<span class="st">"Tot"</span>)
-<span class="fu"><a href="https://rdrr.io/r/graphics/barplot.html">barplot</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span>(<span class="kw">des</span>[<span class="fl">1</span><span class="op">:</span>(<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="kw">des</span>)),<span class="fl">2</span><span class="op">:</span><span class="fl">3</span>]), names=<span class="kw">strat</span>,
+<span class="kw">strat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span>(<span class="kw">des</span><span class="op">$</span><span class="kw">Domain</span>[<span class="fl">1</span><span class="op">:</span>(<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="kw">des</span>)<span class="op">-</span><span class="fl">1</span>)])))
+<span class="fu"><a href="https://rdrr.io/r/graphics/barplot.html">barplot</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span>(<span class="kw">des</span>[<span class="fl">1</span><span class="op">:</span>(<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="kw">des</span>)<span class="op">-</span><span class="fl">1</span>),<span class="fl">2</span><span class="op">:</span><span class="fl">3</span>]), names=<span class="kw">strat</span>,
         col=<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"darkblue"</span>,<span class="st">"red"</span>), las=<span class="fl">2</span>, xlab = <span class="st">"Stratum"</span>, cex.axis=<span class="fl">0.7</span>, cex.names=<span class="fl">0.7</span>)
 <span class="fu"><a href="https://rdrr.io/r/graphics/legend.html">legend</a></span>(<span class="st">"topleft"</span>, 
-       legend = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Self Representative"</span>,<span class="st">"Non Self Representative"</span>),
+       legend = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Self Representative"</span>,<span class="st">"Non Self Representative"</span>),cex=<span class="fl">0.7</span>,
        fill = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"darkblue"</span>, <span class="st">"red"</span>))
 <span class="fu"><a href="https://rdrr.io/r/graphics/title.html">title</a></span>(<span class="st">"Distribution of allocated PSUs by domain"</span>)
 </pre></div>
 <p><img src="R2BEAT_workflow_files/figure-html/unnamed-chunk-27-1.png" width="576"></p>
 <div class="sourceCode" id="cb53"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/graphics/barplot.html">barplot</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span>(<span class="kw">des</span>[<span class="fl">1</span><span class="op">:</span>(<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="kw">des</span>)),<span class="fl">5</span><span class="op">:</span><span class="fl">6</span>]), names=<span class="kw">strat</span>,
+<span class="fu"><a href="https://rdrr.io/r/graphics/barplot.html">barplot</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span>(<span class="kw">des</span>[<span class="fl">1</span><span class="op">:</span>(<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="kw">des</span>)<span class="op">-</span><span class="fl">1</span>),<span class="fl">5</span><span class="op">:</span><span class="fl">6</span>]), names=<span class="kw">strat</span>,
         col=<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"darkblue"</span>,<span class="st">"red"</span>), las=<span class="fl">2</span>, xlab = <span class="st">"Stratum"</span>, cex.axis=<span class="fl">0.7</span>, 
         cex.names=<span class="fl">0.7</span>)
 <span class="fu"><a href="https://rdrr.io/r/graphics/legend.html">legend</a></span>(<span class="st">"topleft"</span>, 
-       legend = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Self Representative"</span>,<span class="st">"Non Self Representative"</span>),
+       legend = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Self Representative"</span>,<span class="st">"Non Self Representative"</span>),cex=<span class="fl">0.7</span>,
        fill = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"darkblue"</span>, <span class="st">"red"</span>))
 <span class="fu"><a href="https://rdrr.io/r/graphics/title.html">title</a></span>(<span class="st">"Distribution of allocated SSUs by domain"</span>)
 </pre></div>
@@ -641,7 +642,7 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Andrea Fasulo, Raffaella Cianchetta, Giulio Barcaroli, Stefano Falorsi, Alessio Guandalini, Daniela Pagliuca, Marco Dionisio Terribili.</p>
+  <p>Developed by Andrea Fasulo, Giulio Barcaroli, Raffaella Cianchetta, Stefano Falorsi, Alessio Guandalini, Daniela Pagliuca, Marco Dionisio Terribili.</p>
 </div>
 
 <div class="pkgdown">
