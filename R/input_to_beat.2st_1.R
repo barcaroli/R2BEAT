@@ -1,12 +1,5 @@
-input_to_beat.2st_1 <- function (RGdes, 
-                                 RGcal, 
-                                 weight_var,
-                                 id_PSU, 
-                                 id_SSU, 
-                                 strata_vars, 
-                                 target_vars, 
-                                 deff_vars, 
-                                 domain_vars) 
+input_to_beat.2st_1 <- function (RGdes, RGcal, weight_var, id_PSU, id_SSU, strata_vars, 
+                                 target_vars, deff_vars, domain_vars) 
 {
   if (requireNamespace("ReGenesees", quietly = TRUE)) {
     svystat <- ReGenesees::svystat
@@ -39,8 +32,8 @@ input_to_beat.2st_1 <- function (RGdes,
   options(warn = -1)
   options(scipen = 9999)
   id_vars <- c(id_PSU, id_SSU)
-  st <- paste0("RGcal$variables$",weight_var," <- RGcal$variables$d.cal")
-  eval(parse(text=st))
+  st <- paste0("RGcal$variables$",weight_var," <- RGcal$variables$",weight_var,".cal")
+  eval(parse(text = st))
   sv1 <- NULL
   for (i in 1:(length(strata_vars))) {
     if (i < length(strata_vars)) 
@@ -62,7 +55,7 @@ input_to_beat.2st_1 <- function (RGdes,
     if (i == length(target_vars)) 
       tv <- paste0(tv, target_vars[i])
   }
-  st <- paste("N <- aggregate(",weight_var," ~ ", sv1, ",RGcal$variables,FUN=sum)", 
+  st <- paste("N <- aggregate(", weight_var, ".cal ~ ", sv1, ",RGcal$variables,FUN=sum)", 
               sep = "")
   eval(parse(text = st))
   st <- "N$STRATUM <- paste0("
@@ -123,14 +116,14 @@ input_to_beat.2st_1 <- function (RGdes,
     if (sw == FALSE) {
       d <- RGcal$variables[, c(strata_vars, weight_var)]
       d$x2 <- RGcal$variables[, target_vars[i]]^2
-      st <- paste0("m <- aggregate(x2 * ",weight_var," ~ ", sv1, 
-                   ", data=d, FUN=sum) / aggregate(",weight_var," ~ ", sv1, 
-                   ", data=d, FUN=sum)")
+      st <- paste0("m <- aggregate(x2 * ", weight_var, 
+                   " ~ ", sv1, ", data=d, FUN=sum) / aggregate(", 
+                   weight_var, " ~ ", sv1, ", data=d, FUN=sum)")
       eval(parse(text = st))
       d$x <- RGcal$variables[, target_vars[i]]
-      st <- paste0("m2 <- aggregate((x * ",weight_var,") ~ ", sv1, 
-                   ", data=d, FUN=sum) / aggregate(",weight_var," ~ ", sv1, 
-                   ", data=d, FUN=sum)")
+      st <- paste0("m2 <- aggregate((x * ", weight_var, 
+                   ") ~ ", sv1, ", data=d, FUN=sum) / aggregate(", 
+                   weight_var, " ~ ", sv1, ", data=d, FUN=sum)")
       eval(parse(text = st))
       st <- paste0("S$S", i, " <- sqrt(m[,length(strata_vars)+1]-m2[,length(strata_vars)+1]^2)")
       eval(parse(text = st))
