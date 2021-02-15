@@ -14,6 +14,7 @@ input_to_beat.2st_1 <- function (RGdes,
   else {
     stop("The package ReGenesees is needed. \nInstall it by executing the following: \ndevtools::install_github('DiegoZardetto/ReGenesees'")
   }
+  
   for (i in (1:length(target_vars))) {
     tvi <- target_vars[i]
     sw <- FALSE

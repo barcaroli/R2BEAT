@@ -163,6 +163,7 @@ Actually, the 'deff' dataframe is not used in the following steps, it just remai
 Here is the way we can produce the above items:
   
 ```{r}
+des$variables$wgts <- 1 / des$prob
 RGdes <- des                           # ReGenesees design object
 RGcal <- cal                           # ReGenesees calibrated object
 weight_var_des <- "wgts"               # name of the weight variable in design object
