@@ -13,7 +13,8 @@ Prepares the following input dataframes for R2BEAT two-stages sample design star
 \usage{
      input_to_beat.2st_1(RGdes,
                         RGcal,
-                        weight_var,
+                        weight_var_des,
+                        weight_var_cal,
                         id_PSU,
                         id_SSU,
                         strata_vars,
@@ -42,7 +43,8 @@ library(R2BEAT)
 load("R2BEAT_ReGenesees.RData")   # ReGenesees design and calibration objects plus PSU data
 
 RGdes <- des                           # ReGenesees design object
-weight_var <- "wgts"                 # name of the weight variable
+weight_var <- "wgts"                   # name of the weight variable in design object
+weight_var <- "d.cal"                  # name of the weight variable in calibrated object
 RGcal <- cal                           # ReGenesees calibrated object
 
 strata_vars <- c("stratum")            # variables of stratification
@@ -57,7 +59,8 @@ id_SSU <- c("id_hh")                   # identification variable of SSUs
 domain_vars <- c("region")             # domain variables
 inp1 <- input_to_beat.2st_1(RGdes,
                             RGcal,
-                            weight_var,
+                            weight_var_des,
+                            weight_var_cal,
                             id_PSU,
                             id_SSU,
                             strata_vars,

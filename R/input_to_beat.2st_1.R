@@ -1,5 +1,12 @@
-input_to_beat.2st_1 <- function (RGdes, RGcal, weight_var, id_PSU, id_SSU, strata_vars, 
-                                 target_vars, deff_vars, domain_vars) 
+input_to_beat.2st_1 <- function (RGdes, 
+                                 RGcal, 
+                                 weight_var_des, 
+                                 weight_var_cal,
+                                 id_PSU, id_SSU, 
+                                 strata_vars, 
+                                 target_vars, 
+                                 deff_vars, 
+                                 domain_vars) 
 {
   if (requireNamespace("ReGenesees", quietly = TRUE)) {
     svystat <- ReGenesees::svystat
@@ -32,7 +39,7 @@ input_to_beat.2st_1 <- function (RGdes, RGcal, weight_var, id_PSU, id_SSU, strat
   options(warn = -1)
   options(scipen = 9999)
   id_vars <- c(id_PSU, id_SSU)
-  st <- paste0("RGcal$variables$",weight_var," <- RGcal$variables$",weight_var,".cal")
+  st <- paste0("RGcal$variables$",weight_var," <- RGcal$variables$",weight_var_cal)
   eval(parse(text = st))
   sv1 <- NULL
   for (i in 1:(length(strata_vars))) {
@@ -55,7 +62,7 @@ input_to_beat.2st_1 <- function (RGdes, RGcal, weight_var, id_PSU, id_SSU, strat
     if (i == length(target_vars)) 
       tv <- paste0(tv, target_vars[i])
   }
-  st <- paste("N <- aggregate(", weight_var, ".cal ~ ", sv1, ",RGcal$variables,FUN=sum)", 
+  st <- paste("N <- aggregate(", weight_var, " ~ ", sv1, ",RGcal$variables,FUN=sum)", 
               sep = "")
   eval(parse(text = st))
   st <- "N$STRATUM <- paste0("
