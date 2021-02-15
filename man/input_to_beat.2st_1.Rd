@@ -42,7 +42,7 @@ library(R2BEAT)
 load("R2BEAT_ReGenesees.RData")   # ReGenesees design and calibration objects plus PSU data
 
 RGdes <- des                           # ReGenesees design object
-weight_var <- "wgts"                   # name of the weight variable
+weight_var <- "wgts"                 # name of the weight variable
 RGcal <- cal                           # ReGenesees calibrated object
 
 strata_vars <- c("stratum")            # variables of stratification

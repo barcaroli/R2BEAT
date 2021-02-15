@@ -178,6 +178,7 @@ id_SSU <- c("id_hh")                   # identification variable of SSUs
 domain_vars <- c("region")             # domain variables
 inp1 <- input_to_beat.2st_1(RGdes,
                             RGcal,
+                            weight_var,
                             id_PSU,
                             id_SSU,
                             strata_vars,
