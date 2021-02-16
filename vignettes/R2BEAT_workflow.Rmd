@@ -166,8 +166,6 @@ Here is the way we can produce the above items:
 des$variables$wgts <- 1 / des$prob
 RGdes <- des                           # ReGenesees design object
 RGcal <- cal                           # ReGenesees calibrated object
-weight_var_des <- "wgts"               # name of the weight variable in design object
-weight_var_cal <- "d.cal"              # name of the weight variable in calibrated object
 strata_vars <- c("stratum")            # variables of stratification
 target_vars <- c("income_hh",
                  "active",
@@ -180,8 +178,6 @@ id_SSU <- c("id_hh")                   # identification variable of SSUs
 domain_vars <- c("region")             # domain variables
 inp1 <- input_to_beat.2st_1(RGdes,
                             RGcal,
-                            weight_var_des,
-                            weight_var_cal,
                             id_PSU,
                             id_SSU,
                             strata_vars,
