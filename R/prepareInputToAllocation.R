@@ -26,7 +26,7 @@ prepareInputToAllocation <- function(
                         Y=target_vars,
                         domain=domain_var)
   nvarY <- length(grep("Y",colnames(frame)))
-  strata <- buildStrataDF(frame)
+  strata <- buildStrataDF(frame,progress=FALSE)
   strata$DOM2 <- strata$DOM1
   strata$DOM1 <- 1
   strata$STRATUM <- as.factor(strata$STRATO)
