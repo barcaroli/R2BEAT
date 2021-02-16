@@ -156,7 +156,6 @@
 
     <pre class="usage"><span class='fu'>input_to_beat.2st_1</span>(<span class='kw'>RGdes</span>,
                         <span class='kw'>RGcal</span>,
-                        <span class='kw'>weight_var</span>,
                         <span class='kw'>id_PSU</span>,
                         <span class='kw'>id_SSU</span>,
                         <span class='kw'>strata_vars</span>,
@@ -174,10 +173,6 @@
     <tr>
       <th>RGcal</th>
       <td><p>ReGenesees calibrated object.</p></td>
-    </tr>
-    <tr>
-      <th>weight_var</th>
-      <td><p>name of the weight variable in the design object.</p></td>
     </tr>
     <tr>
       <th>id_PSU</th>
@@ -216,7 +211,6 @@
 <span class='fu'><a href='https://rdrr.io/r/base/load.html'>load</a></span>(<span class='st'>"R2BEAT_ReGenesees.RData"</span>)   <span class='co'># ReGenesees design and calibration objects plus PSU data</span>
 
 <span class='kw'>RGdes</span> <span class='op'>&lt;-</span> <span class='kw'>des</span>                           <span class='co'># ReGenesees design object</span>
-<span class='kw'>weight_var</span> <span class='op'>&lt;-</span> <span class='st'>"wgts"</span>                 <span class='co'># name of the weight variable</span>
 <span class='kw'>RGcal</span> <span class='op'>&lt;-</span> <span class='kw'>cal</span>                           <span class='co'># ReGenesees calibrated object</span>
 
 <span class='kw'>strata_vars</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"stratum"</span>)            <span class='co'># variables of stratification</span>
@@ -231,7 +225,6 @@
 <span class='kw'>domain_vars</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"region"</span>)             <span class='co'># domain variables</span>
 <span class='kw'>inp1</span> <span class='op'>&lt;-</span> <span class='fu'>input_to_beat.2st_1</span>(<span class='kw'>RGdes</span>,
                             <span class='kw'>RGcal</span>,
-                            <span class='kw'>weight_var</span>,
                             <span class='kw'>id_PSU</span>,
                             <span class='kw'>id_SSU</span>,
                             <span class='kw'>strata_vars</span>,

@@ -91,7 +91,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>R2BEAT two-stage sampling design workflow starting from a previous survey</h1>
             
-            <h4 class="date">2021-02-15 <br><br><br>
+            <h4 class="date">2021-02-16 <br><br><br>
 </h4>
       
       <small class="dont-index">Source: <a href="https://github.com/barcaroli/R2BEAT/blob/master/vignettes/R2BEAT_workflow.Rmd"><code>vignettes/R2BEAT_workflow.Rmd</code></a></small>
@@ -252,9 +252,9 @@
 <p>Actually, the ‘deff’ dataframe is not used in the following steps, it just remains for documentation purposes.</p>
 <p>Here is the way we can produce the above items:</p>
 <div class="sourceCode" id="cb23"><pre class="downlit">
+<span class="kw">des</span><span class="op">$</span><span class="kw">variables</span><span class="op">$</span><span class="kw">wgts</span> <span class="op">&lt;-</span> <span class="fl">1</span> <span class="op">/</span> <span class="kw">des</span><span class="op">$</span><span class="kw">prob</span>
 <span class="kw">RGdes</span> <span class="op">&lt;-</span> <span class="kw">des</span>                           <span class="co"># ReGenesees design object</span>
 <span class="kw">RGcal</span> <span class="op">&lt;-</span> <span class="kw">cal</span>                           <span class="co"># ReGenesees calibrated object</span>
-<span class="kw">weight_var</span> <span class="op">&lt;-</span> <span class="st">"wgts"</span>
 <span class="kw">strata_vars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"stratum"</span>)            <span class="co"># variables of stratification</span>
 <span class="kw">target_vars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"income_hh"</span>,
                  <span class="st">"active"</span>,
@@ -267,7 +267,6 @@
 <span class="kw">domain_vars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"region"</span>)             <span class="co"># domain variables</span>
 <span class="kw">inp1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/input_to_beat.2st_1.html">input_to_beat.2st_1</a></span>(<span class="kw">RGdes</span>,
                             <span class="kw">RGcal</span>,
-                            <span class="kw">weight_var</span>,
                             <span class="kw">id_PSU</span>,
                             <span class="kw">id_SSU</span>,
                             <span class="kw">strata_vars</span>,
