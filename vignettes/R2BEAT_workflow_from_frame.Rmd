@@ -62,7 +62,7 @@ load("Frame.RData")
 str(pop)
 ```
 
-In this phase we may have to derive new variables, corresponding to the parameters required by the following steps. In this case, it is not necessary, as almost all the variables are already available. We just have We manipulate in order to derive two target (binary) variables, and add a work variable ('one'):
+In this phase we may have to derive new variables, corresponding to the parameters required by the following steps. In this case, it is not necessary, as almost all the variables are already available. We just have to manipulate in order to derive two target (binary) variables, and add a work variable ('one'):
 
 ```{r}
 pop$active <- ifelse(pop$work==1,1,0)

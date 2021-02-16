@@ -17,6 +17,7 @@ prepareInputToAllocation <- function(
   deff_sugg) 
 {
   require(SamplingStrata)
+  if (is.null(samp_frame$one)) samp_frame$one <- 1
 
   # strata
   frame <- buildFrameDF(df=samp_frame,
@@ -40,7 +41,7 @@ prepareInputToAllocation <- function(
     st <- paste0("deff$DEFF",i," <- ",deff_sugg)
     eval(parse(text=st))
   }
-  st <- paste0("b_nar <- aggregate(one ~ ",strata_var," + ",id_PSU,", pop, FUN=sum)")
+  st <- paste0("b_nar <- aggregate(one ~ ",strata_var," + ",id_PSU,", data=samp_frame, FUN=sum)")
   eval(parse(text=st))
   st <- paste0("b_nar <- aggregate(one ~ ",strata_var,", b_nar, FUN=mean)")
   eval(parse(text=st))
@@ -72,9 +73,9 @@ prepareInputToAllocation <- function(
   rho <- rho[order(as.numeric(as.character(rho$STRATUM))),]
 
   # psu_file
-  strat_mun <- pop[,c(strata_var,id_PSU)]
+  strat_mun <- samp_frame[,c(strata_var,id_PSU)]
   strat_mun <- strat_mun[!duplicated(strat_mun),]
-  st <- paste0("mun <- aggregate(pop$one,by=list(pop$",id_PSU,"),sum)")
+  st <- paste0("mun <- aggregate(samp_frame$one,by=list(samp_frame$",id_PSU,"),sum)")
   eval(parse(text=st))
   colnames(mun) <- c(id_PSU,"N")
   mun <- merge(mun,strat_mun)
