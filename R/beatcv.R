@@ -110,10 +110,10 @@ nome2=paste ("qu_dom",j,"var",i,sep="")
 names(qu)[k]<-nome2
 
 }
-
-assign("cv",cv,envir=.BaseNamespaceEnv)
-
-assign("qu",qu,envir=.BaseNamespaceEnv)
+cv <<- cv
+#assign("cv",cv,envir=.BaseNamespaceEnv)
+qu <<- qu
+#assign("qu",qu,envir=.BaseNamespaceEnv)
 
 # New output (Barcaroli)
 

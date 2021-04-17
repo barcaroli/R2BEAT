@@ -28,7 +28,8 @@ beat.1st<-function (stratif, errors, minnumstrat = 2, maxiter = 200, maxiter1 = 
     param_alloc$nvar <- nvar
     param_alloc$ndom <- ndom
     param_alloc$nstrat <- nstrat
-    assign("param_alloc", param_alloc, envir = .BaseNamespaceEnv)
+    param_alloc <<- param_alloc
+#    assign("param_alloc", param_alloc, envir = .BaseNamespaceEnv)
     varloop <- c(1:nvar)
     strloop <- c(1:nstrat)
     domloop <- c(1:ndom)
@@ -195,7 +196,7 @@ beat.1st<-function (stratif, errors, minnumstrat = 2, maxiter = 200, maxiter1 = 
     output_beth$sensitivity[,6]<-as.numeric(as.character(output_beth$sensitivity[,6]))
     output_beth$sensitivity[,5]<-as.numeric(as.character(output_beth$sensitivity[,5]))
     output_beth$sensitivity[,4]<-as.numeric(as.character(output_beth$sensitivity[,4]))
-
-    assign("output_beth", output_beth, envir = .BaseNamespaceEnv)
+    output_beth <<- output_beth
+#    assign("output_beth", output_beth, envir = .BaseNamespaceEnv)
     return(output_beth)
 }
