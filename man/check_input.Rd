@@ -37,7 +37,7 @@ deff_vars <- "stratum"    # stratification variables for calculating deff and ef
 id_PSU <- c("municipality")            # identification variable of PSUs
 id_SSU <- c("id_hh")                   # identification variable of SSUs
 domain_vars <- c("region")             # domain variables
-inp1 <- check_input(RGdes,
+inp1 <- input_to_beat.2st_1(RGdes,
                             RGcal,
                             id_PSU,
                             id_SSU,
