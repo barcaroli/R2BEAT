@@ -4,7 +4,7 @@
 Prepares the design file for two-stage sample design
 }
 \description{
-Prepares the design file for two-stage sample design on the basis of a dataset containin information on each PSU
+Prepares the design file for two-stage sample design on the basis of a dataset containing information on each PSU
 }
 \usage{
      input_to_beat.2st_2(psu,psu_id,stratum_var,mos_var,delta,minimum)
