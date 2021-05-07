@@ -7,9 +7,9 @@ Sensitivity analysis for some parameters by means of grid search
 This function allows to analyse the different results in terms 
 of first stage size (number of PSUs) and second stage size (number of SSUs),
 when varying the values of the following parameters: 
-\item deff_sugg (suggested value of deff) 
-\item minimum (minimum number of SSU per single PSU)
-\item f (suggested sample fraction)
+- deff_sugg (suggested value of deff) 
+- minimum (minimum number of SSU per single PSU)
+- f (suggested sample fraction)
 The name of the parameter has to be given, together with the minimum and
 maximum value. On the basis of these minimum and maximum values, 10 different values will be used for carrying out the allocation.
 The output will be a graphical one.
