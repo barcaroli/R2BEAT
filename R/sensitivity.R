@@ -1,4 +1,4 @@
-grid_search <- function(samp_frame,
+sensitivity <- function(samp_frame,
                         id_PSU,
                         id_SSU,
                         strata_var,

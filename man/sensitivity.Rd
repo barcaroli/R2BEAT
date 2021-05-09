@@ -1,5 +1,5 @@
-\name{grid_search}
-\alias{grid_search}
+\name{sensitivity}
+\alias{sensitivity}
 \title{
 Sensitivity analysis for some parameters by means of grid search 
 }
@@ -7,19 +7,22 @@ Sensitivity analysis for some parameters by means of grid search
 This function allows to analyse the different results in terms 
 of first stage size (number of PSUs) and second stage size (number of SSUs),
 when varying the values of the following parameters: 
+
 - deff_sugg (suggested value of deff) 
 - minimum (minimum number of SSU per single PSU)
 - f (suggested sample fraction)
+
 The name of the parameter has to be given, together with the minimum and
 maximum value. On the basis of these minimum and maximum values, 10 different values will be used for carrying out the allocation.
 The output will be a graphical one.
 It can be time consuming.
+
 To be used only in the scenario when no previous rounds of the survey are 
 available, and a frame complete with values of target variables is available.
 
 }
 \usage{
-grid_search ( 
+sensitivity ( 
   samp_frame,
   id_PSU,
   id_SSU,
@@ -79,7 +82,7 @@ delta =  1     # average dimension of the SSU in terms of elementary survey unit
 f = 0.05 # sampling fraction (suggested)
 deff_sugg <- 1.5
 # prepare inputs
-inp <- grid_search(samp_frame,
+inp <- sensitivity(samp_frame,
                    id_PSU,
                    id_SSU,
                    strata_var,
