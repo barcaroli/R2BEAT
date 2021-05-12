@@ -61,7 +61,6 @@ sensitivity (
 \dontrun{
 library(R2BEAT)
 data(pop)
-pop$one <- 1
 cv <- as.data.frame(list(DOM=c("DOM1","DOM2"),
                          CV1=c(0.03,0.04),
                          CV2=c(0.06,0.08),
@@ -81,21 +80,20 @@ delta =  nrow(pop) /length(unique(pop$id_hh))     # average dimension of the SSU
 delta =  1     # average dimension of the SSU in terms of elementary survey units
 f = 0.05 # sampling fraction (suggested)
 deff_sugg <- 1.5
-# prepare inputs
-inp <- sensitivity(samp_frame,
-                   id_PSU,
-                   id_SSU,
-                   strata_var,
-                   target_vars,
-                   deff_var,
-                   domain_var,
-                   minimum,
-                   delta,
-                   f,
-                   deff_sugg,
-                   search=c("deff"),
-                   min=1,
-                   max=2)
+sensitivity(samp_frame,
+            id_PSU,
+            id_SSU,
+            strata_var,
+            target_vars,
+            deff_var,
+            domain_var,
+            minimum,
+            delta,
+            f,
+            deff_sugg,
+            search=c("deff"),
+            min=1,
+            max=2)
 }
 }
 \author{Giulio Barcaroli}
