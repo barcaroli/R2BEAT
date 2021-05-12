@@ -7,7 +7,8 @@
 
 -   Added a function (‘select\_SSU’) for the selection of Secondary
     Stage Units
-    
+
+-   Added a function (‘sensitivity’) for the fine tuning of parameters
 
 # R2BEAT 1.0.2
 

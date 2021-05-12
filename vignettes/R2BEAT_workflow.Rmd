@@ -21,6 +21,7 @@ vignette: >
   %\VignetteIndexEntry{R2BEAT two-stage sampling design workflow starting from a previous survey}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
 ---
 
 

@@ -106,7 +106,10 @@
       <a href="../articles/R2BEAT_methodology.html">R2BEAT methodology and use</a>
     </li>
     <li>
-      <a href="../articles/R2BEAT_workflow.html">R2BEAT two-stage sampling design workflow</a>
+      <a href="../articles/R2BEAT_workflow.html">R2BEAT two-stage sampling design workflow starting from a previous survey</a>
+    </li>
+    <li>
+      <a href="../articles/R2BEAT_workflow_from_frame.html">R2BEAT two-stage sampling design workflow starting from the sampling frame</a>
     </li>
   </ul>
 </li>
@@ -117,7 +120,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/barcaroli/R2BEAT/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -143,7 +146,7 @@
     <p>Checks the coherence between the population in the strata dataset and the population calculated by the PSUs dataset</p>
     </div>
 
-    <pre class="usage"><span class='fu'>check_input</span>(<span class='kw'>strata</span>,<span class='kw'>des</span>,<span class='kw'>strata_var_strata</span>,<span class='kw'>strata_var_des</span>)</pre>
+    <pre class="usage"><span class='fu'>check_input</span><span class='op'>(</span><span class='va'>strata</span>,<span class='va'>des</span>,<span class='va'>strata_var_strata</span>,<span class='va'>strata_var_des</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -171,52 +174,52 @@
     <p>Giulio Barcaroli</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://barcaroli.github.io/R2BEAT'>R2BEAT</a></span>)
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://barcaroli.github.io/R2BEAT/'>R2BEAT</a></span><span class='op'>)</span>
 
-<span class='fu'><a href='https://rdrr.io/r/base/load.html'>load</a></span>(<span class='st'>"R2BEAT_ReGenesees.RData"</span>)   <span class='co'># ReGenesees design and calibration objects plus PSU data</span>
+<span class='fu'><a href='https://rdrr.io/r/base/load.html'>load</a></span><span class='op'>(</span><span class='st'>"R2BEAT_ReGenesees.RData"</span><span class='op'>)</span>   <span class='co'># ReGenesees design and calibration objects plus PSU data</span>
 
-<span class='kw'>RGdes</span> <span class='op'>&lt;-</span> <span class='kw'>des</span>                           <span class='co'># ReGenesees design object</span>
-<span class='kw'>RGcal</span> <span class='op'>&lt;-</span> <span class='kw'>cal</span>                           <span class='co'># ReGenesees calibrated object</span>
+<span class='va'>RGdes</span> <span class='op'>&lt;-</span> <span class='va'>des</span>                           <span class='co'># ReGenesees design object</span>
+<span class='va'>RGcal</span> <span class='op'>&lt;-</span> <span class='va'>cal</span>                           <span class='co'># ReGenesees calibrated object</span>
 
-<span class='kw'>strata_vars</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"stratum"</span>)            <span class='co'># variables of stratification</span>
-<span class='kw'>target_vars</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"income_hh"</span>,
+<span class='va'>strata_vars</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"stratum"</span><span class='op'>)</span>            <span class='co'># variables of stratification</span>
+<span class='va'>target_vars</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"income_hh"</span>,
                  <span class='st'>"active"</span>,
                  <span class='st'>"inactive"</span>,
-                 <span class='st'>"unemployed"</span>)         <span class='co'># target variables</span>
-<span class='kw'>deff_vars</span> <span class='op'>&lt;-</span> <span class='st'>"stratum"</span>    <span class='co'># stratification variables for calculating deff and effst </span>
+                 <span class='st'>"unemployed"</span><span class='op'>)</span>         <span class='co'># target variables</span>
+<span class='va'>deff_vars</span> <span class='op'>&lt;-</span> <span class='st'>"stratum"</span>    <span class='co'># stratification variables for calculating deff and effst </span>
                           <span class='co'># (n.b: must coincide or be a subset of variables of stratification)</span>
-<span class='kw'>id_PSU</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"municipality"</span>)            <span class='co'># identification variable of PSUs</span>
-<span class='kw'>id_SSU</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"id_hh"</span>)                   <span class='co'># identification variable of SSUs</span>
-<span class='kw'>domain_vars</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"region"</span>)             <span class='co'># domain variables</span>
-<span class='kw'>inp1</span> <span class='op'>&lt;-</span> <span class='fu'>check_input</span>(<span class='kw'>RGdes</span>,
-                            <span class='kw'>RGcal</span>,
-                            <span class='kw'>id_PSU</span>,
-                            <span class='kw'>id_SSU</span>,
-                            <span class='kw'>strata_vars</span>,
-                            <span class='kw'>target_vars</span>,
-                            <span class='kw'>deff_vars</span>,
-                            <span class='kw'>domain_vars</span>)              
-<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='kw'>inp1</span><span class='op'>$</span><span class='kw'>strata</span>)
-<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='kw'>psu</span>)
-<span class='kw'>psu_id</span><span class='op'>=</span><span class='st'>"municipality"</span>        <span class='co'># Identifier of the PSU</span>
-<span class='kw'>stratum_var</span><span class='op'>=</span><span class='st'>"stratum"</span>        <span class='co'># Identifier of the stratum</span>
-<span class='kw'>mos_var</span><span class='op'>=</span><span class='st'>"ind"</span>                <span class='co'># Variable to be used as 'measure of size'</span>
-<span class='kw'>delta</span><span class='op'>=</span><span class='fl'>1</span>                      <span class='co'># Average number of SSUs for each selection unit</span>
-<span class='kw'>minimum</span> <span class='op'>&lt;-</span> <span class='fl'>50</span>                <span class='co'># Minimum number of SSUs to be selected in each PSU</span>
-<span class='kw'>inp2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='input_to_beat.2st_2.html'>input_to_beat.2st_2</a></span>(<span class='kw'>psu</span>,
-                            <span class='kw'>psu_id</span>,
-                            <span class='kw'>stratum_var</span>,
-                            <span class='kw'>mos_var</span>,
-                            <span class='kw'>delta</span>,
-                            <span class='kw'>minimum</span>)
-<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='kw'>inp2</span><span class='op'>$</span><span class='kw'>psu_file</span>)
-<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='kw'>inp2</span><span class='op'>$</span><span class='kw'>des_file</span>)
-<span class='kw'>newstrata</span> <span class='op'>&lt;-</span> <span class='fu'>check_input</span>(strata=<span class='kw'>inp1</span><span class='op'>$</span><span class='kw'>strata</span>,
-                         des=<span class='kw'>inp2</span><span class='op'>$</span><span class='kw'>des_file</span>,
-                         strata_var_strata=<span class='st'>"STRATUM"</span>,
-                         strata_var_des=<span class='st'>"STRATUM"</span>)
-}
+<span class='va'>id_PSU</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"municipality"</span><span class='op'>)</span>            <span class='co'># identification variable of PSUs</span>
+<span class='va'>id_SSU</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"id_hh"</span><span class='op'>)</span>                   <span class='co'># identification variable of SSUs</span>
+<span class='va'>domain_vars</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"region"</span><span class='op'>)</span>             <span class='co'># domain variables</span>
+<span class='va'>inp1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='input_to_beat.2st_1.html'>input_to_beat.2st_1</a></span><span class='op'>(</span><span class='va'>RGdes</span>,
+                            <span class='va'>RGcal</span>,
+                            <span class='va'>id_PSU</span>,
+                            <span class='va'>id_SSU</span>,
+                            <span class='va'>strata_vars</span>,
+                            <span class='va'>target_vars</span>,
+                            <span class='va'>deff_vars</span>,
+                            <span class='va'>domain_vars</span><span class='op'>)</span>              
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>inp1</span><span class='op'>$</span><span class='va'>strata</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>psu</span><span class='op'>)</span>
+<span class='va'>psu_id</span><span class='op'>=</span><span class='st'>"municipality"</span>        <span class='co'># Identifier of the PSU</span>
+<span class='va'>stratum_var</span><span class='op'>=</span><span class='st'>"stratum"</span>        <span class='co'># Identifier of the stratum</span>
+<span class='va'>mos_var</span><span class='op'>=</span><span class='st'>"ind"</span>                <span class='co'># Variable to be used as 'measure of size'</span>
+<span class='va'>delta</span><span class='op'>=</span><span class='fl'>1</span>                      <span class='co'># Average number of SSUs for each selection unit</span>
+<span class='va'>minimum</span> <span class='op'>&lt;-</span> <span class='fl'>50</span>                <span class='co'># Minimum number of SSUs to be selected in each PSU</span>
+<span class='va'>inp2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='input_to_beat.2st_2.html'>input_to_beat.2st_2</a></span><span class='op'>(</span><span class='va'>psu</span>,
+                            <span class='va'>psu_id</span>,
+                            <span class='va'>stratum_var</span>,
+                            <span class='va'>mos_var</span>,
+                            <span class='va'>delta</span>,
+                            <span class='va'>minimum</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>inp2</span><span class='op'>$</span><span class='va'>psu_file</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>inp2</span><span class='op'>$</span><span class='va'>des_file</span><span class='op'>)</span>
+<span class='va'>newstrata</span> <span class='op'>&lt;-</span> <span class='fu'>check_input</span><span class='op'>(</span>strata<span class='op'>=</span><span class='va'>inp1</span><span class='op'>$</span><span class='va'>strata</span>,
+                         des<span class='op'>=</span><span class='va'>inp2</span><span class='op'>$</span><span class='va'>des_file</span>,
+                         strata_var_strata<span class='op'>=</span><span class='st'>"STRATUM"</span>,
+                         strata_var_des<span class='op'>=</span><span class='st'>"STRATUM"</span><span class='op'>)</span>
+<span class='op'>}</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -229,7 +232,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by Andrea Fasulo, Raffaella Cianchetta, Giulio Barcaroli, Stefano Falorsi, Alessio Guandalini, Daniela Pagliuca, Marco Dionisio Terribili.</p>
+  <p>Developed by Andrea Fasulo, Giulio Barcaroli, Raffaella Cianchetta, Stefano Falorsi, Alessio Guandalini, Daniela Pagliuca, Marco Dionisio Terribili.</p>
 </div>
 
 <div class="pkgdown">

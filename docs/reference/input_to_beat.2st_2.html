@@ -42,7 +42,7 @@
   
 
 <meta property="og:title" content="Prepares the design file for two-stage sample design — input_to_beat.2st_2" />
-<meta property="og:description" content="Prepares the design file for two-stage sample design on the basis of a dataset containin information on each PSU" />
+<meta property="og:description" content="Prepares the design file for two-stage sample design on the basis of a dataset containing information on each PSU" />
 
 
 
@@ -106,7 +106,10 @@
       <a href="../articles/R2BEAT_methodology.html">R2BEAT methodology and use</a>
     </li>
     <li>
-      <a href="../articles/R2BEAT_workflow.html">R2BEAT two-stage sampling design workflow</a>
+      <a href="../articles/R2BEAT_workflow.html">R2BEAT two-stage sampling design workflow starting from a previous survey</a>
+    </li>
+    <li>
+      <a href="../articles/R2BEAT_workflow_from_frame.html">R2BEAT two-stage sampling design workflow starting from the sampling frame</a>
     </li>
   </ul>
 </li>
@@ -117,7 +120,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/barcaroli/R2BEAT/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -140,10 +143,10 @@
     </div>
 
     <div class="ref-description">
-    <p>Prepares the design file for two-stage sample design on the basis of a dataset containin information on each PSU</p>
+    <p>Prepares the design file for two-stage sample design on the basis of a dataset containing information on each PSU</p>
     </div>
 
-    <pre class="usage"><span class='fu'>input_to_beat.2st_2</span>(<span class='kw'>psu</span>,<span class='kw'>psu_id</span>,<span class='kw'>stratum_var</span>,<span class='kw'>mos_var</span>,<span class='kw'>delta</span>,<span class='kw'>minimum</span>)</pre>
+    <pre class="usage"><span class='fu'>input_to_beat.2st_2</span><span class='op'>(</span><span class='va'>psu</span>,<span class='va'>psu_id</span>,<span class='va'>stratum_var</span>,<span class='va'>mos_var</span>,<span class='va'>delta</span>,<span class='va'>minimum</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -179,24 +182,24 @@
     <p>Giulio Barcaroli</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># psu &lt;- read.csv2("psu.csv") # Read the external file containing PSU information</span>
-<span class='fu'><a href='https://rdrr.io/r/base/load.html'>load</a></span>(<span class='st'>"R2BEAT_ReGenesees.RData"</span>) <span class='co'># ReGenesees design and calibration objects plus PSU data</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='kw'>psu</span>)
-<span class='kw'>psu_id</span><span class='op'>=</span><span class='st'>"municipality"</span>        <span class='co'># Identifier of the PSU</span>
-<span class='kw'>stratum_var</span><span class='op'>=</span><span class='st'>"stratum"</span>        <span class='co'># Identifier of the stratum</span>
-<span class='kw'>mos_var</span><span class='op'>=</span><span class='st'>"ind"</span>                <span class='co'># Variable to be used as 'measure of size'</span>
-<span class='kw'>delta</span><span class='op'>=</span><span class='fl'>1</span>                      <span class='co'># Average number of SSUs for each selection unit</span>
-<span class='kw'>minimum</span> <span class='op'>&lt;-</span> <span class='fl'>50</span>                <span class='co'># Minimum number of SSUs to be selected in each PSU</span>
-<span class='kw'>inp2</span> <span class='op'>&lt;-</span> <span class='fu'>input_to_beat.2st_2</span>(<span class='kw'>psu</span>,
-                            <span class='kw'>psu_id</span>,
-                            <span class='kw'>stratum_var</span>,
-                            <span class='kw'>mos_var</span>,
-                            <span class='kw'>delta</span>,
-                            <span class='kw'>minimum</span>)
-<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='kw'>inp2</span><span class='op'>$</span><span class='kw'>psu_file</span>)
-<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='kw'>inp2</span><span class='op'>$</span><span class='kw'>des_file</span>)
-}
+<span class='fu'><a href='https://rdrr.io/r/base/load.html'>load</a></span><span class='op'>(</span><span class='st'>"R2BEAT_ReGenesees.RData"</span><span class='op'>)</span> <span class='co'># ReGenesees design and calibration objects plus PSU data</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>psu</span><span class='op'>)</span>
+<span class='va'>psu_id</span><span class='op'>=</span><span class='st'>"municipality"</span>        <span class='co'># Identifier of the PSU</span>
+<span class='va'>stratum_var</span><span class='op'>=</span><span class='st'>"stratum"</span>        <span class='co'># Identifier of the stratum</span>
+<span class='va'>mos_var</span><span class='op'>=</span><span class='st'>"ind"</span>                <span class='co'># Variable to be used as 'measure of size'</span>
+<span class='va'>delta</span><span class='op'>=</span><span class='fl'>1</span>                      <span class='co'># Average number of SSUs for each selection unit</span>
+<span class='va'>minimum</span> <span class='op'>&lt;-</span> <span class='fl'>50</span>                <span class='co'># Minimum number of SSUs to be selected in each PSU</span>
+<span class='va'>inp2</span> <span class='op'>&lt;-</span> <span class='fu'>input_to_beat.2st_2</span><span class='op'>(</span><span class='va'>psu</span>,
+                            <span class='va'>psu_id</span>,
+                            <span class='va'>stratum_var</span>,
+                            <span class='va'>mos_var</span>,
+                            <span class='va'>delta</span>,
+                            <span class='va'>minimum</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>inp2</span><span class='op'>$</span><span class='va'>psu_file</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>inp2</span><span class='op'>$</span><span class='va'>des_file</span><span class='op'>)</span>
+<span class='op'>}</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -209,7 +212,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by Andrea Fasulo, Raffaella Cianchetta, Giulio Barcaroli, Stefano Falorsi, Alessio Guandalini, Daniela Pagliuca, Marco Dionisio Terribili.</p>
+  <p>Developed by Andrea Fasulo, Giulio Barcaroli, Raffaella Cianchetta, Stefano Falorsi, Alessio Guandalini, Daniela Pagliuca, Marco Dionisio Terribili.</p>
 </div>
 
 <div class="pkgdown">

@@ -12,7 +12,7 @@ output:
     toc_float:
       collapsed: no
       smooth_scroll: yes
-    toc_title: spsur vs spse
+    toc_title: 
     # code_folding: hide
 bibliography: 
 link-citations: yes
@@ -21,6 +21,7 @@ vignette: >
   %\VignetteIndexEntry{R2BEAT two-stage sampling design workflow starting from the sampling frame}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
 ---
 
 
@@ -153,8 +154,8 @@ f) the 'PSU_file' dataframe, containing the following information:
 
 Let us see the content of these objects:
 
-```{r, eval=FALSE}
-inp$strata
+```{r}
+head(inp$strata)
 ```
 
 ```{r}
@@ -220,7 +221,7 @@ The meaning of these constraints is that, once we select a sample and produce ex
 
 For instance, we can analyze the impact of the 'deff_sugg' parameter on the final sample design by executing the following code:
 
-```{r, eval=FALSE}
+```{r, eval=TRUE,results='hide'}
 sensitivity (samp_frame=pop,
             id_PSU="municipality",
             id_SSU="id_ind",
@@ -236,14 +237,14 @@ sensitivity (samp_frame=pop,
             max=2) 
 ```
 
-```{r}
+```{r, eval=FALSE,echo=FALSE}
 knitr::include_graphics("Plot_deff.png")
 ```
 
 
 The same for the 'minimum' parameter:
 
-```{r, eval=FALSE}
+```{r, eval=TRUE,results='hide'}
 sensitivity (samp_frame=pop,
             id_PSU="municipality",
             id_SSU="id_ind",
@@ -261,13 +262,13 @@ sensitivity (samp_frame=pop,
 
 
 
-```{r}
+```{r , eval=FALSE,echo=FALSE}
 knitr::include_graphics("Plot_min_SSU.png")
 ```
 
 And, finally, for initial sampling rate:
 
-```{r, eval=FALSE}
+```{r, eval=TRUE,results='hide'}
 sensitivity (samp_frame=pop,
             id_PSU="municipality",
             id_SSU="id_ind",
@@ -283,7 +284,7 @@ sensitivity (samp_frame=pop,
             max=0.10) 
 ```
 
-```{r}
+```{r, eval=FALSE,echo=FALSE}
 knitr::include_graphics("Plot_sample_fraction.png")
 ```
 
