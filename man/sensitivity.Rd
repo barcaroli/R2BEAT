@@ -8,8 +8,10 @@ This function allows to analyse the different results in terms
 of first stage size (number of PSUs) and second stage size (number of SSUs),
 when varying the values of the following parameters: 
 
-- deff_sugg (suggested value of deff) 
+- deff_sugg (suggested value of deff)
+
 - minimum (minimum number of SSU per single PSU)
+
 - f (suggested sample fraction)
 
 The name of the parameter has to be given, together with the minimum and
