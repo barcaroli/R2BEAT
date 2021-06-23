@@ -56,10 +56,12 @@ Having this sampling frame, the workflow is based on the following steps:
 
 # Loading data and pre-processing
 
-We make use of a synthetic population data frame:
+We make use of a synthetic population data frame (pop), that is available at the link:
+
+https://github.com/barcaroli/R2BEAT/tree/master/data
 
 ```{r}
-load("Frame.RData")   
+load("pop.RData")   
 str(pop)
 ```
 
@@ -394,7 +396,7 @@ Finally, we are able to select the Secondary Sample Units (the individuals) from
 First, we load the population frame:
 
 ```{r}
-load("Frame.RData")
+load("pop.RData")
 ```
 
 and we proceed to select the sample in this way:

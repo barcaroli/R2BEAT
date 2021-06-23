@@ -24,7 +24,6 @@ vignette: >
   \usepackage[utf8]{inputenc}
 ---
 
-
 ```{r setup, include=FALSE}
 options(width=400) 
 knitr::opts_chunk$set(echo = TRUE, fig.width=6, fig.height=4)
@@ -50,7 +49,11 @@ This general flow assumes that at least a previous round of the survey, whose sa
 
 # Use of ReGenesees
 
-Perform externally the definition of the sample design, and possibly of the calibration step, using the R package ReGenesees, and make the design object and the calibrated object available. 
+Perform externally the definition of the sample design, and possibly of the calibration step, using the R package ReGenesees, and make the design object and the calibrated object available.
+
+The workspace to be loaded (R2BEAT_ReGenesees.RData) is available at the link:
+
+<https://github.com/barcaroli/R2BEAT/tree/master/data>
 
 ```{r}
 load("R2BEAT_ReGenesees.RData")   # ReGenesees design object
@@ -83,12 +86,11 @@ In this example, in the ReGenesees objects there are the following variables:
 str(des$variables)
 ```
 
-
 where there are three potential target variables:
 
-1. income_hh (numeric);
-2. work (factor with values 0, 1, 2);
-3. unemployed (factor with values 0, 1).
+1.  income_hh (numeric);
+2.  work (factor with values 0, 1, 2);
+3.  unemployed (factor with values 0, 1).
 
 ```{r}
 summary(des$variables$income_hh)
@@ -102,9 +104,7 @@ table(des$variables$work)
 table(des$variables$unemployed)
 ```
 
-Great attention must be paid to the nature of the target variables, especially of the 'factor' type.
-In fact, the procedure here illustrated is suitable only when categorical variables are binary with values 0 and 1, supposing we are willing to estimate proportions of '1' in the population.
-If factor variables are of other nature, then an error message is printed.
+Great attention must be paid to the nature of the target variables, especially of the 'factor' type. In fact, the procedure here illustrated is suitable only when categorical variables are binary with values 0 and 1, supposing we are willing to estimate proportions of '1' in the population. If factor variables are of other nature, then an error message is printed.
 
 Therefore, we have to handle the 'work' variable in this way: as values 0, 1 and 2 indicate respectively non labour force, active and inactive people, we can decide to derive from 'work' two binary variables, 'active' and 'inactive':
 
@@ -130,39 +130,37 @@ table(cal$variables$inactive)
 table(cal$variables$unemployed)
 ```
 
-
 # Build 'strata', 'deff', 'effst' and 'rho' dataframes
 
 Using ReGenesees objects as input, produce the following dataframes (function 'input_to_beat.2st_1'):
 
-a) the 'stratif' dataframe containing:
+a)  the 'stratif' dataframe containing:
 
- - STRATUM: identifier of the single stratum
- - N: total population in terms of final sampling units
- - Mi,Si: mean and standard deviation of target variables (i=1,2,..,P) 
- - DOMk: domain(s) to which the stratum belongs
- 
-b) the 'deff' (design effect) dataframe, containing the following information:
+-   STRATUM: identifier of the single stratum
+-   N: total population in terms of final sampling units
+-   Mi,Si: mean and standard deviation of target variables (i=1,2,..,P)
+-   DOMk: domain(s) to which the stratum belongs
 
-  - STRATUM: the stratum identifier
-  - DEFFi: the design effect for each target variable i (i=1,2,...,P)
+b)  the 'deff' (design effect) dataframe, containing the following information:
 
- 
-c) the 'effst' (estimator effect) dataframe, containing the following information:
+-   STRATUM: the stratum identifier
+-   DEFFi: the design effect for each target variable i (i=1,2,...,P)
 
-  - STRATUM: the stratum identifier
-  - EFFSTi: the estimator effect for each target variable i (i=1,2,...,P)
+c)  the 'effst' (estimator effect) dataframe, containing the following information:
 
-d) the 'rho' (intraclass coefficient of correlation) dataframe, containing the following information:
+-   STRATUM: the stratum identifier
+-   EFFSTi: the estimator effect for each target variable i (i=1,2,...,P)
 
-  - STRATUM: the stratum identifier
-  - RHO_ARi: the intraclass coefficient of correlation in self-representative PSUs for each target variable i (i=1,2,...,P)
-  - RHO_NARi: the intraclass coefficient of correlation in non self-representative PSUs for each target variable i (i=1,2,...,P)
-  
+d)  the 'rho' (intraclass coefficient of correlation) dataframe, containing the following information:
+
+-   STRATUM: the stratum identifier
+-   RHO_ARi: the intraclass coefficient of correlation in self-representative PSUs for each target variable i (i=1,2,...,P)
+-   RHO_NARi: the intraclass coefficient of correlation in non self-representative PSUs for each target variable i (i=1,2,...,P)
+
 Actually, the 'deff' dataframe is not used in the following steps, it just remains for documentation purposes.
 
 Here is the way we can produce the above items:
-  
+
 ```{r}
 des$variables$wgts <- 1 / des$prob
 RGdes <- des                           # ReGenesees design object
@@ -205,24 +203,23 @@ head(inp1$effst)
 head(inp1$rho)
 ```
 
-
 # Build 'PSU' and 'design' dataframes
 
 Prepare the inputs related to the PSUs (function 'input_to_strat.2d_2'), that are
 
-  a) the 'des_file' dataframe, containing the following information:
+a)  the 'des_file' dataframe, containing the following information:
 
-  - STRATUM: stratum identifier
-  - MOS: measure of size of the stratum (in terms of number of contained selection units)
-  - DELTA: factor that report the average number of SSUs for each selection unit 
-  - MINIMUM: minimum number of units to be selected in each PSU
+-   STRATUM: stratum identifier
+-   MOS: measure of size of the stratum (in terms of number of contained selection units)
+-   DELTA: factor that report the average number of SSUs for each selection unit
+-   MINIMUM: minimum number of units to be selected in each PSU
 
-  b) the 'PSU_file' dataframe, containing the following information:
+b)  the 'PSU_file' dataframe, containing the following information:
 
-  - stratum identifier
-  - PSU id
-  - PSU_MOS: number of final selection units contained in a given PSU
-  
+-   stratum identifier
+-   PSU id
+-   PSU_MOS: number of final selection units contained in a given PSU
+
 ```{r}
 # psu <- read.csv2("psu.csv") # Read the external file containing PSU information
 head(psu)
@@ -241,7 +238,7 @@ head(inp2$psu_file)
 head(inp2$des_file)
 ```
 
-# Check the coherence of populations in strata and PSUs 
+# Check the coherence of populations in strata and PSUs
 
 It may happen that the population in strata (variable 'N' in 'inp1\$strata' dataset) and the one derived by the PSU dataset (variable 'STRAT_MOS' in 'inp2\$des_file' dataset) are not the same.
 
@@ -263,9 +260,7 @@ It is preferable to use this new version:
 inp1$strata <- newstrata
 ```
 
-
-
-# Optimal allocation of units in each stratum 
+# Optimal allocation of units in each stratum
 
 Using the function 'beat.2st' in 'R2BEAT' package execute the optimization of PSU and SSU allocation in strata:
 
@@ -304,14 +299,13 @@ This is the sensitivity of the solution:
 alloc$sensitivity
 ```
 
-i.e., for each domain value and for each variable it is reported the gain in terms of reduction in the sample size if the corresponding precision constraint is reduced of 10\%.
+i.e., for each domain value and for each variable it is reported the gain in terms of reduction in the sample size if the corresponding precision constraint is reduced of 10%.
 
 These are the expected values of the coefficients of variation:
 
 ```{r}
 alloc$expected
 ```
-
 
 # Selection of PSUs
 
@@ -341,7 +335,6 @@ This is the overall sample design:
 sample_2st[[2]]
 ```
 
-
 ```{r, echo=TRUE}
 des <- sample_2st[[2]]
 des <- des[1:(nrow(des)-1),]
@@ -365,7 +358,6 @@ legend("topleft",
 title("Distribution of allocated SSUs by domain")
 ```
 
-
 and these are the selected PSUs:
 
 ```{r}
@@ -377,13 +369,11 @@ head(selected_PSU)
 
 # Selection of SSUs
 
-Finally, we are able to select the Secondary Sample Units (the individuals) from the already selected PSUs (the municipalities). 
-First, we load the population frame:
+Finally, we are able to select the Secondary Sample Units (the individuals) from the already selected PSUs (the municipalities). First, we load the population frame:
 
 ```{r}
-load("Frame.RData")
+load("pop.RData")
 ```
-
 
 and we proceed to select the sample in this way:
 
@@ -408,6 +398,7 @@ and that the sum of weights equalize population size:
 nrow(pop)
 sum(samp$weight)
 ```
+
 This is the distribution of weights:
 
 ```{r}
@@ -423,5 +414,3 @@ title("Weights distribution by stratum",cex.main=0.7)
 ```
 
 It can be seen that the sample is fully self-weighted inside strata, and approximately self-weighted in aggregations of strata, that is the result we wanted to obtain.
-
-

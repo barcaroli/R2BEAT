@@ -47,7 +47,7 @@ prepareInputToAllocation (
 library(R2BEAT)
 library(SamplingStrata)
 library(sampling)
-load("Frame.RData")
+load("pop.RData")
 pop$active <- ifelse(pop$work==1,1,0)
 pop$inactive <- ifelse(pop$work==2,1,0)
 pop$one <- 1
