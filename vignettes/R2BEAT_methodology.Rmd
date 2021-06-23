@@ -182,10 +182,17 @@ Then the selection of a fixed number of  PSUs per stratum is carried out using t
 
 The function produces an output list, reporting the overall information on selected PSUs.
 In particular, in the fourth output, it provides the first order inclusion probability for each PSU, that is, for the first selection stage.
+
+
+# Second stage selection 
+
 The inclusion probability for the second stage can be easily obtained dividing the number of SSUs to be selected in the PSU by the measure of size of the PSU.
+
 Then, the design weights for each unit in the sample are equal to the inverse of the product between the first order  and the second stage inclusion probabilities. 
 
 The inclusion probability of the first and second stage of the sampling scheme are such that the overall inclusion probabilities are almost constant for each unit in the sample, thus obtaining self-weighting samples.
+
+Once performed the first stage selection step, the function *select_SSU* allows to perform the selection of the Primary Stage Units (PSUs).
 
 # References
 
