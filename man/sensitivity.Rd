@@ -26,6 +26,7 @@ available, and a frame complete with values of target variables is available.
 \usage{
 sensitivity ( 
   samp_frame,
+  errors,
   id_PSU,
   id_SSU,
   strata_var,
@@ -43,6 +44,7 @@ sensitivity (
 
 \arguments{
  \item{samp_frame}{The dataframe containing sampling units in the reference population.}
+ \item{errors}{Precision constraints.}
  \item{id_PSU}{variables used as identifiers in sampling frame.}
  \item{id_SSU}{variables used as identifiers in sampling frame.}
  \item{strata_var}{stratification variable used in sampling frame.}
@@ -71,6 +73,7 @@ cv <- as.data.frame(list(DOM=c("DOM1","DOM2"),
 cv
 # parameters
 samp_frame <- pop
+errors <- cv
 id_PSU <- "municipality"  
 id_SSU <- "id_ind"        
 strata_var <- "stratum"  
@@ -78,11 +81,13 @@ target_vars <- c("income_hh","active","inactive","unemployed")   # more than one
 deff_var <- "stratum"        
 domain_var <- "region"        
 minimum <- 50 # minimum number of SSUs to be interviewed in each selected PSU
-delta =  nrow(pop) /length(unique(pop$id_hh))     # average dimension of the SSU in terms of elementary survey units
-delta =  1     # average dimension of the SSU in terms of elementary survey units
+# average dimension of the SSU in terms of elementary survey units
+#delta =  nrow(pop) /length(unique(pop$id_hh))     
+delta =  1  # average dimension of the SSU in terms of elementary survey units
 f = 0.05 # sampling fraction (suggested)
 deff_sugg <- 1.5
 sensitivity(samp_frame,
+            errors,
             id_PSU,
             id_SSU,
             strata_var,

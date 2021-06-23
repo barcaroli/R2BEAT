@@ -16,17 +16,16 @@ prepareInputToAllocation <- function(
   f,
   deff_sugg) 
 {
-  require(SamplingStrata)
   if (is.null(samp_frame$one)) samp_frame$one <- 1
 
   # strata
-  frame <- buildFrameDF(df=samp_frame,
+  frame <- SamplingStrata::buildFrameDF(df=samp_frame,
                         id=id_SSU,
                         X=strata_var,
                         Y=target_vars,
-                        domain=domain_var)
+                        domainvalue=domain_var)
   nvarY <- length(grep("Y",colnames(frame)))
-  strata <- buildStrataDF(frame,progress=FALSE)
+  strata <- SamplingStrata::buildStrataDF(frame,progress=FALSE)
   strata$DOM2 <- strata$DOM1
   strata$DOM1 <- 1
   strata$STRATUM <- as.factor(strata$STRATO)

@@ -226,6 +226,7 @@ For instance, we can analyze the impact of the 'deff_sugg' parameter on the fina
 
 ```{r, eval=FALSE,results='hide'}
 sensitivity (samp_frame=pop,
+            errors=cv,
             id_PSU="municipality",
             id_SSU="id_ind",
             strata_var="stratum",

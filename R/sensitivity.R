@@ -1,4 +1,5 @@
 sensitivity <- function(samp_frame,
+                        errors,
                         id_PSU,
                         id_SSU,
                         strata_var,
@@ -44,7 +45,7 @@ sensitivity <- function(samp_frame,
                                       deff_sugg=i)
       
       alloc <- beat.2st(stratif = inp$strata, 
-                        errors = cv, 
+                        errors = errors, 
                         des_file = inp$des_file, 
                         psu_file = inp$psu_file, 
                         rho = inp$rho, 
@@ -93,7 +94,7 @@ sensitivity <- function(samp_frame,
                                       deff_sugg)
       
       alloc <- beat.2st(stratif = inp$strata, 
-                        errors = cv, 
+                        errors = errors, 
                         des_file = inp$des_file, 
                         psu_file = inp$psu_file, 
                         rho = inp$rho, 

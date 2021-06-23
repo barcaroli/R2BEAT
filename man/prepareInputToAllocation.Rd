@@ -56,12 +56,13 @@ samp_frame <- pop
 id_PSU <- "municipality"  
 id_SSU <- "id_ind"        
 strata_var <- "stratum"  
-target_vars <- c("income_hh","active","inactive","unemployed")   # more than one
+target_vars <- c("income_hh","active","inactive","unemployed") 
 deff_var <- "stratum"        
 domain_var <- "region"        
 minimum <- 50 # minimum number of SSUs to be interviewed in each selected PSU
-# delta =  nrow(pop) /length(unique(pop$id_hh))     # average dimension of the SSU in terms of elementary survey units
-delta =  1     # average dimension of the SSU in terms of elementary survey units
+# average dimension of the SSU in terms of elementary survey units
+# delta =  nrow(pop) /length(unique(pop$id_hh))     
+delta =  1     
 f = 0.05 # sampling fraction (suggested)
 deff_sugg <- 1.5
 # prepare inputs
