@@ -1,5 +1,5 @@
 ---
-title: "R2BEAT two-stage sampling design workflow starting from a previous survey"  
+title: "R2BEAT two-stage sampling design workflow starting from a previous survey" 
 date: "`r Sys.Date()` <br>  <br> <br>"
 output: 
   bookdown::html_document2:
@@ -12,11 +12,12 @@ output:
     toc_float:
       collapsed: no
       smooth_scroll: yes
-    toc_title: spsur vs spse
+    toc_title: 
     # code_folding: hide
-bibliography: 
-link-citations: yes
-linkcolor: red
+keep_md: TRUE
+#bibliography: 
+#link-citations: yes
+#linkcolor: red
 vignette: >
   %\VignetteIndexEntry{R2BEAT two-stage sampling design workflow starting from a previous survey}
   %\VignetteEncoding{UTF-8}
@@ -414,3 +415,9 @@ title("Weights distribution by stratum",cex.main=0.7)
 ```
 
 It can be seen that the sample is fully self-weighted inside strata, and approximately self-weighted in aggregations of strata, that is the result we wanted to obtain.
+
+```{r, include=FALSE}
+   # add this chunk to end of mycode.rmd
+   file.rename(from="R2BEAT_workflow.md", 
+               to="out.md")
+```

@@ -11,7 +11,7 @@ output:
     toc_float:
       collapsed: no
       smooth_scroll: yes
-    toc_title: spsur vs spse
+    toc_title: 
     # code_folding: hide
 keep_md: TRUE
 bibliography: R2BEAT.bib

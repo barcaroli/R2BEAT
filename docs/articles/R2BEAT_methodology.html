@@ -45,6 +45,12 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
+  <a href="../index.html">
+    <span class="fas fa-home fa-lg"></span>
+     
+  </a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -58,7 +64,10 @@
       <a href="../articles/R2BEAT_methodology.html">R2BEAT methodology and use</a>
     </li>
     <li>
-      <a href="../articles/R2BEAT_workflow.html">R2BEAT two-stage sampling design workflow</a>
+      <a href="../articles/R2BEAT_workflow.html">R2BEAT two-stage sampling design workflow starting from a previous survey</a>
+    </li>
+    <li>
+      <a href="../articles/R2BEAT_workflow_from_frame.html">R2BEAT two-stage sampling design workflow starting from the sampling frame</a>
     </li>
   </ul>
 </li>
@@ -69,7 +78,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/barcaroli/R2BEAT/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -83,7 +92,7 @@
 
       
 
-      </header><script src="R2BEAT_methodology_files/header-attrs-2.5/header-attrs.js"></script><div class="row">
+      </header><script src="R2BEAT_methodology_files/header-attrs-2.9/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>R2BEAT methodology and use</h1>
@@ -176,8 +185,15 @@ where, for <span class="math inline">\(SR\)</span> and <span class="math inline"
 <a href="#first-stage-selection" class="anchor"></a>First stage selection</h1>
 <p>Once performed the allocation step, the function <em>StratSel</em> allows to perform the selection of the Primary Stage Units (PSUs).</p>
 <p>The function carries out the stratification of the PSUs, for each estimation domain, according to a size threshold. PSUs with measure of size exceeding the threshold are identified as SR (see also description in the previous section). The remaining NSR PSUs are ordered by their measure of size and divided into strata whose sizes are approximately equal to the threshold multiplied by the number of PSUs to be selected in each stratum (<em>MINCS</em>). In this way, strata are composed by PSUs having as equal as possible size. For each PSU, <em>StratSel</em> determines the size of final sample units on the basis of the size planned in input. Then the selection of a fixed number of PSUs per stratum is carried out using the Sampford’s method (unequal probabilities, without replacement, fixed sample size), implemented by the <em>UPsampford</em> function of the R package <em>sampling</em>.</p>
-<p>The function produces an output list, reporting the overall information on selected PSUs. In particular, in the fourth output, it provides the first order inclusion probability for each PSU, that is, for the first selection stage. The inclusion probability for the second stage can be easily obtained dividing the number of SSUs to be selected in the PSU by the measure of size of the PSU. Then, the design weights for each unit in the sample are equal to the inverse of the product between the first order and the second stage inclusion probabilities.</p>
+<p>The function produces an output list, reporting the overall information on selected PSUs. In particular, in the fourth output, it provides the first order inclusion probability for each PSU, that is, for the first selection stage.</p>
+</div>
+<div id="second-stage-selection" class="section level1">
+<h1 class="hasAnchor">
+<a href="#second-stage-selection" class="anchor"></a>Second stage selection</h1>
+<p>The inclusion probability for the second stage can be easily obtained dividing the number of SSUs to be selected in the PSU by the measure of size of the PSU.</p>
+<p>Then, the design weights for each unit in the sample are equal to the inverse of the product between the first order and the second stage inclusion probabilities.</p>
 <p>The inclusion probability of the first and second stage of the sampling scheme are such that the overall inclusion probabilities are almost constant for each unit in the sample, thus obtaining self-weighting samples.</p>
+<p>Once performed the first stage selection step, the function <em>select_SSU</em> allows to perform the selection of the Primary Stage Units (PSUs).</p>
 </div>
 <div id="references" class="section level1 unnumbered">
 <h1 class="hasAnchor">
@@ -207,11 +223,11 @@ Tschprow, A. A. 1923. <span>“On the Mathematical Expectation of the Moments of
 
 
       <footer><div class="copyright">
-  <p>Developed by Andrea Fasulo, Raffaella Cianchetta, Giulio Barcaroli, Stefano Falorsi, Alessio Guandalini, Daniela Pagliuca, Marco Dionisio Terribili.</p>
+  <p>Developed by Andrea Fasulo, Giulio Barcaroli, Raffaella Cianchetta, Stefano Falorsi, Alessio Guandalini, Daniela Pagliuca, Marco Dionisio Terribili.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

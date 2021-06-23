@@ -14,9 +14,10 @@ output:
       smooth_scroll: yes
     toc_title: 
     # code_folding: hide
-bibliography: 
-link-citations: yes
-linkcolor: red
+keep_md: TRUE
+#bibliography: 
+#link-citations: yes
+#linkcolor: red
 vignette: >
   %\VignetteIndexEntry{R2BEAT two-stage sampling design workflow starting from the sampling frame}
   %\VignetteEncoding{UTF-8}
