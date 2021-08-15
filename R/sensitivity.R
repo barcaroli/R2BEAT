@@ -164,5 +164,6 @@ sensitivity <- function(samp_frame,
     title("Second Stage Size")
     par(mfrow=c(1,1))
   }
-  
+  two_stage_allocation <- list(PSU,SSU)
+  return(two_stage_allocation)
 }

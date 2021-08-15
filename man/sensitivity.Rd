@@ -60,6 +60,9 @@ sensitivity (
  \item{max}{maximum value of the parameter.}
 }
 
+\value{
+A list containing the (i) vector of allocated PSUs in the iterations and (ii) the vector of allocated SSUs in the iterations
+}
 
 \examples{
 \dontrun{

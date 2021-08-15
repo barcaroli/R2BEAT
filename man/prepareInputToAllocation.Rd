@@ -41,6 +41,9 @@ prepareInputToAllocation (
  \item{deff_sugg}{suggested value of the deff.}
 }
 
+\value{
+A list containing  (i) the vector of allocated PSUs in the iterations and (ii) the vector of allocated SSUs in the iterations
+}
 
 \examples{
 \dontrun{

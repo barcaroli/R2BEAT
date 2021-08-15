@@ -18,6 +18,9 @@ Select sample of secondary stage units (SSU) from the population frame on the ba
  \item{verbose}{Flag for producing output information while executing}
 }
 
+\value{
+A dataframe containing the units selected in the sample
+}
 
 \examples{
 \dontrun{
