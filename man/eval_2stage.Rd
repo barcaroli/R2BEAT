@@ -2,8 +2,7 @@
 \Rdversion{1.4}
 \alias{eval_2stage}
 \title{
-Evaluation of the solution produced by the optimization steps of R2BEAT by
-selecting a number of samples from the frame with the optimal stratification, and calculating average CV's on the target variables Y's.
+Evaluation of the two-stage sample design optimized solution by simulation
 }
 \description{
 The user can indicate the number of samples that must be selected by the optimized frame. First, the true values of the parameters are calculated from the frame. Then, for each sample the sampling estimates are calculated, together with the differences between them and the true values of the parameters.

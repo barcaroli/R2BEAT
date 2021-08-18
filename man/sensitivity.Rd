@@ -39,7 +39,8 @@ sensitivity (
   deff_sugg,
   search=c("deff","min_SSU","sample_fraction"),
   min,
-  max) 
+  max,
+  plot=TRUE) 
 }
 
 \arguments{
@@ -58,6 +59,7 @@ sensitivity (
  \item{search}{parameter for which the analysis must be done.}
  \item{min}{minimum value of the parameter.}
  \item{max}{maximum value of the parameter.}
+  \item{plot}{plot (TRUE/FALSE) the final result.}
 }
 
 \value{
