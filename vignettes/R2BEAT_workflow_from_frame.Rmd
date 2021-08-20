@@ -98,10 +98,10 @@ deff_sugg <- 1.5  # suggestion for the deff value
 
 # Producing the inputs for next steps
 
-With already assigned parameters, we can execute the 'prepareInputToAllocation' function:
+With already assigned parameters, we can execute the 'prepareInputToAllocation1' function:
 
 ```{r, results='hide'}
-inp <- prepareInputToAllocation(samp_frame,
+inp <- prepareInputToAllocation1(samp_frame,
                                 id_PSU,
                                 id_SSU,
                                 strata_var,
@@ -114,7 +114,7 @@ inp <- prepareInputToAllocation(samp_frame,
                                 deff_sugg)
 ```
 
-The function 'prepareInputToAllocation' produces a list composed by six elements, stored in the 'inp' object:
+The function 'prepareInputToAllocation1' produces a list composed by six elements, stored in the 'inp' object:
 
 a) the 'stratif' dataframe containing:
 
@@ -195,7 +195,7 @@ newstrata <- check_input(strata=inp$strata,
 
 # Fine tuning of the parameters
 
-For the execution of the function 'prepareInputToAllocation' it is necessary to assign values to the different parameters. Some of them can be directly derived by available data, but for others, namely: 
+For the execution of the function 'prepareInputToAllocation1' it is necessary to assign values to the different parameters. Some of them can be directly derived by available data, but for others, namely: 
 
 - 'minimum' (minimum number of SSUs to be interviewed in each selected PSU)
 - 'f' (suggestion for the sampling fraction) 
