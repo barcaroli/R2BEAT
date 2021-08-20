@@ -1,9 +1,10 @@
 #-----------------------------------
 # Function to prepare inputs to 
 # allocation and PSU selection steps
+# (scenario 1)
 #-----------------------------------
 
-prepareInputToAllocation <- function( 
+prepareInputToAllocation1 <- function( 
   samp_frame,
   id_PSU,
   id_SSU,

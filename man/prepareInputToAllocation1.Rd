@@ -1,10 +1,10 @@
-\name{prepareInputToAllocation}
-\alias{prepareInputToAllocation}
+\name{prepareInputToAllocation1}
+\alias{prepareInputToAllocation1}
 \title{
 Input dataframes for R2BEAT two-stages sample design when sampling frame is available
 }
 \description{
-Prepares the following input dataframes for R2BEAT two-stages sample design starting from the sampling frame:
+In case of scenario 1 (no previous round of the survey available), prepares the following input dataframes for R2BEAT two-stages sample design starting from the sampling frame:
 1. strata
 2. deff
 3. effst
@@ -13,7 +13,7 @@ Prepares the following input dataframes for R2BEAT two-stages sample design star
 6. des_file
 }
 \usage{
-prepareInputToAllocation ( 
+prepareInputToAllocation1 ( 
   samp_frame,
   id_PSU,
   id_SSU,
@@ -69,7 +69,7 @@ delta =  1
 f = 0.05 # sampling fraction (suggested)
 deff_sugg <- 1.5
 # prepare inputs
-inp <- prepareInputToAllocation(samp_frame,
+inp <- prepareInputToAllocation1(samp_frame,
                                 id_PSU,
                                 id_SSU,
                                 strata_var,
