@@ -19,7 +19,6 @@ prepareInputToAllocation2 <- function(
   target_vars, 
   deff_vars, 
   domain_vars,
-  mos_var,
   delta,
   minimum
 ) 
@@ -34,6 +33,7 @@ prepareInputToAllocation2 <- function(
                              domain_vars)
   samp_frame$one <- 1
   psu <- eval(parse(text=paste0("aggregate(one~",id_PSU,"+",strata_vars,",data=samp_frame,FUN=sum)")))
+  mos_var <- "one"
   two <- input_to_beat.2st_2(psu,
                              psu_id=id_PSU,
                              stratum_var=strata_vars,

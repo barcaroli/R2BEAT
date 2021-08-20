@@ -23,7 +23,6 @@ prepareInputToAllocation2 (
   target_vars, 
   deff_vars, 
   domain_vars,
-  mos_var,
   delta,
   minimum) 
 }
@@ -68,7 +67,6 @@ deff_vars <- "stratum"    # stratification variables for calculating deff and ef
 id_PSU <- c("municipality")            # identification variable of PSUs
 id_SSU <- c("id_hh")                   # identification variable of SSUs
 domain_vars <- c("region")             # domain variables
-mos_var="ind"                # Variable to be used as 'measure of size'
 delta=1                      # Average number of SSUs for each selection unit
 minimum <- 50                # Minimum number of SSUs to be selected in each PSU
 inp <- prepareInputToAllocation2 ( 
@@ -81,7 +79,6 @@ inp <- prepareInputToAllocation2 (
   target_vars, 
   deff_vars, 
   domain_vars,
-  mos_var,
   delta,
   minimum) 
 }
