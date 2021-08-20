@@ -1,5 +1,5 @@
-\name{prepareInputToAllocation1}
-\alias{prepareInputToAllocation1}
+\name{prepareInputToAllocation2}
+\alias{prepareInputToAllocation2}
 \title{
 Input dataframes for R2BEAT two-stages sample design when sampling frame is available
 }
@@ -13,7 +13,7 @@ In case of scenario 2 (at least one previous round of the survey available), pre
 6. des_file
 }
 \usage{
-prepareInputToAllocation1 ( 
+prepareInputToAllocation2 ( 
   samp_frame,
   RGdes, 
   RGcal, 
