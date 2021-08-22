@@ -13,7 +13,7 @@ sensitivity <- function (samp_frame, errors, id_PSU, id_SSU, strata_var, target_
   for (i in grid) {
     k <- k + 1
     cat("\n", k)
-    inp <- prepareInputToAllocation(samp_frame, id_PSU, 
+    inp <- prepareInputToAllocation1(samp_frame, id_PSU, 
                                     id_SSU, strata_var, target_vars, deff_var, domain_var, 
                                     minimum, delta, f, deff_sugg = i)
     alloc <- beat.2st(stratif = inp$strata, errors = errors, 
