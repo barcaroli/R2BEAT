@@ -187,7 +187,7 @@ beat.1st<-function (stratif, errors, minnumstrat = 2, maxiter = 200, maxiter1 = 
         }
 
     output_beth <- list(n = n, file_strata = Bethel_sample,
-        alloc = as.data.frame(df), sensitivity = as.data.frame(outcv[-1,]))
+        alloc = as.data.frame(df), sensitivity = as.data.frame(outcv)[-1,])
 
     output_beth$alloc[,2]<-as.numeric(as.character(output_beth$alloc[,2]))
     output_beth$alloc[,3]<-as.numeric(as.character(output_beth$alloc[,3]))
