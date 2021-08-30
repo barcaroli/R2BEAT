@@ -20,6 +20,7 @@ prepareInputToAllocation1 <- function(
   if (is.null(samp_frame$one)) samp_frame$one <- 1
 
   # strata
+  cat("\nCalculating strata...")
   frame <- SamplingStrata::buildFrameDF(df=samp_frame,
                         id=id_SSU,
                         X=strata_var,
@@ -60,17 +61,45 @@ prepareInputToAllocation1 <- function(
   }
   effst <- effst[order(as.numeric(as.character(effst$STRATUM))),]
 
-  # rho
-  rho <- deff
+  # rho ------------------------------------------------------------------
+  # rho <- deff
+  # for (i in c(1:nvarY)) {
+  #   st <- paste0("rho$RHO_AR",i," <- 1")
+  #   eval(parse(text=st))
+  #   st <- paste0("rho$RHO_NAR",i," <- (rho$DEFF", i, "-1)/(rho$b_nar-1)")
+  #   eval(parse(text=st))
+  # }
+  # rho$b_nar <- NULL
+  # rho[,grep("DEFF",colnames(rho))] <- NULL
+  # rho <- rho[order(as.numeric(as.character(rho$STRATUM))),]
+  cat("\nCalculating rho in strata...")
+  rho <- NULL
+  rho$STRATUM <- strata$STRATUM
+  rho <- as.data.frame(rho)
   for (i in c(1:nvarY)) {
-    st <- paste0("rho$RHO_AR",i," <- 1")
-    eval(parse(text=st))
-    st <- paste0("rho$RHO_NAR",i," <- (rho$DEFF", i, "-1)/(rho$b_nar-1)")
-    eval(parse(text=st))
+    eval(parse(text=paste0("rho$RHO_AR",i," <- 1")))
+    eval(parse(text=paste0("rho$RHO_NAR",i," <- NA")))
   }
-  rho$b_nar <- NULL
-  rho[,grep("DEFF",colnames(rho))] <- NULL
-  rho <- rho[order(as.numeric(as.character(rho$STRATUM))),]
+
+  k <- 0
+  for (s in c(rho$STRATUM)) {
+    cat("\nStratum ",s)
+    k <- k+1
+    for (i in c(1:nvarY)) {
+      eval(parse(text=paste0("mu <- mean(frame$",target_vars[i],"[frame$",strata_var," == ",s,"])")))
+      eval(parse(text=paste0("D2y <- sum((frame$",target_vars[i],"[frame$",strata_var," == ",s,"]-mu)^2)")))
+      eval(parse(text=paste0("L <- unique(frame$",id_PSU,"[frame$",strata_var,"==s])")))
+      D2w <- 0
+      for (l in c(L)) {
+        eval(parse(text=paste0("mu_L <- mean(frame$",target_vars[i],"[frame$",id_PSU," == ",l,"])")))
+        eval(parse(text=paste0("D2w <- D2w + sum((frame$",target_vars[i],"[frame$",id_PSU," == ",l,"] - mu_L)^2)")))
+      }
+      eval(parse(text=paste0("rho$RHO_NAR",i,"[",k,"] <- 1 - (length(L) / (length(L) - 1) * (D2w / D2y))")))
+      eval(parse(text=paste0("rho$RHO_NAR",i,"[",k,"] <- 1 - (D2w / D2y)")))
+      
+    }
+  }
+  #------------------------------------------------------------------------
 
   # psu_file
   strat_mun <- samp_frame[,c(strata_var,id_PSU)]
