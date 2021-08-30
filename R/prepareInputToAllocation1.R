@@ -86,13 +86,13 @@ prepareInputToAllocation1 <- function(
     cat("\nStratum ",s)
     k <- k+1
     for (i in c(1:nvarY)) {
-      eval(parse(text=paste0("mu <- mean(frame$",target_vars[i],"[frame$",strata_var," == ",s,"])")))
-      eval(parse(text=paste0("D2y <- sum((frame$",target_vars[i],"[frame$",strata_var," == ",s,"]-mu)^2)")))
-      eval(parse(text=paste0("L <- unique(frame$",id_PSU,"[frame$",strata_var,"==s])")))
+      eval(parse(text=paste0("mu <- mean(samp_frame$",target_vars[i],"[samp_frame$",strata_var," == ",s,"])")))
+      eval(parse(text=paste0("D2y <- sum((samp_frame$",target_vars[i],"[samp_frame$",strata_var," == ",s,"]-mu)^2)")))
+      eval(parse(text=paste0("L <- unique(samp_frame$",id_PSU,"[samp_frame$",strata_var,"==s])")))
       D2w <- 0
       for (l in c(L)) {
-        eval(parse(text=paste0("mu_L <- mean(frame$",target_vars[i],"[frame$",id_PSU," == ",l,"])")))
-        eval(parse(text=paste0("D2w <- D2w + sum((frame$",target_vars[i],"[frame$",id_PSU," == ",l,"] - mu_L)^2)")))
+        eval(parse(text=paste0("mu_L <- mean(samp_frame$",target_vars[i],"[samp_frame$",id_PSU," == ",l,"])")))
+        eval(parse(text=paste0("D2w <- D2w + sum((samp_frame$",target_vars[i],"[samp_frame$",id_PSU," == ",l,"] - mu_L)^2)")))
       }
       eval(parse(text=paste0("rho$RHO_NAR",i,"[",k,"] <- 1 - (length(L) / (length(L) - 1) * (D2w / D2y))")))
       eval(parse(text=paste0("rho$RHO_NAR",i,"[",k,"] <- 1 - (D2w / D2y)")))
