@@ -46,8 +46,10 @@ prepareInputToAllocation1 <- function(
   eval(parse(text=st))
   st <- paste0("b_nar <- aggregate(one ~ ",strata_var,", b_nar, FUN=mean)")
   eval(parse(text=st))
+  if (ncol(b_nar) > 1) colnames(b_nar)[1] <- "STRATUM"
+  if (ncol(b_nar) == 1) b_nar$STRATUM <- 1
   b_nar$one <- b_nar$one * f
-  deff <- merge(deff,b_nar,by.x="STRATUM",by.y="stratum")
+  deff <- merge(deff,b_nar,by="STRATUM")
   colnames(deff)[ncol(deff)] <- "b_nar"
   deff <- deff[order(as.numeric(as.character(deff$STRATUM))),]
 
