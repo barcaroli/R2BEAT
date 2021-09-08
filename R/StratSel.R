@@ -1,10 +1,6 @@
-# Function taken from FS4 package 
-# (with changes in lines 427-445)
-# Author: Raffaella Cianchetta
-
 StratSel <- function (dataPop, idpsu, dom, final_pop, size, PSUsamplestratum, 
-                      min_sample, min_sample_index = FALSE, dataAll, domAll, f_sample, 
-                      planned_min_sample = NULL, launch = TRUE) 
+          min_sample, min_sample_index = FALSE, dataAll, domAll, f_sample, 
+          planned_min_sample = NULL, launch = TRUE) 
 {
   if (!inherits(dataPop, "data.frame")) 
     stop("Population data must be supplied as a data frame")
@@ -424,25 +420,22 @@ StratSel <- function (dataPop, idpsu, dom, final_pop, size, PSUsamplestratum,
                                        "Pik", "Size_Stratum")
       PSU_final_sample_unit <- rep(NA, nrow(DFGlobal_ord))
       nSR <- rep(NA, nrow(DFGlobal_ord))
-      # From here: changes to let this function work also with R 4.0 -----------------------
-      # change [[i]] in [i]
       for (i in 1:nrow(DFGlobal_ord)) {
         if (DFGlobal_ord$N_PSU_Stratum[i] <= DFGlobal_ord$PSUsamplestratum[i]) 
           DFGlobal_ord$PSU_final_sample_unit[i] <- round((DFGlobal_ord$sampling_fraction[i] * 
-                                                              DFGlobal_ord[[4]][i] * DFGlobal_ord$Sampled_PSU[i])/DFGlobal_ord$N_PSU_Stratum[i])
+                                                            DFGlobal_ord[[4]][i] * DFGlobal_ord$Sampled_PSU[i])/DFGlobal_ord$N_PSU_Stratum[i])
         else {
           DFGlobal_ord$PSU_final_sample_unit[i] <- round((DFGlobal_ord$sampling_fraction[i] * 
-                                                              DFGlobal_ord[[4]][i] * DFGlobal_ord$Sampled_PSU[i])/Countstr$PSUsamplestr[1])
+                                                            DFGlobal_ord[[4]][i] * DFGlobal_ord$Sampled_PSU[i])/Countstr$PSUsamplestr[1])
         }
-        if ((DFGlobal_ord$Sampled_PSU[i] == 1) && 
-            (DFGlobal_ord$Pik[i] < 1)) {
+        if ((DFGlobal_ord$Sampled_PSU[i] == 1) && (DFGlobal_ord$Pik[i] < 
+                                                   1)) {
           DFGlobal_ord$nSR[i] <- 1
         }
         else {
           DFGlobal_ord$nSR[i] <- 0
         }
       }
-      # ------ until here ---------------------------------------------------------------
       DFGlobal_ord[4] <- NULL
       a <- aggregate(DFGlobal_ord$SR, list(Domain = DFGlobal_ord$Domain), 
                      FUN = sum)
@@ -485,9 +478,15 @@ StratSel <- function (dataPop, idpsu, dom, final_pop, size, PSUsamplestratum,
       ]
       not_dupl_N_PSU_Stratum <- DFGlobal_ord[!duplicated(DFGlobal_ord$stratum, 
                                                          DFGlobal_ord$N_PSU_Stratum), ]
-      aggPSUsampleStr <- cbind(aggPSUsampleStr, not_dupl_N_PSU_Stratum$N_PSU_Stratum)
+      
+      
+      # Modified
+      if (nrow(aggPSUsampleStr) == nrow(not_dupl_N_PSU_Stratum)) {
+        aggPSUsampleStr <- cbind(aggPSUsampleStr, not_dupl_N_PSU_Stratum$N_PSU_Stratum)
+        names(aggPSUsampleStr)[3] <- "N_PSU_Stratum"
+      }
+      
       aggPSUsampleStr[1] <- NULL
-      names(aggPSUsampleStr)[3] <- "N_PSU_Stratum"
       names(aggPSUsampleStr)[2] <- "PSU_Sample_Stratum"
       class(b) <- c("data.frame", "results")
       class(aggPSUsampleStr) <- c("data.frame", "results")
