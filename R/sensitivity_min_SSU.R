@@ -8,6 +8,7 @@ sensitivity_min_SSU <- function (samp_frame,
                                  domain_var, 
                                  delta = 1, 
                                  f = 0.05, 
+                                 deff_sugg = 1,
                                  min, 
                                  max, 
                                  plot = TRUE) 
@@ -25,8 +26,7 @@ sensitivity_min_SSU <- function (samp_frame,
                                    domain_var, 
                                    minimum, 
                                    delta, 
-                                   f, 
-                                   deff_sugg = i)
+                                   f)
   for (i in grid) {
     k <- k + 1
     cat("\n", k)

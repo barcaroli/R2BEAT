@@ -43,6 +43,7 @@ sensitivity_min_SSU (
  \item{domain_var}{the variable used to identify the domain of interest.}
  \item{delta}{average number of analysis units per sampling unit.}
  \item{f}{expected (initial) sampling rate.}
+  \item{deff_sugg}{suggestion for deff value.}
  \item{min}{minimum value of the parameter.}
  \item{max}{maximum value of the parameter.}
   \item{plot}{plot (TRUE/FALSE) the final result.}
