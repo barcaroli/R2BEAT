@@ -21,13 +21,13 @@ prepareInputToAllocation1 <- function(
 
   # strata
   cat("\nCalculating strata...")
-  frame <- SamplingStrata::buildFrameDF(df=samp_frame,
+  frame <- buildFrameDF(df=samp_frame,
                         id=id_SSU,
                         X=strata_var,
                         Y=target_vars,
                         domainvalue=domain_var)
   nvarY <- length(grep("Y",colnames(frame)))
-  strata <- SamplingStrata::buildStrataDF(frame,progress=FALSE)
+  strata <- buildStrataDF(frame,progress=FALSE)
   strata$DOM2 <- strata$DOM1
   strata$DOM1 <- 1
   strata$STRATUM <- as.factor(strata$STRATO)
