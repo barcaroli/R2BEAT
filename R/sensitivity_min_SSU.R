@@ -13,10 +13,6 @@ sensitivity_min_SSU <- function (samp_frame,
                                  max, 
                                  plot = TRUE) 
 {
-  if (!(search %in% c("deff", "min_SSU", "sample_fraction"))) {
-    stop("Value for search grid not acceptable: must be one of 'deff','min_SSU','sample_fraction'")
-  }
-  
   grid <- seq(min, max, (max - min)/10)
   k <- 0
   PSU <- rep(NA, 10)
