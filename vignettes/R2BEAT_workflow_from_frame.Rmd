@@ -195,16 +195,9 @@ newstrata <- check_input(strata=inp$strata,
 
 # Fine tuning of the parameters
 
-For the execution of the function 'prepareInputToAllocation1' it is necessary to assign values to the different parameters. Some of them can be directly derived by available data, but for others, namely: 
+For the execution of the function 'prepareInputToAllocation1' it is necessary to assign values to the different parameters. Some of them can be directly derived by available data, but for others, namely 'minimum' (minimum number of SSUs to be interviewed in each selected PSU) the indication of the values is more difficult, without having any reference.
 
-- 'minimum' (minimum number of SSUs to be interviewed in each selected PSU)
-- 'f' (suggestion for the sampling fraction) 
-- 'deff_sugg'  (suggestion for the deff value)
-
-
-the indication of the values is more difficult, without having any reference.
-
-In order to orientate in the choice of these values, the function 'sensitivity' allows to perform a sensitivity analysis for each of this parameters.
+In order to orientate in the choice of the value to give to 'minimum', the function 'sensitivity_min_SSU' allows to perform a sensitivity analysis for this parameter.
 
 To execute this function, the name of the parameter has to be given, together with the minimum and maximum value. On the basis of these minimum and maximum values, 10 different values will be used for carrying out the allocation. The output will be a graphical one. 
 
@@ -222,31 +215,7 @@ cv
 
 The meaning of these constraints is that, once we select a sample and produce extimates, we expect a maximum coefficient of variation for the first variable ('income_hh') equal to 3\% at national level ('DOM1') and to 4\% at regional level ('DOM2'); respectively 6\% and 8\% for the other three variables.
 
-For instance, we can analyze the impact of the 'deff_sugg' parameter on the final sample design by executing the following code:
-
-```{r, eval=FALSE,results='hide'}
-deff_sugg_sens <- sensitivity (samp_frame=pop,
-            errors=cv,
-            id_PSU="municipality",
-            id_SSU="id_ind",
-            strata_var="stratum",
-            target_vars=c("income_hh","active","inactive","unemployed"),
-            deff_var="stratum",
-            domain_var="region",
-            minimum=50,
-            delta=1,
-            f=0.05,
-            search="deff",
-            min=1,
-            max=2) 
-```
-
-```{r, eval=TRUE,echo=FALSE}
-knitr::include_graphics("Plot_deff.png")
-```
-
-
-The same for the 'minimum' parameter:
+We can analyze the results in terms of first stage and second stage sizes by executing the following code:
 
 ```{r, eval=FALSE,results='hide'}
 deff_sugg_min <- sensitivity (samp_frame=pop,
@@ -259,7 +228,6 @@ deff_sugg_min <- sensitivity (samp_frame=pop,
             delta=1,
             f=0.05,
             deff_sugg=1.5,
-            search="min_SSU",
             min=30,
             max=80) 
 ```
@@ -268,28 +236,6 @@ deff_sugg_min <- sensitivity (samp_frame=pop,
 
 ```{r , eval=TRUE,echo=FALSE}
 knitr::include_graphics("Plot_min_SSU.png")
-```
-
-And, finally, for initial sampling rate:
-
-```{r, eval=FALSE,results='hide'}
-deff_sugg_sr <- sensitivity (samp_frame=pop,
-            id_PSU="municipality",
-            id_SSU="id_ind",
-            strata_var="stratum",
-            target_vars=c("income_hh","active","inactive","unemployed"),
-            deff_var="stratum",
-            domain_var="region",
-            delta=1,
-            minimum=50,
-            deff_sugg=1.5,
-            search="sample_fraction",
-            min=0.01,
-            max=0.10) 
-```
-
-```{r, eval=TRUE,echo=FALSE}
-knitr::include_graphics("Plot_sample_fraction.png")
 ```
 
 By analysing the above graphs we can decide which values are the most suitable for the sample design.

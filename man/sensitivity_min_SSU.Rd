@@ -1,19 +1,12 @@
-\name{sensitivity}
-\alias{sensitivity}
+\name{sensitivity_min_SSU}
+\alias{sensitivity_min_SSU}
 \title{
-Sensitivity analysis for some parameters by means of grid search 
+Sensitivity analysis for choosing minimum number of SSUs per PSU
 }
 \description{
 This function allows to analyse the different results in terms 
 of first stage size (number of PSUs) and second stage size (number of SSUs),
-when varying the values of the following parameters: 
-
-- deff_sugg (suggested value of deff)
-
-- minimum (minimum number of SSU per single PSU)
-
-- f (suggested sample fraction)
-
+when varying the values of the minimum number of SSU per single PSU)
 The name of the parameter has to be given, together with the minimum and
 maximum value. On the basis of these minimum and maximum values, 10 different values will be used for carrying out the allocation.
 The output will be a graphical one.
@@ -24,7 +17,7 @@ available, and a frame complete with values of target variables is available.
 
 }
 \usage{
-sensitivity ( 
+sensitivity_min_SSU ( 
   samp_frame,
   errors,
   id_PSU,
@@ -37,7 +30,6 @@ sensitivity (
   delta,
   f,
   deff_sugg,
-  search=c("deff","min_SSU","sample_fraction"),
   min,
   max,
   plot=TRUE) 
@@ -52,11 +44,9 @@ sensitivity (
  \item{target_vars}{target variables.}
  \item{deff_var}{stratification variable to be used when calculating deff.}
  \item{domain_var}{the variable used to identify the domain of interest.}
- \item{minimum}{minimum number of SSU to be selected from a PSU.}
  \item{delta}{average number of analysis units per sampling unit.}
  \item{f}{expected (initial) sampling rate.}
  \item{deff_sugg}{suggested value of the deff.}
- \item{search}{parameter for which the analysis must be done.}
  \item{min}{minimum value of the parameter.}
  \item{max}{maximum value of the parameter.}
   \item{plot}{plot (TRUE/FALSE) the final result.}
@@ -85,13 +75,12 @@ strata_var <- "stratum"
 target_vars <- c("income_hh","active","inactive","unemployed")   # more than one
 deff_var <- "stratum"        
 domain_var <- "region"        
-minimum <- 50 # minimum number of SSUs to be interviewed in each selected PSU
 # average dimension of the SSU in terms of elementary survey units
 #delta =  nrow(pop) /length(unique(pop$id_hh))     
 delta =  1  # average dimension of the SSU in terms of elementary survey units
 f = 0.05 # sampling fraction (suggested)
 deff_sugg <- 1.5
-sensitivity(samp_frame,
+sensitivity_min_SSU(samp_frame,
             errors,
             id_PSU,
             id_SSU,
@@ -99,11 +88,9 @@ sensitivity(samp_frame,
             target_vars,
             deff_var,
             domain_var,
-            minimum,
             delta,
             f,
             deff_sugg,
-            search=c("deff"),
             min=1,
             max=2)
 }
