@@ -178,12 +178,12 @@ eval_2stage <- function (df,
 
   cv[,c(1:numY)] <- round(cv[,c(1:numY)],4)
   results <- list(coeff_var = cv, rel_bias = bias, est = est)
-  cv <- cbind(c(1:nrow(cv)),cv)
-  colnames(cv) <- c("domain",paste("cv(Y",c(1:numY),")",sep=""))
-  bias <- cbind(c(1:nrow(bias)),bias)
-  colnames(bias) <- c("domain",paste("bias(Y",c(1:numY),")",sep=""))
-  cv <- formattable(cv,list(area(col = 2:(numY+1)) ~ color_tile("#DeF7E9", "#71CA97")))
-  bias <- formattable(bias,list(area(col = 2:(numY+1)) ~ color_tile("#DeF7E9", "#71CA97")))
+  # cv <- cbind(c(1:nrow(cv)),cv)
+  # colnames(cv) <- c("domain",paste("cv(Y",c(1:numY),")",sep=""))
+  # bias <- cbind(c(1:nrow(bias)),bias)
+  # colnames(bias) <- c("domain",paste("bias(Y",c(1:numY),")",sep=""))
+  # cv <- formattable(cv,list(area(col = 2:(numY+1)) ~ color_tile("#DeF7E9", "#71CA97")))
+  # bias <- formattable(bias,list(area(col = 2:(numY+1)) ~ color_tile("#DeF7E9", "#71CA97")))
   if (writeFiles == TRUE) {
     setwd(dire)
   }
