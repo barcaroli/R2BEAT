@@ -218,7 +218,8 @@ The meaning of these constraints is that, once we select a sample and produce ex
 We can analyze the results in terms of first stage and second stage sizes by executing the following code:
 
 ```{r, eval=FALSE,results='hide'}
-deff_sugg_min <- sensitivity (samp_frame=pop,
+deff_sugg_min <- sensitivity (
+            samp_frame=pop,
             id_PSU="municipality",
             id_SSU="id_ind",
             strata_var="stratum",
@@ -227,7 +228,6 @@ deff_sugg_min <- sensitivity (samp_frame=pop,
             domain_var="region",
             delta=1,
             f=0.05,
-            deff_sugg=1.5,
             min=30,
             max=80) 
 ```
