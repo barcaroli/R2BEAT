@@ -10,8 +10,6 @@ when varying the values of the minimum number of SSU per single PSU)
 The name of the parameter has to be given, together with the minimum and
 maximum value. On the basis of these minimum and maximum values, 10 different values will be used for carrying out the allocation.
 The output will be a graphical one.
-It can be time consuming.
-
 To be used only in the scenario when no previous rounds of the survey are 
 available, and a frame complete with values of target variables is available.
 
@@ -29,7 +27,6 @@ sensitivity_min_SSU (
   minimum,
   delta,
   f,
-  deff_sugg,
   min,
   max,
   plot=TRUE) 
@@ -46,7 +43,6 @@ sensitivity_min_SSU (
  \item{domain_var}{the variable used to identify the domain of interest.}
  \item{delta}{average number of analysis units per sampling unit.}
  \item{f}{expected (initial) sampling rate.}
- \item{deff_sugg}{suggested value of the deff.}
  \item{min}{minimum value of the parameter.}
  \item{max}{maximum value of the parameter.}
   \item{plot}{plot (TRUE/FALSE) the final result.}
@@ -90,7 +86,6 @@ sensitivity_min_SSU(samp_frame,
             domain_var,
             delta,
             f,
-            deff_sugg,
             min=1,
             max=2)
 }

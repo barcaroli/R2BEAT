@@ -8,7 +8,6 @@ sensitivity_min_SSU <- function (samp_frame,
                                  domain_var, 
                                  delta = 1, 
                                  f = 0.05, 
-                                 deff_sugg = 1.5, 
                                  min, 
                                  max, 
                                  plot = TRUE) 
