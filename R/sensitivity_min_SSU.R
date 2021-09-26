@@ -26,7 +26,9 @@ sensitivity_min_SSU <- function (samp_frame,
                                    domain_var, 
                                    minimum, 
                                    delta, 
-                                   f)
+                                   f,
+                                   deff_sugg)
+  k <- 0
   for (i in grid) {
     k <- k + 1
     cat("\n", k)
@@ -50,6 +52,6 @@ sensitivity_min_SSU <- function (samp_frame,
   }
   two_stage_allocation <- list(PSU, SSU)
   if (plot == TRUE) 
-    plot.sens(two_stage_allocation, search, min, max)
+    plot.sens(two_stage_allocation, min, max)
   return(two_stage_allocation)
 }
