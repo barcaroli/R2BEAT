@@ -10,14 +10,12 @@ This function allows to plot the results of the simulation carried out by using 
 \usage{
 plot.sens ( 
   x,
-  search,
   min,
   max) 
 }
 
 \arguments{
  \item{x}{The result of the 'sensitivity' function.}
- \item{search}{parameter for which the analysis must be done.}
  \item{min}{minimum value of the parameter.}
  \item{max}{maximum value of the parameter.}
 }
@@ -51,7 +49,10 @@ minimum <- 50 # minimum number of SSUs to be interviewed in each selected PSU
 delta =  1  # average dimension of the SSU in terms of elementary survey units
 f = 0.05 # sampling fraction (suggested)
 deff_sugg <- 1.5
-sens <- sensitivity(samp_frame,
+min <- 30
+max <- 80
+sens <- sensitivity_min_SSU (
+            samp_frame,
             errors,
             id_PSU,
             id_SSU,
@@ -63,10 +64,9 @@ sens <- sensitivity(samp_frame,
             delta,
             f,
             deff_sugg,
-            search=c("deff"),
-            min=1,
-            max=2)
-plot.sens(sens,"deff",1,2)
+            min,
+            max)
+plot.sens(sens,min,max)
 }
 }
 \author{Giulio Barcaroli}

@@ -76,8 +76,9 @@ domain_var <- "region"
 #delta =  nrow(pop) /length(unique(pop$id_hh))     
 delta =  1  # average dimension of the SSU in terms of elementary survey units
 f = 0.05 # sampling fraction (suggested)
-deff_sugg <- 1.5
-sensitivity_min_SSU(samp_frame,
+deff_sugg <- 1.5  # deff (suggested)
+sensitivity_min_SSU(
+            samp_frame,
             errors,
             id_PSU,
             id_SSU,
@@ -87,6 +88,7 @@ sensitivity_min_SSU(samp_frame,
             domain_var,
             delta,
             f,
+            deff_sugg,
             min=1,
             max=2)
 }
