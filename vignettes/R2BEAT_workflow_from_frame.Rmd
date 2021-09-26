@@ -227,7 +227,8 @@ deff_sugg_min <- sensitivity (
             deff_var="stratum",
             domain_var="region",
             delta=1,
-            f=0.05,
+            f=0.05, 
+            deff_sugg = 1,
             min=30,
             max=80) 
 ```
