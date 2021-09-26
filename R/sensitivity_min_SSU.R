@@ -17,6 +17,7 @@ sensitivity_min_SSU <- function (samp_frame,
   k <- 0
   PSU <- rep(NA, 10)
   SSU <- rep(NA, 10)
+  minimum <- grid[1]
   inp <- prepareInputToAllocation1(samp_frame, 
                                    id_PSU, 
                                    id_SSU, 
