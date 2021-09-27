@@ -1,3 +1,4 @@
+
 beat.1st<-function (stratif, errors, minnumstrat = 2, maxiter = 200, maxiter1 = 25,  epsilon = 10^(-11))
 {
        test_stages <- try(test_stages, TRUE)
