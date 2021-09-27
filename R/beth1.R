@@ -89,7 +89,7 @@ beat.1st<-function (stratif, errors, minnumstrat = 2, maxiter = 200, maxiter1 = 
         a <- t(t(numA)/denA)
         return(a)
     }
-    chromy = function(alfatot, diff, iter, alfa, alfanext, x) {
+    chromy = function(alfatot, diff, iter, alfa, alfanext, x, diff, maxiter) {
         while (diff > epsilon && iter < maxiter) {
             iter <- iter + 1
             den1 = sqrt(rowSums(t(t(a) * c(alfa))))
@@ -106,7 +106,7 @@ beat.1st<-function (stratif, errors, minnumstrat = 2, maxiter = 200, maxiter1 = 
     }
     a <- crea_a()
     n <- chromy(0, 999, 0, c(rep(1/nvar, nvar)), c(rep(0, nvar)),
-        array(0.1, dim = c(nstrat, 1)))
+        array(0.1, dim = c(nstrat, 1)), diff, maxiter)
     contx <- sum(n > N)
     cens[n > N] <- 1
     nocens = 1 - cens
@@ -119,7 +119,7 @@ beat.1st<-function (stratif, errors, minnumstrat = 2, maxiter = 200, maxiter1 = 
         iter1 = iter1 + 1
         a <- crea_a()
         n <- chromy(0, 999, 0, c(rep(1/nvar, nvar)), c(rep(0,
-            nvar)), array(0.1, dim = c(nstrat, 1)))
+            nvar)), array(0.1, dim = c(nstrat, 1)), diff, maxiter)
         contx <- sum(n > N)
         cens[n > N] <- 1
         nocens = 1 - cens
