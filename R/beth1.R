@@ -90,16 +90,18 @@ beat.1st<-function (stratif, errors, minnumstrat = 2, maxiter = 200, maxiter1 = 
         return(a)
     }
     chromy = function(alfatot, diff, iter, alfa, alfanext, x) {
-        diff <- 999
-        epsilon <- 10^(-11)
-        iter <- 0
-        maxiter <- 200
-        cat("\ndiff ", diff)
-        cat("\nepsilon ", epsilon)
-        cat("\niter ", iter)
-        cat("\nmaxiter ", maxiter)
-        while (diff > epsilon && iter < maxiter) {    
-            iter <- iter + 1
+        # while (diff > epsilon && iter < maxiter) {    
+        #     iter <- iter + 1
+        #     den1 = sqrt(rowSums(t(t(a) * c(alfa))))
+        #     den2 = sum(sqrt(rowSums(t(t(a * cost) * c(alfa)))))
+        #     x <- sqrt(cost)/(den1 * den2 + epsilon)
+        #     alfatot <- sum(c(alfa) * (t(a) %*% x)^2)
+        #     alfanext <- c(alfa) * (t(a) %*% x)^2/alfatot
+        #     diff <- max(abs(alfanext - alfa))
+        #     alfa <- alfanext
+        #     alfa2 <<- alfanext
+        # }
+        for (i in (1:maxiter)) {    
             den1 = sqrt(rowSums(t(t(a) * c(alfa))))
             den2 = sum(sqrt(rowSums(t(t(a * cost) * c(alfa)))))
             x <- sqrt(cost)/(den1 * den2 + epsilon)
@@ -108,6 +110,7 @@ beat.1st<-function (stratif, errors, minnumstrat = 2, maxiter = 200, maxiter1 = 
             diff <- max(abs(alfanext - alfa))
             alfa <- alfanext
             alfa2 <<- alfanext
+            if (diff < epsilon) break
         }
         n <- ceiling(1/x)
         return(n)
