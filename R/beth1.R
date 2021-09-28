@@ -1,20 +1,20 @@
 beat.1st<-function (stratif, errors, minnumstrat = 2, maxiter = 200, maxiter1 = 25,  epsilon = 10^(-11))
 {
-       test_stages <- try(test_stages, TRUE)
-       if (test_stages == 2) {
-        minnumstrat <- param_alloc$p_minnumstrat
-        maxiter <- param_alloc$p_maxiter
-        maxiter1 <- param_alloc$p_maxiter1
-        epsilon <- param_alloc$p_epsilon
-    }
-    else {
+    #    test_stages <- try(test_stages, TRUE)
+    #    if (test_stages == 2) {
+    #     minnumstrat <- param_alloc$p_minnumstrat
+    #     maxiter <- param_alloc$p_maxiter
+    #     maxiter1 <- param_alloc$p_maxiter1
+    #     epsilon <- param_alloc$p_epsilon
+    # }
+    # else {
         param_alloc <- as.data.frame(t(c(epsilon, minnumstrat,
             maxiter, maxiter1,
             1)))
         names(param_alloc) = c("p_epsilon", "p_minnumstrat",
             "p_maxiter", "p_maxiter1", 
             "num_stages")
-    }
+    # }
     colnames(stratif) <- toupper(colnames(stratif))
     colnames(errors) <- toupper(colnames(errors))
     iter1 <- 0
@@ -90,18 +90,8 @@ beat.1st<-function (stratif, errors, minnumstrat = 2, maxiter = 200, maxiter1 = 
         return(a)
     }
     chromy = function(alfatot, diff, iter, alfa, alfanext, x) {
-        # while (diff > epsilon && iter < maxiter) {    
-        #     iter <- iter + 1
-        #     den1 = sqrt(rowSums(t(t(a) * c(alfa))))
-        #     den2 = sum(sqrt(rowSums(t(t(a * cost) * c(alfa)))))
-        #     x <- sqrt(cost)/(den1 * den2 + epsilon)
-        #     alfatot <- sum(c(alfa) * (t(a) %*% x)^2)
-        #     alfanext <- c(alfa) * (t(a) %*% x)^2/alfatot
-        #     diff <- max(abs(alfanext - alfa))
-        #     alfa <- alfanext
-        #     alfa2 <<- alfanext
-        # }
-        for (i in (1:maxiter)) {    
+        while (diff > epsilon && iter < maxiter) {
+            iter <- iter + 1
             den1 = sqrt(rowSums(t(t(a) * c(alfa))))
             den2 = sum(sqrt(rowSums(t(t(a * cost) * c(alfa)))))
             x <- sqrt(cost)/(den1 * den2 + epsilon)
@@ -110,8 +100,18 @@ beat.1st<-function (stratif, errors, minnumstrat = 2, maxiter = 200, maxiter1 = 
             diff <- max(abs(alfanext - alfa))
             alfa <- alfanext
             alfa2 <<- alfanext
-            # if (diff < epsilon) break
         }
+        # for (i in (1:maxiter)) {    
+        #     den1 = sqrt(rowSums(t(t(a) * c(alfa))))
+        #     den2 = sum(sqrt(rowSums(t(t(a * cost) * c(alfa)))))
+        #     x <- sqrt(cost)/(den1 * den2 + epsilon)
+        #     alfatot <- sum(c(alfa) * (t(a) %*% x)^2)
+        #     alfanext <- c(alfa) * (t(a) %*% x)^2/alfatot
+        #     diff <- max(abs(alfanext - alfa))
+        #     alfa <- alfanext
+        #     alfa2 <<- alfanext
+        #     if (diff < epsilon) break
+        # }
         n <- ceiling(1/x)
         return(n)
     }
