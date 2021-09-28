@@ -98,7 +98,7 @@ beat.1st<-function (stratif, errors, minnumstrat = 2, maxiter = 200, maxiter1 = 
         cat("\nepsilon ", epsilon)
         cat("\niter ", iter)
         cat("\nmaxiter ", maxiter)
-        while (diff > epsilon & iter < maxiter) {    
+        while (diff > epsilon && iter < maxiter) {    
             iter <- iter + 1
             den1 = sqrt(rowSums(t(t(a) * c(alfa))))
             den2 = sum(sqrt(rowSums(t(t(a * cost) * c(alfa)))))
