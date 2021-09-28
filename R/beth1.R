@@ -1,4 +1,9 @@
-beat.1st<-function (stratif, errors, minnumstrat = 2, maxiter = 200, maxiter1 = 25,  epsilon = 10^(-11))
+beat.1st<-function (stratif, 
+                    errors, 
+                    minnumstrat = 2, 
+                    maxiter = 200, 
+                    maxiter1 = 25,  
+                    epsilon = 10^(-11))
 {
     #    test_stages <- try(test_stages, TRUE)
     #    if (test_stages == 2) {
@@ -28,7 +33,7 @@ beat.1st<-function (stratif, errors, minnumstrat = 2, maxiter = 200, maxiter1 = 
     param_alloc$nvar <- nvar
     param_alloc$ndom <- ndom
     param_alloc$nstrat <- nstrat
-    param_alloc <<- param_alloc
+    # param_alloc <<- param_alloc
 #    assign("param_alloc", param_alloc, envir = .BaseNamespaceEnv)
     varloop <- c(1:nvar)
     strloop <- c(1:nstrat)
@@ -54,7 +59,7 @@ beat.1st<-function (stratif, errors, minnumstrat = 2, maxiter = 200, maxiter1 = 
         out = NULL
         sapply(vars, function(vari) {
             col = as.factor(data[, vari])
-            out <<- cbind(out, outer(col, levels(col), function(y,
+            out <- cbind(out, outer(col, levels(col), function(y,
                 x) ifelse(y == x, 1, 0)))
         })
         out
@@ -90,18 +95,8 @@ beat.1st<-function (stratif, errors, minnumstrat = 2, maxiter = 200, maxiter1 = 
         return(a)
     }
     chromy = function(alfatot, diff, iter, alfa, alfanext, x) {
-        while (diff > epsilon && iter < maxiter) {
-            iter <- iter + 1
-            den1 = sqrt(rowSums(t(t(a) * c(alfa))))
-            den2 = sum(sqrt(rowSums(t(t(a * cost) * c(alfa)))))
-            x <- sqrt(cost)/(den1 * den2 + epsilon)
-            alfatot <- sum(c(alfa) * (t(a) %*% x)^2)
-            alfanext <- c(alfa) * (t(a) %*% x)^2/alfatot
-            diff <- max(abs(alfanext - alfa))
-            alfa <- alfanext
-            alfa2 <<- alfanext
-        }
-        # for (i in (1:maxiter)) {    
+        # while (diff > epsilon && iter < maxiter) {
+        #     iter <- iter + 1
         #     den1 = sqrt(rowSums(t(t(a) * c(alfa))))
         #     den2 = sum(sqrt(rowSums(t(t(a * cost) * c(alfa)))))
         #     x <- sqrt(cost)/(den1 * den2 + epsilon)
@@ -110,8 +105,18 @@ beat.1st<-function (stratif, errors, minnumstrat = 2, maxiter = 200, maxiter1 = 
         #     diff <- max(abs(alfanext - alfa))
         #     alfa <- alfanext
         #     alfa2 <<- alfanext
-        #     if (diff < epsilon) break
         # }
+        for (i in (1:maxiter)) {
+            den1 = sqrt(rowSums(t(t(a) * c(alfa))))
+            den2 = sum(sqrt(rowSums(t(t(a * cost) * c(alfa)))))
+            x <- sqrt(cost)/(den1 * den2 + epsilon)
+            alfatot <- sum(c(alfa) * (t(a) %*% x)^2)
+            alfanext <- c(alfa) * (t(a) %*% x)^2/alfatot
+            diff <- max(abs(alfanext - alfa))
+            alfa <- alfanext
+            alfa2 <- alfanext
+            if (diff < epsilon) break
+        }
         n <- ceiling(1/x)
         return(n)
     }
@@ -207,7 +212,7 @@ beat.1st<-function (stratif, errors, minnumstrat = 2, maxiter = 200, maxiter1 = 
     output_beth$sensitivity[,6]<-as.numeric(as.character(output_beth$sensitivity[,6]))
     output_beth$sensitivity[,5]<-as.numeric(as.character(output_beth$sensitivity[,5]))
     output_beth$sensitivity[,4]<-as.numeric(as.character(output_beth$sensitivity[,4]))
-    output_beth <<- output_beth
+    # output_beth <<- output_beth
 #    assign("output_beth", output_beth, envir = .BaseNamespaceEnv)
     return(output_beth)
 }
