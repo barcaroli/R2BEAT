@@ -1,4 +1,3 @@
-
 beat.1st<-function (stratif, errors, minnumstrat = 2, maxiter = 200, maxiter1 = 25,  epsilon = 10^(-11))
 {
        test_stages <- try(test_stages, TRUE)
@@ -91,10 +90,6 @@ beat.1st<-function (stratif, errors, minnumstrat = 2, maxiter = 200, maxiter1 = 
         return(a)
     }
     chromy = function(alfatot, diff, iter, alfa, alfanext, x) {
-        # if (is.null(diff) | is.na(diff)) diff <- 999
-        # if (is.null(iter) | is.na(iter)) iter <- 0
-        # if (is.null(maxiter) | is.na(maxiter)) maxiter <- 200
-        # if (is.null(epsilon) | is.na(epsilon)) epsilon <- 10^(-11)
         while (diff > epsilon && iter < maxiter) {
             iter <- iter + 1
             den1 = sqrt(rowSums(t(t(a) * c(alfa))))
@@ -192,7 +187,7 @@ beat.1st<-function (stratif, errors, minnumstrat = 2, maxiter = 200, maxiter1 = 
         }
 
     output_beth <- list(n = n, file_strata = Bethel_sample,
-        alloc = as.data.frame(df), sensitivity = as.data.frame(outcv)[-1,])
+        alloc = as.data.frame(df), sensitivity = as.data.frame(outcv[-1,]))
 
     output_beth$alloc[,2]<-as.numeric(as.character(output_beth$alloc[,2]))
     output_beth$alloc[,3]<-as.numeric(as.character(output_beth$alloc[,3]))

@@ -3,10 +3,11 @@ beat.2st<-function (stratif, errors, des_file, psu_file, rho,
                      mmdiff_deft = 1, maxi = 20, epsilon = 10^(-11),
                     minnumstrat = 2, maxiter = 200, maxiter1 = 25)
 {
+  #globalVariables(test_stages)
   diffx = 999
   iterx = 0
   stages <- NULL
-  test_stages <<- 2
+  test_stages <- 2
   # assign("test_stages", 2, envir = .BaseNamespaceEnv)
   param_alloc <- as.data.frame(t(c(epsilon, minnumstrat, maxiter,
                                    maxiter1, 
@@ -218,7 +219,7 @@ beat.2st<-function (stratif, errors, des_file, psu_file, rho,
   Bethel_sample_n12 <- cbind(stratif[, c("STRATUM", "N", 
                        sapply(1:ndom,function(i) paste("DOM", i, sep = "")))], 
                        n_1st, n_2st)
-  test_stages <<- 0
+  test_stages <- 0
 #  assign("test_stages", 0, envir = .BaseNamespaceEnv)
   output_beth12$n2_st <- n_2st
   output_beth12$Bethel_sample_n12 <- (cbind(stratif[, c("STRATUM",
