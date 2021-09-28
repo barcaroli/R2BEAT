@@ -110,7 +110,7 @@ beat.1st<-function (stratif, errors, minnumstrat = 2, maxiter = 200, maxiter1 = 
             diff <- max(abs(alfanext - alfa))
             alfa <- alfanext
             alfa2 <<- alfanext
-            if (diff < epsilon) break
+            # if (diff < epsilon) break
         }
         n <- ceiling(1/x)
         return(n)
