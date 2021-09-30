@@ -3,15 +3,15 @@ beat.1st <- function (stratif, errors, minnumstrat = 2, maxiter = 200, maxiter1 
 {
   test_stages <- try(test_stages, TRUE)
   if (test_stages == 2) {
-    minPSUstrat <- param_alloc$p_minPSUstrat
+    minnumstrat <- param_alloc$p_minnumstrat
     maxiter <- param_alloc$p_maxiter
     maxiter1 <- param_alloc$p_maxiter1
     epsilon <- param_alloc$p_epsilon
   }
   else {
-    param_alloc <- as.data.frame(t(c(epsilon, minPSUstrat, 
+    param_alloc <- as.data.frame(t(c(epsilon, minnumstrat, 
                                      maxiter, maxiter1, 1)))
-    names(param_alloc) = c("p_epsilon", "p_minPSUstrat", 
+    names(param_alloc) = c("p_epsilon", "p_minnumstrat", 
                            "p_maxiter", "p_maxiter1", "num_stages")
   }
   colnames(stratif) <- toupper(colnames(stratif))
@@ -123,8 +123,8 @@ beat.1st <- function (stratif, errors, minnumstrat = 2, maxiter = 200, maxiter1 
     cens[n > N] <- 1
     nocens = 1 - cens
     for (i in strloop) {
-      if (n[i] < minPSUstrat) {
-        n[i] <- min(minPSUstrat, N[i])
+      if (n[i] < minnumstrat) {
+        n[i] <- min(minnumstrat, N[i])
       }
     }
   }
