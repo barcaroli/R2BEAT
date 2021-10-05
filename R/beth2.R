@@ -98,7 +98,7 @@ beat.2st <- function (stratif,
       des_file$THRESHOLD = ((des_file$MINIMUM/des_file$F) * des_file$DELTA)
       psu_file1 <- merge(des_file[, c("STRATUM", "THRESHOLD")], psu_file, by = "STRATUM")
       psu_file1$AR <- 0
-      psu_file1$AR[(psu_file1$PSU_MOS >= psu_file1$THRESHOLD)] <- 1
+      psu_file1$AR[(psu_file1$PSU_MOS <= psu_file1$THRESHOLD)] <- 1
       table(psu_file1$AR)
       ###
       psu_file1 <- psu_file1[order(psu_file1$STRATUM,-psu_file1$PSU_MOS),]
@@ -134,7 +134,8 @@ beat.2st <- function (stratif,
       colnames(psu_strat)[2] <- "PSU_strat"
       psu_file1 <- merge(psu_file1,psu_strat,by="SUBSTRAT")
       # check
-      psu_file1[which(psu_file1$PSU_strat==minPSUstrat),]$AR <- 1
+      # psu_file1[which(psu_file1$PSU_strat==minPSUstrat),]$AR <- 1
+      psu_file1$AR <- ifelse(psu_file1$PSU_strat <= minPSUstrat,1,0)
       psu_file1 <- psu_file1[order(psu_file1$STRATUM,-psu_file1$PSU_MOS),]
       psu_file1$partial <- 0
       psu_file1$SUB[1] <- 1
@@ -240,7 +241,8 @@ beat.2st <- function (stratif,
       # PSU_SR <- sum(psu_file1$AR)
       # PSU_NSR <- round(sum(aggregate(psu_file1$POPNAR/psu_file1$THRESHOLD, 
       #                                by = list(psu_file1$STRATUM), sum)[, 2]))
-      psu_file1[which(psu_file1$PSU_strat==minPSUstrat),]$AR <- 1
+      # psu_file1[which(psu_file1$PSU_strat==minPSUstrat),]$AR <- 1
+      psu_file1$AR <- ifelse(psu_file1$PSU_strat <= minPSUstrat,1,0)
       PSU_SR <- sum(aggregate(AR~SUBSTRAT,data=psu_file1,sum)[2])
       PSU_NSR <- length(unique(psu_file1$SUBSTRAT[psu_file1$AR==0]))*minPSUstrat
       PSU_Total <- PSU_SR + PSU_NSR
