@@ -178,7 +178,7 @@ inp$des_file
 ```
 
 ```{r}
-head(inp$PSU_file)
+head(inp$psu_file)
 ```
 
 It may happen that the population in strata (variable 'N' in 'inp\$strata' dataset) and the one derived by the PSU dataset (variable 'STRAT_MOS' in 'inp\$des_file' dataset) are not the same.
@@ -206,10 +206,10 @@ This function requires also the definition of the precision constraints on the t
 
 ```{r}
 cv <- as.data.frame(list(DOM=c("DOM1","DOM2"),
-                         CV1=c(0.03,0.04),
-                         CV2=c(0.06,0.08),
-                         CV3=c(0.06,0.08),
-                         CV4=c(0.06,0.08)))
+                         CV1=c(0.02,0.03),
+                         CV2=c(0.03,0.05),
+                         CV3=c(0.03,0.05),
+                         CV4=c(0.05,0.08)))
 cv
 ```
 
@@ -218,8 +218,9 @@ The meaning of these constraints is that, once we select a sample and produce ex
 We can analyze the results in terms of first stage and second stage sizes by executing the following code:
 
 ```{r, eval=FALSE,results='hide'}
-deff_sugg_min <- sensitivity (
+deff_sugg_min <- sensitivity_min_SSU (
             samp_frame=pop,
+            errors=cv,
             id_PSU="municipality",
             id_SSU="id_ind",
             strata_var="stratum",

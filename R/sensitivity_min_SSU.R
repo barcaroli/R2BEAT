@@ -45,6 +45,7 @@ sensitivity_min_SSU <- function (samp_frame,
                       mmdiff_deft = 1, 
                       maxi = 15, 
                       epsilon = 10^(-11), 
+                      minPSUstrat = 2,
                       minnumstrat = 2, 
                       maxiter = 200, 
                       maxiter1 = 25)
