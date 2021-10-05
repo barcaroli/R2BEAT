@@ -291,9 +291,9 @@ beat.2st <- function (stratif,
   #----------------------------------------------------------
   # psu_trs[which(psu_trs$PSU_strat<=minPSUstrat),]$AR <- 1
   psu_trs$AR <- ifelse(psu_trs$PSU_strat==minPSUstrat,1,psu_trs$AR)
-  iterations$`PSU_SR`[nrow(alloc$iterations)] <- sum(aggregate(AR~SUBSTRAT,data=psu_trs,sum)[2])
-  iterations$`PSU NSR`[nrow(alloc$iterations)] <- length(unique(psu_trs$SUBSTRAT[psu_trs$AR==0]))*minPSUstrat
-  iterations$`PSU Total`[nrow(alloc$iterations)] <- sum(aggregate(AR~SUBSTRAT,data=psu_trs,sum)[2]) + length(unique(psu_trs$SUBSTRAT[psu_trs$AR==0]))*minPSUstrat
+  iterations$`PSU_SR`[nrow(iterations)] <- sum(aggregate(AR~SUBSTRAT,data=psu_trs,sum)[2])
+  iterations$`PSU NSR`[nrow(iterations)] <- length(unique(psu_trs$SUBSTRAT[psu_trs$AR==0]))*minPSUstrat
+  iterations$`PSU Total`[nrow(iterations)] <- sum(aggregate(AR~SUBSTRAT,data=psu_trs,sum)[2]) + length(unique(psu_trs$SUBSTRAT[psu_trs$AR==0]))*minPSUstrat
   print(iterations)
   #----------------------------------------------------------
   
