@@ -131,8 +131,62 @@ select_PSU <- function(alloc, type="ALLOC", pps=TRUE)
    sample_PSU$weight_2st <- sample_PSU$PSU_MOS/sample_PSU$PSU_final_sample_unit
    sample_PSU$weight <- sample_PSU$weight_1st * sample_PSU$weight_2st
    sample_PSU <- sample_PSU[,c("PSU_ID","STRATUM","stratum","SR","nSR","PSU_final_sample_unit","Pik","weight_1st","weight_2st","weight")] 
+
+   #---------------------------------------------------------------------------
+   PSU_stats <- as.data.frame(list(STRATUM = as.character(unique(PSUs$STRATUM)),
+                                   PSU = as.numeric(table(PSUs$STRATUM)),
+                                   PSU_SR = tapply(PSUs$AR,PSUs$STRATUM,sum)))
+   PSU_stats$PSU_NSR <- PSU_stats$PSU - PSU_stats$PSU_SR
+   SSU <- aggregate(PSU_final_sample_unit~STRATUM,data=sample_PSU,sum)
+   colnames(SSU)[2] <- "SSU"
+   PSU_stats$SSU <- SSU$SSU
+   SSU_SR <- aggregate(PSU_final_sample_unit~STRATUM,data=sample_PSU[sample_PSU$SR==1,],sum)
+   colnames(SSU_SR)[2] <- "SSU_SR"
+   SSU_NSR <- aggregate(PSU_final_sample_unit~STRATUM,data=sample_PSU[sample_PSU$nSR==1,],sum)
+   colnames(SSU_NSR)[2] <- "SSU_NSR"
+   PSU_stats <- merge(PSU_stats,SSU,all.x=T)
+   PSU_stats <- merge(PSU_stats,SSU_SR,all.x=T)
+   PSU_stats <- merge(PSU_stats,SSU_NSR,all.x=T)
+   PSU_stats$SSU_SR <- ifelse(is.na(PSU_stats$SSU_SR),0,PSU_stats$SSU_SR)
+   PSU_stats$SSU_NSR <- ifelse(is.na(PSU_stats$SSU_NSR),0,PSU_stats$SSU_NSR)
+   PSU_stats <- rbind(PSU_stats,rep(NA,8))
+   PSU_stats[nrow(PSU_stats),1] <- "Total"
+   PSU_stats[nrow(PSU_stats),c(2:7)] <- colSums(PSU_stats[-nrow(PSU_stats),2:7])
+   #-----------------------------------------------------------
+   des <- PSU_stats
+   des2 <- NULL
+   des2$strata <- c(des$STRATUM[1:24],des$STRATUM[1:24])
+   des2$SR <- c(rep("SR",24),rep("nSR",24))
+   des2$PSU <- as.numeric(c(des$PSU_SR[1:24],des$PSU_NSR[1:24]))
+   des2$SSU <- as.numeric(c(des$SSU_SR[1:24],des$des$SSU_NSR[1:24]))
+   des2 <- as.data.frame(des2)
+   des2$strata <- as.numeric(des2$strata)
+   par(mfrow=c(2, 1))
+   barplot(PSU~SR+strata, data=des2,
+           main = "PSUs by strata",
+           xlab = "strata", ylab = "PSUs",
+           col = c("black", "grey"),
+           # beside = TRUE,
+           las=2,
+           cex.names=0.7)
+   legend("topright", 
+          legend = c("Non Self Representative","Self Representative"),cex = 0.7,
+          fill = c("black", "grey"))
+   barplot(SSU~SR+strata, data=des2,
+           main = "SSUs by strata",
+           xlab = "strata", ylab = "PSUs",
+           col = c("black", "grey"),
+           # beside = TRUE,
+           las=2,
+           cex.names=0.7)
+   legend("topright", 
+          legend = c("Non Self Representative","Self Representative"),cex = 0.7,
+          fill = c("black", "grey"))
+   #-----------------------------------------------------------
    
 
-   out <- list(universe_PSU=universe_PSU,sample_PSU=sample_PSU)
+   out <- list(universe_PSU=universe_PSU,
+               sample_PSU=sample_PSU,
+               PSU_stats=PSU_stats[,c("STRATUM","PSU","PSU_SR","PSU_NSR","SSU","SSU_SR","SSU_NSR")])
    out
 }
