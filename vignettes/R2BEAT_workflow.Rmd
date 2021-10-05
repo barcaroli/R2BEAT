@@ -140,6 +140,7 @@ Actually, the 'deff' dataframe is not used in the following steps, it just remai
 Here is the way we can produce the above items:
 
 ```{r}
+load("pop.RData")
 samp_frame <- pop
 RGdes <- des
 RGcal <- cal
@@ -204,8 +205,8 @@ It may happen that the population in strata (variable 'N' in 'inp1\$strata' data
 We can check it by applying the function 'check_input' in this way:
 
 ```{r}
-newstrata <- check_input(strata=inp1$strata,
-                         des=inp2$des_file,
+newstrata <- check_input(strata=inp$strata,
+                         des=inp$des_file,
                          strata_var_strata="STRATUM",
                          strata_var_des="STRATUM")
 
@@ -216,7 +217,7 @@ Together with the print of the differences between the two populations, the func
 It is preferable to use this new version:
 
 ```{r}
-inp1$strata <- newstrata
+inp$strata <- newstrata
 ```
 
 # Optimal allocation of units in each stratum

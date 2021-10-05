@@ -293,7 +293,7 @@ We proceed to select the sample in this way:
 samp <- select_SSU(df=pop,
                    PSU_code="municipality",
                    SSU_code="id_ind",
-                   PSU_sampled=sample_1st$sample_PSUsample_PSU,
+                   PSU_sampled=sample_1st$sample_PSU,
                    verbose=FALSE)
 ```
 
