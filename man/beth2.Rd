@@ -9,7 +9,7 @@ Compute multivariate optimal allocation for different domains corrected consider
 \usage{
 	beat.2st(stratif, errors, des_file, psu_file, rho, deft_start = NULL, 
     effst = NULL, epsilon1 = 5, mmdiff_deft = 1,maxi = 20, 
-    epsilon = 10^(-11), minnumstrat = 2, maxiter = 200, maxiter1 = 25)
+    epsilon = 10^(-11), minPSUstrat = 2, minnumstrat = 2, maxiter = 200, maxiter1 = 25)
 }
 \arguments{
  \item{stratif}{Data frame of survey strata, for more details see, e.g.,\link{strata}.}
@@ -23,6 +23,7 @@ Compute multivariate optimal allocation for different domains corrected consider
  \item{mmdiff_deft}{Second stop condition: defts differences beetween two iterations; iteration continues until the maximum of defts largest differences is greater than the default value. The default is 0.06.}
  \item{maxi}{Third stop condition: maximum number of allowed iterations. The default is 20.}
  \item{epsilon}{The same as in function \link{beat.1st}.}
+ \item{minPSUstrat}{Minimum number of non-self-represenative PSUs to be selected in each stratum.}
  \item{minnumstrat}{The same as in function \link{beat.1st}.}
  \item{maxiter}{The same as in function \link{beat.1st}.}
  \item{maxiter1}{The same as in function \link{beat.1st}.}
@@ -106,7 +107,7 @@ design1[,4] <- 60
 allocation2st_4 <- beat.2st(stratif=strata, errors=errors2,
 des_file=design1, psu_file=PSU_strat, rho=rho)
 
-# The PSUs numer is decreased, while the SSUs number increased 
+# The PSUs number is decreased, while the SSUs number increased 
 # due to cluster intra-correlation effect.
 # Under the same expected errors, to offset a slight reduction of PSUs (from 221 to 207) 
 # an increase of SSUs involved is observed.
