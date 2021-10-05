@@ -207,8 +207,8 @@ This function requires also the definition of the precision constraints on the t
 ```{r}
 cv <- as.data.frame(list(DOM=c("DOM1","DOM2"),
                          CV1=c(0.02,0.03),
-                         CV2=c(0.03,0.05),
-                         CV3=c(0.03,0.05),
+                         CV2=c(0.03,0.06),
+                         CV3=c(0.03,0.06),
                          CV4=c(0.05,0.08)))
 cv
 ```
@@ -218,20 +218,21 @@ The meaning of these constraints is that, once we select a sample and produce ex
 We can analyze the results in terms of first stage and second stage sizes by executing the following code:
 
 ```{r, eval=FALSE,results='hide'}
-deff_sugg_min <- sensitivity_min_SSU (
-            samp_frame=pop,
-            errors=cv,
-            id_PSU="municipality",
-            id_SSU="id_ind",
-            strata_var="stratum",
-            target_vars=c("income_hh","active","inactive","unemployed"),
-            deff_var="stratum",
-            domain_var="region",
-            delta=1,
-            f=0.05, 
-            deff_sugg = 1,
-            min=30,
-            max=80) 
+sens_min_SSU <- sensitivity_min_SSU(
+             samp_frame=pop,
+             errors=cv,
+             id_PSU="municipality",
+             id_SSU="id_ind",
+             strata_var="stratum",
+             target_vars=c("income_hh","active","inactive","unemployed"),
+             deff_var="stratum",
+             domain_var="region",
+             delta=1,
+             f=0.05,
+             deff_sugg=1,
+             min=30,
+             max=80,
+             plot=TRUE)
 ```
 
 
