@@ -133,7 +133,7 @@ select_PSU <- function(alloc, type="ALLOC", pps=TRUE)
    sample_PSU <- sample_PSU[,c("PSU_ID","STRATUM","stratum","SR","nSR","PSU_final_sample_unit","Pik","weight_1st","weight_2st","weight")] 
 
    #---------------------------------------------------------------------------
-   PSUs <-universe_PSU
+   PSUs <- universe_PSU[universe_PSU$PSU_ID %in% sample_PSU$PSU_ID,]
    PSU_stats <- as.data.frame(list(STRATUM = as.character(unique(PSUs$STRATUM)),
                                    PSU = as.numeric(table(PSUs$STRATUM)),
                                    PSU_SR = tapply(PSUs$AR,PSUs$STRATUM,sum)))
