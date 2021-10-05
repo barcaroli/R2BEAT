@@ -209,7 +209,7 @@ The meaning of these constraints is that, once we select a sample and produce ex
 
 We can analyze the results in terms of first stage and second stage sizes by executing the following code:
 
-```{r, eval=FALSE,results='hide'}
+```{r, eval=TRUE,results='hide'}
 sens_min_SSU <- sensitivity_min_SSU(
              samp_frame=pop,
              errors=cv,
@@ -293,7 +293,7 @@ We proceed to select the sample in this way:
 samp <- select_SSU(df=pop,
                    PSU_code="municipality",
                    SSU_code="id_ind",
-                   PSU_sampled=sample_PSU,
+                   PSU_sampled=sample_1st$sample_PSUsample_PSU,
                    verbose=FALSE)
 ```
 
