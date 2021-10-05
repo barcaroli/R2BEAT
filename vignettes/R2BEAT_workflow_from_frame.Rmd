@@ -66,14 +66,6 @@ load("pop.RData")
 str(pop)
 ```
 
-In this phase we may have to derive new variables, corresponding to the parameters required by the following steps. In this case, it is not necessary, as almost all the variables are already available. We just have to manipulate in order to derive two target (binary) variables, and add a work variable ('one'):
-
-```{r}
-pop$active <- ifelse(pop$work==1,1,0)
-pop$inactive <- ifelse(pop$work==2,1,0)
-pop$one <- 1
-```
-
 Great attention must be paid to the nature of the target variables, especially of the 'factor' type.
 In fact, the procedure here illustrated is suitable only when categorical variables are binary with values 0 and 1, supposing we are willing to estimate proportions of '1' in the population.
 If factor variables are of other nature, then an error message is printed.
@@ -235,30 +227,27 @@ sens_min_SSU <- sensitivity_min_SSU(
              plot=TRUE)
 ```
 
-
-
-```{r , eval=TRUE,echo=FALSE}
-knitr::include_graphics("Plot_min_SSU.png")
-```
-
-By analysing the above graphs we can decide which values are the most suitable for the sample design.
+By analysing the above graph we can decide which values are the most suitable for the sample design.
 
 # Optimal allocation
 
 Using the function 'beat.2st' in 'R2BEAT' package we can perform the optimization of PSU and SSU allocation in strata:
 
 ```{r}
-alloc <- beat.2st(inp$strata, 
-                  cv, 
-                  inp$des_file, 
-                  inp$psu_file, 
-                  inp$rho, 
+inp$des_file$MINIMUM <- 50
+minPSUstrat = 2
+alloc <- beat.2st(stratif = inp$strata, 
+                  errors = cv, 
+                  des_file = inp$des_file, 
+                  psu_file = inp$psu_file, 
+                  rho = inp$rho, 
                   deft_start = NULL, 
-                  inp$effst,
+                  effst = inp$effst,
                   epsilon1 = 5, 
                   mmdiff_deft = 1,
                   maxi = 15, 
                   epsilon = 10^(-11), 
+                  minPSUstrat,
                   minnumstrat = 2, 
                   maxiter = 200, 
                   maxiter1 = 25)
@@ -281,81 +270,30 @@ alloc$expected
 
 # Selection of PSUs
 
-Using the function 'StratSel' execute the selection of PSU in strata:
+Using the function 'select_PSU' execute the selection of PSU in strata:
 
 ```{r}
 set.seed(1234)
-allocat <- alloc$alloc[-nrow(alloc$alloc),]
-sample_2st <- StratSel(dataPop= inp$psu_file,
-                       idpsu= ~ PSU_ID, 
-                       dom= ~ STRATUM, 
-                       final_pop= ~ PSU_MOS, 
-                       size= ~ PSU_MOS, 
-                       PSUsamplestratum= 1, 
-                       min_sample= minimum, 
-                       min_sample_index= FALSE, 
-                       dataAll=allocat,
-                       domAll= ~ factor(STRATUM), 
-                       f_sample= ~ ALLOC, 
-                       planned_min_sample= NULL, 
-                       launch= F)
+sample_1st <- select_PSU(alloc, type="ALLOC", pps=TRUE)
 ```
 
 This is the overall sample design:
 
 ```{r}
-sample_2st[[2]]
+sample_1st$PSU_stats
 ```
 
-
-```{r, echo=TRUE}
-des <- sample_2st[[2]]
-des <- des[1:(nrow(des)-1),]
-strat <- c(as.character(as.numeric(des$Domain[1:(nrow(des)-1)])),"Tot")
-barplot(t(des[1:(nrow(des)),2:3]), names=strat,
-        col=c("darkblue","red"), las=2, xlab = "Stratum", cex.axis=0.7, cex.names=0.7)
-legend("topleft", 
-       legend = c("Self Representative","Non Self Representative"),
-       fill = c("darkblue", "red"))
-title("Distribution of allocated PSUs by domain")
-
-```
-
-```{r, echo=TRUE}
-barplot(t(des[1:(nrow(des)),5:6]), names=strat,
-        col=c("darkblue","red"), las=2, xlab = "Stratum", cex.axis=0.7, 
-        cex.names=0.7)
-legend("topleft", 
-       legend = c("Self Representative","Non Self Representative"),
-       fill = c("darkblue", "red"))
-title("Distribution of allocated SSUs by domain")
-```
-
-and these are the selected PSUs:
-
-```{r}
-selected_PSU <- sample_2st[[4]]
-selected_PSU <- selected_PSU[selected_PSU$PSU_final_sample_unit > 0,]
-write.table(sample_2st[[4]],"Selected_PSUs.csv",sep=";",row.names=F,quote=F)
-head(selected_PSU)
-```
 
 # Selection of SSUs
 
 Finally, we are able to select the Secondary Sample Units (the individuals) from the already selected PSUs (the municipalities). 
-First, we load the population frame:
-
-```{r}
-load("pop.RData")
-```
-
-and we proceed to select the sample in this way:
+We proceed to select the sample in this way:
 
 ```{r}
 samp <- select_SSU(df=pop,
                    PSU_code="municipality",
                    SSU_code="id_ind",
-                   PSU_sampled=selected_PSU[selected_PSU$Sampled_PSU==1,],
+                   PSU_sampled=sample_PSU,
                    verbose=FALSE)
 ```
 
@@ -363,7 +301,7 @@ To check that the total amount is practically equal to what determined in the al
 
 ```{r}
 nrow(samp)
-sum(allocat$ALLOC)
+sum(alloc$alloc$ALLOC[-nrow(alloc$alloc)])
 ```
 
 and that the sum of weights equalize population size:
@@ -375,7 +313,6 @@ sum(samp$weight)
 This is the distribution of weights:
 
 ```{r}
-par(mfrow=c(1, 2))
 boxplot(samp$weight,col="orange")
 title("Weights distribution (total sample)",cex.main=0.7)
 boxplot(weight ~ region, data=samp,col="orange")

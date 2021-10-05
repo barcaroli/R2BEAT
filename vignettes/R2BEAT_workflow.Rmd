@@ -107,29 +107,6 @@ table(des$variables$unemployed)
 
 Great attention must be paid to the nature of the target variables, especially of the 'factor' type. In fact, the procedure here illustrated is suitable only when categorical variables are binary with values 0 and 1, supposing we are willing to estimate proportions of '1' in the population. If factor variables are of other nature, then an error message is printed.
 
-Therefore, we have to handle the 'work' variable in this way: as values 0, 1 and 2 indicate respectively non labour force, active and inactive people, we can decide to derive from 'work' two binary variables, 'active' and 'inactive':
-
-```{r, eval=FALSE}
-des<-des.addvars(des,active=factor(ifelse(work==1,1,0)))
-des<-des.addvars(des,inactive=factor(ifelse(work==2,1,0)))
-cal<-des.addvars(cal,active=factor(ifelse(work==1,1,0)))
-cal<-des.addvars(cal,inactive=factor(ifelse(work==2,1,0)))
-```
-
-Now, all the categorical target variables are compliant to the binary constraint:
-
-```{r}
-table(cal$variables$active)
-```
-
-```{r}
-table(cal$variables$inactive)
-
-```
-
-```{r}
-table(cal$variables$unemployed)
-```
 
 # Build 'strata', 'deff', 'effst' and 'rho' dataframes
 
@@ -163,81 +140,62 @@ Actually, the 'deff' dataframe is not used in the following steps, it just remai
 Here is the way we can produce the above items:
 
 ```{r}
-des$variables$wgts <- 1 / des$prob
-RGdes <- des                           # ReGenesees design object
-RGcal <- cal                           # ReGenesees calibrated object
-strata_vars <- c("stratum")            # variables of stratification
+samp_frame <- pop
+RGdes <- des
+RGcal <- cal
+strata_vars <- c("stratum")      
 target_vars <- c("income_hh",
                  "active",
                  "inactive",
-                 "unemployed")         # target variables
-deff_vars <- "stratum"                 # stratification variables to be used when calculating deff and effst 
-                                       #    (n.b: must coincide or be a subset of variables of stratification)
-id_PSU <- c("municipality")            # identification variable of PSUs
-id_SSU <- c("id_hh")                   # identification variable of SSUs
-domain_vars <- c("region")             # domain variables
-inp1 <- input_to_beat.2st_1(RGdes,
-                            RGcal,
-                            id_PSU,
-                            id_SSU,
-                            strata_vars,
-                            target_vars,
-                            deff_vars,
-                            domain_vars)
+                 "unemployed")   
+weight_var <- "weight"
+deff_vars <- "stratum"            
+id_PSU <- c("municipality")      
+id_SSU <- c("id_hh")             
+domain_vars <- c("region") 
+delta <- 1                   
+minimum <- 50                
+
+inp <- prepareInputToAllocation2(
+        samp_frame,  # sampling frame
+        RGdes,       # ReGenesees design object
+        RGcal,       # ReGenesees calibrated object
+        id_PSU,      # identification variable of PSUs
+        id_SSU,      # identification variable of SSUs
+        strata_vars, # strata variables
+        target_vars, # target variables
+        deff_vars,   # deff variables
+        domain_vars, # domain variables
+        delta,       # Average number of SSUs for each selection unit
+        minimum      # Minimum number of SSUs to be selected in each PSU
+      )
 ```
 
 and these are the results:
 
 ```{r}
-head(inp1$strata)
+head(inp$strata)
 ```
 
 ```{r}
-head(inp1$deff)
+head(inp$deff)
 ```
 
 ```{r}
-head(inp1$effst)
+head(inp$effst)
 ```
 
 ```{r}
-head(inp1$rho)
+head(inp$rho)
 ```
-
-# Build 'PSU' and 'design' dataframes
-
-Prepare the inputs related to the PSUs (function 'input_to_strat.2d_2'), that are
-
-a)  the 'des_file' dataframe, containing the following information:
-
--   STRATUM: stratum identifier
--   MOS: measure of size of the stratum (in terms of number of contained selection units)
--   DELTA: factor that report the average number of SSUs for each selection unit
--   MINIMUM: minimum number of units to be selected in each PSU
-
-b)  the 'PSU_file' dataframe, containing the following information:
-
--   stratum identifier
--   PSU id
--   PSU_MOS: number of final selection units contained in a given PSU
+```{r}
+head(inp$psu_file)
+```
 
 ```{r}
-# psu <- read.csv2("psu.csv") # Read the external file containing PSU information
-head(psu)
-psu_id="municipality"        # Identifier of the PSU
-stratum_var="stratum"        # Identifier of the stratum
-mos_var="ind"                # Variable to be used as 'measure of size'
-delta=1                      # Average number of SSUs for each selection unit
-minimum <- 50                # Minimum number of SSUs to be selected in each PSU
-inp2 <- input_to_beat.2st_2(psu,
-                            psu_id,
-                            stratum_var,
-                            mos_var,
-                            delta,
-                            minimum)
-head(inp2$psu_file)
-head(inp2$des_file)
+head(inp$des_file)
 ```
+
 
 # Check the coherence of populations in strata and PSUs
 
@@ -267,31 +225,32 @@ Using the function 'beat.2st' in 'R2BEAT' package execute the optimization of PS
 
 ```{r}
 cv <- as.data.frame(list(DOM=c("DOM1","DOM2"),
-                         CV1=c(0.03,0.04),
-                         CV2=c(0.06,0.08),
-                         CV3=c(0.06,0.08),
-                         CV4=c(0.06,0.08)))
+                         CV1=c(0.02,0.03),
+                         CV2=c(0.03,0.05),
+                         CV3=c(0.03,0.05),
+                         CV4=c(0.05,0.08)))
 cv
 ```
 
 ```{r}
-stratif = inp1$strata 
-errors = cv 
-des_file = inp2$des_file 
-psu_file = inp2$psu_file 
-rho = inp1$rho 
-effst = inp1$effst
-
-alloc <- beat.2st(stratif, 
-                  errors, 
-                  des_file, 
-                  psu_file, 
-                  rho, 
+set.seed(1234)
+minPSUstrat <- 2
+inp$des_file$MINIMUM <- 50
+alloc <- beat.2st(stratif = inp$strata, 
+                  errors = cv, 
+                  des_file = inp$des_file, 
+                  psu_file = inp$psu_file, 
+                  rho = inp$rho, 
                   deft_start = NULL, 
-                  effst,
+                  effst = inp$effst,
                   epsilon1 = 5, 
-                  mmdiff_deft = 1,maxi = 15, 
-                  epsilon = 10^(-11), minnumstrat = 2, maxiter = 200, maxiter1 = 25)
+                  mmdiff_deft = 1,
+                  maxi = 15, 
+                  epsilon = 10^(-11), 
+                  minnumstrat = 2, 
+                  minPSUstrat,
+                  maxiter = 200, 
+                  maxiter1 = 25)
 ```
 
 This is the sensitivity of the solution:
@@ -310,79 +269,28 @@ alloc$expected
 
 # Selection of PSUs
 
-Using the function 'StratSel' execute the selection of PSU in strata:
+Using the function 'select_SSU' execute the selection of PSU in strata:
 
 ```{r}
 set.seed(1234)
-allocat <- alloc$alloc[-nrow(alloc$alloc),]
-sample_2st <- StratSel(dataPop= inp2$psu_file,
-                       idpsu= ~ PSU_ID, 
-                       dom= ~ STRATUM, 
-                       final_pop= ~ PSU_MOS, 
-                       size= ~ PSU_MOS, 
-                       PSUsamplestratum= 1, 
-                       min_sample= minimum, 
-                       min_sample_index= FALSE, 
-                       dataAll=allocat,
-                       domAll= ~ factor(STRATUM), 
-                       f_sample= ~ ALLOC, 
-                       planned_min_sample= NULL, 
-                       launch= F)
+sample_1st <- select_PSU(alloc, type="ALLOC", pps=TRUE)
 ```
 
 This is the overall sample design:
 
 ```{r}
-sample_2st[[2]]
-```
-
-```{r, echo=TRUE}
-des <- sample_2st[[2]]
-des <- des[1:(nrow(des)-1),]
-strat <- c(as.character(as.numeric(des$Domain[1:(nrow(des)-1)])))
-barplot(t(des[1:(nrow(des)-1),2:3]), names=strat,
-        col=c("darkblue","red"), las=2, xlab = "Stratum", cex.axis=0.7, cex.names=0.7)
-legend("topleft", 
-       legend = c("Self Representative","Non Self Representative"),cex=0.7,
-       fill = c("darkblue", "red"))
-title("Distribution of allocated PSUs by domain")
-
-```
-
-```{r, echo=TRUE}
-barplot(t(des[1:(nrow(des)-1),5:6]), names=strat,
-        col=c("darkblue","red"), las=2, xlab = "Stratum", cex.axis=0.7, 
-        cex.names=0.7)
-legend("topleft", 
-       legend = c("Self Representative","Non Self Representative"),cex=0.7,
-       fill = c("darkblue", "red"))
-title("Distribution of allocated SSUs by domain")
-```
-
-and these are the selected PSUs:
-
-```{r}
-selected_PSU <- sample_2st[[4]]
-selected_PSU <- selected_PSU[selected_PSU$PSU_final_sample_unit > 0,]
-write.table(sample_2st[[4]],"Selected_PSUs.csv",sep=";",row.names=F,quote=F)
-head(selected_PSU)
+sample_1st$PSU_stats
 ```
 
 # Selection of SSUs
 
-Finally, we are able to select the Secondary Sample Units (the individuals) from the already selected PSUs (the municipalities). First, we load the population frame:
-
-```{r}
-load("pop.RData")
-```
-
-and we proceed to select the sample in this way:
+Finally, we are able to select the Secondary Sample Units (the individuals) from the already selected PSUs (the municipalities). We proceed to select the sample in this way:
 
 ```{r}
 samp <- select_SSU(df=pop,
                    PSU_code="municipality",
                    SSU_code="id_ind",
-                   PSU_sampled=selected_PSU[selected_PSU$Sampled_PSU==1,],
+                   PSU_sampled=sample_1st$sample_PSU,
                    verbose=FALSE)
 ```
 
@@ -390,7 +298,7 @@ To check that the total amount is practically equal to what determined in the al
 
 ```{r}
 nrow(samp)
-sum(allocat$ALLOC)
+sum(alloc$alloc$ALLOC[-nrow(alloc$alloc)])
 ```
 
 and that the sum of weights equalize population size:
