@@ -175,7 +175,7 @@ select_PSU <- function(alloc, type="ALLOC", pps=TRUE)
           fill = c("black", "grey"))
    barplot(SSU~SR+strata, data=des2,
            main = "SSUs by strata",
-           xlab = "strata", ylab = "PSUs",
+           xlab = "strata", ylab = "SSUs",
            col = c("black", "grey"),
            # beside = TRUE,
            las=2,
