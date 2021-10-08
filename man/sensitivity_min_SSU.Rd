@@ -26,7 +26,6 @@ sensitivity_min_SSU (
   domain_var,
   minimum,
   delta,
-  f,
   min,
   max,
   plot=TRUE) 
@@ -42,7 +41,6 @@ sensitivity_min_SSU (
  \item{deff_var}{stratification variable to be used when calculating deff.}
  \item{domain_var}{the variable used to identify the domain of interest.}
  \item{delta}{average number of analysis units per sampling unit.}
- \item{f}{expected (initial) sampling rate.}
  \item{deff_sugg}{suggestion for deff value.}
  \item{min}{minimum value of the parameter.}
  \item{max}{maximum value of the parameter.}
@@ -75,7 +73,6 @@ domain_var <- "region"
 # average dimension of the SSU in terms of elementary survey units
 #delta =  nrow(pop) /length(unique(pop$id_hh))     
 delta =  1  # average dimension of the SSU in terms of elementary survey units
-f = 0.05 # sampling fraction (suggested)
 deff_sugg <- 1.5  # deff (suggested)
 sensitivity_min_SSU(
             samp_frame,
@@ -87,7 +84,6 @@ sensitivity_min_SSU(
             deff_var,
             domain_var,
             delta,
-            f,
             deff_sugg,
             min=1,
             max=2)
