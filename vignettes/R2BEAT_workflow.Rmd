@@ -274,7 +274,7 @@ Using the function 'select_SSU' execute the selection of PSU in strata:
 
 ```{r}
 set.seed(1234)
-sample_1st <- select_PSU(alloc, type="ALLOC", pps=TRUE)
+sample_1st <- select_PSU(alloc, type="ALLOC", pps=TRUE, plot=TRUE)
 ```
 
 This is the overall sample design:

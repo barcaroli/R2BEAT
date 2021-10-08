@@ -23,7 +23,6 @@ prepareInputToAllocation1 (
   domain_var,
   minimum,
   delta,
-  f,
   deff_sugg) 
 }
 
@@ -37,7 +36,6 @@ prepareInputToAllocation1 (
  \item{domain_var}{the variable used to identify the domain of interest.}
  \item{minimum}{minimum number of SSU to be selected from a PSU.}
  \item{delta}{average number of analysis units per sampling unit.}
- \item{f}{expected (initial) sampling rate.}
  \item{deff_sugg}{suggested value of the deff.}
 }
 
@@ -66,7 +64,6 @@ minimum <- 50 # minimum number of SSUs to be interviewed in each selected PSU
 # average dimension of the SSU in terms of elementary survey units
 # delta =  nrow(pop) /length(unique(pop$id_hh))     
 delta =  1     
-f = 0.05 # sampling fraction (suggested)
 deff_sugg <- 1.5
 # prepare inputs
 inp <- prepareInputToAllocation1(samp_frame,
@@ -78,7 +75,6 @@ inp <- prepareInputToAllocation1(samp_frame,
                                 domain_var,
                                 minimum,
                                 delta,
-                                f,
                                 deff_sugg)
 }
 }

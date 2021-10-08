@@ -69,10 +69,54 @@ str(pop)
 Great attention must be paid to the nature of the target variables, especially of the 'factor' type.
 In fact, the procedure here illustrated is suitable only when categorical variables are binary with values 0 and 1, supposing we are willing to estimate proportions of '1' in the population.
 If factor variables are of other nature, then an error message is printed.
-
 Therefore, we have to handle the 'work' variable in this way: as values 0, 1 and 2 indicate respectively non labour force, active and inactive people, this is why we derived from 'work' the two binary variables, 'active' and 'inactive'.
 
-We are now able to populate the required parameters:
+# Producing the inputs for next steps
+
+To prepare the inputs for the optimal allocation and selection of primary and secondary sampling units, the function 'prepareInputToAllocation1' is available.
+
+For the execution of this function, it is necessary to assign values to the different parameters. Some of them can be directly derived by available data, but for others, namely 'minimum' (minimum number of SSUs to be interviewed in each selected PSU) the indication of the values is more difficult, without having any reference.
+
+In order to orientate in the choice of the value to give to 'minimum', the function 'sensitivity_min_SSU' allows to perform a sensitivity analysis for this parameter.
+
+To execute this function, the name of the parameter has to be given, together with the minimum and maximum value. On the basis of these minimum and maximum values, 10 different values will be used for carrying out the allocation. The output will be a graphical one. 
+
+This function requires also the definition of the precision constraints on the target values:
+
+
+```{r}
+cv <- as.data.frame(list(DOM=c("DOM1","DOM2"),
+                         CV1=c(0.02,0.03),
+                         CV2=c(0.03,0.06),
+                         CV3=c(0.03,0.06),
+                         CV4=c(0.05,0.08)))
+cv
+```
+
+The meaning of these constraints is that, once we select a sample and produce extimates, we expect a maximum coefficient of variation for the first variable ('income_hh') equal to 3\% at national level ('DOM1') and to 4\% at regional level ('DOM2'); respectively 6\% and 8\% for the other three variables.
+
+We can analyze the results in terms of first stage and second stage sizes by executing the following code:
+
+```{r, eval=TRUE,results='hide'}
+sens_min_SSU <- sensitivity_min_SSU(
+             samp_frame=pop,
+             errors=cv,
+             id_PSU="municipality",
+             id_SSU="id_ind",
+             strata_var="stratum",
+             target_vars=c("income_hh","active","inactive","unemployed"),
+             deff_var="stratum",
+             domain_var="region",
+             delta=1,
+             deff_sugg=1,
+             min=30,
+             max=80,
+             plot=TRUE)
+```
+
+By analysing the above graph we can decide which values are the most suitable for the sample design.
+
+We therefore assign the following values to the required parameters:
 
 ```{r}
 samp_frame <- pop
@@ -82,13 +126,11 @@ strata_var <- "stratum"   # only one
 target_vars <- c("income_hh","active","inactive","unemployed")   # more than one
 deff_var <- "stratum"     # only one
 domain_var <- "region"    # only one
-minimum <- 50  # minimum number of SSUs to be interviewed in each selected PSU
-delta =  1     # average dimension of the SSU in terms of elementary survey units
-f = 0.05          # suggestion for the sampling fraction 
+minimum <- 50     # minimum number of SSUs to be interviewed in each selected PSU
+delta =  1        # average dimension of the SSU in terms of elementary survey units
 deff_sugg <- 1.5  # suggestion for the deff value
 ```
 
-# Producing the inputs for next steps
 
 With already assigned parameters, we can execute the 'prepareInputToAllocation1' function:
 
@@ -102,7 +144,6 @@ inp <- prepareInputToAllocation1(samp_frame,
                                 domain_var,
                                 minimum,
                                 delta,
-                                f,
                                 deff_sugg)
 ```
 
@@ -183,51 +224,6 @@ newstrata <- check_input(strata=inp$strata,
                          strata_var_strata="STRATUM",
                          strata_var_des="STRATUM")
 ```
-
-
-# Fine tuning of the parameters
-
-For the execution of the function 'prepareInputToAllocation1' it is necessary to assign values to the different parameters. Some of them can be directly derived by available data, but for others, namely 'minimum' (minimum number of SSUs to be interviewed in each selected PSU) the indication of the values is more difficult, without having any reference.
-
-In order to orientate in the choice of the value to give to 'minimum', the function 'sensitivity_min_SSU' allows to perform a sensitivity analysis for this parameter.
-
-To execute this function, the name of the parameter has to be given, together with the minimum and maximum value. On the basis of these minimum and maximum values, 10 different values will be used for carrying out the allocation. The output will be a graphical one. 
-
-This function requires also the definition of the precision constraints on the target values:
-
-
-```{r}
-cv <- as.data.frame(list(DOM=c("DOM1","DOM2"),
-                         CV1=c(0.02,0.03),
-                         CV2=c(0.03,0.06),
-                         CV3=c(0.03,0.06),
-                         CV4=c(0.05,0.08)))
-cv
-```
-
-The meaning of these constraints is that, once we select a sample and produce extimates, we expect a maximum coefficient of variation for the first variable ('income_hh') equal to 3\% at national level ('DOM1') and to 4\% at regional level ('DOM2'); respectively 6\% and 8\% for the other three variables.
-
-We can analyze the results in terms of first stage and second stage sizes by executing the following code:
-
-```{r, eval=TRUE,results='hide'}
-sens_min_SSU <- sensitivity_min_SSU(
-             samp_frame=pop,
-             errors=cv,
-             id_PSU="municipality",
-             id_SSU="id_ind",
-             strata_var="stratum",
-             target_vars=c("income_hh","active","inactive","unemployed"),
-             deff_var="stratum",
-             domain_var="region",
-             delta=1,
-             f=0.05,
-             deff_sugg=1,
-             min=30,
-             max=80,
-             plot=TRUE)
-```
-
-By analysing the above graph we can decide which values are the most suitable for the sample design.
 
 # Optimal allocation
 

@@ -14,9 +14,10 @@ prepareInputToAllocation1 <- function(
   domain_var,
   minimum,
   delta,
-  f,
   deff_sugg) 
 {
+  # initial sampling fraction
+  f = 0.05
   if (is.null(samp_frame$one)) samp_frame$one <- 1
 
   # strata
