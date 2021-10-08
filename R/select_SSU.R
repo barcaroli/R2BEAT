@@ -13,7 +13,7 @@ select_SSU <- function (df, PSU_code, SSU_code, PSU_sampled, verbose = TRUE)
     eval(parse(text = st))
     s$Prob <- nrow(s)/nrow(df)
     if (verbose == TRUE) {
-      cat("\nPSU = ", PSU_ID, " *** Selected SSU = ", 
+      cat("\nPSU = ", as.character(PSU_ID), " *** Selected SSU = ", 
           nrow(s))
     }
     return(s)
@@ -49,9 +49,10 @@ select_SSU <- function (df, PSU_code, SSU_code, PSU_sampled, verbose = TRUE)
     cat("\nTotal SSU = ", nrow(samp))
     cat("\n--------------------------------")
   }
-  PSU <- PSU_sampled[,c('PSU_ID','SR','nSR','stratum')]
+  PSU <- PSU_sampled[, c("PSU_ID", "SR", "nSR", "stratum")]
   colnames(PSU)[4] <- "stratum_2"
-  st <- paste0("samp <- merge(samp,PSU,by.x=c('",PSU_code,"'),by.y='PSU_ID')")
-  eval(parse(text=st))
+  st <- paste0("samp <- merge(samp,PSU,by.x=c('", PSU_code, 
+               "'),by.y='PSU_ID')")
+  eval(parse(text = st))
   return(samp)
 }
