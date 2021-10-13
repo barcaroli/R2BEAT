@@ -4,6 +4,7 @@ select_PSU <- function (alloc, type = "ALLOC", pps = TRUE, plot = TRUE)
   univ <- univ[order(univ$STRATUM, -univ$PSU_MOS), ]
   minPSUstr <- alloc$param_alloc$p_minPSUstrat
   minSSUstr <- alloc$param_alloc$p_minnumstrat
+  minimum <- alloc$param_alloc$minimum
   univ$minPSUstr <- alloc$param_alloc$p_minPSUstrat
   univ$minSSUstr <- alloc$param_alloc$p_minnumstrat
   univ <- merge(univ, alloc$file_strata[, c("STRATUM", "N")], 

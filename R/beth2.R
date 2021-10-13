@@ -16,7 +16,7 @@ beat.2st <- function (stratif,
 {
   diffx = 999
   iterx = 0
-  stages <- NULL
+  test_stages <- NULL
   test_stages <<- 2
   param_alloc <- as.data.frame(t(c(epsilon, minPSUstrat, minnumstrat, mean(des_file$MINIMUM), maxiter, 
                                    maxiter1, epsilon1, diffx, iterx, mmdiff_deft, maxi, 

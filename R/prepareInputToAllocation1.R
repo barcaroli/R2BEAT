@@ -83,7 +83,7 @@ prepareInputToAllocation1 <- function(
     eval(parse(text=paste0("rho$RHO_AR",i," <- 1")))
     eval(parse(text=paste0("rho$RHO_NAR",i," <- NA")))
   }
-
+  L <- NULL
   k <- 0
   for (s in c(rho$STRATUM)) {
     cat("\nStratum ",s)
