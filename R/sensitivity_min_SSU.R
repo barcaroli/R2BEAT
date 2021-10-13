@@ -52,6 +52,6 @@ sensitivity_min_SSU <- function (samp_frame,
   }
   two_stage_allocation <- list(PSU, SSU)
   if (plot == TRUE) 
-    plot.sens(two_stage_allocation, min, max)
+    plot_sens(two_stage_allocation, min, max)
   return(two_stage_allocation)
 }
