@@ -29,11 +29,13 @@ prepareInputToAllocation2 (
 
 \arguments{
  \item{samp_frame}{The dataframe containing sampling units in the reference population.}
+ \item{RGdes}{The 'design' ReGenesees object.}
+ \item{RGcal}{The 'calibration' ReGenesees object.}
  \item{id_PSU}{variables used as identifiers in sampling frame.}
  \item{id_SSU}{variables used as identifiers in sampling frame.}
- \item{strata_var}{stratification variable used in sampling frame.}
+ \item{strata_vars}{stratification variable used in sampling frame.}
  \item{target_vars}{target variables.}
- \item{deff_var}{stratification variable to be used when calculating deff.}
+ \item{deff_vars}{stratification variable to be used when calculating deff.}
  \item{domain_var}{the variable used to identify the domain of interest.}
  \item{minimum}{minimum number of SSU to be selected from a PSU.}
  \item{delta}{average number of analysis units per sampling unit.}
