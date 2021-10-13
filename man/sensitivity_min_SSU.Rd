@@ -15,19 +15,19 @@ available, and a frame complete with values of target variables is available.
 
 }
 \usage{
-sensitivity_min_SSU ( 
-  samp_frame,
-  errors,
-  id_PSU,
-  id_SSU,
-  strata_var,
-  target_vars,
-  deff_var,
-  domain_var,
-  delta,
-  min,
-  max,
-  plot) 
+sensitivity_min_SSU (samp_frame, 
+                     errors, 
+                     id_PSU, 
+                     id_SSU, 
+                     strata_var, 
+                     target_vars, 
+                     deff_var, 
+                     domain_var, 
+                     delta, 
+                     deff_sugg,
+                     min, 
+                     max, 
+                     plot) 
 }
 
 \arguments{
