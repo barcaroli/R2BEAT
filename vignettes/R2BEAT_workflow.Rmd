@@ -144,16 +144,16 @@ load("pop.RData")
 samp_frame <- pop
 RGdes <- des
 RGcal <- cal
-strata_vars <- c("stratum")      
+strata_var <- c("stratum")      
 target_vars <- c("income_hh",
                  "active",
                  "inactive",
                  "unemployed")   
 weight_var <- "weight"
-deff_vars <- "stratum"            
+deff_var <- "stratum"            
 id_PSU <- c("municipality")      
 id_SSU <- c("id_hh")             
-domain_vars <- c("region") 
+domain_var <- c("region") 
 delta <- 1                   
 minimum <- 50                
 
@@ -163,10 +163,10 @@ inp <- prepareInputToAllocation2(
         RGcal,       # ReGenesees calibrated object
         id_PSU,      # identification variable of PSUs
         id_SSU,      # identification variable of SSUs
-        strata_vars, # strata variables
+        strata_var,  # strata variables
         target_vars, # target variables
-        deff_vars,   # deff variables
-        domain_vars, # domain variables
+        deff_var,    # deff variables
+        domain_var,  # domain variables
         delta,       # Average number of SSUs for each selection unit
         minimum      # Minimum number of SSUs to be selected in each PSU
       )
@@ -243,15 +243,9 @@ alloc <- beat.2st(stratif = inp$strata,
                   psu_file = inp$psu_file, 
                   rho = inp$rho, 
                   deft_start = NULL, 
-                  effst = inp$effst,
-                  epsilon1 = 5, 
-                  mmdiff_deft = 1,
-                  maxi = 15, 
-                  epsilon = 10^(-11), 
+                  effst = inp$effst, 
                   minnumstrat = 2, 
-                  minPSUstrat,
-                  maxiter = 200, 
-                  maxiter1 = 25)
+                  minPSUstrat)
 ```
 
 This is the sensitivity of the solution:

@@ -238,15 +238,9 @@ alloc <- beat.2st(stratif = inp$strata,
                   psu_file = inp$psu_file, 
                   rho = inp$rho, 
                   deft_start = NULL, 
-                  effst = inp$effst,
-                  epsilon1 = 5, 
-                  mmdiff_deft = 1,
-                  maxi = 15, 
-                  epsilon = 10^(-11), 
+                  effst = inp$effst, 
                   minPSUstrat,
-                  minnumstrat = 2, 
-                  maxiter = 200, 
-                  maxiter1 = 25)
+                  minnumstrat = 2)
 ```
 
 This is the sensitivity of the solution:
