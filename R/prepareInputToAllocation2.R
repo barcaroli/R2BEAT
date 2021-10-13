@@ -32,7 +32,7 @@ prepareInputToAllocation2 <- function(
                              deff_vars=deff_var, 
                              domain_vars=domain_var)
   samp_frame$one <- 1
-  psu <- eval(parse(text=paste0("aggregate(one~",id_PSU,"+",strata_vars,",data=samp_frame,FUN=sum)")))
+  psu <- eval(parse(text=paste0("aggregate(one~",id_PSU,"+",strata_var,",data=samp_frame,FUN=sum)")))
   mos_var <- "one"
   if (length(strata_var) == 1) st <- paste0("samp_frame$stratum_new <- samp_frame$",strata_var[1],"")
   if (length(strata_var) > 1) {
