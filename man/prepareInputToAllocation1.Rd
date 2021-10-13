@@ -46,12 +46,7 @@ A list containing  (i) the vector of allocated PSUs in the iterations and (ii) t
 \examples{
 \dontrun{
 library(R2BEAT)
-library(SamplingStrata)
-library(sampling)
 load("pop.RData")
-pop$active <- ifelse(pop$work==1,1,0)
-pop$inactive <- ifelse(pop$work==2,1,0)
-pop$one <- 1
 # parameters
 samp_frame <- pop
 id_PSU <- "municipality"  
@@ -67,15 +62,16 @@ delta =  1
 deff_sugg <- 1.5
 # prepare inputs
 inp <- prepareInputToAllocation1(samp_frame,
-                                id_PSU,
-                                id_SSU,
-                                strata_var,
-                                target_vars,
-                                deff_var,
-                                domain_var,
-                                minimum,
-                                delta,
-                                deff_sugg)
+                                 id_PSU,
+                                 id_SSU,
+                                 strata_var,
+                                 target_vars,
+                                 deff_var,
+                                 domain_var,
+                                 minimum,
+                                 delta,
+                                 deff_sugg)
+
 }
 }
 \author{Giulio Barcaroli}

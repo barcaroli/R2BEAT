@@ -37,7 +37,6 @@ prepareInputToAllocation2 (
  \item{domain_var}{the variable used to identify the domain of interest.}
  \item{minimum}{minimum number of SSU to be selected from a PSU.}
  \item{delta}{average number of analysis units per sampling unit.}
- \item{f}{expected (initial) sampling rate.}
  \item{deff_sugg}{suggested value of the deff.}
 }
 

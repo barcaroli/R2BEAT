@@ -66,12 +66,12 @@ Giulio Barcaroli
 \examples{
 \dontrun{
 library(R2BEAT)
-load("./data/pop.RData")
+load("pop.RData")
 cv <- as.data.frame(list(DOM=c("DOM1","DOM2"),
-                         CV1=c(0.03,0.04),
-                         CV2=c(0.06,0.08),
-                         CV3=c(0.06,0.08),
-                         CV4=c(0.06,0.08)))
+                         CV1=c(0.02,0.03),
+                         CV2=c(0.03,0.05),
+                         CV3=c(0.03,0.05),
+                         CV4=c(0.05,0.08)))
 samp_frame <- pop
 id_PSU <- "municipality"  
 id_SSU <- "id_ind"        
@@ -81,9 +81,8 @@ deff_var <- "stratum"
 domain_var <- "region"  
 delta =  1     # households = survey units
 minimum <- 50  # minimum number of SSUs to be interviewed in each selected PSU
-f = 0.05         # suggestion for the sampling fraction 
 deff_sugg <- 1.5  # suggestion for the deff value
-inp <- prepareInputToAllocation(samp_frame,
+inp <- prepareInputToAllocation1(samp_frame,
                                 id_PSU,
                                 id_SSU,
                                 strata_var,
@@ -92,46 +91,30 @@ inp <- prepareInputToAllocation(samp_frame,
                                 domain_var,
                                 minimum,
                                 delta,
-                                f,
                                 deff_sugg)
+inp$desfile$MINIMUM <- 50
 alloc <- beat.2st(stratif = inp$strata, 
                   errors = cv, 
                   des_file = inp$des_file, 
                   psu_file = inp$psu_file, 
                   rho = inp$rho, 
-                  deft_start = NULL, 
-                  effst = inp$effst,
-                  epsilon1 = 5, 
-                  mmdiff_deft = 1,maxi = 15, 
-                  epsilon = 10^(-11), 
-                  minnumstrat = 2, 
-                  maxiter = 200, 
-                  maxiter1 = 25)
-allocat <- alloc$alloc[-nrow(alloc$alloc),]
-sample_2st <- StratSel(dataPop= inp$psu_file,
-                       idpsu= ~ PSU_ID, 
-                       dom= ~ STRATUM, 
-                       final_pop= ~ PSU_MOS, 
-                       size= ~ PSU_MOS, 
-                       PSUsamplestratum= 1, 
-                       min_sample= minimum, 
-                       min_sample_index= FALSE, 
-                       dataAll=allocat,
-                       domAll= ~ factor(STRATUM), 
-                       f_sample= ~ ALLOC, 
-                       planned_min_sample= NULL, 
-                       launch= F)
-selected_PSU <- sample_2st[[4]]
+                  deft_start = NULL,
+                  effst = inp$effst, 
+                  minPSUstrat = 2,
+                  minnumstrat = 50
+                  )
+sample_1st <- select_PSU(alloc, type="ALLOC", pps=TRUE)
+
 df=pop
+df$one <- 1
 PSU_code="municipality"
 SSU_code="id_ind"
-PSU_sampled=selected_PSU[selected_PSU$Sampled_PSU==1,]
 target_vars <- c("income_hh",
                  "active",
                  "inactive",
                  "unemployed")  
-domain_var <- "region"
-PSU_sampled <- selected_PSU[selected_PSU$PSU_final_sample_unit > 0,]
+
+PSU_sampled <- sample_1st$sample_PSU
 eval <- eval_2stage(df,
                     PSU_code,
                     SSU_code,
