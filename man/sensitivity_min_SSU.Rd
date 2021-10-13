@@ -24,11 +24,10 @@ sensitivity_min_SSU (
   target_vars,
   deff_var,
   domain_var,
-  minimum,
   delta,
   min,
   max,
-  plot=TRUE) 
+  plot) 
 }
 
 \arguments{
@@ -44,7 +43,7 @@ sensitivity_min_SSU (
  \item{deff_sugg}{suggestion for deff value.}
  \item{min}{minimum value of the parameter.}
  \item{max}{maximum value of the parameter.}
-  \item{plot}{plot (TRUE/FALSE) the final result.}
+ \item{plot}{plot (TRUE/FALSE) the final result.}
 }
 
 \value{
