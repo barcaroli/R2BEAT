@@ -1,4 +1,4 @@
-plot.sens <- function(x,min,max) {
+plot_sens <- function(x,min,max) {
   grid <- seq(min, max, (max - min)/10)
   par(mfrow = c(1, 2))
   plot(grid, x[[1]], type = "l", ylab = "Number of PSUs", 
