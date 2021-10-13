@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">R2BEAT </a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.4</span>
       </span>
     </div>
 
@@ -92,12 +92,12 @@
 
       
 
-      </header><script src="R2BEAT_workflow_from_frame_files/header-attrs-2.8/header-attrs.js"></script><script src="R2BEAT_workflow_from_frame_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><script src="R2BEAT_workflow_from_frame_files/header-attrs-2.11/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>R2BEAT two-stage sampling design workflow starting from the sampling frame</h1>
             
-            <h4 class="date">2021-05-12 <br><br><br>
+            <h4 class="date">2021-10-13 <br><br><br>
 </h4>
       
       <small class="dont-index">Source: <a href="https://github.com/barcaroli/R2BEAT/blob/master/vignettes/R2BEAT_workflow_from_frame.Rmd"><code>vignettes/R2BEAT_workflow_from_frame.Rmd</code></a></small>
@@ -128,41 +128,66 @@
 <div id="loading-data-and-pre-processing" class="section level1">
 <h1 class="hasAnchor">
 <a href="#loading-data-and-pre-processing" class="anchor"></a>Loading data and pre-processing</h1>
-<p>We make use of a synthetic population data frame:</p>
+<p>We make use of a synthetic population data frame (pop), that is available at the link:</p>
+<p><a href="https://github.com/barcaroli/R2BEAT/tree/master/data" class="uri">https://github.com/barcaroli/R2BEAT/tree/master/data</a></p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="st">"Frame.RData"</span><span class="op">)</span>   
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="st">"pop.RData"</span><span class="op">)</span>   
 <span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span><span class="op">(</span><span class="va">pop</span><span class="op">)</span></code></pre></div>
-<pre><code>## 'data.frame':    2258507 obs. of  21 variables:
+<pre><code>## 'data.frame':    2258507 obs. of  13 variables:
 ##  $ region       : Factor w/ 3 levels "north","center",..: 1 1 1 1 1 1 1 1 1 1 ...
 ##  $ province     : Factor w/ 6 levels "north_1","north_2",..: 1 1 1 1 1 1 1 1 1 1 ...
 ##  $ municipality : num  1 1 1 1 1 1 1 1 1 1 ...
-##  $ pop_m        : num  1546 1546 1546 1546 1546 ...
-##  $ type_m       : num  6 6 6 6 6 6 6 6 6 6 ...
 ##  $ id_hh        : Factor w/ 963018 levels "H1","H10","H100",..: 1 1 1 2 3 3 3 3 1114 1114 ...
 ##  $ id_ind       : int  1 2 3 4 5 6 7 8 9 10 ...
-##  $ sex          : int  1 2 1 2 1 1 2 2 1 1 ...
-##  $ age          : int  33 69 81 46 38 64 63 35 37 6 ...
-##  $ edu          : int  5 3 3 4 5 3 4 12 5 2 ...
-##  $ marital      : num  1 2 2 1 1 2 2 2 1 1 ...
-##  $ foreigner    : int  0 0 0 0 0 0 0 0 0 0 ...
-##  $ earner       : int  1 1 1 1 1 1 1 1 1 0 ...
-##  $ income_hh    : num  30488 30488 30488 21756 29871 ...
-##  $ work         : num  1 1 2 1 1 1 1 1 1 2 ...
-##  $ unemployed   : num  0 0 0 0 0 0 0 0 0 0 ...
-##  $ one          : num  1 1 1 1 1 1 1 1 1 1 ...
 ##  $ stratum      : Factor w/ 24 levels "1000","2000",..: 12 12 12 12 12 12 12 12 12 12 ...
-##  $ stratum_n    : num  12000 12000 12000 12000 12000 12000 12000 12000 12000 12000 ...
 ##  $ stratum_label: chr  "north_1_6" "north_1_6" "north_1_6" "north_1_6" ...
-##  $ prog_hh      : int  1 2 3 1 1 2 3 4 1 2 ...</code></pre>
-<p>In this phase we may have to derive new variables, corresponding to the parameters required by the following steps. In this case, it is not necessary, as almost all the variables are already available. We just have to manipulate in order to derive two target (binary) variables, and add a work variable (‘one’):</p>
+##  $ sex          : int  1 2 1 2 1 1 2 2 1 1 ...
+##  $ cl_age       : Factor w/ 8 levels "(0,14]","(14,24]",..: 3 7 8 5 4 6 6 4 4 1 ...
+##  $ active       : num  1 1 0 1 1 1 1 1 1 0 ...
+##  $ income_hh    : num  30488 30488 30488 21756 29871 ...
+##  $ unemployed   : num  0 0 0 0 0 0 0 0 0 0 ...
+##  $ inactive     : num  0 0 1 0 0 0 0 0 0 1 ...</code></pre>
+<p>Great attention must be paid to the nature of the target variables, especially of the ‘factor’ type. In fact, the procedure here illustrated is suitable only when categorical variables are binary with values 0 and 1, supposing we are willing to estimate proportions of ‘1’ in the population. If factor variables are of other nature, then an error message is printed. Therefore, we have to handle the ‘work’ variable in this way: as values 0, 1 and 2 indicate respectively non labour force, active and inactive people, this is why we derived from ‘work’ the two binary variables, ‘active’ and ‘inactive’.</p>
+</div>
+<div id="producing-the-inputs-for-next-steps" class="section level1">
+<h1 class="hasAnchor">
+<a href="#producing-the-inputs-for-next-steps" class="anchor"></a>Producing the inputs for next steps</h1>
+<p>To prepare the inputs for the optimal allocation and selection of primary and secondary sampling units, the function ‘prepareInputToAllocation1’ is available.</p>
+<p>For the execution of this function, it is necessary to assign values to the different parameters. Some of them can be directly derived by available data, but for others, namely ‘minimum’ (minimum number of SSUs to be interviewed in each selected PSU) the indication of the values is more difficult, without having any reference.</p>
+<p>In order to orientate in the choice of the value to give to ‘minimum’, the function ‘sensitivity_min_SSU’ allows to perform a sensitivity analysis for this parameter.</p>
+<p>To execute this function, the name of the parameter has to be given, together with the minimum and maximum value. On the basis of these minimum and maximum values, 10 different values will be used for carrying out the allocation. The output will be a graphical one.</p>
+<p>This function requires also the definition of the precision constraints on the target values:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">pop</span><span class="op">$</span><span class="va">active</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">pop</span><span class="op">$</span><span class="va">work</span><span class="op">==</span><span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">0</span><span class="op">)</span>
-<span class="va">pop</span><span class="op">$</span><span class="va">inactive</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">pop</span><span class="op">$</span><span class="va">work</span><span class="op">==</span><span class="fl">2</span>,<span class="fl">1</span>,<span class="fl">0</span><span class="op">)</span>
-<span class="va">pop</span><span class="op">$</span><span class="va">one</span> <span class="op">&lt;-</span> <span class="fl">1</span></code></pre></div>
-<p>Great attention must be paid to the nature of the target variables, especially of the ‘factor’ type. In fact, the procedure here illustrated is suitable only when categorical variables are binary with values 0 and 1, supposing we are willing to estimate proportions of ‘1’ in the population. If factor variables are of other nature, then an error message is printed.</p>
-<p>Therefore, we have to handle the ‘work’ variable in this way: as values 0, 1 and 2 indicate respectively non labour force, active and inactive people, this is why we derived from ‘work’ the two binary variables, ‘active’ and ‘inactive’.</p>
-<p>We are now able to populate the required parameters:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">cv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>DOM<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"DOM1"</span>,<span class="st">"DOM2"</span><span class="op">)</span>,
+                         CV1<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.02</span>,<span class="fl">0.03</span><span class="op">)</span>,
+                         CV2<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.03</span>,<span class="fl">0.06</span><span class="op">)</span>,
+                         CV3<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.03</span>,<span class="fl">0.06</span><span class="op">)</span>,
+                         CV4<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.05</span>,<span class="fl">0.08</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+<span class="va">cv</span></code></pre></div>
+<pre><code>##    DOM  CV1  CV2  CV3  CV4
+## 1 DOM1 0.02 0.03 0.03 0.05
+## 2 DOM2 0.03 0.06 0.06 0.08</code></pre>
+<p>The meaning of these constraints is that, once we select a sample and produce extimates, we expect a maximum coefficient of variation for the first variable (‘income_hh’) equal to 3% at national level (‘DOM1’) and to 4% at regional level (‘DOM2’); respectively 6% and 8% for the other three variables.</p>
+<p>We can analyze the results in terms of first stage and second stage sizes by executing the following code:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">sens_min_SSU</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sensitivity_min_SSU.html">sensitivity_min_SSU</a></span><span class="op">(</span>
+             samp_frame<span class="op">=</span><span class="va">pop</span>,
+             errors<span class="op">=</span><span class="va">cv</span>,
+             id_PSU<span class="op">=</span><span class="st">"municipality"</span>,
+             id_SSU<span class="op">=</span><span class="st">"id_ind"</span>,
+             strata_var<span class="op">=</span><span class="st">"stratum"</span>,
+             target_vars<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"income_hh"</span>,<span class="st">"active"</span>,<span class="st">"inactive"</span>,<span class="st">"unemployed"</span><span class="op">)</span>,
+             deff_var<span class="op">=</span><span class="st">"stratum"</span>,
+             domain_var<span class="op">=</span><span class="st">"region"</span>,
+             delta<span class="op">=</span><span class="fl">1</span>,
+             deff_sugg<span class="op">=</span><span class="fl">1</span>,
+             min<span class="op">=</span><span class="fl">30</span>,
+             max<span class="op">=</span><span class="fl">80</span>,
+             plot<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<p><img src="R2BEAT_workflow_from_frame_files/figure-html/unnamed-chunk-3-1.png" width="576"></p>
+<p>By analysing the above graph we can decide which values are the most suitable for the sample design.</p>
+<p>We therefore assign the following values to the required parameters:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">samp_frame</span> <span class="op">&lt;-</span> <span class="va">pop</span>
 <span class="va">id_PSU</span> <span class="op">&lt;-</span> <span class="st">"municipality"</span>  <span class="co"># only one</span>
 <span class="va">id_SSU</span> <span class="op">&lt;-</span> <span class="st">"id_ind"</span>        <span class="co"># only one</span>
@@ -170,17 +195,12 @@
 <span class="va">target_vars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"income_hh"</span>,<span class="st">"active"</span>,<span class="st">"inactive"</span>,<span class="st">"unemployed"</span><span class="op">)</span>   <span class="co"># more than one</span>
 <span class="va">deff_var</span> <span class="op">&lt;-</span> <span class="st">"stratum"</span>     <span class="co"># only one</span>
 <span class="va">domain_var</span> <span class="op">&lt;-</span> <span class="st">"region"</span>    <span class="co"># only one</span>
-<span class="va">minimum</span> <span class="op">&lt;-</span> <span class="fl">50</span>  <span class="co"># minimum number of SSUs to be interviewed in each selected PSU</span>
-<span class="va">delta</span> <span class="op">=</span>  <span class="fl">1</span>     <span class="co"># average dimension of the SSU in terms of elementary survey units</span>
-<span class="va">f</span> <span class="op">=</span> <span class="fl">0.05</span>          <span class="co"># suggestion for the sampling fraction </span>
+<span class="va">minimum</span> <span class="op">&lt;-</span> <span class="fl">50</span>     <span class="co"># minimum number of SSUs to be interviewed in each selected PSU</span>
+<span class="va">delta</span> <span class="op">=</span>  <span class="fl">1</span>        <span class="co"># average dimension of the SSU in terms of elementary survey units</span>
 <span class="va">deff_sugg</span> <span class="op">&lt;-</span> <span class="fl">1.5</span>  <span class="co"># suggestion for the deff value</span></code></pre></div>
-</div>
-<div id="producing-the-inputs-for-next-steps" class="section level1">
-<h1 class="hasAnchor">
-<a href="#producing-the-inputs-for-next-steps" class="anchor"></a>Producing the inputs for next steps</h1>
-<p>With already assigned parameters, we can execute the ‘prepareInputToAllocation’ function:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">inp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/prepareInputToAllocation.html">prepareInputToAllocation</a></span><span class="op">(</span><span class="va">samp_frame</span>,
+<p>With already assigned parameters, we can execute the ‘prepareInputToAllocation1’ function:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">inp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/prepareInputToAllocation1.html">prepareInputToAllocation1</a></span><span class="op">(</span><span class="va">samp_frame</span>,
                                 <span class="va">id_PSU</span>,
                                 <span class="va">id_SSU</span>,
                                 <span class="va">strata_var</span>,
@@ -189,9 +209,8 @@
                                 <span class="va">domain_var</span>,
                                 <span class="va">minimum</span>,
                                 <span class="va">delta</span>,
-                                <span class="va">f</span>,
                                 <span class="va">deff_sugg</span><span class="op">)</span></code></pre></div>
-<p>The function ‘prepareInputToAllocation’ produces a list composed by six elements, stored in the ‘inp’ object:</p>
+<p>The function ‘prepareInputToAllocation1’ produces a list composed by six elements, stored in the ‘inp’ object:</p>
 <ol style="list-style-type: lower-alpha">
 <li>the ‘stratif’ dataframe containing:</li>
 </ol>
@@ -242,7 +261,7 @@
 </ul>
 <p>(Actually, the ‘deff’ dataframe is not used in the following steps, it just remains for documentation purposes.)</p>
 <p>Let us see the content of these objects:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">inp</span><span class="op">$</span><span class="va">strata</span><span class="op">)</span></code></pre></div>
 <pre><code>##           N       M1        M2        M3         M4       S1        S2        S3        S4 COST CENS DOM1 DOM2 STRATUM
 ## 1000 197007 23959.87 0.6650322 0.2285807 0.10638708 22179.08 0.4719792 0.4199185 0.3083324    1    0    1    2    1000
@@ -251,7 +270,7 @@
 ## 4000  17241 18732.72 0.6273418 0.2499275 0.12273070 13462.74 0.4835122 0.4329708 0.3281278    1    0    1    2    4000
 ## 5000 101067 22070.31 0.6134445 0.2338845 0.15267100 17187.98 0.4869603 0.4232996 0.3596701    1    0    1    2    5000
 ## 6000  47218 21069.07 0.6135796 0.2348469 0.15157355 17342.74 0.4869288 0.4239031 0.3586070    1    0    1    2    6000</code></pre>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">inp</span><span class="op">$</span><span class="va">deff</span></code></pre></div>
 <pre><code>##    STRATUM DEFF1 DEFF2 DEFF3 DEFF4      b_nar
 ## 1     1000   1.5   1.5   1.5   1.5 4925.17500
@@ -278,7 +297,7 @@
 ## 15   22000   1.5   1.5   1.5   1.5  696.51667
 ## 16   23000   1.5   1.5   1.5   1.5  240.55000
 ## 17   24000   1.5   1.5   1.5   1.5   48.19583</code></pre>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">inp</span><span class="op">$</span><span class="va">effst</span></code></pre></div>
 <pre><code>##    STRATUM EFFST1 EFFST2 EFFST3 EFFST4
 ## 1     1000      1      1      1      1
@@ -305,34 +324,34 @@
 ## 22   22000      1      1      1      1
 ## 23   23000      1      1      1      1
 ## 24   24000      1      1      1      1</code></pre>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">inp</span><span class="op">$</span><span class="va">rho</span></code></pre></div>
-<pre><code>##    STRATUM RHO_AR1      RHO_NAR1 RHO_AR2      RHO_NAR2 RHO_AR3      RHO_NAR3 RHO_AR4      RHO_NAR4
-## 1     1000       1 0.00010153985       1 0.00010153985       1 0.00010153985       1 0.00010153985
-## 12    2000       1 0.00049771053       1 0.00049771053       1 0.00049771053       1 0.00049771053
-## 18    3000       1 0.00225512390       1 0.00225512390       1 0.00225512390       1 0.00225512390
-## 19    4000       1 0.01066287542       1 0.01066287542       1 0.01066287542       1 0.01066287542
-## 20    5000       1 0.00019796688       1 0.00019796688       1 0.00019796688       1 0.00019796688
-## 21    6000       1 0.00063615929       1 0.00063615929       1 0.00063615929       1 0.00063615929
-## 22    7000       1 0.00298111958       1 0.00298111958       1 0.00298111958       1 0.00298111958
-## 23    8000       1 0.00726911011       1 0.00726911011       1 0.00726911011       1 0.00726911011
-## 24    9000       1 0.00010774353       1 0.00010774353       1 0.00010774353       1 0.00010774353
-## 2    10000       1 0.00056651874       1 0.00056651874       1 0.00056651874       1 0.00056651874
-## 3    11000       1 0.00288198515       1 0.00288198515       1 0.00288198515       1 0.00288198515
-## 4    12000       1 0.00882503486       1 0.00882503486       1 0.00882503486       1 0.00882503486
-## 5    13000       1 0.00009716945       1 0.00009716945       1 0.00009716945       1 0.00009716945
-## 6    14000       1 0.00047674100       1 0.00047674100       1 0.00047674100       1 0.00047674100
-## 7    15000       1 0.00258857790       1 0.00258857790       1 0.00258857790       1 0.00258857790
-## 8    16000       1 0.01146875235       1 0.01146875235       1 0.01146875235       1 0.01146875235
-## 9    17000       1 0.00016367416       1 0.00016367416       1 0.00016367416       1 0.00016367416
-## 10   18000       1 0.00080933432       1 0.00080933432       1 0.00080933432       1 0.00080933432
-## 11   19000       1 0.00264961366       1 0.00264961366       1 0.00264961366       1 0.00264961366
-## 13   20000       1 0.00920455877       1 0.00920455877       1 0.00920455877       1 0.00920455877
-## 14   21000       1 0.00018140919       1 0.00018140919       1 0.00018140919       1 0.00018140919
-## 15   22000       1 0.00071889003       1 0.00071889003       1 0.00071889003       1 0.00071889003
-## 16   23000       1 0.00208724692       1 0.00208724692       1 0.00208724692       1 0.00208724692
-## 17   24000       1 0.01059415556       1 0.01059415556       1 0.01059415556       1 0.01059415556</code></pre>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">inp</span><span class="op">$</span><span class="va">rho</span></code></pre></div>
+<pre><code>##    STRATUM RHO_AR1     RHO_NAR1 RHO_AR2         RHO_NAR2 RHO_AR3        RHO_NAR3 RHO_AR4       RHO_NAR4
+## 1     1000       1 0.0032494875       1 0.00001260175649       1 0.0000003631192       1 0.000039120880
+## 2     2000       1 0.0028554017       1 0.00150936389450       1 0.0007420929883       1 0.000937018761
+## 3     3000       1 0.0069678726       1 0.00162968276279       1 0.0006469515878       1 0.002837431259
+## 4     4000       1 0.0114552934       1 0.00578473329221       1 0.0019797687826       1 0.008962657055
+## 5     5000       1 0.0002677333       1 0.00000001682475       1 0.0000029484212       1 0.000003404961
+## 6     6000       1 0.0057050500       1 0.00004270905958       1 0.0000397945795       1 0.000194411580
+## 7     7000       1 0.0041928513       1 0.00335650970751       1 0.0013094132833       1 0.001811885741
+## 8     8000       1 0.0047238668       1 0.00232954042415       1 0.0018778264665       1 0.002170139711
+## 9     9000       1 0.0000000000       1 0.00000000000000       1 0.0000000000000       1 0.000000000000
+## 10   10000       1 0.0036846052       1 0.00159042535852       1 0.0008341965831       1 0.001542112124
+## 11   11000       1 0.0106855950       1 0.00108932726442       1 0.0010329547671       1 0.001443153086
+## 12   12000       1 0.0248038343       1 0.00234284567982       1 0.0020173346363       1 0.003133182814
+## 13   13000       1 0.0000000000       1 0.00000000000000       1 0.0000000000000       1 0.000000000000
+## 14   14000       1 0.0006512162       1 0.00089486265511       1 0.0005406860974       1 0.000374792839
+## 15   15000       1 0.0068491200       1 0.00099219098192       1 0.0007727553419       1 0.000804727789
+## 16   16000       1 0.0136596351       1 0.00303718119769       1 0.0021714455040       1 0.003432476610
+## 17   17000       1 0.0000000000       1 0.00000000000000       1 0.0000000000000       1 0.000000000000
+## 18   18000       1 0.0049434365       1 0.00437892168554       1 0.0002362549576       1 0.003892389733
+## 19   19000       1 0.0157809669       1 0.01068408388378       1 0.0027579762296       1 0.008247327069
+## 20   20000       1 0.0103417224       1 0.01400092460177       1 0.0044279712391       1 0.010470589088
+## 21   21000       1 0.0000000000       1 0.00000000000000       1 0.0000000000000       1 0.000000000000
+## 22   22000       1 0.0004350194       1 0.00362953805252       1 0.0011558770239       1 0.001149223429
+## 23   23000       1 0.0069095241       1 0.00300292420693       1 0.0023502401768       1 0.003027075348
+## 24   24000       1 0.0127711611       1 0.01070575411782       1 0.0017807607239       1 0.007809884541</code></pre>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">inp</span><span class="op">$</span><span class="va">des_file</span></code></pre></div>
 <pre><code>##    STRATUM STRAT_MOS DELTA MINIMUM
 ## 1     1000    197007     1      50
@@ -359,12 +378,18 @@
 ## 22   22000     41791     1      50
 ## 23   23000     72165     1      50
 ## 24   24000     11567     1      50</code></pre>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">inp</span><span class="op">$</span><span class="va">PSU_file</span><span class="op">)</span></code></pre></div>
-<pre><code>## NULL</code></pre>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">inp</span><span class="op">$</span><span class="va">psu_file</span><span class="op">)</span></code></pre></div>
+<pre><code>##   PSU_ID STRATUM PSU_MOS
+## 1      1   12000    1546
+## 2      2   12000     936
+## 3      3   12000     367
+## 4      4   10000   13032
+## 5      5   12000     678
+## 6      6   11000    3193</code></pre>
 <p>It may happen that the population in strata (variable ‘N’ in ‘inp$strata’ dataset) and the one derived by the PSU dataset (variable ‘STRAT_MOS’ in ‘inp$des_file’ dataset) are not the same.</p>
 <p>We can check it by applying the function ‘check_input’ in this way:</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">newstrata</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/check_input.html">check_input</a></span><span class="op">(</span>strata<span class="op">=</span><span class="va">inp</span><span class="op">$</span><span class="va">strata</span>,
                          des<span class="op">=</span><span class="va">inp</span><span class="op">$</span><span class="va">des_file</span>,
                          strata_var_strata<span class="op">=</span><span class="st">"STRATUM"</span>,
@@ -402,246 +427,124 @@
 ## --------------------------------------------------
 ## Population of PSUs has been attributed to strata</code></pre>
 </div>
-<div id="fine-tuning-of-the-parameters" class="section level1">
-<h1 class="hasAnchor">
-<a href="#fine-tuning-of-the-parameters" class="anchor"></a>Fine tuning of the parameters</h1>
-<p>For the execution of the function ‘prepareInputToAllocation’ it is necessary to assign values to the different parameters. Some of them can be directly derived by available data, but for others, namely:</p>
-<ul>
-<li>‘minimum’ (minimum number of SSUs to be interviewed in each selected PSU)</li>
-<li>‘f’ (suggestion for the sampling fraction)</li>
-<li>‘deff_sugg’ (suggestion for the deff value)</li>
-</ul>
-<p>the indication of the values is more difficult, without having any reference.</p>
-<p>In order to orientate in the choice of these values, the function ‘sensitivity’ allows to perform a sensitivity analysis for each of this parameters.</p>
-<p>To execute this function, the name of the parameter has to be given, together with the minimum and maximum value. On the basis of these minimum and maximum values, 10 different values will be used for carrying out the allocation. The output will be a graphical one.</p>
-<p>This function requires also the definition of the precision constraints on the target values:</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">cv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>DOM<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"DOM1"</span>,<span class="st">"DOM2"</span><span class="op">)</span>,
-                         CV1<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.03</span>,<span class="fl">0.04</span><span class="op">)</span>,
-                         CV2<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.06</span>,<span class="fl">0.08</span><span class="op">)</span>,
-                         CV3<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.06</span>,<span class="fl">0.08</span><span class="op">)</span>,
-                         CV4<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.06</span>,<span class="fl">0.08</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
-<span class="va">cv</span></code></pre></div>
-<pre><code>##    DOM  CV1  CV2  CV3  CV4
-## 1 DOM1 0.03 0.06 0.06 0.06
-## 2 DOM2 0.04 0.08 0.08 0.08</code></pre>
-<p>The meaning of these constraints is that, once we select a sample and produce extimates, we expect a maximum coefficient of variation for the first variable (‘income_hh’) equal to 3% at national level (‘DOM1’) and to 4% at regional level (‘DOM2’); respectively 6% and 8% for the other three variables.</p>
-<p>For instance, we can analyze the impact of the ‘deff_sugg’ parameter on the final sample design by executing the following code:</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/sensitivity.html">sensitivity</a></span> <span class="op">(</span>samp_frame<span class="op">=</span><span class="va">pop</span>,
-            id_PSU<span class="op">=</span><span class="st">"municipality"</span>,
-            id_SSU<span class="op">=</span><span class="st">"id_ind"</span>,
-            strata_var<span class="op">=</span><span class="st">"stratum"</span>,
-            target_vars<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"income_hh"</span>,<span class="st">"active"</span>,<span class="st">"inactive"</span>,<span class="st">"unemployed"</span><span class="op">)</span>,
-            deff_var<span class="op">=</span><span class="st">"stratum"</span>,
-            domain_var<span class="op">=</span><span class="st">"region"</span>,
-            minimum<span class="op">=</span><span class="fl">50</span>,
-            delta<span class="op">=</span><span class="fl">1</span>,
-            f<span class="op">=</span><span class="fl">0.05</span>,
-            search<span class="op">=</span><span class="st">"deff"</span>,
-            min<span class="op">=</span><span class="fl">1</span>,
-            max<span class="op">=</span><span class="fl">2</span><span class="op">)</span> </code></pre></div>
-<p><img src="../../../../../../Google%20Drive/Sampling/R2BEAT/R2BEAT_1.0.3/R2BEAT/vignettes/Plot_deff.png" width="374"></p>
-<p>The same for the ‘minimum’ parameter:</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/sensitivity.html">sensitivity</a></span> <span class="op">(</span>samp_frame<span class="op">=</span><span class="va">pop</span>,
-            id_PSU<span class="op">=</span><span class="st">"municipality"</span>,
-            id_SSU<span class="op">=</span><span class="st">"id_ind"</span>,
-            strata_var<span class="op">=</span><span class="st">"stratum"</span>,
-            target_vars<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"income_hh"</span>,<span class="st">"active"</span>,<span class="st">"inactive"</span>,<span class="st">"unemployed"</span><span class="op">)</span>,
-            deff_var<span class="op">=</span><span class="st">"stratum"</span>,
-            domain_var<span class="op">=</span><span class="st">"region"</span>,
-            delta<span class="op">=</span><span class="fl">1</span>,
-            f<span class="op">=</span><span class="fl">0.05</span>,
-            deff_sugg<span class="op">=</span><span class="fl">1.5</span>,
-            search<span class="op">=</span><span class="st">"min_SSU"</span>,
-            min<span class="op">=</span><span class="fl">30</span>,
-            max<span class="op">=</span><span class="fl">80</span><span class="op">)</span> </code></pre></div>
-<p><img src="../../../../../../Google%20Drive/Sampling/R2BEAT/R2BEAT_1.0.3/R2BEAT/vignettes/Plot_min_SSU.png" width="374"></p>
-<p>And, finally, for initial sampling rate:</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/sensitivity.html">sensitivity</a></span> <span class="op">(</span>samp_frame<span class="op">=</span><span class="va">pop</span>,
-            id_PSU<span class="op">=</span><span class="st">"municipality"</span>,
-            id_SSU<span class="op">=</span><span class="st">"id_ind"</span>,
-            strata_var<span class="op">=</span><span class="st">"stratum"</span>,
-            target_vars<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"income_hh"</span>,<span class="st">"active"</span>,<span class="st">"inactive"</span>,<span class="st">"unemployed"</span><span class="op">)</span>,
-            deff_var<span class="op">=</span><span class="st">"stratum"</span>,
-            domain_var<span class="op">=</span><span class="st">"region"</span>,
-            delta<span class="op">=</span><span class="fl">1</span>,
-            minimum<span class="op">=</span><span class="fl">50</span>,
-            deff_sugg<span class="op">=</span><span class="fl">1.5</span>,
-            search<span class="op">=</span><span class="st">"sample_fraction"</span>,
-            min<span class="op">=</span><span class="fl">0.01</span>,
-            max<span class="op">=</span><span class="fl">0.10</span><span class="op">)</span> </code></pre></div>
-<p><img src="../../../../../../Google%20Drive/Sampling/R2BEAT/R2BEAT_1.0.3/R2BEAT/vignettes/Plot_sample_fraction.png" width="374"></p>
-<p>By analysing the above graphs we can decide which values are the most suitable for the sample design.</p>
-</div>
 <div id="optimal-allocation" class="section level1">
 <h1 class="hasAnchor">
 <a href="#optimal-allocation" class="anchor"></a>Optimal allocation</h1>
 <p>Using the function ‘beat.2st’ in ‘R2BEAT’ package we can perform the optimization of PSU and SSU allocation in strata:</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">alloc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/beat.2st.html">beat.2st</a></span><span class="op">(</span><span class="va">inp</span><span class="op">$</span><span class="va">strata</span>, 
-                  <span class="va">cv</span>, 
-                  <span class="va">inp</span><span class="op">$</span><span class="va">des_file</span>, 
-                  <span class="va">inp</span><span class="op">$</span><span class="va">psu_file</span>, 
-                  <span class="va">inp</span><span class="op">$</span><span class="va">rho</span>, 
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">inp</span><span class="op">$</span><span class="va">des_file</span><span class="op">$</span><span class="va">MINIMUM</span> <span class="op">&lt;-</span> <span class="fl">50</span>
+<span class="va">minPSUstrat</span> <span class="op">=</span> <span class="fl">2</span>
+<span class="va">alloc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/beat.2st.html">beat.2st</a></span><span class="op">(</span>stratif <span class="op">=</span> <span class="va">inp</span><span class="op">$</span><span class="va">strata</span>, 
+                  errors <span class="op">=</span> <span class="va">cv</span>, 
+                  des_file <span class="op">=</span> <span class="va">inp</span><span class="op">$</span><span class="va">des_file</span>, 
+                  psu_file <span class="op">=</span> <span class="va">inp</span><span class="op">$</span><span class="va">psu_file</span>, 
+                  rho <span class="op">=</span> <span class="va">inp</span><span class="op">$</span><span class="va">rho</span>, 
                   deft_start <span class="op">=</span> <span class="cn">NULL</span>, 
-                  <span class="va">inp</span><span class="op">$</span><span class="va">effst</span>,
-                  epsilon1 <span class="op">=</span> <span class="fl">5</span>, 
-                  mmdiff_deft <span class="op">=</span> <span class="fl">1</span>,
-                  maxi <span class="op">=</span> <span class="fl">15</span>, 
-                  epsilon <span class="op">=</span> <span class="fl">10</span><span class="op">^</span><span class="op">(</span><span class="op">-</span><span class="fl">11</span><span class="op">)</span>, 
-                  minnumstrat <span class="op">=</span> <span class="fl">2</span>, 
-                  maxiter <span class="op">=</span> <span class="fl">200</span>, 
-                  maxiter1 <span class="op">=</span> <span class="fl">25</span><span class="op">)</span></code></pre></div>
+                  effst <span class="op">=</span> <span class="va">inp</span><span class="op">$</span><span class="va">effst</span>, 
+                  <span class="va">minPSUstrat</span>,
+                  minnumstrat <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></code></pre></div>
 <pre><code>##   iterations PSU_SR PSU NSR PSU Total  SSU
-## 1          0      0       0         0 7391
-## 2          1     20      86       106 8302
-## 3          2     21      99       120 8300</code></pre>
+## 1          0      0       0         0 7836
+## 2          1     25     100       125 8296
+## 3          2     28     100       128 8297
+## 4          3     28     100       128 8297</code></pre>
 <p>This is the sensitivity of the solution:</p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">alloc</span><span class="op">$</span><span class="va">sensitivity</span></code></pre></div>
-<pre><code>##    Type Dom V1 V2  V3   V4
-## 1  DOM1   1  1  0   1    1
-## 5  DOM2   1  0  0   0 1283
-## 9  DOM2   2  1  0   1  247
-## 13 DOM2   3  1  1 129    1</code></pre>
+<pre><code>##    Type Dom  V1 V2 V3   V4
+## 2  DOM1   1   1  0  1    1
+## 6  DOM2   1   1  0  1 1184
+## 10 DOM2   2   1  0  1  246
+## 14 DOM2   3 203  1 27    1</code></pre>
 <p>i.e., for each domain value and for each variable it is reported the gain in terms of reduction in the sample size if the corresponding precision constraint is reduced of 10%.</p>
 <p>These are the expected values of the coefficients of variation:</p>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">alloc</span><span class="op">$</span><span class="va">expected</span></code></pre></div>
 <pre><code>##    Type Dom     V1     V2     V3     V4
-## 1  DOM1   1 0.0123 0.0109 0.0288 0.0447
-## 5  DOM2   1 0.0117 0.0074 0.0260 0.0800
-## 9  DOM2   2 0.0256 0.0213 0.0533 0.0799
-## 13 DOM2   3 0.0387 0.0438 0.0799 0.0609</code></pre>
+## 2  DOM1   1 0.0121 0.0101 0.0260 0.0393
+## 6  DOM2   1 0.0129 0.0074 0.0258 0.0800
+## 10 DOM2   2 0.0264 0.0213 0.0526 0.0799
+## 14 DOM2   3 0.0299 0.0358 0.0598 0.0487</code></pre>
 </div>
 <div id="selection-of-psus" class="section level1">
 <h1 class="hasAnchor">
 <a href="#selection-of-psus" class="anchor"></a>Selection of PSUs</h1>
-<p>Using the function ‘StratSel’ execute the selection of PSU in strata:</p>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<p>Using the function ‘select_PSU’ execute the selection of PSU in strata:</p>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1234</span><span class="op">)</span>
-<span class="va">allocat</span> <span class="op">&lt;-</span> <span class="va">alloc</span><span class="op">$</span><span class="va">alloc</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">alloc</span><span class="op">$</span><span class="va">alloc</span><span class="op">)</span>,<span class="op">]</span>
-<span class="va">sample_2st</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/StratSel.html">StratSel</a></span><span class="op">(</span>dataPop<span class="op">=</span> <span class="va">inp</span><span class="op">$</span><span class="va">psu_file</span>,
-                       idpsu<span class="op">=</span> <span class="op">~</span> <span class="va">PSU_ID</span>, 
-                       dom<span class="op">=</span> <span class="op">~</span> <span class="va">STRATUM</span>, 
-                       final_pop<span class="op">=</span> <span class="op">~</span> <span class="va">PSU_MOS</span>, 
-                       size<span class="op">=</span> <span class="op">~</span> <span class="va">PSU_MOS</span>, 
-                       PSUsamplestratum<span class="op">=</span> <span class="fl">1</span>, 
-                       min_sample<span class="op">=</span> <span class="va">minimum</span>, 
-                       min_sample_index<span class="op">=</span> <span class="cn">FALSE</span>, 
-                       dataAll<span class="op">=</span><span class="va">allocat</span>,
-                       domAll<span class="op">=</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">STRATUM</span><span class="op">)</span>, 
-                       f_sample<span class="op">=</span> <span class="op">~</span> <span class="va">ALLOC</span>, 
-                       planned_min_sample<span class="op">=</span> <span class="cn">NULL</span>, 
-                       launch<span class="op">=</span> <span class="cn">F</span><span class="op">)</span></code></pre></div>
+<span class="va">sample_1st</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/select_PSU.html">select_PSU</a></span><span class="op">(</span><span class="va">alloc</span>, type<span class="op">=</span><span class="st">"ALLOC"</span>, pps<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<p><img src="R2BEAT_workflow_from_frame_files/figure-html/unnamed-chunk-16-1.png" width="576"></p>
 <p>This is the overall sample design:</p>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">sample_2st</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span></code></pre></div>
-<pre><code>##    Domain SRdom nSRdom SRdom+nSRdom SR_PSU_final_sample_unit NSR_PSU_final_sample_unit
-## 1    1000     2      0            2                      287                         0
-## 2    2000     3      4            7                      143                       232
-## 3    3000     0      4            4                        0                       176
-## 4    4000     0      1            1                        0                        33
-## 5    5000     2      0            2                      172                         0
-## 6    6000     1      1            2                       33                        49
-## 7    7000     0      1            1                        0                        55
-## 8    8000     0      1            1                        0                        56
-## 9    9000     1      0            1                      581                         0
-## 10  10000     6      0            6                      611                         0
-## 11  11000     4     20           24                      155                      1053
-## 12  12000     0      8            8                        0                       396
-## 13  13000     1      0            1                      733                         0
-## 14  14000     4      0            4                      601                         0
-## 15  15000     9     17           26                      434                       883
-## 16  16000     0     19           19                        0                       975
-## 17  17000     1      0            1                       70                         0
-## 18  18000     0      2            2                        0                        88
-## 19  19000     0      4            4                        0                       175
-## 20  20000     0      2            2                        0                        91
-## 21  21000     1      0            1                       64                         0
-## 22  22000     0      1            1                        0                        49
-## 23  23000     0      2            2                        0                        89
-## 24  24000     0      1            1                        0                        18
-## 25  Total    35     88          123                     3884                      4418
-## 26   Mean                                                162                       184</code></pre>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">des</span> <span class="op">&lt;-</span> <span class="va">sample_2st</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>
-<span class="va">des</span> <span class="op">&lt;-</span> <span class="va">des</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">des</span><span class="op">)</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span>,<span class="op">]</span>
-<span class="va">strat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="va">des</span><span class="op">$</span><span class="va">Domain</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">des</span><span class="op">)</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>,<span class="st">"Tot"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/barplot.html">barplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="va">des</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">des</span><span class="op">)</span><span class="op">)</span>,<span class="fl">2</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span>, names<span class="op">=</span><span class="va">strat</span>,
-        col<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"darkblue"</span>,<span class="st">"red"</span><span class="op">)</span>, las<span class="op">=</span><span class="fl">2</span>, xlab <span class="op">=</span> <span class="st">"Stratum"</span>, cex.axis<span class="op">=</span><span class="fl">0.7</span>, cex.names<span class="op">=</span><span class="fl">0.7</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/legend.html">legend</a></span><span class="op">(</span><span class="st">"topleft"</span>, 
-       legend <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Self Representative"</span>,<span class="st">"Non Self Representative"</span><span class="op">)</span>,
-       fill <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"darkblue"</span>, <span class="st">"red"</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/title.html">title</a></span><span class="op">(</span><span class="st">"Distribution of allocated PSUs by domain"</span><span class="op">)</span></code></pre></div>
-<p><img src="R2BEAT_workflow_from_frame_files/figure-html/unnamed-chunk-24-1.png" width="576"></p>
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/barplot.html">barplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="va">des</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">des</span><span class="op">)</span><span class="op">)</span>,<span class="fl">5</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span><span class="op">)</span>, names<span class="op">=</span><span class="va">strat</span>,
-        col<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"darkblue"</span>,<span class="st">"red"</span><span class="op">)</span>, las<span class="op">=</span><span class="fl">2</span>, xlab <span class="op">=</span> <span class="st">"Stratum"</span>, cex.axis<span class="op">=</span><span class="fl">0.7</span>, 
-        cex.names<span class="op">=</span><span class="fl">0.7</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/legend.html">legend</a></span><span class="op">(</span><span class="st">"topleft"</span>, 
-       legend <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Self Representative"</span>,<span class="st">"Non Self Representative"</span><span class="op">)</span>,
-       fill <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"darkblue"</span>, <span class="st">"red"</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/title.html">title</a></span><span class="op">(</span><span class="st">"Distribution of allocated SSUs by domain"</span><span class="op">)</span></code></pre></div>
-<p><img src="R2BEAT_workflow_from_frame_files/figure-html/unnamed-chunk-25-1.png" width="576"></p>
-<p>and these are the selected PSUs:</p>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">selected_PSU</span> <span class="op">&lt;-</span> <span class="va">sample_2st</span><span class="op">[[</span><span class="fl">4</span><span class="op">]</span><span class="op">]</span>
-<span class="va">selected_PSU</span> <span class="op">&lt;-</span> <span class="va">selected_PSU</span><span class="op">[</span><span class="va">selected_PSU</span><span class="op">$</span><span class="va">PSU_final_sample_unit</span> <span class="op">&gt;</span> <span class="fl">0</span>,<span class="op">]</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/write.table.html">write.table</a></span><span class="op">(</span><span class="va">sample_2st</span><span class="op">[[</span><span class="fl">4</span><span class="op">]</span><span class="op">]</span>,<span class="st">"Selected_PSUs.csv"</span>,sep<span class="op">=</span><span class="st">";"</span>,row.names<span class="op">=</span><span class="cn">F</span>,quote<span class="op">=</span><span class="cn">F</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">selected_PSU</span><span class="op">)</span></code></pre></div>
-<pre><code>##      Sampled_PSU       Pik Size_Stratum STRATUM PSU_ID PSU_MOS PSU_MOS.1 ALLOC threshold final_populationdom sampling_fraction SR SizeSR stratum N_PSU_Stratum PSU_final_sample_unit nSR
-## 1              1 1.0000000       146162    1000    330  146162    146162   287  34321.78              197007       0.001456801  1 146162   10001             1                   213   0
-## 2              1 1.0000000        50845    1000    309   50845     50845   287  34321.78              197007       0.001456801  1  50845   10002             1                    74   0
-## 3              1 1.0000000        36195    2000    304   36195     36195   374  34954.01              261456       0.001430451  1  36195   20001             1                    52   0
-## 4              1 1.0000000        34156    2000    342   34156     34156   374  34954.01              261456       0.001430451  1      0   20002             1                    49   0
-## 5              1 1.0000000        29376    2000    315   29376     29376   374  34954.01              261456       0.001430451  1      0   20003             1                    42   0
-## 1100           1 0.5583857        44403    2000    292   24794     24794   374  34954.01              261456       0.001430451  0      0   20004             2                    64   1</code></pre>
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">sample_1st</span><span class="op">$</span><span class="va">PSU_stats</span></code></pre></div>
+<pre><code>##    STRATUM PSU PSU_SR PSU_NSR  SSU SSU_SR SSU_NSR
+## 1     1000   2      2       0  287    287       0
+## 2     2000   7      1       6  380     52     328
+## 3     3000   4      0       4  204      0     204
+## 4     4000   2      0       2  100      0     100
+## 5     5000   2      2       0  219    219       0
+## 6     6000   2      0       2  100      0     100
+## 7     7000   2      0       2  100      0     100
+## 8     8000   2      0       2  100      0     100
+## 9     9000   1      1       0  558    558       0
+## 10   10000   6      6       0  588    588       0
+## 11   11000  22      2      20 1198    100    1098
+## 12   12000   8      0       8  410      0     410
+## 13   13000   1      1       0  704    704       0
+## 14   14000   4      4       0  577    577       0
+## 15   15000  23      3      20 1281    161    1120
+## 16   16000  16      0      16  830      0     830
+## 17   17000   1      1       0  157    157       0
+## 18   18000   3      1       2  166     50     116
+## 19   19000   6      0       6  308      0     308
+## 20   20000   4      0       4  200      0     200
+## 21   21000   1      1       0  127    127       0
+## 22   22000   3      3       0  151    151       0
+## 23   23000   4      0       4  204      0     204
+## 24   24000   2      0       2  100      0     100
+## 25   Total 128     28     100 9049   3731    5318</code></pre>
 </div>
 <div id="selection-of-ssus" class="section level1">
 <h1 class="hasAnchor">
 <a href="#selection-of-ssus" class="anchor"></a>Selection of SSUs</h1>
-<p>Finally, we are able to select the Secondary Sample Units (the individuals) from the already selected PSUs (the municipalities). First, we load the population frame:</p>
-<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="st">"Frame.RData"</span><span class="op">)</span></code></pre></div>
-<p>and we proceed to select the sample in this way:</p>
-<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
+<p>Finally, we are able to select the Secondary Sample Units (the individuals) from the already selected PSUs (the municipalities). We proceed to select the sample in this way:</p>
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">samp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/select_SSU.html">select_SSU</a></span><span class="op">(</span>df<span class="op">=</span><span class="va">pop</span>,
                    PSU_code<span class="op">=</span><span class="st">"municipality"</span>,
                    SSU_code<span class="op">=</span><span class="st">"id_ind"</span>,
-                   PSU_sampled<span class="op">=</span><span class="va">selected_PSU</span><span class="op">[</span><span class="va">selected_PSU</span><span class="op">$</span><span class="va">Sampled_PSU</span><span class="op">==</span><span class="fl">1</span>,<span class="op">]</span>,
+                   PSU_sampled<span class="op">=</span><span class="va">sample_1st</span><span class="op">$</span><span class="va">sample_PSU</span>,
                    verbose<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
 <p>To check that the total amount is practically equal to what determined in the allocation step:</p>
-<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">samp</span><span class="op">)</span></code></pre></div>
-<pre><code>## [1] 8302</code></pre>
-<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">allocat</span><span class="op">$</span><span class="va">ALLOC</span><span class="op">)</span></code></pre></div>
-<pre><code>## [1] 8300</code></pre>
+<pre><code>## [1] 9049</code></pre>
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">alloc</span><span class="op">$</span><span class="va">alloc</span><span class="op">$</span><span class="va">ALLOC</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">alloc</span><span class="op">$</span><span class="va">alloc</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></code></pre></div>
+<pre><code>## [1] 8297</code></pre>
 <p>and that the sum of weights equalize population size:</p>
-<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">pop</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] 2258507</code></pre>
-<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">samp</span><span class="op">$</span><span class="va">weight</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] 2258507</code></pre>
 <p>This is the distribution of weights:</p>
-<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/boxplot.html">boxplot</a></span><span class="op">(</span><span class="va">samp</span><span class="op">$</span><span class="va">weight</span>,col<span class="op">=</span><span class="st">"orange"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/title.html">title</a></span><span class="op">(</span><span class="st">"Weights distribution (total sample)"</span>,cex.main<span class="op">=</span><span class="fl">0.7</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/boxplot.html">boxplot</a></span><span class="op">(</span><span class="va">weight</span> <span class="op">~</span> <span class="va">region</span>, data<span class="op">=</span><span class="va">samp</span>,col<span class="op">=</span><span class="st">"orange"</span><span class="op">)</span>
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/boxplot.html">boxplot</a></span><span class="op">(</span><span class="va">samp</span><span class="op">$</span><span class="va">weight</span>,col<span class="op">=</span><span class="st">"orange"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/title.html">title</a></span><span class="op">(</span><span class="st">"Weights distribution (total sample)"</span>,cex.main<span class="op">=</span><span class="fl">0.7</span><span class="op">)</span></code></pre></div>
+<p><img src="R2BEAT_workflow_from_frame_files/figure-html/unnamed-chunk-21-1.png" width="576"></p>
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/boxplot.html">boxplot</a></span><span class="op">(</span><span class="va">weight</span> <span class="op">~</span> <span class="va">region</span>, data<span class="op">=</span><span class="va">samp</span>,col<span class="op">=</span><span class="st">"orange"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/title.html">title</a></span><span class="op">(</span><span class="st">"Weights distribution by region"</span>,cex.main<span class="op">=</span><span class="fl">0.7</span><span class="op">)</span></code></pre></div>
-<p><img src="R2BEAT_workflow_from_frame_files/figure-html/unnamed-chunk-31-1.png" width="576"></p>
-<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
+<p><img src="R2BEAT_workflow_from_frame_files/figure-html/unnamed-chunk-21-2.png" width="576"></p>
+<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/boxplot.html">boxplot</a></span><span class="op">(</span><span class="va">weight</span> <span class="op">~</span> <span class="va">province</span>, data<span class="op">=</span><span class="va">samp</span>,col<span class="op">=</span><span class="st">"orange"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/title.html">title</a></span><span class="op">(</span><span class="st">"Weights distribution by province"</span>,cex.main<span class="op">=</span><span class="fl">0.7</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/boxplot.html">boxplot</a></span><span class="op">(</span><span class="va">weight</span> <span class="op">~</span> <span class="va">stratum</span>, data<span class="op">=</span><span class="va">samp</span>,col<span class="op">=</span><span class="st">"orange"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/title.html">title</a></span><span class="op">(</span><span class="st">"Weights distribution by province"</span>,cex.main<span class="op">=</span><span class="fl">0.7</span><span class="op">)</span></code></pre></div>
+<p><img src="R2BEAT_workflow_from_frame_files/figure-html/unnamed-chunk-21-3.png" width="576"></p>
+<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/boxplot.html">boxplot</a></span><span class="op">(</span><span class="va">weight</span> <span class="op">~</span> <span class="va">stratum</span>, data<span class="op">=</span><span class="va">samp</span>,col<span class="op">=</span><span class="st">"orange"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/title.html">title</a></span><span class="op">(</span><span class="st">"Weights distribution by stratum"</span>,cex.main<span class="op">=</span><span class="fl">0.7</span><span class="op">)</span></code></pre></div>
-<p><img src="R2BEAT_workflow_from_frame_files/figure-html/unnamed-chunk-31-2.png" width="576"></p>
+<p><img src="R2BEAT_workflow_from_frame_files/figure-html/unnamed-chunk-21-4.png" width="576"></p>
 <p>It can be seen that the sample is fully self-weighted inside strata, and approximately self-weighted in aggregations of strata, that is the result we wanted to obtain.</p>
 </div>
   </div>
@@ -657,7 +560,7 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Andrea Fasulo, Giulio Barcaroli, Raffaella Cianchetta, Stefano Falorsi, Alessio Guandalini, Daniela Pagliuca, Marco Dionisio Terribili.</p>
+  <p>Developed by Andrea Fasulo, Giulio Barcaroli, Stefano Falorsi, Alessio Guandalini, Daniela Pagliuca, Marco Dionisio Terribili.</p>
 </div>
 
 <div class="pkgdown">

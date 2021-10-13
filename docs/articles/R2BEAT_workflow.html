@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">R2BEAT </a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.4</span>
       </span>
     </div>
 
@@ -92,12 +92,12 @@
 
       
 
-      </header><script src="R2BEAT_workflow_files/header-attrs-2.8/header-attrs.js"></script><script src="R2BEAT_workflow_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><script src="R2BEAT_workflow_files/header-attrs-2.11/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>R2BEAT two-stage sampling design workflow starting from a previous survey</h1>
             
-            <h4 class="date">2021-05-12 <br><br><br>
+            <h4 class="date">2021-10-13 <br><br><br>
 </h4>
       
       <small class="dont-index">Source: <a href="https://github.com/barcaroli/R2BEAT/blob/master/vignettes/R2BEAT_workflow.Rmd"><code>vignettes/R2BEAT_workflow.Rmd</code></a></small>
@@ -114,6 +114,8 @@
 <h1 class="hasAnchor">
 <a href="#use-of-regenesees" class="anchor"></a>Use of ReGenesees</h1>
 <p>Perform externally the definition of the sample design, and possibly of the calibration step, using the R package ReGenesees, and make the design object and the calibrated object available.</p>
+<p>The workspace to be loaded (R2BEAT_ReGenesees.RData) is available at the link:</p>
+<p><a href="https://github.com/barcaroli/R2BEAT/tree/master/data" class="uri">https://github.com/barcaroli/R2BEAT/tree/master/data</a></p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="st">"R2BEAT_ReGenesees.RData"</span><span class="op">)</span>   <span class="co"># ReGenesees design object</span></code></pre></div>
 <p>This is the ‘design’ object:</p>
@@ -185,28 +187,6 @@
 ##    0    1 
 ## 1938  306</code></pre>
 <p>Great attention must be paid to the nature of the target variables, especially of the ‘factor’ type. In fact, the procedure here illustrated is suitable only when categorical variables are binary with values 0 and 1, supposing we are willing to estimate proportions of ‘1’ in the population. If factor variables are of other nature, then an error message is printed.</p>
-<p>Therefore, we have to handle the ‘work’ variable in this way: as values 0, 1 and 2 indicate respectively non labour force, active and inactive people, we can decide to derive from ‘work’ two binary variables, ‘active’ and ‘inactive’:</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">des</span><span class="op">&lt;-</span><span class="fu">des.addvars</span><span class="op">(</span><span class="va">des</span>,active<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">work</span><span class="op">==</span><span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
-<span class="va">des</span><span class="op">&lt;-</span><span class="fu">des.addvars</span><span class="op">(</span><span class="va">des</span>,inactive<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">work</span><span class="op">==</span><span class="fl">2</span>,<span class="fl">1</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
-<span class="va">cal</span><span class="op">&lt;-</span><span class="fu">des.addvars</span><span class="op">(</span><span class="va">cal</span>,active<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">work</span><span class="op">==</span><span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
-<span class="va">cal</span><span class="op">&lt;-</span><span class="fu">des.addvars</span><span class="op">(</span><span class="va">cal</span>,inactive<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">work</span><span class="op">==</span><span class="fl">2</span>,<span class="fl">1</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p>Now, all the categorical target variables are compliant to the binary constraint:</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">cal</span><span class="op">$</span><span class="va">variables</span><span class="op">$</span><span class="va">active</span><span class="op">)</span></code></pre></div>
-<pre><code>## 
-##    0    1 
-##  757 1487</code></pre>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">cal</span><span class="op">$</span><span class="va">variables</span><span class="op">$</span><span class="va">inactive</span><span class="op">)</span></code></pre></div>
-<pre><code>## 
-##    0    1 
-## 1793  451</code></pre>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">cal</span><span class="op">$</span><span class="va">variables</span><span class="op">$</span><span class="va">unemployed</span><span class="op">)</span></code></pre></div>
-<pre><code>## 
-##    0    1 
-## 1938  306</code></pre>
 </div>
 <div id="build-strata-deff-effst-and-rho-dataframes" class="section level1">
 <h1 class="hasAnchor">
@@ -245,31 +225,40 @@
 </ul>
 <p>Actually, the ‘deff’ dataframe is not used in the following steps, it just remains for documentation purposes.</p>
 <p>Here is the way we can produce the above items:</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">des</span><span class="op">$</span><span class="va">variables</span><span class="op">$</span><span class="va">wgts</span> <span class="op">&lt;-</span> <span class="fl">1</span> <span class="op">/</span> <span class="va">des</span><span class="op">$</span><span class="va">prob</span>
-<span class="va">RGdes</span> <span class="op">&lt;-</span> <span class="va">des</span>                           <span class="co"># ReGenesees design object</span>
-<span class="va">RGcal</span> <span class="op">&lt;-</span> <span class="va">cal</span>                           <span class="co"># ReGenesees calibrated object</span>
-<span class="va">strata_vars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"stratum"</span><span class="op">)</span>            <span class="co"># variables of stratification</span>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="st">"pop.RData"</span><span class="op">)</span>
+<span class="va">samp_frame</span> <span class="op">&lt;-</span> <span class="va">pop</span>
+<span class="va">RGdes</span> <span class="op">&lt;-</span> <span class="va">des</span>
+<span class="va">RGcal</span> <span class="op">&lt;-</span> <span class="va">cal</span>
+<span class="va">strata_var</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"stratum"</span><span class="op">)</span>      
 <span class="va">target_vars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"income_hh"</span>,
                  <span class="st">"active"</span>,
                  <span class="st">"inactive"</span>,
-                 <span class="st">"unemployed"</span><span class="op">)</span>         <span class="co"># target variables</span>
-<span class="va">deff_vars</span> <span class="op">&lt;-</span> <span class="st">"stratum"</span>                 <span class="co"># stratification variables to be used when calculating deff and effst </span>
-                                       <span class="co">#    (n.b: must coincide or be a subset of variables of stratification)</span>
-<span class="va">id_PSU</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"municipality"</span><span class="op">)</span>            <span class="co"># identification variable of PSUs</span>
-<span class="va">id_SSU</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"id_hh"</span><span class="op">)</span>                   <span class="co"># identification variable of SSUs</span>
-<span class="va">domain_vars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"region"</span><span class="op">)</span>             <span class="co"># domain variables</span>
-<span class="va">inp1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/input_to_beat.2st_1.html">input_to_beat.2st_1</a></span><span class="op">(</span><span class="va">RGdes</span>,
-                            <span class="va">RGcal</span>,
-                            <span class="va">id_PSU</span>,
-                            <span class="va">id_SSU</span>,
-                            <span class="va">strata_vars</span>,
-                            <span class="va">target_vars</span>,
-                            <span class="va">deff_vars</span>,
-                            <span class="va">domain_vars</span><span class="op">)</span></code></pre></div>
+                 <span class="st">"unemployed"</span><span class="op">)</span>   
+<span class="va">weight_var</span> <span class="op">&lt;-</span> <span class="st">"weight"</span>
+<span class="va">deff_var</span> <span class="op">&lt;-</span> <span class="st">"stratum"</span>            
+<span class="va">id_PSU</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"municipality"</span><span class="op">)</span>      
+<span class="va">id_SSU</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"id_hh"</span><span class="op">)</span>             
+<span class="va">domain_var</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"region"</span><span class="op">)</span> 
+<span class="va">delta</span> <span class="op">&lt;-</span> <span class="fl">1</span>                   
+<span class="va">minimum</span> <span class="op">&lt;-</span> <span class="fl">50</span>                
+
+<span class="va">inp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/prepareInputToAllocation2.html">prepareInputToAllocation2</a></span><span class="op">(</span>
+        <span class="va">samp_frame</span>,  <span class="co"># sampling frame</span>
+        <span class="va">RGdes</span>,       <span class="co"># ReGenesees design object</span>
+        <span class="va">RGcal</span>,       <span class="co"># ReGenesees calibrated object</span>
+        <span class="va">id_PSU</span>,      <span class="co"># identification variable of PSUs</span>
+        <span class="va">id_SSU</span>,      <span class="co"># identification variable of SSUs</span>
+        <span class="va">strata_var</span>,  <span class="co"># strata variables</span>
+        <span class="va">target_vars</span>, <span class="co"># target variables</span>
+        <span class="va">deff_var</span>,    <span class="co"># deff variables</span>
+        <span class="va">domain_var</span>,  <span class="co"># domain variables</span>
+        <span class="va">delta</span>,       <span class="co"># Average number of SSUs for each selection unit</span>
+        <span class="va">minimum</span>      <span class="co"># Minimum number of SSUs to be selected in each PSU</span>
+      <span class="op">)</span></code></pre></div>
 <p>and these are the results:</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">inp1</span><span class="op">$</span><span class="va">strata</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">inp</span><span class="op">$</span><span class="va">strata</span><span class="op">)</span></code></pre></div>
 <pre><code>##   stratum STRATUM      N       M1        M2        M3         M4       S1        S2        S3        S4 COST CENS DOM1   DOM2
 ## 1    1000    1000 197451 22266.58 0.6404431 0.2323140 0.12724293 14554.88 0.4798705 0.4223082 0.3332449    1    0    1 center
 ## 2   10000   10000 106106 27985.40 0.7679285 0.2114187 0.02065276 24367.97 0.4221544 0.4083146 0.1422189    1    0    1  north
@@ -277,8 +266,8 @@
 ## 4   12000   12000  57420 26937.42 0.7764955 0.2075926 0.01591188 15743.78 0.4165936 0.4055834 0.1251347    1    0    1  north
 ## 5   13000   13000 103089 26357.25 0.7185271 0.2814729 0.00000000 14592.50 0.4497176 0.4497176 0.0000000    1    0    1  north
 ## 6   14000   14000  84653 20538.42 0.7518236 0.2131042 0.03507211 14285.81 0.4319547 0.4095007 0.1839621    1    0    1  north</code></pre>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">inp1</span><span class="op">$</span><span class="va">deff</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">inp</span><span class="op">$</span><span class="va">deff</span><span class="op">)</span></code></pre></div>
 <pre><code>##   stratum STRATUM    DEFF1    DEFF2    DEFF3    DEFF4    b_nar
 ## 1    1000    1000 0.951705 0.991140 1.006731 0.954024 56.50000
 ## 2   10000   10000 0.856598 1.687606 1.404308 0.819854 26.75000
@@ -286,8 +275,8 @@
 ## 4   12000   12000 1.086363 0.502458 0.483954 0.700691 21.00000
 ## 5   13000   13000 1.000924 1.000924 1.000924 1.000000 95.00000
 ## 6   14000   14000 0.633543 0.856820 0.845580 0.677276 33.66667</code></pre>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">inp1</span><span class="op">$</span><span class="va">effst</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">inp</span><span class="op">$</span><span class="va">effst</span><span class="op">)</span></code></pre></div>
 <pre><code>##   stratum STRATUM    EFFST1 EFFST2 EFFST3    EFFST4
 ## 1    1000    1000 0.9689494      1      1 0.9420958
 ## 2   10000   10000 0.9500011      1      1 1.1915475
@@ -295,8 +284,8 @@
 ## 4   12000   12000 1.0429461      1      1 0.9732493
 ## 5   13000   13000 0.9914219      1      1 1.0000000
 ## 6   14000   14000 0.9829167      1      1 1.0974521</code></pre>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">inp1</span><span class="op">$</span><span class="va">rho</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">inp</span><span class="op">$</span><span class="va">rho</span><span class="op">)</span></code></pre></div>
 <pre><code>##   STRATUM RHO_AR1        RHO_NAR1 RHO_AR2        RHO_NAR2 RHO_AR3        RHO_NAR3 RHO_AR4      RHO_NAR4
 ## 1    1000       1 -0.000870180180       1 -0.000159639640       1  0.000121279279       1 -0.0008283964
 ## 2   10000       1 -0.005569009709       1  0.026703145631       1  0.015701281553       1 -0.0069959612
@@ -304,60 +293,17 @@
 ## 4   12000       1  0.004318150000       1 -0.024877100000       1 -0.025802300000       1 -0.0149654500
 ## 5   13000       1  0.000009829787       1  0.000009829787       1  0.000009829787       1  0.0000000000
 ## 6   14000       1 -0.011218071429       1 -0.004383061224       1 -0.004727142857       1 -0.0098793061</code></pre>
-</div>
-<div id="build-psu-and-design-dataframes" class="section level1">
-<h1 class="hasAnchor">
-<a href="#build-psu-and-design-dataframes" class="anchor"></a>Build ‘PSU’ and ‘design’ dataframes</h1>
-<p>Prepare the inputs related to the PSUs (function ‘input_to_strat.2d_2’), that are</p>
-<ol style="list-style-type: lower-alpha">
-<li>the ‘des_file’ dataframe, containing the following information:</li>
-</ol>
-<ul>
-<li>STRATUM: stratum identifier</li>
-<li>MOS: measure of size of the stratum (in terms of number of contained selection units)</li>
-<li>DELTA: factor that report the average number of SSUs for each selection unit</li>
-<li>MINIMUM: minimum number of units to be selected in each PSU</li>
-</ul>
-<ol start="2" style="list-style-type: lower-alpha">
-<li>the ‘PSU_file’ dataframe, containing the following information:</li>
-</ol>
-<ul>
-<li>stratum identifier</li>
-<li>PSU id</li>
-<li>PSU_MOS: number of final selection units contained in a given PSU</li>
-</ul>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># psu &lt;- read.csv2("psu.csv") # Read the external file containing PSU information</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">psu</span><span class="op">)</span></code></pre></div>
-<pre><code>##   municipality stratum   ind   hh
-## 1            1   12000  1546  609
-## 2            2   12000   936  402
-## 3            3   12000   367  178
-## 4            4   10000 13032 5788
-## 5            5   12000   678  281
-## 6            6   11000  3193 1194</code></pre>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">psu_id</span><span class="op">=</span><span class="st">"municipality"</span>        <span class="co"># Identifier of the PSU</span>
-<span class="va">stratum_var</span><span class="op">=</span><span class="st">"stratum"</span>        <span class="co"># Identifier of the stratum</span>
-<span class="va">mos_var</span><span class="op">=</span><span class="st">"ind"</span>                <span class="co"># Variable to be used as 'measure of size'</span>
-<span class="va">delta</span><span class="op">=</span><span class="fl">1</span>                      <span class="co"># Average number of SSUs for each selection unit</span>
-<span class="va">minimum</span> <span class="op">&lt;-</span> <span class="fl">50</span>                <span class="co"># Minimum number of SSUs to be selected in each PSU</span>
-<span class="va">inp2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/input_to_beat.2st_2.html">input_to_beat.2st_2</a></span><span class="op">(</span><span class="va">psu</span>,
-                            <span class="va">psu_id</span>,
-                            <span class="va">stratum_var</span>,
-                            <span class="va">mos_var</span>,
-                            <span class="va">delta</span>,
-                            <span class="va">minimum</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">inp2</span><span class="op">$</span><span class="va">psu_file</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">inp</span><span class="op">$</span><span class="va">psu_file</span><span class="op">)</span></code></pre></div>
 <pre><code>##   PSU_ID STRATUM PSU_MOS
-## 1      1   12000    1546
-## 2      2   12000     936
-## 3      3   12000     367
-## 4      4   10000   13032
-## 5      5   12000     678
-## 6      6   11000    3193</code></pre>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">inp2</span><span class="op">$</span><span class="va">des_file</span><span class="op">)</span></code></pre></div>
+## 1    309    1000   50845
+## 2    330    1000  146162
+## 3    292    2000   24794
+## 4    293    2000   19609
+## 5    300    2000   13897
+## 6    304    2000   36195</code></pre>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">inp</span><span class="op">$</span><span class="va">des_file</span><span class="op">)</span></code></pre></div>
 <pre><code>##   STRATUM STRAT_MOS DELTA MINIMUM
 ## 1    1000    197007     1      50
 ## 2    2000    261456     1      50
@@ -371,9 +317,9 @@
 <a href="#check-the-coherence-of-populations-in-strata-and-psus" class="anchor"></a>Check the coherence of populations in strata and PSUs</h1>
 <p>It may happen that the population in strata (variable ‘N’ in ‘inp1$strata’ dataset) and the one derived by the PSU dataset (variable ‘STRAT_MOS’ in ‘inp2$des_file’ dataset) are not the same.</p>
 <p>We can check it by applying the function ‘check_input’ in this way:</p>
-<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">newstrata</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/check_input.html">check_input</a></span><span class="op">(</span>strata<span class="op">=</span><span class="va">inp1</span><span class="op">$</span><span class="va">strata</span>,
-                         des<span class="op">=</span><span class="va">inp2</span><span class="op">$</span><span class="va">des_file</span>,
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">newstrata</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/check_input.html">check_input</a></span><span class="op">(</span>strata<span class="op">=</span><span class="va">inp</span><span class="op">$</span><span class="va">strata</span>,
+                         des<span class="op">=</span><span class="va">inp</span><span class="op">$</span><span class="va">des_file</span>,
                          strata_var_strata<span class="op">=</span><span class="st">"STRATUM"</span>,
                          strata_var_des<span class="op">=</span><span class="st">"STRATUM"</span><span class="op">)</span></code></pre></div>
 <pre><code>## 
@@ -410,189 +356,135 @@
 ## Population of PSUs has been attributed to strata</code></pre>
 <p>Together with the print of the differences between the two populations, the function produces a new version of the strata dataset, where the population has been changed to the one derived by the PSUs dataset.</p>
 <p>It is preferable to use this new version:</p>
-<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">inp1</span><span class="op">$</span><span class="va">strata</span> <span class="op">&lt;-</span> <span class="va">newstrata</span></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">inp</span><span class="op">$</span><span class="va">strata</span> <span class="op">&lt;-</span> <span class="va">newstrata</span></code></pre></div>
 </div>
 <div id="optimal-allocation-of-units-in-each-stratum" class="section level1">
 <h1 class="hasAnchor">
 <a href="#optimal-allocation-of-units-in-each-stratum" class="anchor"></a>Optimal allocation of units in each stratum</h1>
 <p>Using the function ‘beat.2st’ in ‘R2BEAT’ package execute the optimization of PSU and SSU allocation in strata:</p>
-<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">cv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>DOM<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"DOM1"</span>,<span class="st">"DOM2"</span><span class="op">)</span>,
-                         CV1<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.03</span>,<span class="fl">0.04</span><span class="op">)</span>,
-                         CV2<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.06</span>,<span class="fl">0.08</span><span class="op">)</span>,
-                         CV3<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.06</span>,<span class="fl">0.08</span><span class="op">)</span>,
-                         CV4<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.06</span>,<span class="fl">0.08</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+                         CV1<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.02</span>,<span class="fl">0.03</span><span class="op">)</span>,
+                         CV2<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.03</span>,<span class="fl">0.05</span><span class="op">)</span>,
+                         CV3<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.03</span>,<span class="fl">0.05</span><span class="op">)</span>,
+                         CV4<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.05</span>,<span class="fl">0.08</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
 <span class="va">cv</span></code></pre></div>
 <pre><code>##    DOM  CV1  CV2  CV3  CV4
-## 1 DOM1 0.03 0.06 0.06 0.06
-## 2 DOM2 0.04 0.08 0.08 0.08</code></pre>
-<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">stratif</span> <span class="op">=</span> <span class="va">inp1</span><span class="op">$</span><span class="va">strata</span> 
-<span class="va">errors</span> <span class="op">=</span> <span class="va">cv</span> 
-<span class="va">des_file</span> <span class="op">=</span> <span class="va">inp2</span><span class="op">$</span><span class="va">des_file</span> 
-<span class="va">psu_file</span> <span class="op">=</span> <span class="va">inp2</span><span class="op">$</span><span class="va">psu_file</span> 
-<span class="va">rho</span> <span class="op">=</span> <span class="va">inp1</span><span class="op">$</span><span class="va">rho</span> 
-<span class="va">effst</span> <span class="op">=</span> <span class="va">inp1</span><span class="op">$</span><span class="va">effst</span>
-
-<span class="va">alloc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/beat.2st.html">beat.2st</a></span><span class="op">(</span><span class="va">stratif</span>, 
-                  <span class="va">errors</span>, 
-                  <span class="va">des_file</span>, 
-                  <span class="va">psu_file</span>, 
-                  <span class="va">rho</span>, 
+## 1 DOM1 0.02 0.03 0.03 0.05
+## 2 DOM2 0.03 0.05 0.05 0.08</code></pre>
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1234</span><span class="op">)</span>
+<span class="va">minPSUstrat</span> <span class="op">&lt;-</span> <span class="fl">2</span>
+<span class="va">inp</span><span class="op">$</span><span class="va">des_file</span><span class="op">$</span><span class="va">MINIMUM</span> <span class="op">&lt;-</span> <span class="fl">50</span>
+<span class="va">alloc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/beat.2st.html">beat.2st</a></span><span class="op">(</span>stratif <span class="op">=</span> <span class="va">inp</span><span class="op">$</span><span class="va">strata</span>, 
+                  errors <span class="op">=</span> <span class="va">cv</span>, 
+                  des_file <span class="op">=</span> <span class="va">inp</span><span class="op">$</span><span class="va">des_file</span>, 
+                  psu_file <span class="op">=</span> <span class="va">inp</span><span class="op">$</span><span class="va">psu_file</span>, 
+                  rho <span class="op">=</span> <span class="va">inp</span><span class="op">$</span><span class="va">rho</span>, 
                   deft_start <span class="op">=</span> <span class="cn">NULL</span>, 
-                  <span class="va">effst</span>,
-                  epsilon1 <span class="op">=</span> <span class="fl">5</span>, 
-                  mmdiff_deft <span class="op">=</span> <span class="fl">1</span>,maxi <span class="op">=</span> <span class="fl">15</span>, 
-                  epsilon <span class="op">=</span> <span class="fl">10</span><span class="op">^</span><span class="op">(</span><span class="op">-</span><span class="fl">11</span><span class="op">)</span>, minnumstrat <span class="op">=</span> <span class="fl">2</span>, maxiter <span class="op">=</span> <span class="fl">200</span>, maxiter1 <span class="op">=</span> <span class="fl">25</span><span class="op">)</span></code></pre></div>
-<pre><code>##   iterations PSU_SR PSU NSR PSU Total  SSU
-## 1          0      0       0         0 6530
-## 2          1     40      60       100 9025
-## 3          2     23     124       147 9453
-## 4          3     23     125       148 9453</code></pre>
+                  effst <span class="op">=</span> <span class="va">inp</span><span class="op">$</span><span class="va">effst</span>, 
+                  minnumstrat <span class="op">=</span> <span class="fl">2</span>, 
+                  <span class="va">minPSUstrat</span><span class="op">)</span></code></pre></div>
+<pre><code>##   iterations PSU_SR PSU NSR PSU Total   SSU
+## 1          0      0       0         0  7701
+## 2          1     49      80       129 10601
+## 3          2     29     138       167 10789
+## 4          3     28     140       168 10789</code></pre>
 <p>This is the sensitivity of the solution:</p>
-<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">alloc</span><span class="op">$</span><span class="va">sensitivity</span></code></pre></div>
-<pre><code>##    Type Dom  V1 V2 V3   V4
-## 1  DOM1   1   1  0  1    1
-## 5  DOM2   1   1  0  3 1649
-## 9  DOM2   2  26  1 14   67
-## 13 DOM2   3 121  1 12    1</code></pre>
+<pre><code>##    Type Dom V1 V2  V3   V4
+## 2  DOM1   1  1  0   1    1
+## 6  DOM2   1  1  0   8 1648
+## 10 DOM2   2 63  0 137    1
+## 14 DOM2   3  1  1 302    1</code></pre>
 <p>i.e., for each domain value and for each variable it is reported the gain in terms of reduction in the sample size if the corresponding precision constraint is reduced of 10%.</p>
 <p>These are the expected values of the coefficients of variation:</p>
-<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">alloc</span><span class="op">$</span><span class="va">expected</span></code></pre></div>
 <pre><code>##    Type Dom     V1     V2     V3     V4
-## 1  DOM1   1 0.0188 0.0159 0.0465 0.0445
-## 5  DOM2   1 0.0230 0.0202 0.0769 0.0800
-## 9  DOM2   2 0.0399 0.0305 0.0786 0.0798
-## 13 DOM2   3 0.0399 0.0401 0.0796 0.0608</code></pre>
+## 2  DOM1   1 0.0141 0.0102 0.0296 0.0322
+## 6  DOM2   1 0.0177 0.0130 0.0494 0.0800
+## 10 DOM2   2 0.0300 0.0197 0.0499 0.0643
+## 14 DOM2   3 0.0278 0.0246 0.0499 0.0398</code></pre>
 </div>
 <div id="selection-of-psus" class="section level1">
 <h1 class="hasAnchor">
 <a href="#selection-of-psus" class="anchor"></a>Selection of PSUs</h1>
-<p>Using the function ‘StratSel’ execute the selection of PSU in strata:</p>
-<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
+<p>Using the function ‘select_SSU’ execute the selection of PSU in strata:</p>
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1234</span><span class="op">)</span>
-<span class="va">allocat</span> <span class="op">&lt;-</span> <span class="va">alloc</span><span class="op">$</span><span class="va">alloc</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">alloc</span><span class="op">$</span><span class="va">alloc</span><span class="op">)</span>,<span class="op">]</span>
-<span class="va">sample_2st</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/StratSel.html">StratSel</a></span><span class="op">(</span>dataPop<span class="op">=</span> <span class="va">inp2</span><span class="op">$</span><span class="va">psu_file</span>,
-                       idpsu<span class="op">=</span> <span class="op">~</span> <span class="va">PSU_ID</span>, 
-                       dom<span class="op">=</span> <span class="op">~</span> <span class="va">STRATUM</span>, 
-                       final_pop<span class="op">=</span> <span class="op">~</span> <span class="va">PSU_MOS</span>, 
-                       size<span class="op">=</span> <span class="op">~</span> <span class="va">PSU_MOS</span>, 
-                       PSUsamplestratum<span class="op">=</span> <span class="fl">1</span>, 
-                       min_sample<span class="op">=</span> <span class="va">minimum</span>, 
-                       min_sample_index<span class="op">=</span> <span class="cn">FALSE</span>, 
-                       dataAll<span class="op">=</span><span class="va">allocat</span>,
-                       domAll<span class="op">=</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">STRATUM</span><span class="op">)</span>, 
-                       f_sample<span class="op">=</span> <span class="op">~</span> <span class="va">ALLOC</span>, 
-                       planned_min_sample<span class="op">=</span> <span class="cn">NULL</span>, 
-                       launch<span class="op">=</span> <span class="cn">F</span><span class="op">)</span></code></pre></div>
+<span class="va">sample_1st</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/select_PSU.html">select_PSU</a></span><span class="op">(</span><span class="va">alloc</span>, type<span class="op">=</span><span class="st">"ALLOC"</span>, pps<span class="op">=</span><span class="cn">TRUE</span>, plot<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<p><img src="R2BEAT_workflow_files/figure-html/unnamed-chunk-22-1.png" width="576"></p>
 <p>This is the overall sample design:</p>
-<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">sample_2st</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span></code></pre></div>
-<pre><code>##    Domain SRdom nSRdom SRdom+nSRdom SR_PSU_final_sample_unit NSR_PSU_final_sample_unit
-## 1    1000     2      0            2                      160                         0
-## 2    2000     0      3            3                        0                       173
-## 3    3000     0      1            1                        0                        47
-## 4    4000     0      1            1                        0                         4
-## 5    5000     2      0            2                       94                         0
-## 6    6000     0      1            1                        0                        41
-## 7    7000     0      1            1                        0                         8
-## 8    8000     0      1            1                        0                         7
-## 9    9000     1      0            1                      954                         0
-## 10  10000     6      0            6                      766                         0
-## 11  11000    15     20           35                      708                      1098
-## 12  12000     0      3            3                        0                       155
-## 13  13000     1      0            1                       11                         0
-## 14  14000     4      0            4                      725                         0
-## 15  15000     8     16           24                      367                       845
-## 16  16000    15     38           53                      624                      2010
-## 17  17000     1      0            1                       52                         0
-## 18  18000     0      2            2                        0                        82
-## 19  19000     0      6            6                        0                       301
-## 20  20000     0      1            1                        0                        47
-## 21  21000     1      0            1                       55                         0
-## 22  22000     0      1            1                        0                        45
-## 23  23000     0      2            2                        0                        76
-## 24  24000     0      1            1                        0                         5
-## 25  Total    56     98          154                     4516                      4944
-## 26   Mean                                                188                       206</code></pre>
-<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">des</span> <span class="op">&lt;-</span> <span class="va">sample_2st</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>
-<span class="va">des</span> <span class="op">&lt;-</span> <span class="va">des</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">des</span><span class="op">)</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span>,<span class="op">]</span>
-<span class="va">strat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="va">des</span><span class="op">$</span><span class="va">Domain</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">des</span><span class="op">)</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span><span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/barplot.html">barplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="va">des</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">des</span><span class="op">)</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span>,<span class="fl">2</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span>, names<span class="op">=</span><span class="va">strat</span>,
-        col<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"darkblue"</span>,<span class="st">"red"</span><span class="op">)</span>, las<span class="op">=</span><span class="fl">2</span>, xlab <span class="op">=</span> <span class="st">"Stratum"</span>, cex.axis<span class="op">=</span><span class="fl">0.7</span>, cex.names<span class="op">=</span><span class="fl">0.7</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/legend.html">legend</a></span><span class="op">(</span><span class="st">"topleft"</span>, 
-       legend <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Self Representative"</span>,<span class="st">"Non Self Representative"</span><span class="op">)</span>,cex<span class="op">=</span><span class="fl">0.7</span>,
-       fill <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"darkblue"</span>, <span class="st">"red"</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/title.html">title</a></span><span class="op">(</span><span class="st">"Distribution of allocated PSUs by domain"</span><span class="op">)</span></code></pre></div>
-<p><img src="R2BEAT_workflow_files/figure-html/unnamed-chunk-27-1.png" width="576"></p>
-<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/barplot.html">barplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="va">des</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">des</span><span class="op">)</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span>,<span class="fl">5</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span><span class="op">)</span>, names<span class="op">=</span><span class="va">strat</span>,
-        col<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"darkblue"</span>,<span class="st">"red"</span><span class="op">)</span>, las<span class="op">=</span><span class="fl">2</span>, xlab <span class="op">=</span> <span class="st">"Stratum"</span>, cex.axis<span class="op">=</span><span class="fl">0.7</span>, 
-        cex.names<span class="op">=</span><span class="fl">0.7</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/legend.html">legend</a></span><span class="op">(</span><span class="st">"topleft"</span>, 
-       legend <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Self Representative"</span>,<span class="st">"Non Self Representative"</span><span class="op">)</span>,cex<span class="op">=</span><span class="fl">0.7</span>,
-       fill <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"darkblue"</span>, <span class="st">"red"</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/title.html">title</a></span><span class="op">(</span><span class="st">"Distribution of allocated SSUs by domain"</span><span class="op">)</span></code></pre></div>
-<p><img src="R2BEAT_workflow_files/figure-html/unnamed-chunk-28-1.png" width="576"></p>
-<p>and these are the selected PSUs:</p>
-<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">selected_PSU</span> <span class="op">&lt;-</span> <span class="va">sample_2st</span><span class="op">[[</span><span class="fl">4</span><span class="op">]</span><span class="op">]</span>
-<span class="va">selected_PSU</span> <span class="op">&lt;-</span> <span class="va">selected_PSU</span><span class="op">[</span><span class="va">selected_PSU</span><span class="op">$</span><span class="va">PSU_final_sample_unit</span> <span class="op">&gt;</span> <span class="fl">0</span>,<span class="op">]</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/write.table.html">write.table</a></span><span class="op">(</span><span class="va">sample_2st</span><span class="op">[[</span><span class="fl">4</span><span class="op">]</span><span class="op">]</span>,<span class="st">"Selected_PSUs.csv"</span>,sep<span class="op">=</span><span class="st">";"</span>,row.names<span class="op">=</span><span class="cn">F</span>,quote<span class="op">=</span><span class="cn">F</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">selected_PSU</span><span class="op">)</span></code></pre></div>
-<pre><code>##    Sampled_PSU        Pik Size_Stratum STRATUM PSU_ID PSU_MOS PSU_MOS.1 ALLOC threshold final_populationdom sampling_fraction SR SizeSR stratum N_PSU_Stratum PSU_final_sample_unit nSR
-## 1            1 1.00000000       146162    1000    330  146162    146162   160  61564.69              197007      0.0008121539  1 146162   10001             1                   119   0
-## 2            1 1.00000000        50845    1000    309   50845     50845   160  61564.69              197007      0.0008121539  1      0   10002             1                    41   0
-## 3            1 0.29456416        99727    2000    315   29376     29376   172  76004.65              261456      0.0006578545  0      0   20001             3                    66   1
-## 7            1 0.21265470        80318    2000    318   17080     17080   172  76004.65              261456      0.0006578545  0      0   20002             4                    53   1
-## 11           1 0.16948570        81411    2000    314   13798     13798   172  76004.65              261456      0.0006578545  0      0   20003             6                    54   1
-## 32           1 0.02738898       115813    3000    302    3172      3172    47 123205.32              115813      0.0004058266  0      0   30001            26                    47   1</code></pre>
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">sample_1st</span><span class="op">$</span><span class="va">PSU_stats</span></code></pre></div>
+<pre><code>##    STRATUM PSU PSU_SR PSU_NSR   SSU SSU_SR SSU_NSR
+## 1     1000   2      2       0   241    241       0
+## 2     2000   6      0       6   320      0     320
+## 3     3000   4      0       4   200      0     200
+## 4     4000   2      0       2   100      0     100
+## 5     5000   2      2       0   199    199       0
+## 6     6000   2      0       2   100      0     100
+## 7     7000   2      0       2   100      0     100
+## 8     8000   2      0       2   100      0     100
+## 9     9000   1      1       0   953    953       0
+## 10   10000   6      6       0   767    767       0
+## 11   11000  31      5      26  1802    284    1518
+## 12   12000   4      0       4   202      0     202
+## 13   13000   1      1       0    50     50       0
+## 14   14000   4      4       0   725    725       0
+## 15   15000  23      5      18  1285    261    1024
+## 16   16000  48      0      48  2716      0    2716
+## 17   17000   1      1       0   158    158       0
+## 18   18000   4      0       4   214      0     214
+## 19   19000  10      0      10   546      0     546
+## 20   20000   4      0       4   202      0     202
+## 21   21000   1      1       0   149    149       0
+## 22   22000   2      0       2   100      0     100
+## 23   23000   4      0       4   208      0     208
+## 24   24000   2      0       2   100      0     100
+## 25   Total 168     28     140 11537   3787    7750</code></pre>
 </div>
 <div id="selection-of-ssus" class="section level1">
 <h1 class="hasAnchor">
 <a href="#selection-of-ssus" class="anchor"></a>Selection of SSUs</h1>
-<p>Finally, we are able to select the Secondary Sample Units (the individuals) from the already selected PSUs (the municipalities). First, we load the population frame:</p>
-<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="st">"Frame.RData"</span><span class="op">)</span></code></pre></div>
-<p>and we proceed to select the sample in this way:</p>
-<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
+<p>Finally, we are able to select the Secondary Sample Units (the individuals) from the already selected PSUs (the municipalities). We proceed to select the sample in this way:</p>
+<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">samp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/select_SSU.html">select_SSU</a></span><span class="op">(</span>df<span class="op">=</span><span class="va">pop</span>,
                    PSU_code<span class="op">=</span><span class="st">"municipality"</span>,
                    SSU_code<span class="op">=</span><span class="st">"id_ind"</span>,
-                   PSU_sampled<span class="op">=</span><span class="va">selected_PSU</span><span class="op">[</span><span class="va">selected_PSU</span><span class="op">$</span><span class="va">Sampled_PSU</span><span class="op">==</span><span class="fl">1</span>,<span class="op">]</span>,
+                   PSU_sampled<span class="op">=</span><span class="va">sample_1st</span><span class="op">$</span><span class="va">sample_PSU</span>,
                    verbose<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
 <p>To check that the total amount is practically equal to what determined in the allocation step:</p>
-<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">samp</span><span class="op">)</span></code></pre></div>
-<pre><code>## [1] 9460</code></pre>
-<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">allocat</span><span class="op">$</span><span class="va">ALLOC</span><span class="op">)</span></code></pre></div>
-<pre><code>## [1] 9453</code></pre>
+<pre><code>## [1] 11537</code></pre>
+<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">alloc</span><span class="op">$</span><span class="va">alloc</span><span class="op">$</span><span class="va">ALLOC</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">alloc</span><span class="op">$</span><span class="va">alloc</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></code></pre></div>
+<pre><code>## [1] 10789</code></pre>
 <p>and that the sum of weights equalize population size:</p>
-<div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">pop</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] 2258507</code></pre>
-<div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">samp</span><span class="op">$</span><span class="va">weight</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] 2258507</code></pre>
 <p>This is the distribution of weights:</p>
-<div class="sourceCode" id="cb66"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/boxplot.html">boxplot</a></span><span class="op">(</span><span class="va">samp</span><span class="op">$</span><span class="va">weight</span>,col<span class="op">=</span><span class="st">"orange"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/title.html">title</a></span><span class="op">(</span><span class="st">"Weights distribution (total sample)"</span>,cex.main<span class="op">=</span><span class="fl">0.7</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/boxplot.html">boxplot</a></span><span class="op">(</span><span class="va">weight</span> <span class="op">~</span> <span class="va">region</span>, data<span class="op">=</span><span class="va">samp</span>,col<span class="op">=</span><span class="st">"orange"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/title.html">title</a></span><span class="op">(</span><span class="st">"Weights distribution by region"</span>,cex.main<span class="op">=</span><span class="fl">0.7</span><span class="op">)</span></code></pre></div>
-<p><img src="R2BEAT_workflow_files/figure-html/unnamed-chunk-34-1.png" width="576"></p>
-<div class="sourceCode" id="cb67"><pre class="downlit sourceCode r">
+<p><img src="R2BEAT_workflow_files/figure-html/unnamed-chunk-27-1.png" width="576"></p>
+<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/boxplot.html">boxplot</a></span><span class="op">(</span><span class="va">weight</span> <span class="op">~</span> <span class="va">province</span>, data<span class="op">=</span><span class="va">samp</span>,col<span class="op">=</span><span class="st">"orange"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/title.html">title</a></span><span class="op">(</span><span class="st">"Weights distribution by province"</span>,cex.main<span class="op">=</span><span class="fl">0.7</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/boxplot.html">boxplot</a></span><span class="op">(</span><span class="va">weight</span> <span class="op">~</span> <span class="va">stratum</span>, data<span class="op">=</span><span class="va">samp</span>,col<span class="op">=</span><span class="st">"orange"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/title.html">title</a></span><span class="op">(</span><span class="st">"Weights distribution by stratum"</span>,cex.main<span class="op">=</span><span class="fl">0.7</span><span class="op">)</span></code></pre></div>
-<p><img src="R2BEAT_workflow_files/figure-html/unnamed-chunk-34-2.png" width="576"></p>
+<p><img src="R2BEAT_workflow_files/figure-html/unnamed-chunk-27-2.png" width="576"></p>
 <p>It can be seen that the sample is fully self-weighted inside strata, and approximately self-weighted in aggregations of strata, that is the result we wanted to obtain.</p>
 </div>
   </div>
@@ -608,7 +500,7 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Andrea Fasulo, Giulio Barcaroli, Raffaella Cianchetta, Stefano Falorsi, Alessio Guandalini, Daniela Pagliuca, Marco Dionisio Terribili.</p>
+  <p>Developed by Andrea Fasulo, Giulio Barcaroli, Stefano Falorsi, Alessio Guandalini, Daniela Pagliuca, Marco Dionisio Terribili.</p>
 </div>
 
 <div class="pkgdown">
