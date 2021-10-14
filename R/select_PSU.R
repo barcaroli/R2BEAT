@@ -1,6 +1,9 @@
 select_PSU <- function (alloc, type = "ALLOC", pps = TRUE, plot = TRUE) 
 {
   univ <- alloc$psu_trs
+  # check the uniqueness of PSU_ID ----------------------------------------------
+  if (length(unique(univ$PSU_ID)) < nrow(univ)) stop("PSU identifier not unique")
+  #------------------------------------------------------------------------------
   univ <- univ[order(univ$STRATUM, -univ$PSU_MOS), ]
   minPSUstr <- alloc$param_alloc$p_minPSUstrat
   minSSUstr <- alloc$param_alloc$p_minnumstrat
@@ -121,7 +124,10 @@ select_PSU <- function (alloc, type = "ALLOC", pps = TRUE, plot = TRUE)
     s <- c(s, sh)
   }
   sample <- data.frame(PSU_ID = s, sampled = 1)
-  univ <- merge(univ, sample, by = "PSU_ID", all.x = TRUE)
+  #-------------------------------------------------------
+  # sample <- sample[!duplicated(sample$PSU_ID),]
+  #-------------------------------------------------------
+  univ <- merge(univ, sample, by = c("PSU_ID"), all.x = TRUE)
   univ[is.na(univ$sampled), ]$sampled <- 0
   univ$weight_Ist <- 1/univ$pik
   univ$n <- ifelse(univ$sampled == 0, min(round(univ$f * univ$PSU_MOS, 
