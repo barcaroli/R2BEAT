@@ -155,14 +155,14 @@ sample_2st <- select_SSU(df=pop,
                    SSU_code="id_ind",
                    PSU_sampled=sample_1st$sample_PSU)
 head(sample_2st)
-# municipality id_ind region province   id_hh stratum stratum_label sex  cl_age active income_hh
+#   municipality id_ind region province   id_hh stratum stratum_label sex  cl_age active income_hh
 # 1          101   4359  north  north_1 H182836   12000     north_1_6   2 (24,34]      1  15404.61
 # 2          101   4374  north  north_1 H182839   12000     north_1_6   2  (0,14]      0  11173.46
 # 3          101   4425  north  north_1 H182857   12000     north_1_6   2 (64,74]      1  12103.86
 # 4          101   4434  north  north_1 H182861   12000     north_1_6   2  (0,14]      0  19357.71
 # 5          101   4449  north  north_1 H182865   12000     north_1_6   2 (54,64]      1  13949.31
 # 6          101   4458  north  north_1 H182869   12000     north_1_6   1 (34,44]      1  25395.19
-# unemployed inactive   Prob_1st   Prob_2st   Prob_tot   weight SR nSR stratum_2
+#   unemployed inactive   Prob_1st   Prob_2st   Prob_tot   weight SR nSR stratum_2
 # 1          0        0 0.09944943 0.05944056 0.00591133 169.1667  0   1    120003
 # 2          0        1 0.09944943 0.05944056 0.00591133 169.1667  0   1    120003
 # 3          0        0 0.09944943 0.05944056 0.00591133 169.1667  0   1    120003
