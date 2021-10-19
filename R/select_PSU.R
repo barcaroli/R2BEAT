@@ -193,8 +193,8 @@ select_PSU <- function (alloc, type = "ALLOC", pps = TRUE, plot = TRUE)
   PSU_stats <- rbind(PSU_stats, rep(NA, 8))
   PSU_stats$STRATUM <- as.character(PSU_stats$STRATUM)
   PSU_stats[nrow(PSU_stats), 1] <- "Total"
-  PSU_stats[nrow(PSU_stats), c(2:7)] <- colSums(PSU_stats[-nrow(PSU_stats), 
-                                                          2:7])
+  PSU_stats[nrow(PSU_stats), c(2:7)] <- colSums(PSU_stats[-nrow(PSU_stats),2:7])
+  PSU_stats <- PSU_stats[order(PSU_stats$STRATUM),]
   if (plot == TRUE) {
     des <- PSU_stats[-nrow(PSU_stats), ]
     des2 <- NULL
