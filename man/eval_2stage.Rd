@@ -65,8 +65,9 @@ Giulio Barcaroli
 
 \examples{
 \dontrun{
+library(readr)
+pop <- read_rds("https://github.com/barcaroli/R2BEAT_workflows/blob/master/pop.RDS?raw=true")
 library(R2BEAT)
-load("pop.RData")
 cv <- as.data.frame(list(DOM=c("DOM1","DOM2"),
                          CV1=c(0.02,0.03),
                          CV2=c(0.03,0.05),
@@ -126,7 +127,6 @@ eval <- eval_2stage(df,
                     progress=TRUE) 
 eval$coeff_var
 eval$rel_bias
-
 }
 }
 \keyword{ survey }

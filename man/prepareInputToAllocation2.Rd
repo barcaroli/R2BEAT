@@ -47,28 +47,51 @@ A list containing: (1) strata, (2) deff, (3) effst, (4) rho, (5) PSU_file, (6) d
 
 \examples{
 \dontrun{
+library(readr)
+samp <- read_rds("https://github.com/barcaroli/R2BEAT_workflows/blob/master/sample.rds?raw=true")
+pop <- read_rds("https://github.com/barcaroli/R2BEAT_workflows/blob/master/pop.RDS?raw=true")
 library(R2BEAT)
-# the following two RData are available at the link:
-# https://github.com/barcaroli/R2BEAT/tree/master/data
-load("pop.RData")                 # sampling frame  
-load("R2BEAT_ReGenesees.RData")   # ReGenesees design and calibration objects plus PSU data
-
+str(samp)
+## Sample design description
+library(ReGenesees)
+samp$stratum_2 <- as.factor(samp$stratum_2)
+sample.des <- e.svydesign(samp, 
+                          ids= ~ municipality + id_hh, 
+                          strata = ~ stratum_2, 
+                          weights = ~ weight,
+                          self.rep.str = ~ SR,
+                          check.data = TRUE)
+## Find and collapse lonely strata
+ls <- find.lon.strata(sample.des)
+if (!is.null(ls)) sample.des <- collapse.strata(sample.des)
+## Calibration with known totals
+totals <- pop.template(sample.des,
+             calmodel = ~ sex : cl_age, 
+             partition = ~ region)
+totals <- fill.template(pop, totals, mem.frac = 10)
+sample.cal <- e.calibrate(sample.des, 
+                          totals,
+                          calmodel = ~ sex : cl_age, 
+                          partition = ~ region,
+                          calfun = "logit",
+                          bounds = c(0.3, 2.6), 
+                          aggregate.stage = 2,
+                          force = FALSE)
 samp_frame <- pop
-RGdes <- des                           # ReGenesees design object
-RGcal <- cal                           # ReGenesees calibrated object
-
-strata_var <- c("stratum")             # variables of stratification
+RGdes <- sample.des
+RGcal <- sample.cal
+strata_var <- c("stratum")      
 target_vars <- c("income_hh",
                  "active",
                  "inactive",
-                 "unemployed")         # target variables
-deff_var <- "stratum"     # stratification variables for calculating deff and effst 
-                          # (n.b: must coincide or be a subset of variables of stratification)
-id_PSU <- c("municipality")            # identification variable of PSUs
-id_SSU <- c("id_hh")                   # identification variable of SSUs
-domain_var <- c("region")              # domain variables
-delta=1                      # Average number of SSUs for each selection unit
-minimum <- 50                # Minimum number of SSUs to be selected in each PSU
+                 "unemployed")   
+weight_var <- "weight"
+deff_var <- "stratum"            
+id_PSU <- c("municipality")      
+id_SSU <- c("id_hh")             
+domain_var <- c("region") 
+delta <- 1                   
+minimum <- 50     
 inp <- prepareInputToAllocation2 ( 
   samp_frame,
   RGdes, 
@@ -81,6 +104,12 @@ inp <- prepareInputToAllocation2 (
   domain_var,
   delta,
   minimum) 
+head(inp$strata)
+head(inp$deff)
+head(inp$effst)
+head(inp$rho)
+head(inp$psu_file)
+head(inp$des_file)
 }
 }
 \author{Giulio Barcaroli}

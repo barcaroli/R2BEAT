@@ -45,8 +45,9 @@ A list containing  (i) the vector of allocated PSUs in the iterations and (ii) t
 
 \examples{
 \dontrun{
+library(readr)
+pop <- read_rds("https://github.com/barcaroli/R2BEAT_workflows/blob/master/pop.RDS?raw=true")
 library(R2BEAT)
-load("pop.RData")
 # parameters
 samp_frame <- pop
 id_PSU <- "municipality"  
