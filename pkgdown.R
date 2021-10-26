@@ -26,5 +26,5 @@ build_articles()
 # build_tutorials()
 build_news()
 build_reference_index(pkg = "D:\\Documenti\\R\\win-library\\4.0\\R2BEAT")
-build_reference_index(pkg = "C:\\Users\\UTENTE\\Documents\\R\\win-library")
+#build_reference_index(pkg = "C:\\Users\\UTENTE\\Documents\\R\\win-library")
 
