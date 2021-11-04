@@ -72,7 +72,6 @@ inp <- prepareInputToAllocation1(samp_frame,
                                  minimum,
                                  delta,
                                  deff_sugg)
-
 }
 }
 \author{Giulio Barcaroli}
