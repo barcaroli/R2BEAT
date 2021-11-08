@@ -129,7 +129,9 @@ beat.2st <- function (stratif,
            psu_file1$partial[i-1] > psu_file1$THRESHOLD_NAR[i]) 
         {psu_file1$SUB[i]=psu_file1$SUB[i-1]+1; psu_file1$partial[i] <- psu_file1$PSU_MOS[i]}
       }
-      psu_file1$SUBSTRAT <- paste(psu_file1$STRATUM,psu_file1$SUB,sep="")
+      #-------------------------------------------------------------------
+      psu_file1$SUBSTRAT <- paste(psu_file1$STRATUM,psu_file1$SUB,sep="-")
+      #-------------------------------------------------------------------
       psu_strat <- aggregate(PSU_ID~SUBSTRAT,psu_file1,length)
       colnames(psu_strat)[2] <- "PSU_strat"
       psu_file1 <- merge(psu_file1,psu_strat,by="SUBSTRAT")
