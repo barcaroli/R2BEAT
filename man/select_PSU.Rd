@@ -66,6 +66,7 @@ alloc <- beat.2st(stratif = inp$strata,
                    minnumstrat = 50
 )
 sample_1st <- select_PSU(alloc, type="ALLOC", pps=TRUE, plot=TRUE)
+sample_1st$PSU_stats
 }
 }
 \author{Alessio Guandalini}

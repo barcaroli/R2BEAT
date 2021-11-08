@@ -11,13 +11,14 @@
 
 
 # devtools::install_github("hadley/pkgdown")
-# setwd("C:/Users/UTENTE/Google Drive/Sampling/R2BEAT/R2BEAT_1.0.34/R2BEAT")
-setwd("D:\\Google Drive\\Sampling\\R2BEAT\\R2BEAT_1.0.4")
+setwd("D:/Google Drive/Sampling/R2BEAT/R2BEAT_1.0.4/")
+# setwd("C:\\Google Drive\\Sampling\\R2BEAT\\R2BEAT_1.0.4")
 
 library(pkgdown)
 # usethis::use_pkgdown()
 # build_favicon(pkg = ".")
 # init_site(pkg = ".")
+library(R2BEAT)
 # build_site()
 init_site()
 build_home()

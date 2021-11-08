@@ -9,94 +9,114 @@ select_PSU <- function (alloc, type = "ALLOC", pps = TRUE, plot = TRUE)
   minimum <- alloc$param_alloc$minimum
   univ$minPSUstr <- alloc$param_alloc$p_minPSUstrat
   univ$minSSUstr <- alloc$param_alloc$p_minnumstrat
-  univ <- merge(univ, alloc$file_strata[, c("STRATUM", "N")], 
-                by = "STRATUM")
-  univ <- merge(univ, alloc$alloc[-nrow(alloc$alloc), c("STRATUM", 
-                                                        type)], by = "STRATUM")
+  univ <- merge(univ, alloc$file_strata[, c("STRATUM", "N")], by = "STRATUM")
+  univ <- merge(univ, alloc$alloc[-nrow(alloc$alloc), c("STRATUM", type)], by = "STRATUM")
   univ$f <- univ[, type]/univ$N
   univ$THRESHOLD_NAR <- univ$THRESHOLD * univ$minPSUstr
   univ$partial <- 0
   univ$SUB[1] <- 1
+  #----------------------------------------------
+  univ <- univ[order(univ$STRATUM,-univ$PSU_MOS),]
+  #----------------------------------------------
   for (i in 2:nrow(univ)) {
-    if (univ$STRATUM[i] == univ$STRATUM[i - 1] & univ$AR[i] == 
-        1) {
-      univ$SUB[i] = univ$SUB[i - 1] + 1
+    # if same stratum and is AR, then SUB + 1 
+    if (univ$STRATUM[i] == univ$STRATUM[i - 1] & univ$AR[i] == 1) {
+      univ$SUB[i] = univ$SUB[i - 1] + 1 
     }
-    if (univ$STRATUM[i] == univ$STRATUM[i - 1] & univ$AR[i] == 
-        0 & univ$AR[i - 1] == 1) {
+    # if same stratum and not AR and previous is AR, then SUB + 1 and init partial
+    if (univ$STRATUM[i] == univ$STRATUM[i - 1] & univ$AR[i] == 0 & univ$AR[i - 1] == 1) {
       univ$SUB[i] = univ$SUB[i - 1] + 1
       univ$partial[i] <- univ$PSU_MOS[i]
     }
-    if (univ$STRATUM[i] != univ$STRATUM[i - 1] & univ$AR[i] == 
-        0) {
+    # if different stratum and AR, then SUB + 1 and init partial
+    if (univ$STRATUM[i] != univ$STRATUM[i - 1] & univ$AR[i] == 0) {
       univ$SUB[i] = 1
       univ$partial[i] <- univ$PSU_MOS[i]
     }
-    if (univ$STRATUM[i] == univ$STRATUM[i - 1] & univ$AR[i] == 
-        0 & univ$AR[i - 1] == 0 & univ$partial[i - 1] <= 
-        univ$THRESHOLD_NAR[i] & (univ$partial[i - 1] + univ$PSU_MOS[i]) <= 
-        univ$THRESHOLD_NAR[i]) {
+    # if same stratum and both previous and current not AR and previous partial lt threshold
+    #                 and updated partial lt threshold, then same SUB and add to partial
+    if (univ$STRATUM[i] == univ$STRATUM[i - 1] 
+        & univ$AR[i] == 0 & univ$AR[i - 1] == 0 
+        & univ$partial[i - 1] <= univ$THRESHOLD_NAR[i] 
+        & (univ$partial[i - 1] + univ$PSU_MOS[i]) <= univ$THRESHOLD_NAR[i]) {
       univ$SUB[i] = univ$SUB[i - 1]
       univ$partial[i] <- (univ$partial[i - 1] + univ$PSU_MOS[i])
     }
-    if (univ$STRATUM[i] == univ$STRATUM[i - 1] & univ$AR[i] == 
-        0 & univ$AR[i - 1] == 0 & univ$partial[i - 1] <= 
-        univ$THRESHOLD_NAR[i] & (univ$partial[i - 1] + univ$PSU_MOS[i]) > 
-        univ$THRESHOLD_NAR[i]) {
-      univ$SUB[i] = univ$SUB[i - 1]
-      univ$partial[i] <- (univ$partial[i - 1] + univ$PSU_MOS[i])
-    }
-    if (univ$STRATUM[i] == univ$STRATUM[i - 1] & univ$AR[i] == 
-        0 & univ$AR[i - 1] == 0 & univ$partial[i - 1] > 
-        univ$THRESHOLD_NAR[i]) {
+    # if same stratum and both previous and current not AR and previous partial lt threshold
+    #                 and updated partial gt threshold, then new SUB and init partial
+    if (univ$STRATUM[i] == univ$STRATUM[i - 1] 
+        & univ$AR[i] == 0 & univ$AR[i - 1] == 0 
+        & univ$partial[i - 1] <= univ$THRESHOLD_NAR[i] 
+        & (univ$partial[i - 1] + univ$PSU_MOS[i]) > univ$THRESHOLD_NAR[i]) {
+      # univ$SUB[i] = univ$SUB[i - 1]
+      # univ$partial[i] <- (univ$partial[i - 1] + univ$PSU_MOS[i])
       univ$SUB[i] = univ$SUB[i - 1] + 1
       univ$partial[i] <- univ$PSU_MOS[i]
     }
+    # if same stratum and both previous and current not AR and previous partial lt threshold
+    #                 and updated partial gt threshold, then same SUB and add to partial
+    # if (univ$STRATUM[i] == univ$STRATUM[i - 1] 
+    #     & univ$AR[i] == 0 & univ$AR[i - 1] == 0 
+    #     & univ$partial[i - 1] > univ$THRESHOLD_NAR[i]) {
+    #   univ$SUB[i] = univ$SUB[i - 1] + 1
+    #   univ$partial[i] <- univ$PSU_MOS[i]
+    # }
   }
-  univ$SUBSTRAT <- paste(univ$STRATUM, univ$SUB, sep = "")
+  univ$SUBSTRAT <- paste(univ$STRATUM, univ$SUB, sep = "-")
   psu_strat <- aggregate(PSU_ID ~ SUBSTRAT, univ, length)
   colnames(psu_strat)[2] <- "PSU_strat"
-  univ <- merge(univ[, which(colnames(univ) != "PSU_strat")], 
-                psu_strat, by = "SUBSTRAT")
+  univ <- merge(univ[, which(colnames(univ) != "PSU_strat")], psu_strat, by = "SUBSTRAT")
+  #----------------------------------------------
+  univ <- univ[order(univ$STRATUM,-univ$PSU_MOS),]
+  #----------------------------------------------
   univ$AR <- ifelse(univ$PSU_strat <= minPSUstr, 1, univ$AR)
-  univ <- univ[order(univ$STRATUM, -univ$PSU_MOS), ]
-  univ$partial <- 0
+  # univ$partial <- ifelse(univ$PSU_strat <= minPSUstr, 0, univ$partial)
   univ$SUB[1] <- 1
+
   for (i in 2:nrow(univ)) {
-    if (univ$STRATUM[i] == univ$STRATUM[i - 1] & univ$AR[i] == 
-        1) {
+    # if same stratum and is AR, then SUB + 1 
+    if (univ$STRATUM[i] == univ$STRATUM[i - 1] & univ$AR[i] == 1) {
       univ$SUB[i] = univ$SUB[i - 1] + 1
     }
-    if (univ$STRATUM[i] == univ$STRATUM[i - 1] & univ$AR[i] == 
-        0 & univ$AR[i - 1] == 1) {
-      univ$SUB[i] = univ$SUB[i - 1] + 1
-      univ$partial[i] <- univ$PSU_MOS[i]
+    # if same stratum and not AR and previous is AR, then SUB + 1 and init partial
+    if (univ$STRATUM[i] == univ$STRATUM[i - 1] 
+        & univ$AR[i] == 0 & univ$AR[i - 1] == 1) {
+          univ$SUB[i] = univ$SUB[i - 1] + 1
+          univ$partial[i] <- univ$PSU_MOS[i]
     }
-    if (univ$STRATUM[i] != univ$STRATUM[i - 1] & univ$AR[i] == 
-        0) {
-      univ$SUB[i] = 1
-      univ$partial[i] <- univ$PSU_MOS[i]
+    # if different stratum and AR, then SUB + 1 and init partial
+    if (univ$STRATUM[i] != univ$STRATUM[i - 1] 
+        & univ$AR[i] == 0) {
+          univ$SUB[i] = 1
+          univ$partial[i] <- univ$PSU_MOS[i]
     }
-    if (univ$STRATUM[i] == univ$STRATUM[i - 1] & univ$AR[i] == 
-        0 & univ$AR[i - 1] == 0 & univ$partial[i - 1] <= 
-        univ$THRESHOLD_NAR[i] & (univ$partial[i - 1] + univ$PSU_MOS[i]) <= 
-        univ$THRESHOLD_NAR[i]) {
-      univ$SUB[i] = univ$SUB[i - 1]
-      univ$partial[i] <- (univ$partial[i - 1] + univ$PSU_MOS[i])
+    # if same stratum and both previous and current not AR and previous partial lt threshold
+    #                 and updated partial lt threshold, then same SUB and add to partial
+    if (univ$STRATUM[i] == univ$STRATUM[i - 1] 
+        & univ$AR[i] == 0 & univ$AR[i - 1] == 0 
+        & univ$partial[i - 1] <= univ$THRESHOLD_NAR[i] 
+        & (univ$partial[i - 1] + univ$PSU_MOS[i]) <= univ$THRESHOLD_NAR[i]) {
+          univ$SUB[i] = univ$SUB[i - 1]
+          univ$partial[i] <- (univ$partial[i - 1] + univ$PSU_MOS[i])
     }
-    if (univ$STRATUM[i] == univ$STRATUM[i - 1] & univ$AR[i] == 
-        0 & univ$AR[i - 1] == 0 & univ$partial[i - 1] <= 
-        univ$THRESHOLD_NAR[i] & (univ$partial[i - 1] + univ$PSU_MOS[i]) > 
-        univ$THRESHOLD_NAR[i]) {
-      univ$SUB[i] = univ$SUB[i - 1]
-      univ$partial[i] <- (univ$partial[i - 1] + univ$PSU_MOS[i])
+    # if same stratum and both previous and current not AR and previous partial lt threshold
+    #                 and updated partial gt threshold, then new SUB and init partial
+    if (univ$STRATUM[i] == univ$STRATUM[i - 1] 
+        & univ$AR[i] == 0 & univ$AR[i - 1] == 0 
+        & univ$partial[i - 1] <= univ$THRESHOLD_NAR[i] 
+        & (univ$partial[i - 1] + univ$PSU_MOS[i]) > univ$THRESHOLD_NAR[i]) {
+      # univ$SUB[i] = univ$SUB[i - 1]
+      # univ$partial[i] <- (univ$partial[i - 1] + univ$PSU_MOS[i])
+          univ$SUB[i] = univ$SUB[i - 1] + 1
+          univ$partial[i] <- univ$PSU_MOS[i]
     }
-    if (univ$STRATUM[i] == univ$STRATUM[i - 1] & univ$AR[i] == 
-        0 & univ$AR[i - 1] == 0 & univ$partial[i - 1] > 
-        univ$THRESHOLD_NAR[i]) {
-      univ$SUB[i] = univ$SUB[i - 1] + 1
-      univ$partial[i] <- univ$PSU_MOS[i]
-    }
+    # if same stratum and both previous and current not AR and previous partial lt threshold
+    #                 and updated partial gt threshold, then same SUB and add to partial
+    # if (univ$STRATUM[i] == univ$STRATUM[i - 1] 
+    #     & univ$AR[i] == 0 & univ$AR[i - 1] == 0 
+    #     & univ$partial[i - 1] > univ$THRESHOLD_NAR[i]) {
+    #   univ$SUB[i] = univ$SUB[i - 1] + 1
+    #   univ$partial[i] <- univ$PSU_MOS[i]
   }
   #-------------------------------------------------------
   # univ$SUBSTRAT <- paste(univ$STRATUM, univ$SUB, sep = "")
@@ -135,6 +155,7 @@ select_PSU <- function (alloc, type = "ALLOC", pps = TRUE, plot = TRUE)
                                                 0)), minSSUstr)
   univ$weight_IIst <- ifelse(univ$sampled == 0, 0, univ$PSU_MOS/univ$n)
   univ$weight <- univ$weight_Ist * univ$weight_IIst
+  univ <- univ[order(univ$STRATUM,univ$SUB),]
   universe_PSU <- univ[, c("PSU_ID", "STRATUM", "SUB", "SUBSTRAT", 
                            "AR", "PSU_strat", "ALLOC", "SUBSTRAT_MOS", "PSU_MOS", 
                            "pik", "weight", "sampled", "n")]
@@ -168,16 +189,15 @@ select_PSU <- function (alloc, type = "ALLOC", pps = TRUE, plot = TRUE)
                                "weight_2st", "weight")]
   PSU_stats <- as.data.frame(table(sample_PSU$STRATUM))
   colnames(PSU_stats) <- c("STRATUM", "PSU")
-  PSU_SR <- as.data.frame(table(sample_PSU$STRATUM[sample_PSU$SR == 
-                                                     1]))
+  PSU_SR <- as.data.frame(table(sample_PSU$STRATUM[sample_PSU$SR == 1]))
   colnames(PSU_SR) <- c("STRATUM", "PSU_SR")
-  PSU_stats <- merge(PSU_stats, PSU_SR)
+  PSU_stats <- merge(PSU_stats, PSU_SR, all.x=TRUE)
+  PSU_stats$PSU_SR <- ifelse(is.na(PSU_stats$PSU_SR),0,PSU_stats$PSU_SR)
   PSU_stats$PSU_NSR <- PSU_stats$PSU - PSU_stats$PSU_SR
   SSU <- aggregate(PSU_final_sample_unit ~ STRATUM, data = sample_PSU, 
                    sum)
   colnames(SSU)[2] <- "SSU"
-  SSU_SR <- aggregate(PSU_final_sample_unit ~ STRATUM, data = sample_PSU[sample_PSU$SR == 
-                                                                           1, ], sum)
+  SSU_SR <- aggregate(PSU_final_sample_unit ~ STRATUM, data = sample_PSU[sample_PSU$SR == 1, ], sum)
   colnames(SSU_SR)[2] <- "SSU_SR"
   SSU_NSR <- aggregate(PSU_final_sample_unit ~ STRATUM, data = sample_PSU[sample_PSU$nSR == 
                                                                             1, ], sum)
@@ -194,7 +214,7 @@ select_PSU <- function (alloc, type = "ALLOC", pps = TRUE, plot = TRUE)
   PSU_stats$STRATUM <- as.character(PSU_stats$STRATUM)
   PSU_stats[nrow(PSU_stats), 1] <- "Total"
   PSU_stats[nrow(PSU_stats), c(2:7)] <- colSums(PSU_stats[-nrow(PSU_stats),2:7])
-  PSU_stats <- PSU_stats[order(PSU_stats$STRATUM),]
+  # PSU_stats <- PSU_stats[order(as.numeric(PSU_stats$STRATUM)),]
   if (plot == TRUE) {
     des <- PSU_stats[-nrow(PSU_stats), ]
     des2 <- NULL
