@@ -162,7 +162,7 @@ beat.2st <- function (stratif,
                            sum)
       des_file <- merge(des_file, popolaz, by = "STRATUM")
       des_file <- merge(des_file, rho, by = "STRATUM")
-      des_file$CAMPAR = round((des_file$F) * (des_file$POPAR))
+      des_file$CAMPAR = ceiling((des_file$F) * (des_file$POPAR))
       des_file$CAMPNAR = des_file$CAMP - des_file$CAMPAR
       des_file$BDIS_AR = 1 * des_file$DELTA
       des_file$BDIS_NAR = des_file$MINIMUM * des_file$DELTA
