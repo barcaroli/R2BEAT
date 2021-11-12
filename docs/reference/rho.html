@@ -47,8 +47,6 @@
 
 
 
-
-
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
@@ -86,13 +84,19 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">R2BEAT </a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.4</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
+  <a href="../index.html">
+    <span class="fas fa-home fa-lg"></span>
+     
+  </a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -106,7 +110,10 @@
       <a href="../articles/R2BEAT_methodology.html">R2BEAT methodology and use</a>
     </li>
     <li>
-      <a href="../articles/R2BEAT_workflow.html">R2BEAT two-stage sampling design workflow</a>
+      <a href="../articles/R2BEAT_workflow.html">R2BEAT two-stage sampling design workflow starting from a previous survey</a>
+    </li>
+    <li>
+      <a href="../articles/R2BEAT_workflow_from_frame.html">R2BEAT two-stage sampling design workflow starting from the sampling frame</a>
     </li>
   </ul>
 </li>
@@ -117,7 +124,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/barcaroli/R2BEAT/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -143,7 +150,7 @@
     <p>Example data frame containing intraclass correlation \(\rho\) in Self Representative (SR) and Non Self Representative (NSR) strata.</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>beat.example</span>)</pre>
+    <pre class="usage"><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>beat.example</span><span class='op'>)</span></pre>
 
 
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
@@ -182,8 +189,8 @@ In NSR strata usually, \(\rho\) is usual higher than 1, because a double stage o
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Load example data</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>beat.example</span>)
-<span class='kw'>rho</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>beat.example</span><span class='op'>)</span>
+<span class='va'>rho</span>
 </div><div class='output co'>#&gt;    STRATUM RHO_AR1    RHO_NAR1 RHO_AR2     RHO_NAR2
 #&gt; 1        1       1 0.075632716       1 0.0005484989
 #&gt; 2        2       1 0.083271999       1 0.0157297282
@@ -201,7 +208,7 @@ In NSR strata usually, \(\rho\) is usual higher than 1, because a double stage o
 #&gt; 14      14       1 0.021144682       1 0.0038008090
 #&gt; 15      15       1 0.031093597       1 0.0013332588
 #&gt; 16      16       1 0.026412988       1 0.0003013040
-#&gt; 17      17       1 0.065181733       1 0.0053649352</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='kw'>rho</span>)
+#&gt; 17      17       1 0.065181733       1 0.0053649352</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='va'>rho</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; 'data.frame':	17 obs. of  5 variables:
 #&gt;  $ STRATUM : int  1 2 3 4 5 6 7 8 9 10 ...
 #&gt;  $ RHO_AR1 : num  1 1 1 1 1 1 1 1 1 1 ...
@@ -219,11 +226,11 @@ In NSR strata usually, \(\rho\) is usual higher than 1, because a double stage o
 
       <footer>
       <div class="copyright">
-  <p>Developed by Andrea Fasulo, Raffaella Cianchetta, Giulio Barcaroli, Stefano Falorsi, Alessio Guandalini, Daniela Pagliuca, Marco Dionisio Terribili.</p>
+  <p>Developed by Andrea Fasulo, Giulio Barcaroli, Stefano Falorsi, Alessio Guandalini, Daniela Pagliuca, Marco Dionisio Terribili.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

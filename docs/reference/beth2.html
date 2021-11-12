@@ -256,92 +256,38 @@ The optimal allocation is obtained throught a procedure that converge in few ite
     <p>Developed by Stefano Falorsi, Andrea Fasulo, Alessio Guandalini, Daniela Pagliuca, Marco D. Terribili.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># Load example data</span>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='co'># Load example data</span>
 <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>beat.example</span><span class='op'>)</span>
 
 <span class='co'>## Example 1</span>
 <span class='co'># Allocate the sample</span>
 <span class='va'>allocation2st_1</span> <span class='op'>&lt;-</span> <span class='fu'>beat.2st</span><span class='op'>(</span>stratif<span class='op'>=</span><span class='va'>strata</span>, errors<span class='op'>=</span><span class='va'>errors</span>,
 des_file<span class='op'>=</span><span class='va'>design</span>, psu_file<span class='op'>=</span><span class='va'>PSU_strat</span>,rho<span class='op'>=</span><span class='va'>rho</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;   iterations PSU_SR PSU NSR PSU Total   SSU
-#&gt; 1          0      0       0         0  6858
-#&gt; 2          1     24      88       112 16113
-#&gt; 3          2     59     164       223 13771
-#&gt; 4          3     46     156       202 14490
-#&gt; 5          4     49     158       207 14299</div><div class='input'><span class='co'># The total ammount of sample size is 191 PSU (36 SR + 155 NSR) and 15147 SSU. </span>
+<span class='co'># The total ammount of sample size is 191 PSU (36 SR + 155 NSR) and 15147 SSU. </span>
 
 <span class='co'>## Example 2</span>
 <span class='co'># Assume 13000 SSUs is the maximum sample size to stick to our budget.</span>
 <span class='co'># Look at the sensitivity is in DOM1 for REG1 and REG2 due to V1.</span>
 <span class='va'>allocation2st_1</span><span class='op'>$</span><span class='va'>sensitivity</span>
-</div><div class='output co'>#&gt;    Type Dom   V1 V2
-#&gt; 2  DOM1   1 1798  1
-#&gt; 4  DOM1   2 1061  1
-#&gt; 6  DOM2   1    1  1
-#&gt; 8  DOM2   2    1  1
-#&gt; 10 DOM2   3    1  1
-#&gt; 12 DOM2   4    1  1
-#&gt; 14 DOM2   5    1  1
-#&gt; 16 DOM2   6    1  1</div><div class='input'><span class='co'># We can relax the constraints increasing the expected coefficients of variation for X1 by 10%</span>
+<span class='co'># We can relax the constraints increasing the expected coefficients of variation for X1 by 10</span>
 <span class='va'>errors1</span> <span class='op'>&lt;-</span> <span class='va'>errors</span> 
 <span class='va'>errors1</span><span class='op'>[</span><span class='fl'>1</span>,<span class='fl'>2</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='va'>errors</span><span class='op'>[</span><span class='fl'>1</span>,<span class='fl'>2</span><span class='op'>]</span><span class='op'>+</span><span class='va'>errors</span><span class='op'>[</span><span class='fl'>1</span>,<span class='fl'>2</span><span class='op'>]</span><span class='op'>*</span><span class='fl'>0.1</span>
 
 <span class='co'># Try the new allocation </span>
 <span class='va'>allocation2st_2</span> <span class='op'>&lt;-</span> <span class='fu'>beat.2st</span><span class='op'>(</span>stratif<span class='op'>=</span><span class='va'>strata</span>, errors<span class='op'>=</span><span class='va'>errors1</span>,
 des_file<span class='op'>=</span><span class='va'>design</span>, psu_file<span class='op'>=</span><span class='va'>PSU_strat</span>,rho<span class='op'>=</span><span class='va'>rho</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;    iterations PSU_SR PSU NSR PSU Total   SSU
-#&gt; 1           0      0       0         0  5671
-#&gt; 2           1     17      86       103 14044
-#&gt; 3           2     51     146       197 11731
-#&gt; 4           3     40     138       178 12293
-#&gt; 5           4     43     138       181 12153
-#&gt; 6           5     40     140       180 12292
-#&gt; 7           6     43     138       181 12152
-#&gt; 8           7     40     140       180 12293
-#&gt; 9           8     43     138       181 12153
-#&gt; 10          9     40     140       180 12292
-#&gt; 11         10     43     138       181 12152
-#&gt; 12         11     40     140       180 12293
-#&gt; 13         12     43     138       181 12153
-#&gt; 14         13     40     140       180 12292
-#&gt; 15         14     43     138       181 12152
-#&gt; 16         15     40     140       180 12293
-#&gt; 17         16     43     138       181 12153
-#&gt; 18         17     40     140       180 12292
-#&gt; 19         18     43     138       181 12152
-#&gt; 20         19     40     140       180 12293
-#&gt; 21         20     43     138       181 12153</div><div class='input'>
+
 <span class='co'>## Example 3</span>
 <span class='co'># On the contrary, if we tighten the constraints decreasing the expected coefficients of variation </span>
-<span class='co'># for X1 by 10%</span>
+<span class='co'># for X1 by 10</span>
 <span class='va'>errors2</span> <span class='op'>&lt;-</span> <span class='va'>errors</span> 
 <span class='va'>errors2</span><span class='op'>[</span><span class='fl'>1</span>,<span class='fl'>2</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='va'>errors</span><span class='op'>[</span><span class='fl'>1</span>,<span class='fl'>2</span><span class='op'>]</span><span class='op'>-</span><span class='va'>errors</span><span class='op'>[</span><span class='fl'>1</span>,<span class='fl'>2</span><span class='op'>]</span><span class='op'>*</span><span class='fl'>0.1</span>
 
 <span class='co'># The new allocation leads to a larger sample than the first example (around 18000)</span>
 <span class='va'>allocation2st_3</span> <span class='op'>&lt;-</span> <span class='fu'>beat.2st</span><span class='op'>(</span>stratif<span class='op'>=</span><span class='va'>strata</span>, errors<span class='op'>=</span><span class='va'>errors2</span>,
 des_file<span class='op'>=</span><span class='va'>design</span>, psu_file<span class='op'>=</span><span class='va'>PSU_strat</span>,rho<span class='op'>=</span><span class='va'>rho</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;    iterations PSU_SR PSU NSR PSU Total   SSU
-#&gt; 1           0      0       0         0  8463
-#&gt; 2           1     28     106       134 19335
-#&gt; 3           2     70     186       256 16525
-#&gt; 4           3     60     178       238 17048
-#&gt; 5           4     62     180       242 16901
-#&gt; 6           5     62     180       242 16895
-#&gt; 7           6     64     178       242 16828
-#&gt; 8           7     61     180       241 16937
-#&gt; 9           8     63     180       243 16862
-#&gt; 10          9     63     178       241 16859
-#&gt; 11         10     62     180       242 16903
-#&gt; 12         11     62     180       242 16895
-#&gt; 13         12     64     178       242 16828
-#&gt; 14         13     61     180       241 16937
-#&gt; 15         14     63     180       243 16862
-#&gt; 16         15     63     178       241 16859
-#&gt; 17         16     62     180       242 16903
-#&gt; 18         17     62     180       242 16895
-#&gt; 19         18     64     178       242 16828
-#&gt; 20         19     61     180       241 16937
-#&gt; 21         20     63     180       243 16862</div><div class='input'>
+
 <span class='co'>## Example 4</span>
 <span class='co'># Sometimes some budget constraints concern the number of PSU involved in the survey.</span>
 <span class='co'># Tuning the PSUs number is possible modyfing the MINIMUM in des_file. </span>
@@ -350,51 +296,14 @@ des_file<span class='op'>=</span><span class='va'>design</span>, psu_file<span c
 <span class='va'>design1</span><span class='op'>[</span>,<span class='fl'>4</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='fl'>60</span>
 <span class='va'>allocation2st_4</span> <span class='op'>&lt;-</span> <span class='fu'>beat.2st</span><span class='op'>(</span>stratif<span class='op'>=</span><span class='va'>strata</span>, errors<span class='op'>=</span><span class='va'>errors2</span>,
 des_file<span class='op'>=</span><span class='va'>design1</span>, psu_file<span class='op'>=</span><span class='va'>PSU_strat</span>, rho<span class='op'>=</span><span class='va'>rho</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;    iterations PSU_SR PSU NSR PSU Total   SSU
-#&gt; 1           0      0       0         0  8463
-#&gt; 2           1     24      88       112 22928
-#&gt; 3           2     67     182       249 18703
-#&gt; 4           3     52     168       220 19834
-#&gt; 5           4     60     168       228 19212
-#&gt; 6           5     54     170       224 19654
-#&gt; 7           6     58     170       228 19384
-#&gt; 8           7     56     168       224 19479
-#&gt; 9           8     58     168       226 19385
-#&gt; 10          9     56     168       224 19477
-#&gt; 11         10     58     168       226 19386
-#&gt; 12         11     56     168       224 19478
-#&gt; 13         12     58     168       226 19384
-#&gt; 14         13     56     168       224 19479
-#&gt; 15         14     58     168       226 19385
-#&gt; 16         15     56     168       224 19477
-#&gt; 17         16     58     168       226 19386
-#&gt; 18         17     56     168       224 19478
-#&gt; 19         18     58     168       226 19384
-#&gt; 20         19     56     168       224 19479
-#&gt; 21         20     58     168       226 19385</div><div class='input'>
+
 <span class='co'># The PSUs number is decreased, while the SSUs number increased </span>
 <span class='co'># due to cluster intra-correlation effect.</span>
 <span class='co'># Under the same expected errors, to offset a slight reduction of PSUs (from 221 to 207) </span>
 <span class='co'># an increase of SSUs involved is observed.</span>
 <span class='va'>allocation2st_3</span><span class='op'>$</span><span class='va'>expected</span>
-</div><div class='output co'>#&gt;    Type Dom     V1     V2
-#&gt; 2  DOM1   1 0.0900 0.0740
-#&gt; 4  DOM1   2 0.0899 0.1107
-#&gt; 6  DOM2   1 0.0931 0.0773
-#&gt; 8  DOM2   2 0.3451 0.2593
-#&gt; 10 DOM2   3 0.3013 0.3251
-#&gt; 12 DOM2   4 0.4658 0.4905
-#&gt; 14 DOM2   5 0.1773 0.2467
-#&gt; 16 DOM2   6 0.1134 0.1373</div><div class='input'><span class='va'>allocation2st_4</span><span class='op'>$</span><span class='va'>expected</span>
-</div><div class='output co'>#&gt;    Type Dom     V1     V2
-#&gt; 2  DOM1   1 0.0900 0.0692
-#&gt; 4  DOM1   2 0.0900 0.1054
-#&gt; 6  DOM2   1 0.0930 0.0721
-#&gt; 8  DOM2   2 0.3510 0.2477
-#&gt; 10 DOM2   3 0.3052 0.3116
-#&gt; 12 DOM2   4 0.4600 0.4693
-#&gt; 14 DOM2   5 0.1768 0.2367
-#&gt; 16 DOM2   6 0.1133 0.1299</div><div class='input'>
+<span class='va'>allocation2st_4</span><span class='op'>$</span><span class='va'>expected</span>
+
 <span class='co'>## Example 5</span>
 <span class='co'># On the contrary, assume to decrease the MINIMUM from 48 to 24.</span>
 <span class='co'># The SSUs number strongly decrease in the face of an increase of PSUs,</span>
@@ -403,30 +312,9 @@ des_file<span class='op'>=</span><span class='va'>design1</span>, psu_file<span 
 <span class='va'>design2</span><span class='op'>[</span>,<span class='fl'>4</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='fl'>24</span>
 <span class='va'>allocation2st_5</span> <span class='op'>&lt;-</span> <span class='fu'>beat.2st</span><span class='op'>(</span>stratif<span class='op'>=</span><span class='va'>strata</span>, errors<span class='op'>=</span><span class='va'>errors2</span>,
 des_file<span class='op'>=</span><span class='va'>design2</span>, psu_file<span class='op'>=</span><span class='va'>PSU_strat</span>, rho<span class='op'>=</span><span class='va'>rho</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;   iterations PSU_SR PSU NSR PSU Total   SSU
-#&gt; 1          0      0       0         0  8463
-#&gt; 2          1     62     166       228 12615
-#&gt; 3          2     95     220       315 11986
-#&gt; 4          3     89     216       305 12096
-#&gt; 5          4     90     214       304 12085</div><div class='input'><span class='va'>allocation2st_4</span><span class='op'>$</span><span class='va'>expected</span>
-</div><div class='output co'>#&gt;    Type Dom     V1     V2
-#&gt; 2  DOM1   1 0.0900 0.0692
-#&gt; 4  DOM1   2 0.0900 0.1054
-#&gt; 6  DOM2   1 0.0930 0.0721
-#&gt; 8  DOM2   2 0.3510 0.2477
-#&gt; 10 DOM2   3 0.3052 0.3116
-#&gt; 12 DOM2   4 0.4600 0.4693
-#&gt; 14 DOM2   5 0.1768 0.2367
-#&gt; 16 DOM2   6 0.1133 0.1299</div><div class='input'><span class='va'>allocation2st_5</span><span class='op'>$</span><span class='va'>expected</span>
-</div><div class='output co'>#&gt;    Type Dom     V1     V2
-#&gt; 2  DOM1   1 0.0900 0.0861
-#&gt; 4  DOM1   2 0.0899 0.1270
-#&gt; 6  DOM2   1 0.0934 0.0902
-#&gt; 8  DOM2   2 0.3342 0.2911
-#&gt; 10 DOM2   3 0.2984 0.3593
-#&gt; 12 DOM2   4 0.4489 0.5824
-#&gt; 14 DOM2   5 0.1783 0.2782
-#&gt; 16 DOM2   6 0.1138 0.1602</div><div class='input'>
+<span class='va'>allocation2st_4</span><span class='op'>$</span><span class='va'>expected</span>
+<span class='va'>allocation2st_5</span><span class='op'>$</span><span class='va'>expected</span>
+
 
 <span class='co'>## Example 6</span>
 <span class='co'># Assume that the SSUs are in turn clusters, for instance households composed by individuals.</span>
@@ -434,60 +322,9 @@ des_file<span class='op'>=</span><span class='va'>design2</span>, psu_file<span 
 <span class='co'># for sample of SSUs (i.e. households, because</span>
 <span class='co'># DELTA = 1).</span>
 <span class='va'>design</span>
-</div><div class='output co'>#&gt;    STRATUM STRAT_MOS DELTA MINIMUM
-#&gt; 1        1   2302353     1      48
-#&gt; 2        2    179562     1      48
-#&gt; 3        3    371802     1      48
-#&gt; 4        4    592303     1      48
-#&gt; 5        5    221687     1      48
-#&gt; 6        6    440613     1      48
-#&gt; 7        7    128230     1      48
-#&gt; 8        8    222648     1      48
-#&gt; 9        9    287906     1      48
-#&gt; 10      10    882718     1      48
-#&gt; 11      11    223516     1      48
-#&gt; 12      12    883285     1      48
-#&gt; 13      13    594988     1      48
-#&gt; 14      14    183169     1      48
-#&gt; 15      15   3156694     1      48
-#&gt; 16      16   1098740     1      48
-#&gt; 17      17   1256025     1      48</div><div class='input'><span class='va'>design1</span>
-</div><div class='output co'>#&gt;    STRATUM STRAT_MOS DELTA MINIMUM
-#&gt; 1        1   2302353     1      60
-#&gt; 2        2    179562     1      60
-#&gt; 3        3    371802     1      60
-#&gt; 4        4    592303     1      60
-#&gt; 5        5    221687     1      60
-#&gt; 6        6    440613     1      60
-#&gt; 7        7    128230     1      60
-#&gt; 8        8    222648     1      60
-#&gt; 9        9    287906     1      60
-#&gt; 10      10    882718     1      60
-#&gt; 11      11    223516     1      60
-#&gt; 12      12    883285     1      60
-#&gt; 13      13    594988     1      60
-#&gt; 14      14    183169     1      60
-#&gt; 15      15   3156694     1      60
-#&gt; 16      16   1098740     1      60
-#&gt; 17      17   1256025     1      60</div><div class='input'><span class='va'>design2</span>
-</div><div class='output co'>#&gt;    STRATUM STRAT_MOS DELTA MINIMUM
-#&gt; 1        1   2302353     1      24
-#&gt; 2        2    179562     1      24
-#&gt; 3        3    371802     1      24
-#&gt; 4        4    592303     1      24
-#&gt; 5        5    221687     1      24
-#&gt; 6        6    440613     1      24
-#&gt; 7        7    128230     1      24
-#&gt; 8        8    222648     1      24
-#&gt; 9        9    287906     1      24
-#&gt; 10      10    882718     1      24
-#&gt; 11      11    223516     1      24
-#&gt; 12      12    883285     1      24
-#&gt; 13      13    594988     1      24
-#&gt; 14      14    183169     1      24
-#&gt; 15      15   3156694     1      24
-#&gt; 16      16   1098740     1      24
-#&gt; 17      17   1256025     1      24</div><div class='input'><span class='co'># For obtaining a sample in terms of the elements composing SSUs</span>
+<span class='va'>design1</span>
+<span class='va'>design2</span>
+<span class='co'># For obtaining a sample in terms of the elements composing SSUs</span>
 <span class='co'># (i.e., individuals) is just sufficient to </span>
 <span class='co'># modify the DELTA in des_file.</span>
 <span class='va'>design3</span> <span class='op'>&lt;-</span> <span class='va'>design</span> 
@@ -495,13 +332,7 @@ des_file<span class='op'>=</span><span class='va'>design2</span>, psu_file<span 
 <span class='co'># DELTA_IND=2.31, the average size of household in Italy.</span>
 <span class='va'>allocation2st_6</span> <span class='op'>&lt;-</span> <span class='fu'>beat.2st</span><span class='op'>(</span>stratif<span class='op'>=</span><span class='va'>strata</span>, errors<span class='op'>=</span><span class='va'>errors</span>,
 des_file<span class='op'>=</span><span class='va'>design3</span>, psu_file<span class='op'>=</span><span class='va'>PSU_strat</span>, rho<span class='op'>=</span><span class='va'>rho</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;   iterations PSU_SR PSU NSR PSU Total   SSU
-#&gt; 1          0      0       0         0  6858
-#&gt; 2          1      9      60        69 37754
-#&gt; 3          2     60     152       212 28110
-#&gt; 4          3     40     144       184 30383
-#&gt; 5          4     48     144       192 29401
-#&gt; 6          5     46     140       186 29651</div><div class='input'>
+
 <span class='co'>## Example 7</span>
 <span class='co'># Complete workflow</span>
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://readr.tidyverse.org'>readr</a></span><span class='op'>)</span>
@@ -513,9 +344,7 @@ des_file<span class='op'>=</span><span class='va'>design3</span>, psu_file<span 
                          CV3<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.03</span>,<span class='fl'>0.06</span><span class='op'>)</span>,
                          CV4<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.05</span>,<span class='fl'>0.08</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
 <span class='va'>cv</span>
-</div><div class='output co'>#&gt;    DOM  CV1  CV2  CV3  CV4
-#&gt; 1 DOM1 0.02 0.03 0.03 0.05
-#&gt; 2 DOM2 0.03 0.06 0.06 0.08</div><div class='input'><span class='va'>samp_frame</span> <span class='op'>&lt;-</span> <span class='va'>pop</span>
+<span class='va'>samp_frame</span> <span class='op'>&lt;-</span> <span class='va'>pop</span>
 <span class='va'>samp_frame</span><span class='op'>$</span><span class='va'>one</span> <span class='op'>&lt;-</span> <span class='fl'>1</span>
 <span class='va'>id_PSU</span> <span class='op'>&lt;-</span> <span class='st'>"municipality"</span>  
 <span class='va'>id_SSU</span> <span class='op'>&lt;-</span> <span class='st'>"id_ind"</span>        
@@ -537,37 +366,7 @@ des_file<span class='op'>=</span><span class='va'>design3</span>, psu_file<span 
                                   <span class='va'>minimum</span>,
                                   <span class='va'>delta</span>,
                                   <span class='va'>deff_sugg</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; 
-#&gt; Calculating strata...
-#&gt; Computations are being done on population data
-#&gt; 
-#&gt; Number of strata:  24
-#&gt; ... of which with only one unit:  0
-#&gt; Calculating rho in strata...
-#&gt; Stratum  1000
-#&gt; Stratum  2000
-#&gt; Stratum  3000
-#&gt; Stratum  4000
-#&gt; Stratum  5000
-#&gt; Stratum  6000
-#&gt; Stratum  7000
-#&gt; Stratum  8000
-#&gt; Stratum  9000
-#&gt; Stratum  10000
-#&gt; Stratum  11000
-#&gt; Stratum  12000
-#&gt; Stratum  13000
-#&gt; Stratum  14000
-#&gt; Stratum  15000
-#&gt; Stratum  16000
-#&gt; Stratum  17000
-#&gt; Stratum  18000
-#&gt; Stratum  19000
-#&gt; Stratum  20000
-#&gt; Stratum  21000
-#&gt; Stratum  22000
-#&gt; Stratum  23000
-#&gt; Stratum  24000</div><div class='input'><span class='va'>inp</span><span class='op'>$</span><span class='va'>desfile</span><span class='op'>$</span><span class='va'>MINIMUM</span> <span class='op'>&lt;-</span> <span class='fl'>50</span>
+<span class='va'>inp</span><span class='op'>$</span><span class='va'>desfile</span><span class='op'>$</span><span class='va'>MINIMUM</span> <span class='op'>&lt;-</span> <span class='fl'>50</span>
 <span class='va'>alloc</span> <span class='op'>&lt;-</span> <span class='fu'>beat.2st</span><span class='op'>(</span>stratif <span class='op'>=</span> <span class='va'>inp</span><span class='op'>$</span><span class='va'>strata</span>, 
                    errors <span class='op'>=</span> <span class='va'>cv</span>, 
                    des_file <span class='op'>=</span> <span class='va'>inp</span><span class='op'>$</span><span class='va'>des_file</span>, 
@@ -578,11 +377,8 @@ des_file<span class='op'>=</span><span class='va'>design3</span>, psu_file<span 
                    minPSUstrat <span class='op'>=</span> <span class='fl'>2</span>,
                    minnumstrat <span class='op'>=</span> <span class='fl'>50</span>
 <span class='op'>)</span>
-</div><div class='output co'>#&gt;   iterations PSU_SR PSU NSR PSU Total  SSU
-#&gt; 1          0      0       0         0 7887
-#&gt; 2          1     31     104       135 8328
-#&gt; 3          2     39     104       143 8318
-#&gt; 4          3     38     104       142 8321</div><div class='input'>
+
+<span class='op'>}</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

@@ -97,7 +97,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>R2BEAT two-stage sampling design workflow starting from a previous survey</h1>
             
-            <h4 class="date">2021-10-13 <br><br><br>
+            <h4 class="date">2021-11-12 <br><br><br>
 </h4>
       
       <small class="dont-index">Source: <a href="https://github.com/barcaroli/R2BEAT/blob/master/vignettes/R2BEAT_workflow.Rmd"><code>vignettes/R2BEAT_workflow.Rmd</code></a></small>
@@ -142,7 +142,7 @@
 <p>It is advisable to check the presence of lonely strata:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Control the presence of strata with less than two units</span>
-<span class="va">ls</span> <span class="op">&lt;-</span> <span class="fu">find.lon.strata</span><span class="op">(</span><span class="va">des</span><span class="op">)</span></code></pre></div>
+<span class="va">ls</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://diegozardetto.github.io/ReGenesees/reference/find.lon.strata.html">find.lon.strata</a></span><span class="op">(</span><span class="va">des</span><span class="op">)</span></code></pre></div>
 <pre><code>## # No lonely PSUs found!</code></pre>
 <p>In case, provide to collapse and re-do the calibration.</p>
 <p>In this example, in the ReGenesees objects there are the following variables:</p>
@@ -386,27 +386,44 @@
                   effst <span class="op">=</span> <span class="va">inp</span><span class="op">$</span><span class="va">effst</span>, 
                   minnumstrat <span class="op">=</span> <span class="fl">2</span>, 
                   <span class="va">minPSUstrat</span><span class="op">)</span></code></pre></div>
-<pre><code>##   iterations PSU_SR PSU NSR PSU Total   SSU
-## 1          0      0       0         0  7701
-## 2          1     49      80       129 10601
-## 3          2     29     138       167 10789
-## 4          3     28     140       168 10789</code></pre>
+<pre><code>##    iterations PSU_SR PSU NSR PSU Total   SSU
+## 1           0      0       0         0  7701
+## 2           1     82      60       142 10535
+## 3           2     63     134       197  8813
+## 4           3     35     128       163 10330
+## 5           4     63     130       193  8829
+## 6           5     35     128       163 10330
+## 7           6     63     130       193  8829
+## 8           7     35     128       163 10330
+## 9           8     63     130       193  8829
+## 10          9     35     128       163 10330
+## 11         10     63     130       193  8829
+## 12         11     35     128       163 10330
+## 13         12     63     130       193  8829
+## 14         13     35     128       163 10330
+## 15         14     63     130       193  8829
+## 16         15     35     128       163 10330
+## 17         16     63     130       193  8829
+## 18         17     35     128       163 10330
+## 19         18     63     130       193  8829
+## 20         19     35     128       163 10330
+## 21         20     63     130       193  8829</code></pre>
 <p>This is the sensitivity of the solution:</p>
 <div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">alloc</span><span class="op">$</span><span class="va">sensitivity</span></code></pre></div>
 <pre><code>##    Type Dom V1 V2  V3   V4
 ## 2  DOM1   1  1  0   1    1
-## 6  DOM2   1  1  0   8 1648
-## 10 DOM2   2 63  0 137    1
+## 6  DOM2   1  1  0  11 1241
+## 10 DOM2   2  1  1 212    1
 ## 14 DOM2   3  1  1 302    1</code></pre>
 <p>i.e., for each domain value and for each variable it is reported the gain in terms of reduction in the sample size if the corresponding precision constraint is reduced of 10%.</p>
 <p>These are the expected values of the coefficients of variation:</p>
 <div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">alloc</span><span class="op">$</span><span class="va">expected</span></code></pre></div>
 <pre><code>##    Type Dom     V1     V2     V3     V4
-## 2  DOM1   1 0.0141 0.0102 0.0296 0.0322
-## 6  DOM2   1 0.0177 0.0130 0.0494 0.0800
-## 10 DOM2   2 0.0300 0.0197 0.0499 0.0643
+## 2  DOM1   1 0.0139 0.0103 0.0297 0.0328
+## 6  DOM2   1 0.0178 0.0132 0.0499 0.0800
+## 10 DOM2   2 0.0290 0.0202 0.0499 0.0666
 ## 14 DOM2   3 0.0278 0.0246 0.0499 0.0398</code></pre>
 </div>
 <div id="selection-of-psus" class="section level1">
@@ -421,31 +438,31 @@
 <div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">sample_1st</span><span class="op">$</span><span class="va">PSU_stats</span></code></pre></div>
 <pre><code>##    STRATUM PSU PSU_SR PSU_NSR   SSU SSU_SR SSU_NSR
-## 1     1000   2      2       0   241    241       0
-## 2     2000   6      0       6   320      0     320
-## 3     3000   4      0       4   200      0     200
+## 1     1000   2      2       0   273    273       0
+## 2     2000   7      3       4   350    150     200
+## 3     3000   4      0       4   214      0     214
 ## 4     4000   2      0       2   100      0     100
 ## 5     5000   2      2       0   199    199       0
 ## 6     6000   2      0       2   100      0     100
 ## 7     7000   2      0       2   100      0     100
 ## 8     8000   2      0       2   100      0     100
-## 9     9000   1      1       0   953    953       0
-## 10   10000   6      6       0   767    767       0
-## 11   11000  31      5      26  1802    284    1518
-## 12   12000   4      0       4   202      0     202
+## 9     9000   1      1       0   828    828       0
+## 10   10000   6      6       0   667    667       0
+## 11   11000  40     16      24  2000    800    1200
+## 12   12000   4      0       4   200      0     200
 ## 13   13000   1      1       0    50     50       0
-## 14   14000   4      4       0   725    725       0
-## 15   15000  23      5      18  1285    261    1024
-## 16   16000  48      0      48  2716      0    2716
+## 14   14000   4      4       0   630    630       0
+## 15   15000  27      9      18  1350    450     900
+## 16   16000  58     16      42  2900    800    2100
 ## 17   17000   1      1       0   158    158       0
-## 18   18000   4      0       4   214      0     214
-## 19   19000  10      0      10   546      0     546
-## 20   20000   4      0       4   202      0     202
+## 18   18000   3      1       2   230     50     180
+## 19   19000  12      0      12   610      0     610
+## 20   20000   4      0       4   210      0     210
 ## 21   21000   1      1       0   149    149       0
 ## 22   22000   2      0       2   100      0     100
 ## 23   23000   4      0       4   208      0     208
 ## 24   24000   2      0       2   100      0     100
-## 25   Total 168     28     140 11537   3787    7750</code></pre>
+## 25   Total 193     63     130 11826   5204    6622</code></pre>
 </div>
 <div id="selection-of-ssus" class="section level1">
 <h1 class="hasAnchor">
@@ -460,10 +477,10 @@
 <p>To check that the total amount is practically equal to what determined in the allocation step:</p>
 <div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">samp</span><span class="op">)</span></code></pre></div>
-<pre><code>## [1] 11537</code></pre>
+<pre><code>## [1] 11826</code></pre>
 <div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">alloc</span><span class="op">$</span><span class="va">alloc</span><span class="op">$</span><span class="va">ALLOC</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">alloc</span><span class="op">$</span><span class="va">alloc</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></code></pre></div>
-<pre><code>## [1] 10789</code></pre>
+<pre><code>## [1] 8829</code></pre>
 <p>and that the sum of weights equalize population size:</p>
 <div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">pop</span><span class="op">)</span></code></pre></div>

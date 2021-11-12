@@ -67,6 +67,7 @@ Object of class \code{list}. The list contains 8 objects:
   (Chapters 4-6). \emph{Metron}, 1923, 2: 646-683.
 }
 \examples{
+\dontrun{
 # Load example data
 data(beat.example)
 
@@ -188,6 +189,7 @@ alloc <- beat.2st(stratif = inp$strata,
                    minnumstrat = 50
 )
 
+}
 }
 \author{
 Developed by Stefano Falorsi, Andrea Fasulo, Alessio Guandalini, Daniela Pagliuca, Marco D. Terribili.
