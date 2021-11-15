@@ -1,7 +1,7 @@
 \name{input_to_beat.2st_2}
 \alias{input_to_beat.2st_2}
 \title{
-Prepares the design file for two-stage sample design
+Prepares the design and psu file for two-stage sample design (when a previous round of the survey is available, but no sampling frame)
 }
 \description{
 Prepares the design file for two-stage sample design on the basis of a dataset containing information on each PSU

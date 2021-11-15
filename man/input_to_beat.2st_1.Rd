@@ -1,7 +1,7 @@
 \name{input_to_beat.2st_1}
 \alias{input_to_beat.2st_1}
 \title{
-Input dataframes for R2BEAT two-stages sample design
+Input dataframes for R2BEAT two-stages sample design (when a previous round of the survey is available, but no sampling frame)
 }
 \description{
 Prepares the following input dataframes for R2BEAT two-stages sample design starting from ReGenesees design and/or calibrated objects:

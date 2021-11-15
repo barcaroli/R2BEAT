@@ -1,7 +1,7 @@
 \name{sensitivity_min_SSU2}
 \alias{sensitivity_min_SSU2}
 \title{
-Sensitivity analysis for choosing minimum number of SSUs per PSU (version 2)
+Sensitivity analysis for choosing minimum number of SSUs per PSU (no sampling frame available)
 }
 \description{
 This function is similar to the function sensitivity_min_SSU, as it allows to analyse the different results in terms 

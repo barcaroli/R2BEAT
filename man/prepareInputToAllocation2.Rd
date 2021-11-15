@@ -1,7 +1,7 @@
 \name{prepareInputToAllocation2}
 \alias{prepareInputToAllocation2}
 \title{
-Input dataframes for R2BEAT two-stages sample design when sampling frame is available
+Input dataframes for R2BEAT two-stages sample design when both sampling frame and a previous round of the survey are available
 }
 \description{
 In case of scenario 2 (at least one previous round of the survey available), prepares the following input dataframes for R2BEAT two-stages sample design starting from the sampling frame:
