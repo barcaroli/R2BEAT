@@ -22,9 +22,10 @@ Prepares the design file for two-stage sample design on the basis of a dataset c
 
 \examples{
 \dontrun{
-# psu <- read.csv2("psu.csv") # Read the external file containing PSU information
-load("R2BEAT_ReGenesees.RData") # ReGenesees design and calibration objects plus PSU data
+library(readr)
+psu <- read_rds("https://github.com/barcaroli/R2BEAT_workflows/blob/master/psu.rds?raw=true")
 head(psu)
+library(R2BEAT)
 psu_id="municipality"        # Identifier of the PSU
 stratum_var="stratum"        # Identifier of the stratum
 mos_var="ind"                # Variable to be used as 'measure of size'

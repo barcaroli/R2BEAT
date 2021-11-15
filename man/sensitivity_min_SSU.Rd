@@ -52,8 +52,9 @@ A list containing the (i) vector of allocated PSUs in the iterations and (ii) th
 
 \examples{
 \dontrun{
+library(readr)
+pop <- read_rds("https://github.com/barcaroli/R2BEAT_workflows/blob/master/pop.RDS?raw=true")
 library(R2BEAT)
-data(pop)
 cv <- as.data.frame(list(DOM=c("DOM1","DOM2"),
                          CV1=c(0.03,0.04),
                          CV2=c(0.06,0.08),

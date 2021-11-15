@@ -35,13 +35,13 @@ Prepares the following input dataframes for R2BEAT two-stages sample design star
 
 \examples{
 \dontrun{
+library(readr)
+des <- read_rds("https://github.com/barcaroli/R2BEAT_workflows/blob/master/des.rds?raw=true")
+cal <- read_rds("https://github.com/barcaroli/R2BEAT_workflows/blob/master/cal.rds?raw=true")
+
 library(R2BEAT)
-
-load("R2BEAT_ReGenesees.RData")   # ReGenesees design and calibration objects plus PSU data
-
 RGdes <- des                           # ReGenesees design object
 RGcal <- cal                           # ReGenesees calibrated object
-
 strata_vars <- c("stratum")            # variables of stratification
 target_vars <- c("income_hh",
                  "active",
