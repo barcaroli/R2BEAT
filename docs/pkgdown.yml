@@ -2,9 +2,8 @@ pandoc: '2.12'
 pkgdown: 1.6.1
 pkgdown_sha: ~
 articles:
-  R2BEAT: R2BEAT.html
   R2BEAT_methodology: R2BEAT_methodology.html
   R2BEAT_workflow: R2BEAT_workflow.html
   R2BEAT_workflow_from_frame: R2BEAT_workflow_from_frame.html
-last_built: 2021-11-15T16:00Z
+last_built: 2021-11-15T16:06Z
 
