@@ -1,8 +1,8 @@
-# require(devtools)
-# use_readme_rmd()
-# use_news_md()
-# use_vignette("R2BEAT")
-# use_github_links()
+require(devtools)
+use_readme_rmd()
+use_news_md()
+#use_vignette("R2BEAT")
+#use_github_links()
 # use_travis()
 # use_cran_badge()
 
