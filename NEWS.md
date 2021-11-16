@@ -8,11 +8,21 @@
 -   Added the function ‘eval\_2stage’ for the evaluation of the
     two-stage design by means of simulation
 
--   Added the function ‘sensitivity\_min\_SSU’ to give hints about the
-    best value oif ‘minimum’ parameter
+-   Added the functions ‘sensitivity\_min\_SSU’ and
+    ‘sensitivity\_min\_SSU2’ to give hints about how to choose the value
+    of ‘minimum’ parameter (minimum number of SSUs to be selected in
+    each PSU). The first is to be used when a sampling frame of SSUs is
+    available, the second when it is not available. These functions are
+    in substitution of function ‘sensitivity’
 
--   Added the function ‘select\_PSU’ to select first stage units
-    (instead of ‘StratSel’, eliminated)
+-   Added the function ‘select\_PSU’ to select first stage units (in
+    substitution of ‘StratSel’, eliminated)
+
+-   Added the functions ‘prepareInputToAllocation1’ and
+    ‘prepareInputToAllocation2’ to produce the inputs required by the
+    allocation step (the first in case no previous round of the survey
+    is available, the second when at least one round of the survey is
+    available)
 
 # R2BEAT 1.0.3
 
