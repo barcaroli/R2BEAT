@@ -49,7 +49,7 @@ input_to_beat.2st_1 <- function (RGdes,
   ##################### control of weights ####################
   wgtcal <- colnames(RGcal$variables)[grep(".cal",colnames(RGcal$variables))]
   if (length(wgtcal)==0) stop("No calibrated weights in RGcal calibrated object")
-  pos <- unlist(gregexpr(".cal", wgtcal)) 
+  pos <- unlist(gregexpr(".cal", wgtcal, fixed = TRUE)) 
   wgtdes <- substr(wgtcal,1,(pos-1)) 
   if (!(wgtdes %in% colnames(RGdes))) warning("No weights in RGdes calibrated object")
   #############################################################
