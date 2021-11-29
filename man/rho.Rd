@@ -65,8 +65,10 @@ In NSR strata usually, \eqn{\rho} is usual higher than 1, because a double stage
 }
 
 \examples{
+\dontrun{
 # Load example data
 data(beat.example)
 rho
 str(rho)
+}
 }

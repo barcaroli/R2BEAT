@@ -59,9 +59,11 @@ Note: the names of the variables must be the ones indicated above.
 \keyword{datasets}
 
 \examples{
+\dontrun{
 # Load example data
 data(beat.example)
 strata
 str(strata)
+}
 }
 

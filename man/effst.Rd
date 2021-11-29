@@ -60,9 +60,10 @@ Therefore, taking into account the estimator effect when planning the survey can
 
 
 \examples{
+\dontrun{
 # Load example data
 data(beat.example)
 effst
 str(effst)
 }
-
+}

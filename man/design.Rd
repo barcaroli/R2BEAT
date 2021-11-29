@@ -42,9 +42,11 @@ Instead, increasing the MINIMUM for obtaining the same expected errors, requests
 }
 
 \examples{
+\dontrun{
 # Load example data
 data(beat.example)
 design
 str(design)
+}
 }
 \keyword{datasets}

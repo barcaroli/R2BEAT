@@ -31,6 +31,7 @@ For each domain and each variable is defined
 \item{CV}{The coefficient of variation of the}
 }
 \examples{
+\dontrun{
 
 # Load example data
 data(beat.example)
@@ -63,6 +64,6 @@ des_file=design, psu_file=PSU_strat, rho=rho)
 cv2
 
 # Please, note that some very slightly differences may occur.
-
+}
 }
 \author{Developed by Stefano Falorsi, Andrea Fasulo, Alessio Guandalini, Daniela Pagliuca, Marco D. Terribili.}

@@ -30,9 +30,11 @@ It is often expressed as a percentage and is defined as the ratio between the st
 }
 
 \examples{
+\dontrun{
 # Load example data
 data(beat.example)
 errors
 str(errors)
+}
 }
 \keyword{datasets}

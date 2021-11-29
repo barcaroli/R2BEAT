@@ -50,9 +50,11 @@ In practice, higher is the intraclass correlation, higher will be the design eff
 \keyword{datasets}
 
 \examples{
+\dontrun{
 # Load example data
 data(beat.example)
 deft_start
 str(deft_start)
+}
 }
 

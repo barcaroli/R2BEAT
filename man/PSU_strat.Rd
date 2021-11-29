@@ -30,9 +30,11 @@ Note: the names of the variables must be the ones indicated above.
 }
 
 \examples{
+\dontrun{
 # Load example data
 data(beat.example)
 PSU_strat
 str(PSU_strat)
+}
 }
 \keyword{datasets}
