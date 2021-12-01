@@ -1,5 +1,5 @@
 beat.1st <- function (stratif, errors, minnumstrat = 2, maxiter = 200, maxiter1 = 25, 
-          epsilon = 10^(-11)) 
+                      epsilon = 10^(-11)) 
 {
   test_stages <- try(test_stages, TRUE)
   if (test_stages == 2) {
@@ -35,8 +35,7 @@ beat.1st <- function (stratif, errors, minnumstrat = 2, maxiter = 200, maxiter1 
                                                         function(i) paste("M", i, sep = ""))])
   esse <- as.matrix(stratif[, names(stratif) %in% sapply(1:nvar, 
                                                          function(i) paste("S", i, sep = ""))])
-  nom_dom <- sapply(1:ndom, function(i) paste("DOM", 
-                                              i, sep = ""))
+  nom_dom <- sapply(1:ndom, function(i) paste("DOM", i, sep = ""))
   dom <- as.vector(stratif[, names(stratif) %in% nom_dom])
   N <- as.vector(stratif$N)
   cens <- as.vector(stratif$CENS)
@@ -44,10 +43,15 @@ beat.1st <- function (stratif, errors, minnumstrat = 2, maxiter = 200, maxiter1 
   nocens = 1 - cens
   if (ndom == 1) 
     (nvalues <- nlevels((as.factor(stratif$DOM1))))
+  # if (ndom > 1) {
+  #   nvalues <- sapply(nom_dom, function(vari) {
+  #     val <- c(val, nlevels(as.factor(dom[, vari])))
+  #   })
   if (ndom > 1) {
-    nvalues <- sapply(nom_dom, function(vari) {
-      val <- c(val, nlevels(as.factor(dom[, vari])))
-    })
+      nvalues <- NULL
+      for (i in c(1:ndom)) {
+        eval(parse(text=paste0("nvalues <- c(nvalues,nlevels(stratif$DOM",i,"))")))
+       }
   }
   crea_disj = function(data, vars) {
     out = NULL
@@ -167,10 +171,10 @@ beat.1st <- function (stratif, errors, minnumstrat = 2, maxiter = 200, maxiter1 
   }
   j <- 0
   outcv <- NULL
-  outcv = cbind("Type", "dom", "Var", "Planned CV", 
-                "Actual CV", "Sensitivity 10%")
-  colnames(outcv) <- c("Type", "Dom", "Var", 
-                       "Planned CV", "Actual CV", "Sensitivity 10%")
+  outcv = cbind("Type", "dom", "Var", "Planned CV", "Actual CV", 
+                "Sensitivity 10%")
+  colnames(outcv) <- c("Type", "Dom", "Var", "Planned CV", 
+                       "Actual CV", "Sensitivity 10%")
   for (k in (1:ndom)) {
     valloop <- c(1:(domcard[k]))
     for (k1 in valloop) {
@@ -181,8 +185,9 @@ beat.1st <- function (stratif, errors, minnumstrat = 2, maxiter = 200, maxiter1 
       }
     }
   }
-  output_beth <- list(n = n, file_strata = Bethel_sample, alloc = as.data.frame(df), 
-                      sensitivity = as.data.frame(outcv)[-1, ])
+  output_beth <- list(n = n, file_strata = Bethel_sample, 
+                      alloc = as.data.frame(df), sensitivity = as.data.frame(outcv)[-1, 
+                      ])
   output_beth$alloc[, 2] <- as.numeric(as.character(output_beth$alloc[, 
                                                                       2]))
   output_beth$alloc[, 3] <- as.numeric(as.character(output_beth$alloc[, 
