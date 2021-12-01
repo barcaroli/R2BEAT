@@ -50,7 +50,7 @@ beat.1st <- function (stratif, errors, minnumstrat = 2, maxiter = 200, maxiter1 
   if (ndom > 1) {
       nvalues <- NULL
       for (i in c(1:ndom)) {
-        eval(parse(text=paste0("nvalues <- c(nvalues,nlevels(stratif$DOM",i,"))")))
+        eval(parse(text=paste0("nvalues <- c(nvalues,nlevels(as.factor(stratif$DOM",i,")))")))
        }
   }
   crea_disj = function(data, vars) {
@@ -70,7 +70,7 @@ beat.1st <- function (stratif, errors, minnumstrat = 2, maxiter = 200, maxiter1 
   }
   for (k in domloop) {
     cvx <- as.matrix(errors[k, names(errors) %in% sapply(1:nvar, 
-                                                         function(i) paste("CV", i, sep = ""))])
+                     function(i) paste("CV", i, sep = ""))])
     ndomvalues <- c(1:nvalues[k])
     for (k1 in ndomvalues) {
       cv <- cbind(cv, cvx)
