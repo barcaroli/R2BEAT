@@ -36,7 +36,7 @@ knitr::opts_chunk$set(echo = TRUE, fig.width=6, fig.height=4)
   }
 library(ReGenesees)
 library(R2BEAT)
-library(plyr)
+#library(plyr)
 library(sampling)
 options(warn=-1)
 options(scipen=9999)
