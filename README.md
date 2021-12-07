@@ -5,6 +5,7 @@
 [![Downloads](http://cranlogs.r-pkg.org/badges/R2BEAT?color=brightgreen)](http://www.r-pkg.org/pkg/R2BEAT)
 [![Mentioned in Awesome Official
 Statistics](https://awesome.re/mentioned-badge.svg)](http://www.awesomeofficialstatistics.org)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/barcaroli/R2BEAT_workflows/HEAD?filepath=R2BEAT_workflows.ipynb)
 
 # R2BEAT: Multistage Sampling Design and Sample Selection
 
