@@ -176,56 +176,13 @@
     <p>Note: the names of the variables must be the ones indicated above.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># Load example data</span>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='co'># Load example data</span>
 <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>beat.example</span><span class='op'>)</span>
 <span class='va'>strata</span>
-</div><div class='output co'>#&gt;    STRATUM       N DOM1  DOM2         M1         M2 COST CENS        S1
-#&gt; 1        1 2302353 REG1 PROV1 0.02097409 0.01732549    1    0 0.1432975
-#&gt; 2        2  179562 REG1 PROV2 0.02304681 0.01997698    1    0 0.1500522
-#&gt; 3        3  371802 REG2 PROV3 0.02284502 0.01894097    1    0 0.1494093
-#&gt; 4        4  592303 REG2 PROV3 0.02375591 0.01077033    1    0 0.1522878
-#&gt; 5        5  221687 REG2 PROV3 0.03215470 0.01088398    1    0 0.1764108
-#&gt; 6        6  440613 REG2 PROV3 0.04496313 0.01967690    1    0 0.2072232
-#&gt; 7        7  128230 REG2 PROV4 0.03729426 0.01174705    1    0 0.1894819
-#&gt; 8        8  222648 REG2 PROV4 0.03756793 0.01037344    1    0 0.1901488
-#&gt; 9        9  287906 REG2 PROV4 0.03391681 0.01020566    1    0 0.1810151
-#&gt; 10      10  882718 REG2 PROV5 0.04754956 0.01169971    1    0 0.2128112
-#&gt; 11      11  223516 REG2 PROV5 0.03030306 0.01108940    1    0 0.1714199
-#&gt; 12      12  883285 REG2 PROV5 0.04001619 0.01458181    1    0 0.1959972
-#&gt; 13      13  594988 REG2 PROV5 0.04223111 0.01333867    1    0 0.2011160
-#&gt; 14      14  183169 REG2 PROV6 0.04849358 0.01274800    1    0 0.2148068
-#&gt; 15      15 3156694 REG2 PROV6 0.03687560 0.01883960    1    0 0.1884563
-#&gt; 16      16 1098740 REG2 PROV6 0.05847788 0.01154868    1    0 0.2346449
-#&gt; 17      17 1256025 REG2 PROV6 0.05931347 0.01665247    1    0 0.2362105
-#&gt;           S2
-#&gt; 1  0.1304811
-#&gt; 2  0.1399210
-#&gt; 3  0.1363166
-#&gt; 4  0.1032198
-#&gt; 5  0.1037570
-#&gt; 6  0.1388874
-#&gt; 7  0.1077453
-#&gt; 8  0.1013205
-#&gt; 9  0.1005063
-#&gt; 10 0.1075306
-#&gt; 11 0.1047207
-#&gt; 12 0.1198715
-#&gt; 13 0.1147203
-#&gt; 14 0.1121851
-#&gt; 15 0.1359583
-#&gt; 16 0.1068424
-#&gt; 17 0.1279655</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='va'>strata</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; 'data.frame':	17 obs. of  10 variables:
-#&gt;  $ STRATUM: int  1 2 3 4 5 6 7 8 9 10 ...
-#&gt;  $ N      : int  2302353 179562 371802 592303 221687 440613 128230 222648 287906 882718 ...
-#&gt;  $ DOM1   : Factor w/ 2 levels "REG1","REG2": 1 1 2 2 2 2 2 2 2 2 ...
-#&gt;  $ DOM2   : Factor w/ 6 levels "PROV1","PROV2",..: 1 2 3 3 3 3 4 4 4 5 ...
-#&gt;  $ M1     : num  0.021 0.023 0.0228 0.0238 0.0322 ...
-#&gt;  $ M2     : num  0.0173 0.02 0.0189 0.0108 0.0109 ...
-#&gt;  $ COST   : int  1 1 1 1 1 1 1 1 1 1 ...
-#&gt;  $ CENS   : int  0 0 0 0 0 0 0 0 0 0 ...
-#&gt;  $ S1     : num  0.143 0.15 0.149 0.152 0.176 ...
-#&gt;  $ S2     : num  0.13 0.14 0.136 0.103 0.104 ...</div></pre>
+<span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='va'>strata</span><span class='op'>)</span>
+<span class='op'>}</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

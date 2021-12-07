@@ -97,7 +97,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>R2BEAT two-stage sampling design workflow starting from a previous survey</h1>
             
-            <h4 class="date">2021-11-15 <br><br><br>
+            <h4 class="date">2021-12-07 <br><br><br>
 </h4>
       
       <small class="dont-index">Source: <a href="https://github.com/barcaroli/R2BEAT/blob/master/vignettes/R2BEAT_workflow.Rmd"><code>vignettes/R2BEAT_workflow.Rmd</code></a></small>
@@ -142,7 +142,7 @@
 <p>It is advisable to check the presence of lonely strata:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Control the presence of strata with less than two units</span>
-<span class="va">ls</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://diegozardetto.github.io/ReGenesees/reference/find.lon.strata.html">find.lon.strata</a></span><span class="op">(</span><span class="va">des</span><span class="op">)</span></code></pre></div>
+<span class="va">ls</span> <span class="op">&lt;-</span> <span class="fu">find.lon.strata</span><span class="op">(</span><span class="va">des</span><span class="op">)</span></code></pre></div>
 <pre><code>## # No lonely PSUs found!</code></pre>
 <p>In case, provide to collapse and re-do the calibration.</p>
 <p>In this example, in the ReGenesees objects there are the following variables:</p>

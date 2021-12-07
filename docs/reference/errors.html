@@ -172,16 +172,13 @@ It is often expressed as a percentage and is defined as the ratio between the st
 <!-- %\deqn{CV(\hat{Y}) = \frac{\sqrt{\text{var} \left(\hat{Y}\right)}}{\hat{Y}} * 100}. --></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># Load example data</span>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='co'># Load example data</span>
 <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>beat.example</span><span class='op'>)</span>
 <span class='va'>errors</span>
-</div><div class='output co'>#&gt;    DOM  CV1  CV2
-#&gt; 1 DOM1 0.10 0.99
-#&gt; 2 DOM2 0.99 0.99</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='va'>errors</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; 'data.frame':	2 obs. of  3 variables:
-#&gt;  $ DOM: Factor w/ 2 levels "DOM1","DOM2": 1 2
-#&gt;  $ CV1: num  0.1 0.99
-#&gt;  $ CV2: num  0.99 0.99</div></pre>
+<span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='va'>errors</span><span class='op'>)</span>
+<span class='op'>}</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

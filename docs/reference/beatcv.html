@@ -203,7 +203,8 @@ For each domain and each variable is defined</p>
     <p>Developed by Stefano Falorsi, Andrea Fasulo, Alessio Guandalini, Daniela Pagliuca, Marco D. Terribili.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+
 <span class='co'># Load example data</span>
 <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>beat.example</span><span class='op'>)</span>
 
@@ -211,70 +212,20 @@ For each domain and each variable is defined</p>
 <span class='co'># Calculate coefficients of variation, for two variables in two domains,</span>
 <span class='co'># given an allocation among the different strata.</span>
 <span class='va'>allocation</span>
-</div><div class='output co'>#&gt;    SIZE
-#&gt; 1  4276
-#&gt; 2   350
-#&gt; 3    59
-#&gt; 4    96
-#&gt; 5    42
-#&gt; 6    97
-#&gt; 7    26
-#&gt; 8    45
-#&gt; 9    56
-#&gt; 10  199
-#&gt; 11   41
-#&gt; 12  184
-#&gt; 13  127
-#&gt; 14   42
-#&gt; 15  630
-#&gt; 16  273
-#&gt; 17  315</div><div class='input'><span class='va'>cv1</span><span class='op'>&lt;-</span><span class='fu'>beat.cv</span><span class='op'>(</span> n_file<span class='op'>=</span><span class='va'>allocation</span>, stratif<span class='op'>=</span><span class='va'>strata</span>, errors<span class='op'>=</span><span class='va'>errors</span>,
+<span class='va'>cv1</span><span class='op'>&lt;-</span><span class='fu'>beat.cv</span><span class='op'>(</span> n_file<span class='op'>=</span><span class='va'>allocation</span>, stratif<span class='op'>=</span><span class='va'>strata</span>, errors<span class='op'>=</span><span class='va'>errors</span>,
 des_file<span class='op'>=</span><span class='va'>design</span>, psu_file<span class='op'>=</span><span class='va'>PSU_strat</span>, rho<span class='op'>=</span><span class='va'>rho</span><span class='op'>)</span>
 
 <span class='co'>## Example 2</span>
 <span class='co'># Take the example 1 in beat.2st.</span>
 <span class='va'>allocation2st_1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='beat.2st.html'>beat.2st</a></span><span class='op'>(</span>stratif<span class='op'>=</span><span class='va'>strata</span>, errors<span class='op'>=</span><span class='va'>errors</span>,
 des_file<span class='op'>=</span><span class='va'>design</span>, psu_file<span class='op'>=</span><span class='va'>PSU_strat</span>,rho<span class='op'>=</span><span class='va'>rho</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;   iterations PSU_SR PSU NSR PSU Total   SSU
-#&gt; 1          0      0       0         0  6858
-#&gt; 2          1     24      88       112 16113
-#&gt; 3          2     59     164       223 13771
-#&gt; 4          3     46     156       202 14490
-#&gt; 5          4     49     158       207 14299</div><div class='input'><span class='co'># The allocation obtained is </span>
+<span class='co'># The allocation obtained is </span>
 <span class='va'>allocation2st_1</span><span class='op'>$</span><span class='va'>alloc</span>
-</div><div class='output co'>#&gt;    STRATUM ALLOC  PROP EQUAL
-#&gt; 1        1  8163  2527   841
-#&gt; 2        2   826   197   841
-#&gt; 3        3   147   408   841
-#&gt; 4        4   278   650   841
-#&gt; 5        5   108   243   841
-#&gt; 6        6   219   484   841
-#&gt; 7        7    95   141   841
-#&gt; 8        8   157   244   841
-#&gt; 9        9   137   316   841
-#&gt; 10      10   404   969   841
-#&gt; 11      11    65   245   841
-#&gt; 12      12   486   970   841
-#&gt; 13      13   270   653   841
-#&gt; 14      14    91   201   841
-#&gt; 15      15  1322  3465   841
-#&gt; 16      16   612  1206   841
-#&gt; 17      17   919  1379   841
-#&gt; 18   Total 14299 14299 14299</div><div class='input'><span class='co'># with these precision constraints </span>
+<span class='co'># with these precision constraints </span>
 <span class='va'>errors</span>
-</div><div class='output co'>#&gt;    DOM  CV1  CV2
-#&gt; 1 DOM1 0.10 0.99
-#&gt; 2 DOM2 0.99 0.99</div><div class='input'><span class='co'># and these expected coefficient of variation</span>
+<span class='co'># and these expected coefficient of variation</span>
 <span class='va'>allocation2st_1</span><span class='op'>$</span><span class='va'>expected</span>
-</div><div class='output co'>#&gt;    Type Dom     V1     V2
-#&gt; 2  DOM1   1 0.1000 0.0801
-#&gt; 4  DOM1   2 0.0999 0.1219
-#&gt; 6  DOM2   1 0.1035 0.0835
-#&gt; 8  DOM2   2 0.3838 0.2831
-#&gt; 10 DOM2   3 0.3387 0.3615
-#&gt; 12 DOM2   4 0.5255 0.5340
-#&gt; 14 DOM2   5 0.1957 0.2722
-#&gt; 16 DOM2   6 0.1257 0.1507</div><div class='input'>
+
 <span class='co'># Now, fit the output of beat.2st to allocation, that is</span>
 <span class='va'>SIZE</span> <span class='op'>&lt;-</span> <span class='va'>allocation2st_1</span><span class='op'>$</span><span class='va'>alloc</span><span class='op'>[</span><span class='op'>-</span><span class='fl'>18</span>,<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span><span class='op'>)</span><span class='op'>]</span>
 <span class='va'>allocation1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span><span class='va'>SIZE</span><span class='op'>)</span>
@@ -283,17 +234,9 @@ des_file<span class='op'>=</span><span class='va'>design</span>, psu_file<span c
 <span class='va'>cv2</span><span class='op'>&lt;-</span><span class='fu'>beat.cv</span><span class='op'>(</span> n_file<span class='op'>=</span><span class='va'>allocation1</span>, stratif<span class='op'>=</span><span class='va'>strata</span>, errors<span class='op'>=</span><span class='va'>errors</span>,
 des_file<span class='op'>=</span><span class='va'>design</span>, psu_file<span class='op'>=</span><span class='va'>PSU_strat</span>, rho<span class='op'>=</span><span class='va'>rho</span><span class='op'>)</span>
 <span class='va'>cv2</span>
-</div><div class='output co'>#&gt;   Type Dom        V1         V2
-#&gt; 1 DOM1   1 0.1054227 0.08045593
-#&gt; 2 DOM1   2 0.1006070 0.12213924
-#&gt; 3 DOM2   1 0.1084013 0.08352889
-#&gt; 4 DOM2   2 0.4286915 0.29685878
-#&gt; 5 DOM2   3 0.3386786 0.36147314
-#&gt; 6 DOM2   4 0.5254661 0.53398185
-#&gt; 7 DOM2   5 0.2012844 0.27445334
-#&gt; 8 DOM2   6 0.1256738 0.15067760</div><div class='input'>
-<span class='co'># Please, note that some very slightly differences may occur.</span>
 
+<span class='co'># Please, note that some very slightly differences may occur.</span>
+<span class='op'>}</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
