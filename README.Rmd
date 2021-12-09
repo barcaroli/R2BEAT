@@ -15,7 +15,7 @@ knitr::opts_chunk$set(
 [![CRAN](http://www.r-pkg.org/badges/version/R2BEAT)](https://cran.r-project.org/package=R2BEAT)
 [![Downloads](http://cranlogs.r-pkg.org/badges/R2BEAT?color=brightgreen)](http://www.r-pkg.org/pkg/R2BEAT)
 [![Mentioned in Awesome Official Statistics](https://awesome.re/mentioned-badge.svg)](http://www.awesomeofficialstatistics.org)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/barcaroli/R2BEAT_workflows/HEAD?filepath=R2BEAT_workflows.ipynb)
+
 
 # R2BEAT: Multistage Sampling Design and Sample Selection
 
@@ -45,6 +45,10 @@ or the last version of R2BEAT from github with:
 install.packages("devtools")
 devtools::install_github("barcaroli/R2BEAT")
 ```
+
+## Examples with different scenarios
+
+Jupyter notebook: [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/barcaroli/R2BEAT_workflows/HEAD?filepath=R2BEAT_workflows.ipynb)
 
 ## Example
 
