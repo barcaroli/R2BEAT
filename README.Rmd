@@ -46,9 +46,14 @@ install.packages("devtools")
 devtools::install_github("barcaroli/R2BEAT")
 ```
 
-## Examples with different scenarios
+### Examples with different scenarios
 
 Jupyter notebook: [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/barcaroli/R2BEAT_workflows/HEAD?filepath=R2BEAT_workflows.ipynb)
+
+### Comparative evaluation of R2BEAT with packages "PracTools" and "samplesize4surveys"
+
+Jupyter notebook: [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/barcaroli/Two-stage-sampling-software-comparison/HEAD?filepath=SW_comparison.ipynb)
+
 
 ## Example
 
