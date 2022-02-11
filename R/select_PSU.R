@@ -153,29 +153,34 @@ select_PSU <- function (alloc, type = "ALLOC", pps = TRUE, plot = TRUE)
                                "weight_2st", "weight")]
   PSU_stats <- as.data.frame(table(sample_PSU$STRATUM))
   colnames(PSU_stats) <- c("STRATUM", "PSU")
-  PSU_SR <- as.data.frame(table(sample_PSU$STRATUM[sample_PSU$SR == 1]))
-      
+  PSU_SR <- as.data.frame(table(sample_PSU$STRATUM[sample_PSU$SR == 
+                                                     1]))
   if (nrow(PSU_SR) > 0) {
-      colnames(PSU_SR) <- c("STRATUM", "PSU_SR")
-      PSU_stats <- merge(PSU_stats, PSU_SR, all.x = TRUE)
+    colnames(PSU_SR) <- c("STRATUM", "PSU_SR")
+    PSU_stats <- merge(PSU_stats, PSU_SR, all.x = TRUE)
   }
   if (nrow(PSU_SR) == 0) {
-      PSU_stats$PSU_SR <- 0
+    PSU_stats$PSU_SR <- 0
   }
   PSU_stats$PSU_SR <- ifelse(is.na(PSU_stats$PSU_SR), 0, PSU_stats$PSU_SR)
   PSU_stats$PSU_NSR <- PSU_stats$PSU - PSU_stats$PSU_SR
   SSU <- aggregate(PSU_final_sample_unit ~ STRATUM, data = sample_PSU, 
                    sum)
   colnames(SSU)[2] <- "SSU"
-  if (nrow(PSU_SR) > 0) {
-    SSU_SR <- aggregate(PSU_final_sample_unit ~ STRATUM, data = sample_PSU[sample_PSU$SR == 1, ], sum)
+  data = sample_PSU[sample_PSU$SR == 1, ]
+  if (nrow(data) > 0) {
+    SSU_SR <- aggregate(PSU_final_sample_unit ~ STRATUM, 
+                        data = sample_PSU[sample_PSU$SR == 1, ], sum)
     colnames(SSU_SR)[2] <- "SSU_SR"
   }
-  SSU_NSR <- aggregate(PSU_final_sample_unit ~ STRATUM, data = sample_PSU[sample_PSU$nSR == 1, ], sum)
+  SSU_NSR <- aggregate(PSU_final_sample_unit ~ STRATUM, data = sample_PSU[sample_PSU$nSR == 
+                                                                            1, ], sum)
   colnames(SSU_NSR)[2] <- "SSU_NSR"
   PSU_stats <- merge(PSU_stats, SSU, all.x = T)
-  if (nrow(PSU_SR) > 0) PSU_stats <- merge(PSU_stats, SSU_SR, all.x = T)
-  if (nrow(PSU_SR) == 0) PSU_stats$SSU_SR <- 0
+  if (nrow(data) > 0) 
+    PSU_stats <- merge(PSU_stats, SSU_SR, all.x = T)
+  if (nrow(data) == 0) 
+    PSU_stats$SSU_SR <- 0
   PSU_stats <- merge(PSU_stats, SSU_NSR, all.x = T)
   PSU_stats$SSU_SR <- ifelse(is.na(PSU_stats$SSU_SR), 0, PSU_stats$SSU_SR)
   PSU_stats$SSU_NSR <- ifelse(is.na(PSU_stats$SSU_NSR), 0, 
@@ -201,7 +206,6 @@ select_PSU <- function (alloc, type = "ALLOC", pps = TRUE, plot = TRUE)
     des2$PSU[c(nrow(PSU_stats):nrow(des2))] <- des$PSU_NSR
     des2$SSU[c(1:(nrow(PSU_stats) - 1))] <- des$SSU_SR
     des2$SSU[c(nrow(PSU_stats):nrow(des2))] <- des$SSU_NSR
-    # des2$STRATUM <- as.numeric(des2$STRATUM)
     des2
     par(mfrow = c(2, 1))
     barplot(PSU ~ SR + STRATUM, data = des2, main = "PSUs by strata", 
