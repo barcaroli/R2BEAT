@@ -223,9 +223,9 @@ select_PSU <- function (alloc, type = "ALLOC", pps = TRUE, plot = TRUE)
                                                                               "grey"))
   }
   #--------------------------------------------------
-  PSU_stats$SSU_SR <- PSU_stats$PSU_SR * minimum
-  PSU_stats$SSU_NSR <- PSU_stats$PSU_NSR * minimum
-  PSU_stats$SSU <- PSU_stats$PSU * minimum
+  # PSU_stats$SSU_SR <- PSU_stats$PSU_SR * minimum
+  # PSU_stats$SSU_NSR <- PSU_stats$PSU_NSR * minimum
+  # PSU_stats$SSU <- PSU_stats$PSU * minimum
   #--------------------------------------------------
   out <- list(universe_PSU = universe_PSU, sample_PSU = sample_PSU, 
               PSU_stats = PSU_stats[, c("STRATUM", "PSU", "PSU_SR", 

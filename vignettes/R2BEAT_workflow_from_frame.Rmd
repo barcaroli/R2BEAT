@@ -126,7 +126,7 @@ strata_var <- "stratum"   # only one
 target_vars <- c("income_hh","active","inactive","unemployed")   # more than one
 deff_var <- "stratum"     # only one
 domain_var <- "region"    # only one
-minimum <- 50     # minimum number of SSUs to be interviewed in each selected PSU
+minimum <- 25     # minimum number of SSUs to be interviewed in each selected PSU
 delta =  1        # average dimension of the SSU in terms of elementary survey units
 deff_sugg <- 1.5  # suggestion for the deff value
 ```
@@ -230,7 +230,7 @@ newstrata <- check_input(strata=inp$strata,
 Using the function 'beat.2st' in 'R2BEAT' package we can perform the optimization of PSU and SSU allocation in strata:
 
 ```{r}
-inp$des_file$MINIMUM <- 50
+inp$des_file$MINIMUM <- 25
 minPSUstrat = 2
 alloc <- beat.2st(stratif = inp$strata, 
                   errors = cv, 
@@ -287,14 +287,16 @@ samp <- select_SSU(df=pop,
                    verbose=FALSE)
 ```
 
-To check that the total amount is practically equal to what determined in the allocation step:
+To check that the total amount of selected units with respect to the initial allocation:
 
 ```{r}
 nrow(samp)
 sum(alloc$alloc$ALLOC[-nrow(alloc$alloc)])
 ```
 
-and that the sum of weights equalize population size:
+The difference is due to the fact that the constraint on the minimum number of SSUs to be selected for PSU has been enforced, thus resulting in an increase of the SSUs with respect to the optimal allocation.
+
+We check also that the sum of weights equalizes the population size:
 
 ```{r}
 nrow(pop)
@@ -313,6 +315,6 @@ boxplot(weight ~ stratum, data=samp,col="orange")
 title("Weights distribution by stratum",cex.main=0.7)
 ```
 
-It can be seen that the sample is fully self-weighted inside strata, and approximately self-weighted in aggregations of strata, that is the result we wanted to obtain.
+
 
 

@@ -155,7 +155,7 @@ id_PSU <- c("municipality")
 id_SSU <- c("id_hh")             
 domain_var <- c("region") 
 delta <- 1                   
-minimum <- 50                
+minimum <- 25                
 
 inp <- prepareInputToAllocation2(
         samp_frame,  # sampling frame
@@ -236,7 +236,7 @@ cv
 ```{r}
 set.seed(1234)
 minPSUstrat <- 2
-inp$des_file$MINIMUM <- 50
+inp$des_file$MINIMUM <- 25
 alloc <- beat.2st(stratif = inp$strata, 
                   errors = cv, 
                   des_file = inp$des_file, 
@@ -289,14 +289,15 @@ samp <- select_SSU(df=pop,
                    verbose=FALSE)
 ```
 
-To check that the total amount is practically equal to what determined in the allocation step:
+To check that the total amount of selected units with respect to the initial allocation:
 
 ```{r}
 nrow(samp)
 sum(alloc$alloc$ALLOC[-nrow(alloc$alloc)])
 ```
+The difference is due to the fact that the constraint on the minimum number of SSUs to be selected for PSU has been enforced, thus resulting in an increase of the SSUs with respect to the optimal allocation.
 
-and that the sum of weights equalize population size:
+We check also that the sum of weights equalizes the population size:
 
 ```{r}
 nrow(pop)
