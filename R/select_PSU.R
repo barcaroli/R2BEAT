@@ -13,7 +13,8 @@ select_PSU <- function (alloc, type = "ALLOC", pps = TRUE, plot = TRUE)
                 by = "STRATUM")
   univ <- merge(univ, alloc$alloc[-nrow(alloc$alloc), c("STRATUM", 
                                                         type)], by = "STRATUM")
-  univ$f <- univ[, type]/univ$N
+  colnames(univ)[ncol(univ)] <- "ALLOC"
+  univ$f <- univ[, "ALLOC"]/univ$N
   univ$THRESHOLD_NAR <- univ$THRESHOLD * univ$minPSUstr
   univ$partial <- 0
   univ$SUB[1] <- 1
@@ -221,6 +222,11 @@ select_PSU <- function (alloc, type = "ALLOC", pps = TRUE, plot = TRUE)
                                   "Self Representative"), cex = 0.7, fill = c("black", 
                                                                               "grey"))
   }
+  #--------------------------------------------------
+  PSU_stats$SSU_SR <- PSU_stats$PSU_SR * minimum
+  PSU_stats$SSU_NSR <- PSU_stats$PSU_NSR * minimum
+  PSU_stats$SSU <- PSU_stats$PSU * minimum
+  #--------------------------------------------------
   out <- list(universe_PSU = universe_PSU, sample_PSU = sample_PSU, 
               PSU_stats = PSU_stats[, c("STRATUM", "PSU", "PSU_SR", 
                                         "PSU_NSR", "SSU", "SSU_SR", "SSU_NSR")])
