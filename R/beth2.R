@@ -1,30 +1,18 @@
-beat.2st <- function (stratif, 
-                      errors, 
-                      des_file, 
-                      psu_file, 
-                      rho, 
-                      deft_start = NULL, 
-                      effst = NULL, 
-                      epsilon1 = 5, 
-                      mmdiff_deft = 1, 
-                      maxi = 20, 
-                      epsilon = 10^(-11), 
-                      minPSUstrat = 2, 
-                      minnumstrat = 2, 
-                      maxiter = 200, 
+beat.2st <- function (stratif, errors, des_file, psu_file, rho, deft_start = NULL, 
+                      effst = NULL, epsilon1 = 5, mmdiff_deft = 1, maxi = 20, 
+                      epsilon = 10^(-11), minPSUstrat = 2, minnumstrat = 2, maxiter = 200, 
                       maxiter1 = 25) 
 {
   diffx = 999
   iterx = 0
   test_stages <- NULL
   test_stages <<- 2
-  param_alloc <- as.data.frame(t(c(epsilon, minPSUstrat, minnumstrat, mean(des_file$MINIMUM), maxiter, 
-                                   maxiter1, epsilon1, diffx, iterx, mmdiff_deft, maxi, 
-                                   2)))
-  names(param_alloc) = c("p_epsilon", "p_minPSUstrat", "p_minnumstrat", "minimum",
-                         "p_maxiter", "p_maxiter1", "p_epsilon1", 
-                         "p_diffx", "p_iterx", "p_mmdiff_deft", 
-                         "p_maxi", "num_stages")
+  param_alloc <- as.data.frame(t(c(epsilon, minPSUstrat, minnumstrat, 
+                                   mean(des_file$MINIMUM), maxiter, maxiter1, epsilon1, 
+                                   diffx, iterx, mmdiff_deft, maxi, 2)))
+  names(param_alloc) = c("p_epsilon", "p_minPSUstrat", "p_minnumstrat", 
+                         "minimum", "p_maxiter", "p_maxiter1", "p_epsilon1", 
+                         "p_diffx", "p_iterx", "p_mmdiff_deft", "p_maxi", "num_stages")
   nvar = ncol(errors) - 1
   if (!is.null(effst)) {
     colnames(stratif) <- toupper(colnames(stratif))
@@ -34,13 +22,13 @@ beat.2st <- function (stratif,
     })
     sapply(1:nvar, function(i) {
       stratif[, paste("S_ORIG", i, sep = "")] <<- stratif[, 
-                                                          paste("S", i, sep = "")] * effst[, 
-                                                                                           paste("EFFST", i, sep = "")]
+                                                          paste("S", i, sep = "")] * effst[, paste("EFFST", 
+                                                                                                   i, sep = "")]
     })
     sapply(1:nvar, function(i) {
       stratif[, paste("S", i, sep = "")] <<- (stratif[, 
-                                                      paste("S", i, sep = "")] * effst[, 
-                                                                                       paste("EFFST", i, sep = "")])
+                                                      paste("S", i, sep = "")] * effst[, paste("EFFST", 
+                                                                                               i, sep = "")])
     })
   }
   else {
@@ -63,8 +51,7 @@ beat.2st <- function (stratif,
     })
   }
   else {
-    deft <- merge(deft, deft_start, by = "STRATUM", 
-                  all.x = T)
+    deft <- merge(deft, deft_start, by = "STRATUM", all.x = T)
   }
   nstrat = nrow(stratif)
   strloop <- c(1:nstrat)
@@ -78,13 +65,12 @@ beat.2st <- function (stratif,
   n <- ob$n
   n_1st <- n
   iterations <- data.frame(cbind(0, 0, 0, 0, sum(n)))
-  colnames(iterations) <- c("iterations", "PSU_SR", 
-                            "PSU NSR", "PSU Total", "SSU")
+  colnames(iterations) <- c("iterations", "PSU_SR", "PSU NSR", 
+                            "PSU Total", "SSU")
   des_file <- des_file[order(des_file$STRATUM), ]
   des_file$CAMP <- n
   infoloop <- merge(deft, stratif[, c("STRATUM", sapply(1:nvar, 
-                                                        function(i) (paste("S", i, sep = ""))))], 
-                    by = "STRATUM")
+                                                        function(i) (paste("S", i, sep = ""))))], by = "STRATUM")
   Bethel_sample_n12 <- NULL
   i_arnar_fin <- NULL
   i_diff_DEFT_fin <- NULL
@@ -95,71 +81,72 @@ beat.2st <- function (stratif,
            0.06) {
       iterx <- iterx + 1
       des_file$F = (des_file$CAMP/des_file$STRAT_MOS)
-      des_file$THRESHOLD = ((des_file$MINIMUM/des_file$F) * des_file$DELTA)
-      psu_file1 <- merge(des_file[, c("STRATUM", "THRESHOLD")], psu_file, by = "STRATUM")
+      des_file$THRESHOLD = ((des_file$MINIMUM/des_file$F) * 
+                              des_file$DELTA)
+      psu_file1 <- merge(des_file[, c("STRATUM", "THRESHOLD")], 
+                         psu_file, by = "STRATUM")
       psu_file1$AR <- 0
       psu_file1$AR[(psu_file1$PSU_MOS >= psu_file1$THRESHOLD)] <- 1
       table(psu_file1$AR)
-      ###
-      psu_file1 <- psu_file1[order(psu_file1$STRATUM,-psu_file1$PSU_MOS),]
+      psu_file1 <- psu_file1[order(psu_file1$STRATUM, 
+                                   -psu_file1$PSU_MOS), ]
       psu_file1$SUB <- 0
       psu_file1$partial <- 0
       psu_file1$SUB[1] <- 1
-      psu_file1$THRESHOLD_NAR <- psu_file1$THRESHOLD * minPSUstrat
-      for (i in 2:nrow(psu_file1)){
-        # if same stratum and is AR, then SUB + 1 
-        if(psu_file1$STRATUM[i]==psu_file1$STRATUM[i-1] & psu_file1$AR[i]==1) {
-          psu_file1$SUB[i]=psu_file1$SUB[i-1]+1
+      psu_file1$THRESHOLD_NAR <- psu_file1$THRESHOLD * 
+        minPSUstrat
+      for (i in 2:nrow(psu_file1)) {
+        if (psu_file1$STRATUM[i] == psu_file1$STRATUM[i - 
+                                                      1] & psu_file1$AR[i] == 1) {
+          psu_file1$SUB[i] = psu_file1$SUB[i - 1] + 
+            1
         }
-        # if same stratum and not AR and previous is AR, then SUB + 1 and init partial
-        if (psu_file1$STRATUM[i] == psu_file1$STRATUM[i - 1] 
-            & psu_file1$AR[i] == 0 & psu_file1$AR[i - 1] == 1) {
-              psu_file1$SUB[i] = psu_file1$SUB[i - 1] + 1
-              psu_file1$partial[i] <- psu_file1$PSU_MOS[i]
-        }        
-        # if different stratum and AR, then SUB + 1 and init partial
-        if (psu_file1$STRATUM[i] != psu_file1$STRATUM[i - 1] 
-            & psu_file1$AR[i] == 0) {
-              psu_file1$SUB[i] = 1
-              psu_file1$partial[i] <- psu_file1$PSU_MOS[i]
+        if (psu_file1$STRATUM[i] == psu_file1$STRATUM[i - 
+                                                      1] & psu_file1$AR[i] == 0 & psu_file1$AR[i - 
+                                                                                               1] == 1) {
+          psu_file1$SUB[i] = psu_file1$SUB[i - 1] + 
+            1
+          psu_file1$partial[i] <- psu_file1$PSU_MOS[i]
         }
-        # if same stratum and both previous and current not AR and previous partial lt threshold
-        #                 and updated partial lt threshold, then same SUB and add to partial
-        if (psu_file1$STRATUM[i] == psu_file1$STRATUM[i - 1] 
-            & psu_file1$AR[i] == 0 & psu_file1$AR[i - 1] == 0 
-            & psu_file1$partial[i - 1] <= psu_file1$THRESHOLD_NAR[i] 
-            & (psu_file1$partial[i - 1] + psu_file1$PSU_MOS[i]) <= psu_file1$THRESHOLD_NAR[i]) {
-              psu_file1$SUB[i] = psu_file1$SUB[i - 1]
-              psu_file1$partial[i] <- (psu_file1$partial[i - 1] + psu_file1$PSU_MOS[i])
-          }
-        # if same stratum and both previous and current not AR and previous partial lt threshold
-        #                 and updated partial gt threshold, then new SUB and init partial
-        if (psu_file1$STRATUM[i] == psu_file1$STRATUM[i - 1] 
-            & psu_file1$AR[i] == 0 & psu_file1$AR[i - 1] == 0 
-            & psu_file1$partial[i - 1] <= psu_file1$THRESHOLD_NAR[i] 
-            & (psu_file1$partial[i - 1] + psu_file1$PSU_MOS[i]) > psu_file1$THRESHOLD_NAR[i]) {
-              psu_file1$SUB[i] = psu_file1$SUB[i - 1] + 1
-              psu_file1$partial[i] <- psu_file1$PSU_MOS[i]
-            }
+        if (psu_file1$STRATUM[i] != psu_file1$STRATUM[i - 
+                                                      1] & psu_file1$AR[i] == 0) {
+          psu_file1$SUB[i] = 1
+          psu_file1$partial[i] <- psu_file1$PSU_MOS[i]
+        }
+        if (psu_file1$STRATUM[i] == psu_file1$STRATUM[i - 
+                                                      1] & psu_file1$AR[i] == 0 & psu_file1$AR[i - 
+                                                                                               1] == 0 & psu_file1$partial[i - 1] <= psu_file1$THRESHOLD_NAR[i] & 
+            (psu_file1$partial[i - 1] + psu_file1$PSU_MOS[i]) <= 
+            psu_file1$THRESHOLD_NAR[i]) {
+          psu_file1$SUB[i] = psu_file1$SUB[i - 1]
+          psu_file1$partial[i] <- (psu_file1$partial[i - 
+                                                       1] + psu_file1$PSU_MOS[i])
+        }
+        if (psu_file1$STRATUM[i] == psu_file1$STRATUM[i - 
+                                                      1] & psu_file1$AR[i] == 0 & psu_file1$AR[i - 
+                                                                                               1] == 0 & psu_file1$partial[i - 1] <= psu_file1$THRESHOLD_NAR[i] & 
+            (psu_file1$partial[i - 1] + psu_file1$PSU_MOS[i]) > 
+            psu_file1$THRESHOLD_NAR[i]) {
+          psu_file1$SUB[i] = psu_file1$SUB[i - 1] + 
+            1
+          psu_file1$partial[i] <- psu_file1$PSU_MOS[i]
+        }
       }
-      #-------------------------------------------------------------------
-      psu_file1$SUBSTRAT <- paste(psu_file1$STRATUM,psu_file1$SUB,sep="-")
-      #-------------------------------------------------------------------
-      psu_strat <- aggregate(PSU_ID~SUBSTRAT,psu_file1,length)
+      psu_file1$SUBSTRAT <- paste(psu_file1$STRATUM, psu_file1$SUB, 
+                                  sep = "-")
+      psu_strat <- aggregate(PSU_ID ~ SUBSTRAT, psu_file1, 
+                             length)
       colnames(psu_strat)[2] <- "PSU_strat"
-      psu_file1 <- merge(psu_file1,psu_strat,by="SUBSTRAT")
-      # check
-      # psu_file1[which(psu_file1$PSU_strat==minPSUstrat),]$AR <- 1
-      psu_file1$AR <- ifelse(psu_file1$PSU_strat==minPSUstrat,1,psu_file1$AR)
-      psu_file1 <- psu_file1[order(psu_file1$STRATUM,-psu_file1$PSU_MOS),]
-      # psu_file1$partial <- 0
+      psu_file1 <- merge(psu_file1, psu_strat, by = "SUBSTRAT")
+      psu_file1$AR <- ifelse(psu_file1$PSU_strat == minPSUstrat, 
+                             1, psu_file1$AR)
+      psu_file1 <- psu_file1[order(psu_file1$STRATUM, 
+                                   -psu_file1$PSU_MOS), ]
       psu_file1$SUB[1] <- 1
-      ###
       psu_file1$POPAR = psu_file1$PSU_MOS * psu_file1$AR
       psu_file1$POPNAR = psu_file1$PSU_MOS - psu_file1$POPAR
       popolaz <- aggregate(psu_file1[, c("POPAR", "POPNAR")], 
-                           by = list(STRATUM = psu_file1$STRATUM), 
-                           sum)
+                           by = list(STRATUM = psu_file1$STRATUM), sum)
       des_file <- merge(des_file, popolaz, by = "STRATUM")
       des_file <- merge(des_file, rho, by = "STRATUM")
       des_file$CAMPAR = ceiling((des_file$F) * (des_file$POPAR))
@@ -169,12 +156,10 @@ beat.2st <- function (stratif,
       sapply(1:nvar, function(i) {
         des_file[, paste("DEFF", i, sep = "")] <<- ((des_file$CAMP/(des_file$STRAT_MOS^2)) * 
                                                       ((((des_file$POPAR^2)/(des_file$CAMPAR + epsilon)) * 
-                                                          (1 + ((des_file[, paste("RHO_AR", i, 
-                                                                                  sep = "")]) * (des_file$BDIS_AR - 
-                                                                                                   1)))) + (((des_file$POPNAR^2)/(des_file$CAMPNAR + 
-                                                                                                                                    epsilon)) * (1 + ((des_file[, paste("RHO_NAR", 
-                                                                                                                                                                        i, sep = "")]) * (des_file$BDIS_NAR - 
-                                                                                                                                                                                            1))))))
+                                                          (1 + ((des_file[, paste("RHO_AR", i, sep = "")]) * 
+                                                                  (des_file$BDIS_AR - 1)))) + (((des_file$POPNAR^2)/(des_file$CAMPNAR + 
+                                                                                                                       epsilon)) * (1 + ((des_file[, paste("RHO_NAR", 
+                                                                                                                                                           i, sep = "")]) * (des_file$BDIS_NAR - 1))))))
       })
       sapply(1:nvar, function(i) {
         des_file[, paste("DEFF", i, sep = "")][des_file[, 
@@ -185,8 +170,8 @@ beat.2st <- function (stratif,
                                                                  paste("DEFF", i, sep = "")])
       })
       stratif <- merge(stratif, des_file[, c("STRATUM", 
-                                             sapply(1:nvar, function(i) (paste("DEFT", 
-                                                                               i, sep = ""))))], by = "STRATUM")
+                                             sapply(1:nvar, function(i) (paste("DEFT", i, 
+                                                                               sep = ""))))], by = "STRATUM")
       loopdeft <- deft
       sapply(1:nvar, function(i) {
         loopdeft[, paste("oldDEFT", i, sep = "")] <<- loopdeft[, 
@@ -198,8 +183,8 @@ beat.2st <- function (stratif,
       })
       sapply(1:nvar, function(i) {
         loopdeft[, paste("diffx_deft", i, sep = "")] <<- (loopdeft[, 
-                                                                   paste("DEFT", i, sep = "")] - loopdeft[, 
-                                                                                                          paste("oldDEFT", i, sep = "")])
+                                                                   paste("DEFT", i, sep = "")] - loopdeft[, paste("oldDEFT", 
+                                                                                                                  i, sep = "")])
       })
       sapply(1:nvar, function(i) {
         loopdeft[, paste("mdiff_deft", i, sep = "")] <<- max(abs(loopdeft[, 
@@ -211,15 +196,15 @@ beat.2st <- function (stratif,
       if (iterx == 1 & !is.null(deft_start)) {
         sapply(1:nvar, function(i) {
           stratif[, paste("S", i, sep = "")] <<- (stratif[, 
-                                                          paste("S_ORIG", i, sep = "")] * 
-                                                    deft_start[, paste("DEFT", i, sep = "")])
+                                                          paste("S_ORIG", i, sep = "")] * deft_start[, 
+                                                                                                     paste("DEFT", i, sep = "")])
         })
       }
       else {
         sapply(1:nvar, function(i) {
           stratif[, paste("S", i, sep = "")] <<- (stratif[, 
-                                                          paste("S_ORIG", i, sep = "")] * 
-                                                    des_file[, paste("DEFT", i, sep = "")])
+                                                          paste("S_ORIG", i, sep = "")] * des_file[, 
+                                                                                                   paste("DEFT", i, sep = "")])
         })
       }
       c <- nvar
@@ -239,49 +224,41 @@ beat.2st <- function (stratif,
       else {
         colnames(infoloop)[((2 + c) + ((iterx - 1) * 
                                          c * 2)):((2 + c) + nvar - 1 + ((iterx - 1) * 
-                                                                          c * 2))] <- paste("S", 1:nvar, "_", 
-                                                                                            iterx - 1, sep = "")
+                                                                          c * 2))] <- paste("S", 1:nvar, "_", iterx - 
+                                                                                              1, sep = "")
       }
       infoloop <- merge(infoloop, des_file[, c("STRATUM", 
-                                               sapply(1:nvar, function(i) (paste("DEFT", 
-                                                                                 i, sep = ""))))], by = "STRATUM", 
-                        suffixes = rep("", 2))
+                                               sapply(1:nvar, function(i) (paste("DEFT", i, 
+                                                                                 sep = ""))))], by = "STRATUM", suffixes = rep("", 
+                                                                                                                               2))
       infoloop <- merge(infoloop, stratif[, c("STRATUM", 
-                                              sapply(1:nvar, function(i) (paste("S", 
-                                                                                i, sep = ""))))], by = "STRATUM", 
-                        suffixes = rep("", 2))
+                                              sapply(1:nvar, function(i) (paste("S", i, sep = ""))))], 
+                        by = "STRATUM", suffixes = rep("", 2))
       ob <- beat.1st(stratif, errors, minnumstrat)
       n <- ob$n
-      #------------------------------------------------------------------------
-      # PSU_SR <- sum(psu_file1$AR)
-      # PSU_NSR <- round(sum(aggregate(psu_file1$POPNAR/psu_file1$THRESHOLD, 
-      #                                by = list(psu_file1$STRATUM), sum)[, 2]))
-      # psu_file1[which(psu_file1$PSU_strat==minPSUstrat),]$AR <- 1
-      
-     
-      psu_file1$SUBSTRAT <- paste(psu_file1$STRATUM, psu_file1$SUB, sep = "-")
-      psu_strat <- aggregate(PSU_ID ~ SUBSTRAT, psu_file1, length)
+      psu_file1$SUBSTRAT <- paste(psu_file1$STRATUM, psu_file1$SUB, 
+                                  sep = "-")
+      psu_strat <- aggregate(PSU_ID ~ SUBSTRAT, psu_file1, 
+                             length)
       colnames(psu_strat)[2] <- "PSU_strat"
-      psu_file1 <- merge(psu_file1[, which(colnames(psu_file1) != "PSU_strat")], psu_strat, by = "SUBSTRAT")
-      #----------------------------------------------
-      psu_file1 <- psu_file1[order(psu_file1$STRATUM,-psu_file1$PSU_MOS),]
-      #----------------------------------------------
-      psu_file1$AR <- ifelse(psu_file1$PSU_strat <= minPSUstrat, 1, psu_file1$AR)
-      # psu_file1$partial <- ifelse(psu_file1$PSU_strat <= minPSUstrat, 0, psu_file1$partial)
-      # psu_file1$SUB[1] <- 1     
-
-      PSU_SR <- sum(aggregate(AR~SUBSTRAT,data=psu_file1,sum)[2])
-      PSU_NSR <- length(unique(psu_file1$SUBSTRAT[psu_file1$AR==0]))*minPSUstrat
+      psu_file1 <- merge(psu_file1[, which(colnames(psu_file1) != 
+                                             "PSU_strat")], psu_strat, by = "SUBSTRAT")
+      psu_file1 <- psu_file1[order(psu_file1$STRATUM, 
+                                   -psu_file1$PSU_MOS), ]
+      psu_file1$AR <- ifelse(psu_file1$PSU_strat <= minPSUstrat, 
+                             1, psu_file1$AR)
+      PSU_SR <- sum(aggregate(AR ~ SUBSTRAT, data = psu_file1, 
+                              sum)[2])
+      PSU_NSR <- length(unique(psu_file1$SUBSTRAT[psu_file1$AR == 
+                                                    0])) * minPSUstrat
       PSU_Total <- PSU_SR + PSU_NSR
-      #------------------------------------------------------------------------
-      
       iter_new <- c(iterx, PSU_SR, PSU_NSR, PSU_Total, 
                     sum(n))
       iterations <- rbind(iterations, iter_new)
       diffx <- max(abs(n - des_file$CAMP))
       loopdeft$diff_n <- (abs(n - des_file$CAMP))
-      deft <- des_file[, c("STRATUM", sapply(1:nvar, 
-                                             function(i) (paste("DEFT", i, sep = ""))))]
+      deft <- des_file[, c("STRATUM", sapply(1:nvar, function(i) (paste("DEFT", 
+                                                                        i, sep = ""))))]
       output_beth12 <- list(i_diff_DEFT_fin = loopdeft, 
                             i_S_DEFT_loop = infoloop, i_arnar_fin = des_file, 
                             n_1st = n_1st, psu_trs = psu_file1)
@@ -289,42 +266,39 @@ beat.2st <- function (stratif,
       des_file <- des_file[, c("STRATUM", "STRAT_MOS", 
                                "MINIMUM", "DELTA")]
       des_file$CAMP <- n
-      stratif <- stratif[, c("STRATUM", "N", 
-                             sapply(1:nvar, function(i) paste("M", i, 
-                                                              sep = "")), sapply(1:nvar, function(i) paste("S", 
-                                                                                                           i, sep = "")), sapply(1:nvar, function(i) paste("S_ORIG", 
-                                                                                                                                                           i, sep = "")), sapply(1:ndom, function(i) paste("DOM", 
-                                                                                                                                                                                                           i, sep = "")), "COST", "CENS")]
+      stratif <- stratif[, c("STRATUM", "N", sapply(1:nvar, 
+                                                    function(i) paste("M", i, sep = "")), sapply(1:nvar, 
+                                                                                                 function(i) paste("S", i, sep = "")), sapply(1:nvar, 
+                                                                                                                                              function(i) paste("S_ORIG", i, sep = "")), sapply(1:ndom, 
+                                                                                                                                                                                                function(i) paste("DOM", i, sep = "")), "COST", 
+                             "CENS")]
     }
-    # print(iterations)
     obb <- list(ob = ob, iterations = iterations)
     return(obb)
   }
-  ob_fin <- newDeft(des_file, stratif, errors, rho, psu_file,deft)
+  ob_fin <- newDeft(des_file, stratif, errors, rho, psu_file, 
+                    deft)
   iterations <- ob_fin$iteration
-  
   ob_fin <- ob_fin$ob
   n_2st <- ob_fin$n
-  Bethel_sample_n12 <- cbind(stratif[, c("STRATUM", "N", 
-                                         sapply(1:ndom, function(i) paste("DOM", i, sep = "")))], 
-                             n_1st, n_2st)
+  Bethel_sample_n12 <- cbind(stratif[, c("STRATUM", "N", sapply(1:ndom, 
+                                                                function(i) paste("DOM", i, sep = "")))], n_1st, n_2st)
   test_stages <<- 0
   output_beth12$n2_st <- n_2st
   output_beth12$Bethel_sample_n12 <- (cbind(stratif[, c("STRATUM", 
-                                                        "N", sapply(1:ndom, function(i) paste("DOM", 
-                                                                                              i, sep = "")))], n_1st, n_2st))
-  psu_trs <- output_beth12$psu_trs 
-  
-  #----------------------------------------------------------
-  # psu_trs[which(psu_trs$PSU_strat<=minPSUstrat),]$AR <- 1
-  psu_trs$AR <- ifelse(psu_trs$PSU_strat<=minPSUstrat,1,psu_trs$AR)
-  iterations$`PSU_SR`[nrow(iterations)] <- sum(aggregate(AR~SUBSTRAT,data=psu_trs,sum)[2])
-  iterations$`PSU NSR`[nrow(iterations)] <- length(unique(psu_trs$SUBSTRAT[psu_trs$AR==0]))*minPSUstrat
-  iterations$`PSU Total`[nrow(iterations)] <- sum(aggregate(AR~SUBSTRAT,data=psu_trs,sum)[2]) + length(unique(psu_trs$SUBSTRAT[psu_trs$AR==0]))*minPSUstrat
+                                                        "N", sapply(1:ndom, function(i) paste("DOM", i, sep = "")))], 
+                                            n_1st, n_2st))
+  psu_trs <- output_beth12$psu_trs
+  psu_trs$AR <- ifelse(psu_trs$PSU_strat <= minPSUstrat, 1, 
+                       psu_trs$AR)
+  iterations$PSU_SR[nrow(iterations)] <- sum(aggregate(AR ~ 
+                                                         SUBSTRAT, data = psu_trs, sum)[2])
+  iterations$`PSU NSR`[nrow(iterations)] <- length(unique(psu_trs$SUBSTRAT[psu_trs$AR == 
+                                                                             0])) * minPSUstrat
+  iterations$`PSU Total`[nrow(iterations)] <- sum(aggregate(AR ~ 
+                                                              SUBSTRAT, data = psu_trs, sum)[2]) + length(unique(psu_trs$SUBSTRAT[psu_trs$AR == 
+                                                                                                                                    0])) * minPSUstrat
   print(iterations)
-  #----------------------------------------------------------
-  
-  
   output_beth12 <<- output_beth12
   file_strata <- ob_fin$file_strata
   alloc <- ob_fin$alloc
@@ -340,8 +314,8 @@ beat.2st <- function (stratif,
   colnames(planned) <- c(colnames(namesP), paste(varn))
   expected <- cv[, c(1:3, 5)]
   step <- length(unique(expected[, 3]))
-  namesE <- expected[seq(from = 1, to = dim(expected)[1], by = step), 
-                     1:2]
+  namesE <- expected[seq(from = 1, to = dim(expected)[1], 
+                         by = step), 1:2]
   valueE <- matrix(round(expected[, 4], 5), ncol = step, byrow = TRUE)
   expected <- cbind(namesE, valueE)
   colnames(expected) <- c(colnames(namesE), paste(varn))
@@ -355,10 +329,9 @@ beat.2st <- function (stratif,
   deft <- output_beth12$i_S_DEFT_loop
   deft_c <- cbind(STRATUM = file_strata$STRATUM, deft[, startsWith(colnames(deft), 
                                                                    "DEFT")])
- 
   out <- list(iterations = iterations, file_strata = file_strata, 
-              alloc = alloc, psu_trs=psu_trs, planned = planned, expected = expected, 
-              sensitivity = sensitivity, deft_c = deft_c, param_alloc = param_alloc)
+              alloc = alloc, psu_trs = psu_trs, planned = planned, 
+              expected = expected, sensitivity = sensitivity, deft_c = deft_c, 
+              param_alloc = param_alloc, minimum = des_file$MINIMUM)
   return(out)
 }
-

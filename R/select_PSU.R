@@ -6,7 +6,7 @@ select_PSU <- function (alloc, type = "ALLOC", pps = TRUE, plot = TRUE)
   univ <- univ[order(univ$STRATUM, -univ$PSU_MOS), ]
   minPSUstr <- alloc$param_alloc$p_minPSUstrat
   minSSUstr <- alloc$param_alloc$p_minnumstrat
-  minimum <- alloc$param_alloc$minimum
+  minimum <- alloc$minimum
   univ$minPSUstr <- alloc$param_alloc$p_minPSUstrat
   univ$minSSUstr <- alloc$param_alloc$p_minnumstrat
   univ <- merge(univ, alloc$file_strata[, c("STRATUM", "N")], 
@@ -140,8 +140,17 @@ select_PSU <- function (alloc, type = "ALLOC", pps = TRUE, plot = TRUE)
   sample_PSU <- merge(sample_PSU, PSU_substratum)
   sample_PSU$ALLOC_SUBSTR <- round(sample_PSU$ALLOC * sample_PSU$SUBSTRAT_MOS/sample_PSU$STRATUM_MOS)
   sample_PSU$PSU_final_sample_unit <- round(sample_PSU$ALLOC_SUBSTR/sample_PSU$PSU_substrat)
-  sample_PSU$PSU_final_sample_unit <- ifelse(sample_PSU$PSU_final_sample_unit < 
-                                               minimum, minimum, sample_PSU$PSU_final_sample_unit)
+  k <- 0
+  for (i in alloc$alloc$STRATUM[c(1:(nrow(alloc$alloc)-1))]) {
+    k <- k + 1
+    sample_PSU$PSU_final_sample_unit[sample_PSU$STRATUM == i] <- 
+                        ifelse(sample_PSU$PSU_final_sample_unit[sample_PSU$STRATUM == i] < 
+                        minimum[k], minimum[k], sample_PSU$PSU_final_sample_unit[sample_PSU$STRATUM == i])
+  }
+  sample_PSU$PSU_final_sample_unit <- ifelse(sample_PSU$PSU_final_sample_unit > sample_PSU$PSU_MOS,
+                                             sample_PSU$PSU_MOS,
+                                             sample_PSU$PSU_final_sample_unit)
+  sample_PSU$PSU_final_sample_unit
   sample_PSU$SR <- ifelse(sample_PSU$AR == 1, 1, 0)
   sample_PSU$nSR <- ifelse(sample_PSU$AR == 0, 1, 0)
   sample_PSU$stratum <- sample_PSU$SUBSTRAT
@@ -149,7 +158,7 @@ select_PSU <- function (alloc, type = "ALLOC", pps = TRUE, plot = TRUE)
   sample_PSU$weight_1st <- 1/sample_PSU$Pik
   sample_PSU$weight_2st <- sample_PSU$PSU_MOS/sample_PSU$PSU_final_sample_unit
   sample_PSU$weight <- sample_PSU$weight_1st * sample_PSU$weight_2st
-  sample_PSU <- sample_PSU[, c("PSU_ID", "STRATUM", "stratum", 
+  sample_PSU <- sample_PSU[, c("PSU_ID", "STRATUM", "stratum","PSU_MOS", 
                                "SR", "nSR", "PSU_final_sample_unit", "Pik", "weight_1st", 
                                "weight_2st", "weight")]
   PSU_stats <- as.data.frame(table(sample_PSU$STRATUM))
@@ -213,20 +222,15 @@ select_PSU <- function (alloc, type = "ALLOC", pps = TRUE, plot = TRUE)
             xlab = "strata", ylab = "PSUs", col = c("black", 
                                                     "grey"), las = 2, cex.names = 0.7)
     legend("topright", legend = c("Non Self Representative", 
-                                  "Self Representative"), cex = 0.7, fill = c("black", 
+                                  "Self Representative"), cex = 0.5, fill = c("black", 
                                                                               "grey"))
     barplot(SSU ~ SR + STRATUM, data = des2, main = "SSUs by strata", 
             xlab = "strata", ylab = "SSUs", col = c("black", 
                                                     "grey"), las = 2, cex.names = 0.7)
     legend("topright", legend = c("Non Self Representative", 
-                                  "Self Representative"), cex = 0.7, fill = c("black", 
+                                  "Self Representative"), cex = 0.5, fill = c("black", 
                                                                               "grey"))
   }
-  #--------------------------------------------------
-  # PSU_stats$SSU_SR <- PSU_stats$PSU_SR * minimum
-  # PSU_stats$SSU_NSR <- PSU_stats$PSU_NSR * minimum
-  # PSU_stats$SSU <- PSU_stats$PSU * minimum
-  #--------------------------------------------------
   out <- list(universe_PSU = universe_PSU, sample_PSU = sample_PSU, 
               PSU_stats = PSU_stats[, c("STRATUM", "PSU", "PSU_SR", 
                                         "PSU_NSR", "SSU", "SSU_SR", "SSU_NSR")])
