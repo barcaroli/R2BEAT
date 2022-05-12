@@ -32,7 +32,7 @@ select_SSU <- function (df, PSU_code, SSU_code, PSU_sampled, verbose = TRUE)
   samp <- sapply(df.split, function(df) select(df, PSU_code, 
                                                PSU_sampled))
   samp <- data.frame(t(samp))
-  st <- paste0("id_ind <- unlist(samp$", SSU_code, ")")
+  st <- paste0(SSU_code," <- unlist(samp$", SSU_code, ")")
   eval(parse(text = st))
   Pik <- unlist(samp$Pik)
   Prob <- unlist(samp$Prob)
