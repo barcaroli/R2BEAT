@@ -341,15 +341,15 @@ input_to_beat.2st_1 <- function (RGdes,
   ################################################################################
   rho <- d
   for (i in (1:length(target_vars))) {
-    st <- paste0("rho$RHO_AR", i, " <- 1")
+    st <- paste0("rho$RHO_SR", i, " <- 1")
     eval(parse(text = st))
-    st <- paste0("rho$RHO_NAR", i, "<-(rho$DEFF", i, "-1)/(rho$b_nar-1)")
+    st <- paste0("rho$RHO_NSR", i, "<-(rho$DEFF", i, "-1)/(rho$b_nar-1)")
     eval(parse(text = st))
-    st <- paste0("rho$RHO_NAR", i, "<-ifelse(rho$RHO_NAR", 
-                 i, " == -Inf,0,rho$RHO_NAR", i, ")")
+    st <- paste0("rho$RHO_NSR", i, "<-ifelse(rho$RHO_NSR", 
+                 i, " == -Inf,0,rho$RHO_NSR", i, ")")
     eval(parse(text = st))
-    st <- paste0("rho$RHO_NAR", i, "<-ifelse(rho$RHO_NAR", 
-                 i, " == Inf,0,rho$RHO_NAR", i, ")")
+    st <- paste0("rho$RHO_NSR", i, "<-ifelse(rho$RHO_NSR", 
+                 i, " == Inf,0,rho$RHO_NSR", i, ")")
     eval(parse(text = st))
   }
   rho$b_nar <- NULL
