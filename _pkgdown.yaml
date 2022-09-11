@@ -1,8 +1,10 @@
-theme: jekyll-theme-minimal
+destination: docs
 title: R2BEAT
 description: Multistage Sampling Allocation and PSU selection
-url: https://github.com/barcaroli/R2BEAT
 author: Giulio Barcaroli
-plugins:
-  - jekyll-seo-tag
+url: https://github.com/barcaroli/R2BEAT
+template:
+  params:
+    bootswatch: Italy
+
 
