@@ -13,6 +13,14 @@ knitr::opts_chunk$set(
 )
 ```
 
+# R2BEAT 1.0.5 
+
+## Major changes
+
+* Added the function 'select_PSU2' to be used in alternative a 'select_PSU' when there is a quasi uniform distribution of the measure of size of the PSUs (this is the case of Enumeration Areas, in contrast to Municipalities): this function ensures a complete alignment of the number of selected PSUs and of the SSUs to be selected to corrispondent numbers of allocated PSUs and SSUs
+
+* Added the function 'build_dummy_variables' to add dummy variables to the sampling frame (this is necessary if we want to differentiate precision constraints in the same domain level, for instance in the different regions)
+
 # R2BEAT 1.0.4 
 
 ## Major changes
