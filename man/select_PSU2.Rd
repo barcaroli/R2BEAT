@@ -8,17 +8,18 @@ Select sample of primary stage units (PSU) on the basis of the PSU allocated in 
 It also allows an implicit stratification by giving a set of ordering variables for each PSU.
 }
 \usage{
-     select_PSU(alloc, type="ALLOC", var_ord=NULL)
+     select_PSU(alloc, type="ALLOC", var_ord=NULL, des_file=des_file)
 }
 
 \arguments{
  \item{alloc}{Output of the allocation step (beat.st)}
  \item{type}{Type of SSU allocation ("ALLOC" = optimal, "PROP" = proportional to population size, "EQUAL" = equal size in each stratum)}
  \item{var_ord}{dataframe containing for all PSUs a set of variables to be used to order the PSUs}
+ \item{des_file}{dataframe containing information on sampling strata}
 }
 
 \value{
-  sample of PSUs
+  list containing: (i) information on sampled PSUs (ii) list of selected PSUs
 }
 
 \examples{
@@ -65,7 +66,7 @@ alloc <- beat.2st(stratif = inp$strata,
                   minPSUstrat = 2,
                   minnumstrat = 50
 )
-sample_1st <- select_PSU2(alloc, type="ALLOC", var_ord=NULL)
+sample_1st <- select_PSU2(alloc, type="ALLOC", var_ord=NULL, des_file=des_file)
 head(sample_1st)
 }
 }
