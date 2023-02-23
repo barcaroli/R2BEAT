@@ -1,4 +1,8 @@
-select_PSU2 <- function (alloc, type = "ALLOC", var_ord = NULL, des_file = des_file) 
+select_PSU2 <- function (alloc, 
+                         type = "ALLOC", 
+                         var_ord = NULL, 
+                         des_file = des_file,
+                         psu_file = psu_file) 
 {
   require(sampling)
   allocation <- alloc$alloc[-nrow(alloc$alloc), c("STRATUM",type)]
@@ -12,7 +16,7 @@ select_PSU2 <- function (alloc, type = "ALLOC", var_ord = NULL, des_file = des_f
   }
   #-------------------------------------------------------------------
   allocation$PSUs <- ifelse(allocation$PSUs == 0, 1, allocation$PSUs)
-  psu_file <- alloc$psu_trs[, c(4, 2, 5)]
+  if (is.null(psu_file)) psu_file <- alloc$psu_trs[, c(4, 2, 5)]
   psu_file$ones <- 1
   PSUs <- aggregate(cbind(ones, PSU_MOS) ~ STRATUM, data = psu_file, FUN = sum)
   PSUs <- merge(PSUs, allocation)
@@ -42,7 +46,9 @@ select_PSU2 <- function (alloc, type = "ALLOC", var_ord = NULL, des_file = des_f
                                   DELTA=round(des_file$DELTA,2),
                                   Units=rep(NA,nstrat)))
   k = 0
-  for (i in c(unique(psu_frame$STRATUM))) {
+  strats <- c(unique(psu_frame$STRATUM))
+  strats <- strats[order(strats)]
+  for (i in c(strats)) {
     k <- k+1
     psu_to_be_selected <- PSUs$PSUs_allocated[PSUs$STRATUM == i]
     psu_frame$pik_1st[psu_frame$STRATUM == i] <- inclusionprobabilities(psu_frame$PSU_MOS[psu_frame$STRATUM == i], psu_to_be_selected)
@@ -63,6 +69,7 @@ select_PSU2 <- function (alloc, type = "ALLOC", var_ord = NULL, des_file = des_f
   
   sample_PSUs <- psu_frame[psu_frame$sampled == 1, ]
   for (i in c(unique(psu_frame$STRATUM))) {
+    sample_PSUs$PSU_final_sample_unit <- des_file$MINIMUM[des_file$STRATUM == i]
     sample_PSUs$pik_2st[sample_PSUs$STRATUM == i] <- des_file$MINIMUM[des_file$STRATUM == i]/sample_PSUs$PSU_MOS[sample_PSUs$STRATUM == i]
   }
   sample_PSUs$weight <- (1/sample_PSUs$pik_1st) * (1/sample_PSUs$pik_2st)
