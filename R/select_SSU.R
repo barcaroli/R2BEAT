@@ -50,12 +50,10 @@ select_SSU <- function (df, PSU_code, SSU_code, PSU_sampled, verbose = TRUE)
   eval(parse(text = st))
   samp$Prob_tot <- samp$Prob_1st * samp$Prob_2st
   samp$weight <- 1/samp$Prob_tot
-  if (verbose == TRUE) {
-    cat("\n--------------------------------")
-    cat("\nTotal PSU = ", nrow(PSU_sampled))
-    eval(parse(text=paste0("cat('\nTotal SSU = ', length(unique(samp$", SSU_code, ")))")))
-    cat("\nTotal Units = ", nrow(samp))
-    cat("\n--------------------------------")
-  }
+  cat("\n--------------------------------")
+  cat("\nTotal PSU = ", nrow(PSU_sampled))
+  eval(parse(text=paste0("cat('\nTotal SSU = ', length(unique(samp$", SSU_code, ")))")))
+  cat("\nTotal Units = ", nrow(samp))
+  cat("\n--------------------------------")
   return(samp)
 }
