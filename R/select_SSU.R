@@ -1,7 +1,8 @@
 select_SSU <- function (df, PSU_code, SSU_code, PSU_sampled) {
   require(sampling)
+  eval(parse(text=paste0("df$key <- paste(df$",PSU_code,",df$",SSU_code,",sep='*')")))
+  df$keynew <- c(1:nrow(df))
   frame <- df
-  eval(parse(text=paste0("frame$key <- paste(frame$",PSU_code,",frame$",SSU_code,",sep='*')")))
   eval(parse(text=paste0("df <- df[df$",PSU_code," %in% PSU_sampled$PSU_ID,c(PSU_code,SSU_code)]")))
   df$keynew <- c(1:nrow(df))
   eval(parse(text=paste0("test <- length(unique(df$keynew)) > length(unique(df$",SSU_code,"))")))
@@ -15,13 +16,11 @@ select_SSU <- function (df, PSU_code, SSU_code, PSU_sampled) {
   PSU_sampled <- PSU_sampled[order(PSU_sampled$PSU_ID),]
   s <- strata(df2,stratanames=PSU_code,size=PSU_sampled$PSU_final_sample_unit,method="srswor")
   samp <- getdata(df2,s)
-  samp$keynew <- NULL
+  eval(parse(text=paste0("samp$key <- paste(samp$",PSU_code,",samp$",SSU_code,",sep='*')")))
   if (test) {
-    eval(parse(text=paste0("samp$key <- paste(samp$",PSU_code,",samp$",SSU_code,",sep='*')")))
-    eval(parse(text=paste0("s <- frame[frame$key %in% samp$key, c('",PSU_code,"','",SSU_code,"')]")))
+    eval(parse(text=paste0("s <- frame[frame$key %in% samp$key, c('",PSU_code,"','",SSU_code,"','key','keynew')]")))
     samp <- merge(s,samp,all.x=TRUE)
-    samp$key <- NULL
-  }
+   }
   eval(parse(text=paste0("samp <- merge(samp, PSU_sampled,by.x='",PSU_code,"',by.y='PSU_ID')")))
   if (test) {
     samp$weight_2st <- samp$weight <- NULL
@@ -34,8 +33,12 @@ select_SSU <- function (df, PSU_code, SSU_code, PSU_sampled) {
     samp <- merge(samp,c[,c(1,4)])
     samp$ones <- NULL
   }
-  samp$Prob <- samp$ID_unit <- samp$Stratum <- NULL
   samp$weight <- samp$weight_1st * samp$weight_2st
+  cols <- colnames(frame)[colnames(frame) %in% colnames(samp)]
+  cols <- cols[cols != "keynew"]
+  frame <- frame[,!(colnames(frame) %in% cols)]
+  samp <- merge(samp,frame,by="keynew")
+  samp$Prob <- samp$ID_unit <- samp$Stratum <- samp$key <- samp$keynew <- NULL
   cat("\n--------------------------------")
   cat("\nTotal PSUs = ", nrow(PSU_sampled))
   eval(parse(text = paste0("cat('\nTotal SSUs = ', length(unique(samp$", SSU_code, ")))")))
