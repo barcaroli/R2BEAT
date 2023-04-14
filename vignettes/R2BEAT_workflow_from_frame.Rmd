@@ -283,8 +283,7 @@ We proceed to select the sample in this way:
 samp <- select_SSU(df=pop,
                    PSU_code="municipality",
                    SSU_code="id_ind",
-                   PSU_sampled=sample_1st$sample_PSU,
-                   verbose=FALSE)
+                   PSU_sampled=sample_1st$sample_PSU)
 ```
 
 To check that the total amount of selected units with respect to the initial allocation:
