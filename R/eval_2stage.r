@@ -33,8 +33,7 @@ eval_2stage <- function (df,
     samp <- select_SSU(df,
                        PSU_code,
                        SSU_code,
-                       PSU_sampled,
-                       verbose=FALSE)
+                       PSU_sampled)
     
     for (k in 1:numY) {
       eval(parse(text = paste0("estim[,j,k] <- aggregate(samp$",target_vars[k],"*samp$weight,by=list(samp$",domain_var,"),FUN=sum)[,2] / aggregate(samp$weight,by=list(samp$",domain_var,"),FUN=sum)[,2]")))
