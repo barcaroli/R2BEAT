@@ -17,10 +17,8 @@ select_SSU <- function (df, PSU_code, SSU_code, PSU_sampled) {
   s <- strata(df2,stratanames=PSU_code,size=PSU_sampled$PSU_final_sample_unit,method="srswor")
   samp <- getdata(df2,s)
   eval(parse(text=paste0("samp$key <- paste(samp$",PSU_code,",samp$",SSU_code,",sep='*')")))
-  if (test) {
-    eval(parse(text=paste0("s <- frame[frame$key %in% samp$key, c('",PSU_code,"','",SSU_code,"','key','keynew')]")))
-    samp <- merge(s,samp,all.x=TRUE)
-   }
+  s <- frame[frame$key %in% samp$key, ]
+  samp <- merge(s,samp,all.x=TRUE)
   eval(parse(text=paste0("samp <- merge(samp, PSU_sampled,by.x='",PSU_code,"',by.y='PSU_ID')")))
   if (test) {
     samp$weight_2st <- samp$weight <- NULL
@@ -34,11 +32,9 @@ select_SSU <- function (df, PSU_code, SSU_code, PSU_sampled) {
     samp$ones <- NULL
   }
   samp$weight <- samp$weight_1st * samp$weight_2st
-  cols <- colnames(frame)[colnames(frame) %in% colnames(samp)]
-  cols <- cols[cols != "keynew"]
-  frame <- frame[,!(colnames(frame) %in% cols)]
-  samp <- merge(samp,frame,by="keynew")
-  samp$Prob <- samp$ID_unit <- samp$Stratum <- samp$key <- samp$keynew <- NULL
+  samp$Prob <- samp$ID_unit <- samp$Stratum <- samp$key <- samp$keynew <- samp$stratum.x <-NULL
+  colnames(samp)[colnames(samp)=="STRATUM"] <- "stratum"
+  colnames(samp)[colnames(samp)=="stratum.y"] <- "stratum-low"
   cat("\n--------------------------------")
   cat("\nTotal PSUs = ", nrow(PSU_sampled))
   eval(parse(text = paste0("cat('\nTotal SSUs = ', length(unique(samp$", SSU_code, ")))")))
