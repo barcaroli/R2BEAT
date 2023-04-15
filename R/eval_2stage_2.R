@@ -5,9 +5,9 @@ eval_2stage <- function (df,
                          target_vars,
                          PSU_sampled,
                          nsampl = 100, 
-                         writeFiles = TRUE,
-                         progress = TRUE) 
+                         writeFiles = TRUE) 
 {
+  
   if (writeFiles == TRUE) {
     dire <- getwd()
     direnew <- paste(dire,"/simulation",sep="")
@@ -22,38 +22,63 @@ eval_2stage <- function (df,
     eval(parse(text = paste("param[i,] <- aggregate(df$",target_vars[i], ",by=list(df$",domain_var,"),FUN=mean)[,2]", 
                             sep = "")))
   }
-  estim <- array(0, c(numdom, nsampl, numY))
-  differ <- array(0, c(numdom, nsampl, numY))
+
   # create progress bar
-  if (progress == TRUE) pb <- txtProgressBar(min = 0, max = nsampl, style = 3)
-  for (j in (1:nsampl)) {
-    if (progress == TRUE) Sys.sleep(0.01)
+  # if (progress == TRUE) pb <- txtProgressBar(min = 0, max = nsampl, style = 3)
+  library(foreach)
+  library(doParallel)
+  #setup parallel backend to use many processors
+  cores=detectCores()
+  cl <- makeCluster(cores[1]-1) #not to overload your computer
+  registerDoParallel(cl)
+  estim <- array(c(1:(numdom*nsampl*numY)), c(numdom, nsampl, numY))
+  estim_temp <- array(c(1:(numdom*numY)), c(numdom, numY))
+  estim2 <- array(0, c(numdom, numY*nsampl))
+  differ <- array(0, c(numdom, nsampl, numY))
+  estim2 <- foreach(j=1:nsampl, .combine=rbind) %dopar% {
+    # for (j in (1:nsampl)) {
+    # if (progress == TRUE) Sys.sleep(0.01)
     # update progress bar
-    if (progress == TRUE) setTxtProgressBar(pb, j)
-    samp <- select_SSU(df,
+    # if (progress == TRUE) setTxtProgressBar(pb, j)
+    samp <- R2BEAT::select_SSU(df,
                        PSU_code,
                        SSU_code,
                        PSU_sampled)
     
     for (k in 1:numY) {
-      eval(parse(text = paste0("estim[,j,k] <- aggregate(samp$",target_vars[k],"*samp$weight,by=list(samp$",domain_var,"),FUN=sum)[,2] / aggregate(samp$weight,by=list(samp$",domain_var,"),FUN=sum)[,2]")))
+      # for (z in 1:numY) {
+        eval(parse(text = paste0("estim_temp[,k] <- aggregate(samp$",target_vars[k],"*samp$weight,by=list(samp$",domain_var,"),FUN=sum)[,2] / aggregate(samp$weight,by=list(samp$",domain_var,"),FUN=sum)[,2]")))
+      # }
+    }
+    estim_temp
+  }
+  stopCluster(cl)
+  
+  for (k in c(1:numY)) {
+    for (j in c(1:(nsampl-1))) {
+      for (i in c(1:numdom)) {
+        # k1 <- (i-1) * nsampl + 1
+        # k2 <-  i * nsampl
+        # cat("\n k= ",k,"  j= ",j,"  i= ", i,"  k1= ",k1,"  k2= ",k2)
+        estim[i,,k] <- estim2[c(seq(from=i,to=15,by=3)),k]
+      }
     }
   }
-  if (progress == TRUE) close(pb)
+  
+  # if (progress == TRUE) close(pb)
   for (j in (1:nsampl)) {
     for (i in (1:numdom)) {
       for (k in 1:numY) {
-        differ[i, j, k] <- estim[i, j, k] - param[k, 
-                                                  i]
+        differ[i, j, k] <- estim[i, j, k] - param[k,i]
       }
     }
   }
   cv <- array(0, c(numdom, numY))
-#  bias <- array(0, c(numdom, numY))
+  #  bias <- array(0, c(numdom, numY))
   for (k in 1:numY) {
     for (i in (1:numdom)) {
       cv[i, k] <- sd(estim[i, , k])/mean(estim[i, , k])
-#      bias[i, k] <- mean(differ[i, , k]/mean(estim[i, , k]))
+      #      bias[i, k] <- mean(differ[i, , k]/mean(estim[i, , k]))
     }
   }
   cv <- as.data.frame(cv,stringsAsFactors = TRUE)
@@ -102,7 +127,7 @@ eval_2stage <- function (df,
     write.table(diff, "differences.csv", sep = ",", row.names = FALSE, 
                 col.names = TRUE, quote = FALSE)
   ############################################   
-# New code for bias  
+  # New code for bias  
   bias <- NULL
   for (i in (3:ncol(diff))) {
     stmt <- paste("bias$y",i-2," <- tapply(diff$diff",i-2,",diff$dom,mean)",sep="")
@@ -116,7 +141,7 @@ eval_2stage <- function (df,
   for (i in c(1:numY)) {
     eval(parse(text=paste0("Y[,i] <- aggregate(df$",target_vars[i],",by=list(df$",domain_var,"),mean)$x")))
   }
-
+  
   
   bias[,c(1:numY)] <- round(bias[,c(1:numY)]/Y,4)
   if (writeFiles == TRUE)
@@ -174,7 +199,7 @@ eval_2stage <- function (df,
   if (writeFiles == TRUE) {
     write.table(est,"estimates.csv",sep=",",row.names=F,col.names=F)
   }
-
+  
   cv[,c(1:numY)] <- round(cv[,c(1:numY)],4)
   results <- list(coeff_var = cv, rel_bias = bias, est = est)
   # cv <- cbind(c(1:nrow(cv)),cv)
