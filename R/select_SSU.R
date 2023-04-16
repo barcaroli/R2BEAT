@@ -44,7 +44,7 @@ select_SSU <- function (df, PSU_code, SSU_code, PSU_sampled)
   samp$weight <- samp$weight_1st * samp$weight_2st
   samp$Prob <- samp$ID_unit <- samp$Stratum <- samp$key <- samp$keynew <- samp$stratum.x <- NULL
   colnames(samp)[colnames(samp) == "STRATUM"] <- "stratum"
-  colnames(samp)[colnames(samp) == "stratum.y"] <- "stratum2"
+  colnames(samp)[colnames(samp) == "stratum.y"] <- "stratum_2"
   cat("\n--------------------------------")
   cat("\nTotal PSUs = ", nrow(PSU_sampled))
   eval(parse(text = paste0("cat('\nTotal SSUs = ', length(unique(samp$", 
