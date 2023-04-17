@@ -1,5 +1,20 @@
 select_PSU <- function (alloc, type = "ALLOC", pps = TRUE, plot = TRUE) 
 {
+  plot_PSUs <- function(des2) {
+    par(mfrow = c(2, 1))
+    barplot(PSU ~ SR + STRATUM, data = des2, main = "PSUs by strata", 
+            xlab = "strata", ylab = "PSUs", col = c("black", 
+                                                    "grey"), las = 2, cex.names = 0.7)
+    legend("topright", legend = c("Non Self Representative", 
+                                  "Self Representative"), cex = 0.5, fill = c("black", 
+                                                                              "grey"))
+    barplot(SSU ~ SR + STRATUM, data = des2, main = "SSUs by strata", 
+            xlab = "strata", ylab = "SSUs", col = c("black", 
+                                                    "grey"), las = 2, cex.names = 0.7)
+    legend("topright", legend = c("Non Self Representative", 
+                                  "Self Representative"), cex = 0.5, fill = c("black", 
+                                                                              "grey"))
+  }
   univ <- alloc$psu_trs
   if (length(unique(univ$PSU_ID)) < nrow(univ)) 
     stop("PSU identifier not unique")
@@ -217,20 +232,12 @@ select_PSU <- function (alloc, type = "ALLOC", pps = TRUE, plot = TRUE)
     des2$SSU[c(1:(nrow(PSU_stats) - 1))] <- des$SSU_SR
     des2$SSU[c(nrow(PSU_stats):nrow(des2))] <- des$SSU_NSR
     des2
-    dev.new()
-    par(mfrow = c(2, 1))
-    barplot(PSU ~ SR + STRATUM, data = des2, main = "PSUs by strata", 
-            xlab = "strata", ylab = "PSUs", col = c("black", 
-                                                    "grey"), las = 2, cex.names = 0.7)
-    legend("topright", legend = c("Non Self Representative", 
-                                  "Self Representative"), cex = 0.5, fill = c("black", 
-                                                                              "grey"))
-    barplot(SSU ~ SR + STRATUM, data = des2, main = "SSUs by strata", 
-            xlab = "strata", ylab = "SSUs", col = c("black", 
-                                                    "grey"), las = 2, cex.names = 0.7)
-    legend("topright", legend = c("Non Self Representative", 
-                                  "Self Representative"), cex = 0.5, fill = c("black", 
-                                                                              "grey"))
+    result <- try(plot_PSUs(des2),silent=TRUE)
+    if (class(result) == "try-error") {
+      dev.new()
+      plot_PSUs(des2)
+      # dev.off()
+    }
   }
   out <- list(universe_PSU = universe_PSU, sample_PSU = sample_PSU, 
               PSU_stats = PSU_stats[, c("STRATUM", "PSU", "PSU_SR", 
