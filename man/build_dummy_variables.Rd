@@ -38,6 +38,18 @@ Giulio Barcaroli
 
 \examples{
 \dontrun{
+load("frame_pop_EA.RData")
+pop <- frame_pop_EA
+cv <- as.data.frame(list(DOM = c("DOM1","DOM2"),
+                         CV1 = c(0.10,0.20)))
+cv
+new <- build_dummy_variables(frame = pop,
+                             domain_var = "region",
+                             initial_target_vars = "unemployed",
+                             cv = cv)
+head(new$frame)
+new$new_target_vars
+new$cvnew
 }
 }
 \keyword{ survey }

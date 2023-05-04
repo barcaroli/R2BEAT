@@ -7,7 +7,7 @@ Select sample of secondary stage units (SSU)
 Select sample of secondary stage units (SSU) from the population frame on the basis of the SSU allocated to each selected PSU
 }
 \usage{
-     select_SSU(df,PSU_code,SSU_code,PSU_sampled,verbose)
+     select_SSU(df,PSU_code,SSU_code,PSU_sampled)
 }
 
 \arguments{
@@ -15,7 +15,6 @@ Select sample of secondary stage units (SSU) from the population frame on the ba
  \item{PSU_code}{Identifier of each PSU in dataframe containing sampling units}
  \item{SSU_code}{Identifier of each SSU in dataframe containing sampling units}
  \item{PSU_sampled}{Dataframe containing selected PSUs}
- \item{verbose}{Flag for producing output information while executing}
 }
 
 \value{

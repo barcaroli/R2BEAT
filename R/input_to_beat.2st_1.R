@@ -96,21 +96,21 @@ input_to_beat.2st_1 <- function (RGdes,
   ssize <- NULL
   st <- paste0("ssize <- aggregate(one ~ ", sv1, ", RGcal$variables, FUN=sum)")
   eval(parse(text = st))
-  st <- "ssize$STRATUM <- paste0("
-  for (i in 1:(length(strata_vars))) {
-    if (i < length(strata_vars)) 
-      st <- paste0(st, "ssize$", strata_vars[i], ",")
-    if (i == length(strata_vars)) 
-      st <- paste0(st, "ssize$", strata_vars[i], ")")
-  }
-  eval(parse(text = st))
-  for (i in 1:(length(strata_vars))) {
-    st <- paste0("ssize$", strata_vars[i], "<-NULL")
-    eval(parse(text = st))
-  }
+  # st <- "ssize$STRATUM <- paste0("
+  # for (i in 1:(length(strata_vars))) {
+  #   if (i < length(strata_vars)) 
+  #     st <- paste0(st, "ssize$", strata_vars[i], ",")
+  #   if (i == length(strata_vars)) 
+  #     st <- paste0(st, "ssize$", strata_vars[i], ")")
+  # }
+  # eval(parse(text = st))
+  # for (i in 1:(length(strata_vars))) {
+  #   st <- paste0("ssize$", strata_vars[i], "<-NULL")
+  #   eval(parse(text = st))
+  # }
   ####### Compute mean for each target variable
   M <- NULL
-  M$STRATUM <- ssize$STRATUM
+  eval(parse(text=paste0("M$", sv1, " <- ssize$", sv1, "")))
   M <- as.data.frame(M)
   for (i in (1:length(target_vars))) {
     tvi <- target_vars[i]
@@ -134,7 +134,7 @@ input_to_beat.2st_1 <- function (RGdes,
   
   ####### Compute standard deviation for each target variable
   S <- NULL
-  S$STRATUM <- ssize$STRATUM
+  eval(parse(text=paste0("S$", sv1, " <- ssize$", sv1, "")))
   S <- as.data.frame(S)
   for (i in (1:length(target_vars))) {
     tvi <- target_vars[i]
@@ -161,9 +161,9 @@ input_to_beat.2st_1 <- function (RGdes,
   
   ################# strata dataframe                                                                           # 1 + length(target_vars))])
   strata <- NULL
-  strata <- merge(N, ssize, by = c("STRATUM"))
-  strata <- merge(strata, M, by = c("STRATUM"))
-  strata <- merge(strata, S, by = c("STRATUM"))
+  strata <- merge(N, ssize, by = c(sv1))
+  strata <- merge(strata, M, by = c(sv1))
+  strata <- merge(strata, S, by = c(sv1))
   strata$COST <- 1
   strata$CENS <- 0
   strata$DOM1 <- 1

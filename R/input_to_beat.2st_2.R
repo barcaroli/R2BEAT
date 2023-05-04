@@ -1,12 +1,3 @@
-#####################################
-# Prepare inputs for R2BEAT::beat.2st
-# Author: Giulio Barcaroli
-#####################################
-# 1. psu_file
-# 2. des_file
-#####################################
-
-
 input_to_beat.2st_2 <- function(psu,psu_id,stratum_var,mos_var,delta,minimum) {
   
   psu_file <- NULL
@@ -22,5 +13,3 @@ input_to_beat.2st_2 <- function(psu,psu_id,stratum_var,mos_var,delta,minimum) {
   out <- list(psu_file=psu_file,des_file=des_file)
   return(out)
 }
-
-

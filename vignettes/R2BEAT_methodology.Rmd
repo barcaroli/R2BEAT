@@ -192,7 +192,7 @@ Then, the design weights for each unit in the sample are equal to the inverse of
 
 The inclusion probability of the first and second stage of the sampling scheme are such that the overall inclusion probabilities are almost constant for each unit in the sample, thus obtaining self-weighting samples.
 
-Once performed the first stage selection step, the function *select_SSU* allows to perform the selection of the Primary Stage Units (PSUs).
+Once performed the first stage selection step, the function *select_SSU* allows to perform the selection of the Secondary Stage Units (SSUs).
 
 # References
 

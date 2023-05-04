@@ -264,7 +264,7 @@ alloc$expected
 
 # Selection of PSUs
 
-Using the function 'select_SSU' execute the selection of PSU in strata:
+Using the function 'select_PSU' execute the selection of PSU in strata:
 
 ```{r}
 set.seed(1234)
@@ -285,8 +285,7 @@ Finally, we are able to select the Secondary Sample Units (the individuals) from
 samp <- select_SSU(df=pop,
                    PSU_code="municipality",
                    SSU_code="id_ind",
-                   PSU_sampled=sample_1st$sample_PSU,
-                   verbose=FALSE)
+                   PSU_sampled=sample_1st$sample_PSU)
 ```
 
 To check that the total amount of selected units with respect to the initial allocation:

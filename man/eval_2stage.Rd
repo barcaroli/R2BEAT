@@ -22,8 +22,7 @@ eval_2stage(df,
             target_vars,
             PSU_sampled,
             nsampl = 100, 
-            writeFiles = TRUE,
-            progress = TRUE) 
+            writeFiles = TRUE) 
 }
 \arguments{
   \item{df}{
@@ -50,9 +49,6 @@ The number of samples to be drawn from the frame.
   \item{writeFiles}{
 A flag to write in the work directory the outputs of the function. Default is TRUE.
 	}
-	\item{progress}{
-  If set to TRUE, a progress bar is visualised during the execution. Default is TRUE.
-  }
 }
 \value{
 A list containing (i) the CV distribution in the domains, (ii) the bias distribution in the domains, (iii) the dataframe containing the sampling
@@ -123,8 +119,7 @@ eval <- eval_2stage(df,
                     target_vars,
                     PSU_sampled,
                     nsampl=10, 
-                    writeFiles=TRUE,
-                    progress=TRUE) 
+                    writeFiles=TRUE) 
 eval$coeff_var
 eval$rel_bias
 }

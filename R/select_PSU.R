@@ -1,5 +1,20 @@
 select_PSU <- function (alloc, type = "ALLOC", pps = TRUE, plot = TRUE) 
 {
+  plot_PSUs <- function(des2) {
+    par(mfrow = c(2, 1))
+    barplot(PSU ~ SR + STRATUM, data = des2, main = "PSUs by strata", 
+            xlab = "strata", ylab = "PSUs", col = c("black", 
+                                                    "grey"), las = 2, cex.names = 0.7)
+    legend("topright", legend = c("Non Self Representative", 
+                                  "Self Representative"), cex = 0.5, fill = c("black", 
+                                                                              "grey"))
+    barplot(SSU ~ SR + STRATUM, data = des2, main = "SSUs by strata", 
+            xlab = "strata", ylab = "SSUs", col = c("black", 
+                                                    "grey"), las = 2, cex.names = 0.7)
+    legend("topright", legend = c("Non Self Representative", 
+                                  "Self Representative"), cex = 0.5, fill = c("black", 
+                                                                              "grey"))
+  }
   univ <- alloc$psu_trs
   if (length(unique(univ$PSU_ID)) < nrow(univ)) 
     stop("PSU identifier not unique")
@@ -141,15 +156,15 @@ select_PSU <- function (alloc, type = "ALLOC", pps = TRUE, plot = TRUE)
   sample_PSU$ALLOC_SUBSTR <- round(sample_PSU$ALLOC * sample_PSU$SUBSTRAT_MOS/sample_PSU$STRATUM_MOS)
   sample_PSU$PSU_final_sample_unit <- round(sample_PSU$ALLOC_SUBSTR/sample_PSU$PSU_substrat)
   k <- 0
-  for (i in alloc$alloc$STRATUM[c(1:(nrow(alloc$alloc)-1))]) {
+  for (i in alloc$alloc$STRATUM[c(1:(nrow(alloc$alloc) - 1))]) {
     k <- k + 1
-    sample_PSU$PSU_final_sample_unit[sample_PSU$STRATUM == i] <- 
-                        ifelse(sample_PSU$PSU_final_sample_unit[sample_PSU$STRATUM == i] < 
-                        minimum[k], minimum[k], sample_PSU$PSU_final_sample_unit[sample_PSU$STRATUM == i])
+    sample_PSU$PSU_final_sample_unit[sample_PSU$STRATUM == 
+                                       i] <- ifelse(sample_PSU$PSU_final_sample_unit[sample_PSU$STRATUM == 
+                                                                                       i] < minimum[k], minimum[k], sample_PSU$PSU_final_sample_unit[sample_PSU$STRATUM == 
+                                                                                                                                                       i])
   }
-  sample_PSU$PSU_final_sample_unit <- ifelse(sample_PSU$PSU_final_sample_unit > sample_PSU$PSU_MOS,
-                                             sample_PSU$PSU_MOS,
-                                             sample_PSU$PSU_final_sample_unit)
+  sample_PSU$PSU_final_sample_unit <- ifelse(sample_PSU$PSU_final_sample_unit > 
+                                               sample_PSU$PSU_MOS, sample_PSU$PSU_MOS, sample_PSU$PSU_final_sample_unit)
   sample_PSU$PSU_final_sample_unit
   sample_PSU$SR <- ifelse(sample_PSU$AR == 1, 1, 0)
   sample_PSU$nSR <- ifelse(sample_PSU$AR == 0, 1, 0)
@@ -158,9 +173,9 @@ select_PSU <- function (alloc, type = "ALLOC", pps = TRUE, plot = TRUE)
   sample_PSU$weight_1st <- 1/sample_PSU$Pik
   sample_PSU$weight_2st <- sample_PSU$PSU_MOS/sample_PSU$PSU_final_sample_unit
   sample_PSU$weight <- sample_PSU$weight_1st * sample_PSU$weight_2st
-  sample_PSU <- sample_PSU[, c("PSU_ID", "STRATUM", "stratum","PSU_MOS", 
-                               "SR", "nSR", "PSU_final_sample_unit", "Pik", "weight_1st", 
-                               "weight_2st", "weight")]
+  sample_PSU <- sample_PSU[, c("PSU_ID", "STRATUM", "stratum", 
+                               "PSU_MOS", "SR", "nSR", "PSU_final_sample_unit", "Pik", 
+                               "weight_1st", "weight_2st", "weight")]
   PSU_stats <- as.data.frame(table(sample_PSU$STRATUM))
   colnames(PSU_stats) <- c("STRATUM", "PSU")
   PSU_SR <- as.data.frame(table(sample_PSU$STRATUM[sample_PSU$SR == 
@@ -217,19 +232,12 @@ select_PSU <- function (alloc, type = "ALLOC", pps = TRUE, plot = TRUE)
     des2$SSU[c(1:(nrow(PSU_stats) - 1))] <- des$SSU_SR
     des2$SSU[c(nrow(PSU_stats):nrow(des2))] <- des$SSU_NSR
     des2
-    par(mfrow = c(2, 1))
-    barplot(PSU ~ SR + STRATUM, data = des2, main = "PSUs by strata", 
-            xlab = "strata", ylab = "PSUs", col = c("black", 
-                                                    "grey"), las = 2, cex.names = 0.7)
-    legend("topright", legend = c("Non Self Representative", 
-                                  "Self Representative"), cex = 0.5, fill = c("black", 
-                                                                              "grey"))
-    barplot(SSU ~ SR + STRATUM, data = des2, main = "SSUs by strata", 
-            xlab = "strata", ylab = "SSUs", col = c("black", 
-                                                    "grey"), las = 2, cex.names = 0.7)
-    legend("topright", legend = c("Non Self Representative", 
-                                  "Self Representative"), cex = 0.5, fill = c("black", 
-                                                                              "grey"))
+    result <- try(plot_PSUs(des2),silent=TRUE)
+    if (class(result) == "try-error") {
+      dev.new()
+      plot_PSUs(des2)
+      # dev.off()
+    }
   }
   out <- list(universe_PSU = universe_PSU, sample_PSU = sample_PSU, 
               PSU_stats = PSU_stats[, c("STRATUM", "PSU", "PSU_SR", 
