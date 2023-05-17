@@ -9,7 +9,7 @@ Compute the coefficients of variation considering a given multivariate optimal a
 \usage{ 
 beat.cv(n_file, stratif, errors, des_file, psu_file, rho, epsilon)
 }
-
+ 
 \arguments{
  \item{n_file}{Data frame containing the sample size allocated in each stratum, for more details, e.g.,\link{allocation}.}
   \item{stratif}{Data frame of survey strata, for more details see, e.g.,\link{strata}.}
