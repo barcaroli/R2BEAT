@@ -4,7 +4,8 @@ select_SSU <- function (df, PSU_code, SSU_code, PSU_sampled)
                            ",df$", SSU_code, ",sep='*')")))
   df$keynew <- c(1:nrow(df))
   frame <- df
-  eval(parse(text = paste0("df <- df[df$", PSU_code, " %in% PSU_sampled$PSU_ID,c('",PSU_code,"','",SSU_code,"')]")))
+  eval(parse(text = paste0("df <- df[df$", PSU_code, " %in% PSU_sampled$PSU_ID,c('", 
+                           PSU_code, "','", SSU_code, "')]")))
   df$keynew <- c(1:nrow(df))
   test <- NULL
   eval(parse(text = paste0("test <- length(unique(df$keynew)) > length(unique(df$", 
@@ -26,8 +27,13 @@ select_SSU <- function (df, PSU_code, SSU_code, PSU_sampled)
                            ",samp$", SSU_code, ",sep='*')")))
   s <- frame[frame$key %in% samp$key, ]
   samp <- merge(s, samp, all.x = TRUE)
-  eval(parse(text = paste0("samp <- merge(samp, PSU_sampled,by.x='", 
+  eval(parse(text = paste0("samp <- merge(samp, PSU_sampled,
+                           by.x='", 
                            PSU_code, "',by.y='PSU_ID')")))
+  if (!is.null(samp$weight_1st)) samp$pik_1st <- 1 / samp$weight_1st
+  if (!is.null(samp$weight_2st)) samp$pik_2st <- 1 / samp$weight_2st
+  if (!is.null(samp$pik_1st)) samp$weight_1st <- 1 / samp$pik_1st
+  if (!is.null(samp$pik_2st)) samp$weight_2st <- 1 / samp$pik_2st
   if (test) {
     samp$weight <- samp$pik_2st <- NULL
     samp$ones <- 1
