@@ -165,7 +165,6 @@ select_PSU <- function (alloc, type = "ALLOC", pps = TRUE, plot = TRUE)
   }
   sample_PSU$PSU_final_sample_unit <- ifelse(sample_PSU$PSU_final_sample_unit > 
                                                sample_PSU$PSU_MOS, sample_PSU$PSU_MOS, sample_PSU$PSU_final_sample_unit)
-  sample_PSU$PSU_final_sample_unit
   sample_PSU$SR <- ifelse(sample_PSU$AR == 1, 1, 0)
   sample_PSU$nSR <- ifelse(sample_PSU$AR == 0, 1, 0)
   sample_PSU$stratum <- sample_PSU$SUBSTRAT
@@ -212,11 +211,12 @@ select_PSU <- function (alloc, type = "ALLOC", pps = TRUE, plot = TRUE)
                               PSU_stats$SSU_NSR)
   PSU_stats <- PSU_stats[order(as.numeric(as.character(PSU_stats$STRATUM))), 
   ]
-  PSU_stats <- rbind(PSU_stats, rep(NA, 8))
+  PSU_stats <- rbind(PSU_stats, rep(NA, ncol(PSU_stats)))
   PSU_stats$STRATUM <- as.character(PSU_stats$STRATUM)
   PSU_stats[nrow(PSU_stats), 1] <- "Total"
   PSU_stats[nrow(PSU_stats), c(2:7)] <- colSums(PSU_stats[-nrow(PSU_stats), 
                                                           2:7])
+  
   if (plot == TRUE) {
     des <- PSU_stats[-nrow(PSU_stats), ]
     des2 <- NULL
@@ -233,7 +233,7 @@ select_PSU <- function (alloc, type = "ALLOC", pps = TRUE, plot = TRUE)
     des2$SSU[c(nrow(PSU_stats):nrow(des2))] <- des$SSU_NSR
     des2
     result <- try(plot_PSUs(des2),silent=TRUE)
-    if (class(result) == "try-error") {
+    if (is(result)[1] == "try-error") {
       dev.new()
       plot_PSUs(des2)
       # dev.off()

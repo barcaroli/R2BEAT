@@ -1,12 +1,12 @@
 select_SSU <- function (df, PSU_code, SSU_code, PSU_sampled) 
 {
-  require(sampling)
   eval(parse(text = paste0("df$key <- paste(df$", PSU_code, 
                            ",df$", SSU_code, ",sep='*')")))
   df$keynew <- c(1:nrow(df))
   frame <- df
   eval(parse(text = paste0("df <- df[df$", PSU_code, " %in% PSU_sampled$PSU_ID,c(PSU_code,SSU_code)]")))
   df$keynew <- c(1:nrow(df))
+  test <- NULL
   eval(parse(text = paste0("test <- length(unique(df$keynew)) > length(unique(df$", 
                            SSU_code, "))")))
   if (test) {
@@ -31,9 +31,11 @@ select_SSU <- function (df, PSU_code, SSU_code, PSU_sampled)
   if (test) {
     samp$weight_2st <- samp$weight <- NULL
     samp$ones <- 1
+    a <- NULL
     eval(parse(text = paste0("a <- aggregate(ones~", PSU_code, 
                              ",data=samp,FUN=sum)")))
     df$ones <- 1
+    b <- NULL
     eval(parse(text = paste0("b <- aggregate(ones~", PSU_code, 
                              ",data=df,FUN=sum)")))
     c <- cbind(a, b[, 2])

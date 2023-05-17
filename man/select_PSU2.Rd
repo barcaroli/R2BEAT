@@ -4,11 +4,11 @@
 Select sample of primary stage units (PSU)
 }
 \description{
-Select sample of primary stage units (PSU) on the basis of the PSU allocated in the allocation step. This function differs in that PSUs are not organized in sub-strata, but directly sampled with probability proportional to size in each sampling stratum.
+Select sample of primary stage units (PSU) on the basis of the PSU allocated in the allocation step. This function differs from 'selectPSU' in that PSUs are not organized in sub-strata, but directly sampled with probability proportional to size in each sampling stratum.
 It also allows an implicit stratification by giving a set of ordering variables for each PSU.
 }
 \usage{
-     select_PSU(alloc, 
+     select_PSU2(alloc, 
      type="ALLOC", 
      var_ord=NULL, 
      des_file=des_file,

@@ -4,7 +4,6 @@ select_PSU2 <- function (alloc,
                          des_file = des_file,
                          psu_file = psu_file) 
 {
-  require(sampling)
   allocation <- alloc$alloc[-nrow(alloc$alloc), c("STRATUM",type)]
   #------------------------------------------------------------------
   strat <- unique(des_file$STRATUM)

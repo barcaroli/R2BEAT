@@ -25,17 +25,17 @@ eval_2stage <- function (df,
 
   # create progress bar
   # if (progress == TRUE) pb <- txtProgressBar(min = 0, max = nsampl, style = 3)
-  library(foreach)
-  library(doParallel)
+  # require(foreach)
+  # require(doParallel)
   #setup parallel backend to use many processors
-  cores=detectCores()
-  cl <- makeCluster(cores[1]-1) #not to overload your computer
-  registerDoParallel(cl)
+  cores=parallel::detectCores()
+  cl <- parallel::makeCluster(cores[1]-1) #not to overload your computer
+  doParallel::registerDoParallel(cl)
   estim <- array(c(1:(numdom*nsampl*numY)), c(numdom, nsampl, numY))
   estim_temp <- array(c(1:(numdom*numY)), c(numdom, numY))
   estim2 <- array(0, c(numdom, numY*nsampl))
   differ <- array(0, c(numdom, nsampl, numY))
-  estim2 <- foreach(j=1:nsampl, .combine=rbind) %dopar% {
+  estim2 <- foreach::foreach(j=1:nsampl, .combine=rbind) %dopar% {
     # for (j in (1:nsampl)) {
     # if (progress == TRUE) Sys.sleep(0.01)
     # update progress bar
@@ -52,7 +52,7 @@ eval_2stage <- function (df,
     }
     estim_temp
   }
-  stopCluster(cl)
+  parallel::stopCluster(cl)
   
   for (k in c(1:numY)) {
     for (j in c(1:(nsampl-1))) {
