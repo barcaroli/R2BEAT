@@ -60,7 +60,9 @@ eval_2stage <- function (df,
         # k1 <- (i-1) * nsampl + 1
         # k2 <-  i * nsampl
         # cat("\n k= ",k,"  j= ",j,"  i= ", i,"  k1= ",k1,"  k2= ",k2)
-        estim[i,,k] <- estim2[c(seq(from=i,to=15,by=3)),k]
+        # estim[i,,k] <- estim2[c(seq(from=i,to=15,by=3)),k]
+        estim[i, , k] <- estim2[c(seq(from = i, to = nsampl*numdom, 
+                                      by = numdom)), k]
       }
     }
   }
