@@ -6,5 +6,6 @@ url: https://github.com/barcaroli/R2BEAT
 template:
   params:
     bootswatch: Italy
+    ganalytics: UA-156656860-1
 
 

@@ -11,10 +11,15 @@ require(devtools)
 
 
 # devtools::install_github("hadley/pkgdown")
-setwd("D:/Google Drive/Sampling/R2BEAT/R2BEAT_1.0.4/")
-setwd("C:\\Users\\UTENTE\\Google Drive\\Sampling\\R2BEAT\\R2BEAT_1.0.4")
-
+setwd("D:/Google Drive/Sampling/R2BEAT/R2BEAT_1.0.5/")
+# usethis::use_github_action("pkgdown")
+# setwd("C:\\Users\\UTENTE\\Google Drive\\Sampling\\R2BEAT\\R2BEAT_1.0.5")
 library(pkgdown)
+# usethis::use_pkgdown()
+# Sys.setenv(R_WIN_USE_SAFE_CALLBACKS = "0")
+build_site()
+
+
 # usethis::use_pkgdown()
 # build_favicon(pkg = ".")
 # init_site(pkg = ".")
