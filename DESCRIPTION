@@ -1,11 +1,10 @@
-Package: R2BEAT 
+Package: R2BEAT
 Type: Package
 Title: Multistage Sampling Allocation and Sample Selection
 Description: Multivariate optimal allocation for different domains in one and two stages stratified sample design. R2BEAT extends the Neyman (1934) – Tschuprow (1923) allocation method to the case of several variables, adopting a generalization of the Bethel’s proposal (1989).R2BEAT develops this methodology but, moreover, it allows to determine the sample allocation in the multivariate and multi-domains case of estimates for two-stage stratified samples. It also allows to perform both Primary Stage Units and Secondary Stage Units selection. This package requires the availability of ReGenesees, that can be installed from <https://github.com/DiegoZardetto/ReGenesees>.
 Version: 1.0.5
 Depends: R (>= 3.5.0), sampling, glue, methods, parallel, foreach, doParallel 
 Suggests: knitr, rmarkdown, bookdown, ReGenesees
-Author: Andrea Fasulo,Giulio Barcaroli,Stefano Falorsi,Alessio Guandalini,Daniela Pagliuca,Marco Dionisio Terribili 
 Authors@R: c(person("Andrea", "Fasulo", role = c("aut", "cre"),
                      email = "fasulo@istat.it"),
               person("Giulio", "Barcaroli", role = "aut"),
@@ -16,7 +15,6 @@ Authors@R: c(person("Andrea", "Fasulo", role = c("aut", "cre"),
               person("Daniela", "Pagliuca", role = "aut"), 
               person("Marco Dionisio","Terribili", role = "aut")
               )
-Maintainer: Andrea Fasulo <fasulo@istat.it>
 License: EUPL
 Encoding: UTF-8
 URL: https://barcaroli.github.io/R2BEAT/
