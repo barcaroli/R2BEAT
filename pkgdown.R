@@ -20,17 +20,5 @@ library(pkgdown)
 build_site()
 
 
-# usethis::use_pkgdown()
-# build_favicon(pkg = ".")
-# init_site(pkg = ".")
-# library(R2BEAT)
-# build_site()
-init_site()
-build_home()
-build_reference()
-build_articles()
-# build_tutorials()
-build_news()
-#build_reference_index(pkg = "D:\\Documenti\\R\\win-library\\4.1\\R2BEAT")
-#build_reference_index(pkg = "C:\\Users\\UTENTE\\Documents\\R\\win-library")
+
 
