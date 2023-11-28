@@ -8,7 +8,6 @@
     }
     devtools::install_github('DiegoZardetto/ReGenesees')
   }
-  library(ReGenesees)
   packageStartupMessage("\n", appendLF = FALSE)
   packageStartupMessage("Report issues at https://github.com/barcaroli/R2BEAT/issues", appendLF = FALSE)
   packageStartupMessage("\n", appendLF = FALSE)
