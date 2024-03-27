@@ -13,6 +13,27 @@ knitr::opts_chunk$set(
 )
 ```
 
+
+# R2BEAT 1.0.6
+
+## Major changes
+
+* Added the function 'prepareInputToAllocation_beat.1st' that generates the 'strata' dataframe as
+input for the Bethel allocation (one stage)
+
+* Added the function 'CVs_hint' that suggests new values for the precision constraints, depending on the 
+variability of the target variables in the strata
+
+* Added the function 'adjust_CVs' that, after determining the best allocation with given precision constraints (CVs) allows to reach a desired sample size by adjusting proportionally the values of the CVs
+
+* Added the function 'sens_names' to better identify domain and variables in the sensitivity output
+
+* Added the function 'expected_CV' to calculate the expected CVs given the allocation in the strata
+
+* Modified the function 'beat.1st' in the calculation of the expected CVs and to make the proportional and uniform coherent with the variable CENS in the dataset 'stratif'
+
+
+
 # R2BEAT 1.0.5 
 
 ## Major changes
