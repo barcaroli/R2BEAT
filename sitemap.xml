@@ -25,10 +25,22 @@
     <loc>/news/index.html</loc>
   </url>
   <url>
+    <loc>/reference/CVs_hint.html</loc>
+  </url>
+  <url>
     <loc>/reference/PSU_strat.html</loc>
   </url>
   <url>
+    <loc>/reference/adjust_CVs.html</loc>
+  </url>
+  <url>
+    <loc>/reference/aggrStrata.html</loc>
+  </url>
+  <url>
     <loc>/reference/allocation.html</loc>
+  </url>
+  <url>
+    <loc>/reference/beat.1cv.html</loc>
   </url>
   <url>
     <loc>/reference/beatcv.html</loc>
@@ -61,6 +73,9 @@
     <loc>/reference/eval_2stage.html</loc>
   </url>
   <url>
+    <loc>/reference/expected_CV.html</loc>
+  </url>
+  <url>
     <loc>/reference/index.html</loc>
   </url>
   <url>
@@ -77,6 +92,9 @@
   </url>
   <url>
     <loc>/reference/prepareInputToAllocation2.html</loc>
+  </url>
+  <url>
+    <loc>/reference/prepareInputToAllocation_beat.1st.html</loc>
   </url>
   <url>
     <loc>/reference/rho.html</loc>
