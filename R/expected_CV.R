@@ -1,5 +1,5 @@
 #' expected_CV
-#'  
+#'   
 #' @description
 #' Function to calculate expected coefficients of variation for target variables Ys in a 'strata' dataset 
 #' given an allocation 'alloc'

@@ -1,5 +1,5 @@
 #' The function returns a dataframe with planned and actual coefficients of variation (CV) in a multivariate multi-domain allocation problem.
-#'
+#' 
 #' @param stratif A dataframe with strata information.
 #' @param errors: A dataframe with planned CV.
 #' @param alloc: A vector with an allocation into strata.

@@ -2,7 +2,7 @@
 #'  
 #' @description
 #' Function to increase or decrease the precision constraints in order to obtain the desired sample size 
-#' 
+#'  
 #' 
 #' @param target_size desired sample size.
 #' @param strata the 'strata' dataset.
