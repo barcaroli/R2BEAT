@@ -23,7 +23,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">R2BEAT</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.6</span>
       </span>
     </div>
 
@@ -70,7 +70,19 @@
     </div>
 
     <div class="section level2">
-<h2 class="page-header" data-toc-text="1.0.5" id="r2beat-105">R2BEAT 1.0.5<a class="anchor" aria-label="anchor" href="#r2beat-105"></a></h2>
+<h2 class="page-header" data-toc-text="1.0.6" id="r2beat-106">R2BEAT 1.0.6<a class="anchor" aria-label="anchor" href="#r2beat-106"></a></h2>
+<div class="section level3">
+<h3 id="major-changes-1-0-6">Major changes<a class="anchor" aria-label="anchor" href="#major-changes-1-0-6"></a></h3>
+<ul><li><p>Added the function ‘prepareInputToAllocation_beat.1st’ that generates the ‘strata’ dataframe as input for the Bethel allocation (one stage)</p></li>
+<li><p>Added the function ‘CVs_hint’ that suggests new values for the precision constraints, depending on the variability of the target variables in the strata</p></li>
+<li><p>Added the function ‘adjust_CVs’ that, after determining the best allocation with given precision constraints (CVs) allows to reach a desired sample size by adjusting proportionally the values of the CVs</p></li>
+<li><p>Added the function ‘sens_names’ to better identify domain and variables in the sensitivity output</p></li>
+<li><p>Added the function ‘expected_CV’ to calculate the expected CVs given the allocation in the strata</p></li>
+<li><p>Modified the function ‘beat.1st’ in the calculation of the expected CVs and to make the proportional and uniform coherent with the variable CENS in the dataset ‘stratif’</p></li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="1.0.5" id="r2beat-105">R2BEAT 1.0.5<small>2023-05-25</small><a class="anchor" aria-label="anchor" href="#r2beat-105"></a></h2>
 <div class="section level3">
 <h3 id="major-changes-1-0-5">Major changes<a class="anchor" aria-label="anchor" href="#major-changes-1-0-5"></a></h3>
 <ul><li><p>Added the function ‘select_PSU2’ to be used in alternative a ‘select_PSU’ when there is a quasi uniform distribution of the measure of size of the PSUs (this is the case of Enumeration Areas, in contrast to Municipalities): this function ensures a complete alignment of the number of selected PSUs and of the SSUs to be selected to corrispondent numbers of allocated PSUs and SSUs</p></li>
@@ -117,7 +129,7 @@
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Andrea Fasulo, Giulio Barcaroli, Stefano Falorsi, Alessio Guandalini, Daniela Pagliuca, Marco Dionisio Terribili.</p>
+  <p></p><p>Developed by Andrea Fasulo, Giulio Barcaroli, Ilaria Bombelli, Stefano Falorsi, Alessio Guandalini, Ilaria Bombelli, Marco Dionisio Terribili.</p>
 </div>
 
 <div class="pkgdown">
