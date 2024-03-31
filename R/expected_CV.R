@@ -1,3 +1,40 @@
+#' expected_CV
+#'  
+#' @description
+#' Function to calculate expected coefficients of variation for target variables Ys in a 'strata' dataset 
+#' given an allocation 'alloc'
+#' 
+#' @details
+#' The 'strata' dataframe can be obtained by executing the function 'prepareInputToAllocation_beat.1st'
+#' The 'strata' dataframe must contain a variable with the indication of the sampling units allocated in each stratum.
+#' 
+#' @param strata name of the dataframe containing information in the sampling strata.
+#' @param alloc_variable name of the variable in the strata dataframe containing the allocation of sampling units.
+#' @param errors name of the dataframe 
+#' 
+#' @return a dataframe containing the maximum expected coefficients of variation in each domain for each target variable
+#' 
+#' @examples
+#' load("./data/sample.RData")
+#' target_vars <- c("active","inactive","unemployed","income_hh")
+#' strata <- R2BEAT:::prepareInputToAllocation_beat.1st(samp_frame = samp,
+#'                                                      ID = "id_hh",
+#'                                                      stratum = "stratum_label",
+#'                                                      dom = "region",
+#'                                                      target = target_vars)
+#' strata$CENS <- as.numeric(strata$CENS)
+#' strata$COST <- as.numeric(strata$COST)
+#' strata$CENS <- 0
+#' cv <- as.data.frame(list(DOM = c("DOM1","DOM2"),
+#'                          CV1 = c(0.05,0.10),
+#'                          CV2 = c(0.05,0.10),
+#'                          CV3 = c(0.05,0.10),
+#'                          CV4 = c(0.05,0.10)))
+#' allocation <- beat.1st(strata,cv)
+#' 
+#' strata$alloc <- allocation$alloc$ALLOC[-nrow(allocation$alloc)]
+#' exp_cv <- expected_CV(strata,"alloc",cv)
+#' exp_cv
 expected_CV <- function (strata, alloc_variable, errors) 
 {
   nvars <- ncol(errors) - 1
