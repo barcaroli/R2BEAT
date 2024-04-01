@@ -11,13 +11,13 @@ adjust_CVs(target_size, strata, errors, adj_rate = 0.01)
 
 \item{strata}{the 'strata' dataset.}
 
-\item{errors}{the 'errors' dataset containing the current precision constraints: 
-the smaller, the higher the precision in reaching the target size; the higher, the quicker is the adjustment}
+\item{errors}{the 'errors' dataset containing the current precision constraints}
 
-\item{adj_rate}{the rate of adjustment (default=0.01)}
+\item{adj_rate}{the rate of adjustment (default=0.01): 
+the smaller, the higher the precision in reaching the target size; the higher, the quicker is the adjustment}
 }
 \value{
-the new 'errors' dataset containing the changed precision constraints
+the new 'errors' dataset containing the modified precision constraints
 }
 \description{
 Function to increase or decrease the precision constraints in order to obtain the desired sample size

@@ -6,11 +6,11 @@
 #' 
 #' @param target_size desired sample size.
 #' @param strata the 'strata' dataset.
-#' @param errors the 'errors' dataset containing the current precision constraints: 
+#' @param errors the 'errors' dataset containing the current precision constraints
+#' @param adj_rate the rate of adjustment (default=0.01): 
 #' the smaller, the higher the precision in reaching the target size; the higher, the quicker is the adjustment
-#' @param adj_rate the rate of adjustment (default=0.01)
 #' 
-#' @return the new 'errors' dataset containing the changed precision constraints
+#' @return the new 'errors' dataset containing the modified precision constraints
 #' 
 #' @examples
 #' data(beat.example)
