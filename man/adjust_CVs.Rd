@@ -11,7 +11,10 @@ adjust_CVs(target_size, strata, errors)
 
 \item{strata}{the 'strata' dataset.}
 
-\item{errors}{the 'errors' dataset containing the current precision constraints.}
+\item{errors}{the 'errors' dataset containing the current precision constraints: 
+the smaller, the higher the precision in reaching the target size; the higher, the quicker is the adjustment}
+
+\item{adj_rate}{the rate of adjustment (default=0.01)}
 }
 \value{
 the new 'errors' dataset containing the changed precision constraints
@@ -24,6 +27,6 @@ data(beat.example)
 errors
 a <- beat.1st(strata,errors)
 sum(a$alloc$ALLOC[-nrow(a$alloc)])
-errors_new <- adjust_CVs(9000,strata,errors)
+errors_new <- adjust_CVs(9000,strata,errors,adj_rate=0.005)
 errors_new
 }
