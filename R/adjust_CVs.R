@@ -20,7 +20,7 @@
 #' errors_new <- adjust_CVs(9000,strata,errors,adj_rate=0.005)
 #' errors_new
 
-adjust_CVs <- function(target_size,strata,errors) {
+adjust_CVs <- function(target_size,strata,errors,adj_rate=0.01) {
   a <- beat.1st(stratif=strata,errors=errors)
   cvnew <- errors
   size <- sum(a$alloc$ALLOC[-nrow(a$alloc)])

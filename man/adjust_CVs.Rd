@@ -4,7 +4,7 @@
 \alias{adjust_CVs}
 \title{adjustCVs}
 \usage{
-adjust_CVs(target_size, strata, errors)
+adjust_CVs(target_size, strata, errors, adj_rate = 0.01)
 }
 \arguments{
 \item{target_size}{desired sample size.}
