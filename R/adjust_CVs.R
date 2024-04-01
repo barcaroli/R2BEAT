@@ -27,7 +27,7 @@ adjust_CVs <- function(target_size,strata,errors,adj_rate=0.01) {
   if (size < target_size) {
     repeat {
       for (k in c(2:ncol(cvnew))) {
-        cvnew[,k] <- cvnew[,k] - 0.01*cvnew[,k]
+        cvnew[,k] <- cvnew[,k] - adj_rate*cvnew[,k]
       }
       b <- beat.1st(stratif=strata,errors=cvnew)
       if (sum(b$alloc$ALLOC[-nrow(b$alloc)]) > target_size) break
@@ -36,7 +36,7 @@ adjust_CVs <- function(target_size,strata,errors,adj_rate=0.01) {
   if (size >= target_size) {
     repeat {
       for (k in c(2:ncol(cvnew))) {
-        cvnew[,k] <- cvnew[,k] + 0.01*cvnew[,k]
+        cvnew[,k] <- cvnew[,k] + adj_rate*cvnew[,k]
       }
       b <- beat.1st(stratif=strata,errors=cvnew)
       if (sum(b$alloc$ALLOC[-nrow(b$alloc)]) < target_size) break
