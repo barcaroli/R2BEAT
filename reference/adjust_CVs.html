@@ -75,7 +75,7 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">adjust_CVs</span><span class="op">(</span><span class="va">target_size</span>, <span class="va">strata</span>, <span class="va">errors</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">adjust_CVs</span><span class="op">(</span><span class="va">target_size</span>, <span class="va">strata</span>, <span class="va">errors</span>, adj_rate <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -115,9 +115,12 @@ the smaller, the higher the precision in reaching the target size; the higher, t
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">a</span><span class="op">$</span><span class="va">alloc</span><span class="op">$</span><span class="va">ALLOC</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">a</span><span class="op">$</span><span class="va">alloc</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 6858</span>
 <span class="r-in"><span><span class="va">errors_new</span> <span class="op">&lt;-</span> <span class="fu">adjust_CVs</span><span class="op">(</span><span class="fl">9000</span>,<span class="va">strata</span>,<span class="va">errors</span>,adj_rate<span class="op">=</span><span class="fl">0.005</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in adjust_CVs(9000, strata, errors, adj_rate = 0.005):</span> unused argument (adj_rate = 0.005)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Size:  9082</span>
 <span class="r-in"><span><span class="va">errors_new</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'errors_new' not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    DOM        CV1       CV2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 DOM1 0.08687458 0.8600584</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 DOM2 0.86005835 0.8600584</span>
 </code></pre></div>
     </div>
   </div>
