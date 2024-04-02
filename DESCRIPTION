@@ -11,7 +11,7 @@ Author: Andrea Fasulo,Giulio Barcaroli,Ilaria Bombelli,Stefano Falorsi,Alessio G
 Authors@R: c(person("Andrea", "Fasulo", role = c("aut", "cre"),
                      email = "fasulo@istat.it"),
               person("Giulio", "Barcaroli", role = "aut"),
-              person("Ilaria", "Bombelli", role = "aut"),
+                     email = "gbarcaroli@gmail.com"),
               person("Stefano", "Falorsi", role = "aut",
                      email = "stfalors@istat.it"),
               person("Alessio", "Guandalini", role = "aut",
