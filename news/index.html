@@ -77,7 +77,8 @@
 <li><p>Added the function ‘CVs_hint’ that suggests new values for the precision constraints, depending on the variability of the target variables in the strata</p></li>
 <li><p>Added the function ‘adjust_CVs’ that, after determining the best allocation with given precision constraints (CVs) allows to reach a desired sample size by adjusting proportionally the values of the CVs</p></li>
 <li><p>Added the function ‘sens_names’ to better identify domain and variables in the sensitivity output</p></li>
-<li><p>Added the function ‘expected_CV’ to calculate the expected CVs given the allocation in the strata</p></li>
+<li><p>Added the function ‘expected_CV’ to calculate the expected CVs given the allocation in the strata. It differs from the function ‘beat.1cv’ as it reports the maximum CV for each target variable in the domain levels</p></li>
+<li><p>Added the function ‘beat.1cv’ to calculate the expected CVs given the allocation in the strata. It differs from the function ‘expected_CV’ as it reports the expected CV for all the domains at each domain level</p></li>
 <li><p>Modified the function ‘beat.1st’ in the calculation of the expected CVs and to make the proportional and uniform coherent with the variable CENS in the dataset ‘stratif’</p></li>
 </ul></div>
 </div>
