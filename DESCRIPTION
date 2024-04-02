@@ -10,7 +10,7 @@ Remotes:
 Author: Andrea Fasulo,Giulio Barcaroli,Ilaria Bombelli,Stefano Falorsi,Alessio Guandalini,Marco Dionisio Terribili 
 Authors@R: c(person("Andrea", "Fasulo", role = c("aut", "cre"),
                      email = "fasulo@istat.it"),
-              person("Giulio", "Barcaroli", role = "aut"),
+              person("Giulio", "Barcaroli", role = "aut",
                      email = "gbarcaroli@gmail.com"),
               person("Stefano", "Falorsi", role = "aut",
                      email = "stfalors@istat.it"),
