@@ -20,7 +20,13 @@
   variables in the sensitivity output
 
 - Added the function ‘expected_CV’ to calculate the expected CVs given
-  the allocation in the strata
+  the allocation in the strata. It differs from the function ‘beat.1cv’
+  as it reports the maximum CV for each target variable in the domain
+  levels
+
+- Added the function ‘beat.1cv’ to calculate the expected CVs given the
+  allocation in the strata. It differs from the function ‘expected_CV’
+  as it reports the expected CV for all the domains at each domain level
 
 - Modified the function ‘beat.1st’ in the calculation of the expected
   CVs and to make the proportional and uniform coherent with the
