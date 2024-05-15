@@ -248,3 +248,4 @@ beat.1cv <- function(stratif, errors,alloc, minnumstrat = 2)
 
 
   
+  
