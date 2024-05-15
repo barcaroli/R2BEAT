@@ -18,7 +18,7 @@
 #' 
 #' @examples
 #' data(beat.example)
-#' errors[1,c(2:3)] <- c(0.03,0.03)
+#' errors[1,c(2:3)] <- c(0.02,0.02)
 #' errors[2,c(2:3)] <- c(0.03,0.03)
 #' errors
 #' cv <- CVs_hint(strata,errors)
