@@ -23,18 +23,19 @@
 #' errors
 #' cv <- CVs_hint(strata,errors)
 #' cv
-CVs_hint <- function(strata,cv) {
-  ndom <- length(grep("DOM",colnames(strata)))
+CVs_hint <- function (strata, cv) 
+{
+  ndom <- length(grep("DOM", colnames(strata)))
   nvar <- ncol(cv) - 1
-  S <- paste0("S",c(1:nvar))
-  M <- paste0("M",c(1:nvar))
+  S <- paste0("S", c(1:nvar))
+  M <- paste0("M", c(1:nvar))
   cv_new <- cv
   for (i in c(1:ndom)) {
-    eval(parse(text=paste0("vett <- list(as.numeric(as.factor(as.character(strata$DOM",i,"))))")))
+    eval(parse(text = paste0("vett <- list(as.numeric(as.factor(as.character(strata$DOM",i,"))))")))
     vett <- unlist(vett)
-    a <- aggrStrata(strata,vett,dominio = 1,nvar=nvar,censiti="CENS")
-    cvs <- a[,c(S)] / a[,c(M)]
-    cv_new[i,c(2:(nvar+1))] <- cv_new[i,c(2:(nvar+1))]*apply(cvs,2,FUN=mean)
+    a <- aggrStrata(strata, vett, dominio = 1, nvar = nvar, censiti = "CENS")
+    cvs <- a[, c(S)]/(a[, c(M)]+0.00000000001)
+    cv_new[i, c(2:(nvar + 1))] <- cv_new[i, c(2:(nvar + 1))] * apply(cvs, 2, FUN = mean)
   }
   cv_new
 }

@@ -20,28 +20,41 @@
 #' errors_new <- adjust_CVs(9000,strata,errors,adj_rate=0.005)
 #' errors_new
 
-adjust_CVs <- function(target_size,strata,errors,adj_rate=0.01) {
-  a <- beat.1st(stratif=strata,errors=errors)
+adjust_CVs <- function (target_size, strata, errors, adj_rate = 0.01) 
+{
+  a <- beat.1st(stratif = strata, errors = errors)
   cvnew <- errors
   size <- sum(a$alloc$ALLOC[-nrow(a$alloc)])
+  oldsize <- target_size
   if (size < target_size) {
     repeat {
       for (k in c(2:ncol(cvnew))) {
-        cvnew[,k] <- cvnew[,k] - adj_rate*cvnew[,k]
+        # cat("\nk: ",k)
+        cvnew[, k] <- cvnew[,k] - adj_rate * cvnew[,k]
       }
-      b <- beat.1st(stratif=strata,errors=cvnew)
-      if (sum(b$alloc$ALLOC[-nrow(b$alloc)]) > target_size) break
-    } 
+      b <- beat.1st(stratif = strata, errors = cvnew)
+      current_size <- sum(b$alloc$ALLOC[-nrow(b$alloc)])
+      cat("\n Size: ",current_size)
+      if (current_size == oldsize) break
+      if (current_size != oldsize) oldsize <- current_size
+      if (current_size > target_size) 
+        break
+    }
   }
   if (size >= target_size) {
     repeat {
       for (k in c(2:ncol(cvnew))) {
-        cvnew[,k] <- cvnew[,k] + adj_rate*cvnew[,k]
+        cvnew[, k] <- cvnew[,k] + adj_rate * cvnew[,k]
       }
-      b <- beat.1st(stratif=strata,errors=cvnew)
-      if (sum(b$alloc$ALLOC[-nrow(b$alloc)]) < target_size) break
-    } 
+      b <- beat.1st(stratif = strata, errors = cvnew)
+      current_size <- sum(b$alloc$ALLOC[-nrow(b$alloc)])
+      cat("\n Size: ",current_size)
+      if (current_size == oldsize) break
+      if (current_size != oldsize) oldsize <- current_size
+      if (current_size < target_size) 
+        break
+    }
   }
-  cat("\n Size: ",sum(b$alloc$ALLOC[-nrow(b$alloc)]))
+  cat("\n Size: ", sum(b$alloc$ALLOC[-nrow(b$alloc)]))
   return(cvnew)
 }

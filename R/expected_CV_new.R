@@ -35,31 +35,31 @@
 #' 
 
 
-expected_CV <- function(strata,errors,alloc) {
-  data <- beat.1cv(strata,errors,alloc)
+expected_CV <- function (strata, errors, alloc) 
+{
+  data <- beat.1cv(strata, errors, alloc)
   split_strings <- strsplit(data$`DOMAIN/VAR`, split = "/")
   data$Dom <- sapply(split_strings, `[`, 1)
   data$Var <- sapply(split_strings, `[`, 2)
-  data <- data[,c("TYPE","Dom","Var","ACTUAL_CV")]
-  colnames(data) <- c("Type","Dom","Var","Actual CV")
+  data <- data[, c("TYPE", "Dom", "Var", "ACTUAL_CV")]
+  colnames(data) <- c("Type", "Dom", "Var", "Actual CV")
   ndom <- length(unique(data$Type))
   nvar <- length(unique(data$Var))
   unique_combinations <- unique(data[, c("Type", "Dom")])
-  exp_cv  <- as.data.frame(list(Type = unique_combinations[,1],
-                                   DOM = unique_combinations[,2],
-                                   CV1 = rep(0,nrow(unique_combinations))))
+  exp_cv <- as.data.frame(list(Type = unique_combinations[, 
+                                                          1], DOM = unique_combinations[, 2], CV1 = rep(0, nrow(unique_combinations))))
   for (i in c(2:(nvar))) {
-    eval(parse(text=paste0("exp_cv$CV",i," <- 0")))
+    eval(parse(text = paste0("exp_cv$CV", i, " <- 0")))
   }
-  # Loop through each unique combination
   for (i in 1:nrow(unique_combinations)) {
-    # Extract the current combination
     current_combination <- unique_combinations[i, ]
-    exp_cv$Type[i] <- unique_combinations[i,1]
-    exp_cv$DOM[i] <- unique_combinations[i,2]
-    subset_data <- subset(data, Type == current_combination$Type & Dom == current_combination$Dom)
+    exp_cv$Type[i] <- unique_combinations[i, 1]
+    exp_cv$DOM[i] <- unique_combinations[i, 2]
+    subset_data <- subset(data, Type == current_combination$Type & 
+                            Dom == current_combination$Dom)
     for (j in c(1:nvar)) {
-      eval(parse(text=paste0("exp_cv$CV",j,"[",i,"] <- subset_data$`Actual CV`[",j,"]")))
+      eval(parse(text = paste0("exp_cv$CV", j, "[", i, 
+                               "] <- subset_data$`Actual CV`[", j, "]")))
     }
   }
   exp_cv
@@ -71,8 +71,11 @@ expected_CV <- function(strata,errors,alloc) {
     })
   }
   max_values <- lapply(split_data, calculate_max)
-  max_values <- lapply(max_values,function(x) round(x,4))
+  max_values <- lapply(max_values, function(x) round(x, 4))
   max_values_df <- do.call(rbind, max_values)
   row.names(max_values_df) <- unique(exp_cv$Type)
+  max_values_df <- as.data.frame(max_values_df)
+  max_values_df$DOM <- c(row.names(max_values_df))
+  max_values_df <- max_values_df[,c(ncol(max_values_df),c(1:(ncol(max_values_df)-1))),]
   return(max_values_df)
 }

@@ -25,7 +25,7 @@ prepareInputToAllocation_beat.1st <- function (samp_frame, ID, stratum, dom,  ta
       var <- Y[i]
       if (!var %in% vars) {
         msg <- paste("Y variable ", var, " not in the frame variables", 
-                    sep = "")
+                     sep = "")
         stop(msg)
       }
     }
@@ -96,7 +96,7 @@ prepareInputToAllocation_beat.1st <- function (samp_frame, ID, stratum, dom,  ta
       mx <- sum(x * w)/sum(w)
       sqrt(mx*(1-mx))
     }
-   
+    
     avgf <- function(x, w){
       sum(x * w)/sum(w)
     }
@@ -110,23 +110,23 @@ prepareInputToAllocation_beat.1st <- function (samp_frame, ID, stratum, dom,  ta
       stdev <- NULL
       for (i in 1:nvarY){
         if (eval(parse(text=paste("nlevels(as.factor(dataset$Y",i,"))==2", sep="")))){
-        stdev[[i]] <- "stdev_prop"
-        if(eval(parse(text=paste("all(levels(as.factor(dataset$Y", i, "))!=c('0','1'))", sep="")))){
-          #check levels of the dummy variable and convert levels to compute the proportion
-          
-          cat(paste("\nConverting levels of factor variable Y", i," into 0/1 \n", sep=""))
-          txt=paste("dataset$Y", i, " <- as.factor(dataset$Y",i,")", sep="")
-          eval(parse(text=txt)) #to factor
-          txt=paste("levels(dataset$Y", i,") <- c('0', '1')", sep="")
-          eval(parse(text=txt)) #change levels
-          txt=paste("dataset$Y", i, " <- as.numeric(levels(dataset$Y",i,"))[dataset$Y", i, "]", sep="")
-          eval(parse(text=txt)) #to numeric
-        }
+          stdev[[i]] <- "stdev_prop"
+          if(eval(parse(text=paste("all(levels(as.factor(dataset$Y", i, "))!=c('0','1'))", sep="")))){
+            #check levels of the dummy variable and convert levels to compute the proportion
+            
+            cat(paste("\nConverting levels of factor variable Y", i," into 0/1 \n", sep=""))
+            txt=paste("dataset$Y", i, " <- as.factor(dataset$Y",i,")", sep="")
+            eval(parse(text=txt)) #to factor
+            txt=paste("levels(dataset$Y", i,") <- c('0', '1')", sep="")
+            eval(parse(text=txt)) #change levels
+            txt=paste("dataset$Y", i, " <- as.numeric(levels(dataset$Y",i,"))[dataset$Y", i, "]", sep="")
+            eval(parse(text=txt)) #to numeric
+          }
         }
         else{
           stdev[[i]] <- "stdev1" 
         }
-
+        
       }
     }
     if (length(grep("WEIGHT", names(dataset))) == 0) {
@@ -153,14 +153,14 @@ prepareInputToAllocation_beat.1st <- function (samp_frame, ID, stratum, dom,  ta
           }
         }
         else{
-         
-         stdev[[i]] <- "stdev2" 
+          
+          stdev[[i]] <- "stdev2" 
         }
-       
+        
       }
     }
     #define the number of domains:
-
+    
     ndom <- sum(grepl("DOMAINVALUE", colnames(dataset)))
     
     
@@ -189,7 +189,7 @@ prepareInputToAllocation_beat.1st <- function (samp_frame, ID, stratum, dom,  ta
           Sys.sleep(0.1)
           setTxtProgressBar(pb, doms)
         }
-         
+        
         # if (progress == TRUE) 
         #   setTxtProgressBar(pb, doms)
         dom <- d
@@ -227,7 +227,7 @@ prepareInputToAllocation_beat.1st <- function (samp_frame, ID, stratum, dom,  ta
         if(idx_d==1){
           if (!is.null(dataset$COST)){
             cost <- tapply(domain$WEIGHT * domain$COST, domain$STRATUM,sum)/tapply(domain$WEIGHT, 
-                                                                                    domain$STRATUM, sum)
+                                                                                   domain$STRATUM, sum)
           } #cost function to be used later if the variable COST in dataset is specified.
           
           
@@ -259,7 +259,7 @@ prepareInputToAllocation_beat.1st <- function (samp_frame, ID, stratum, dom,  ta
             eval(parse(text = stmt)) #define samp as dataframe 'domain' (including only rows with non-missing values of the variable Yi)
             l.split <- split(samp, samp$STRATUM, drop = TRUE) #split divides the data samp into the groups defined by STRATUM.
             stmt <- paste("M", i, " <- sapply(l.split, function(df,x,w) ",  avg, "(df[,x],df[,w]), x='Y", i, "', w='WEIGHT')", 
-            sep = "")
+                          sep = "")
             eval(parse(text = stmt))  # separately per STRATUM, save the mean value of the variable Yi
             
             stmt <- paste("S", i, " <- sapply(l.split, function(df,x,w) ",  stdev[[i]], "(df[,x],df[,w]), x='Y", i, "', w='WEIGHT')", 
@@ -274,7 +274,7 @@ prepareInputToAllocation_beat.1st <- function (samp_frame, ID, stratum, dom,  ta
                           i, "), stringsAsFactors = TRUE)", sep = "")
             eval(parse(text = stmt)) #create a dataframe with variable x1: STRATUM, x2: mean of the target variable Yi
             m <- merge(strati, m, by = c("X1"), all = TRUE) #merge by strato
-           
+            
             m$X2 <- ifelse(is.na(m$X2), m$X2, as.character(m$X2)) #convert X2 as character
             m$X2 <- ifelse(is.na(m$X2), m$X2, as.numeric(m$X2))  #convert X2 as numeric
             m$X2 <- ifelse(is.na(m$X2), 0, m$X2) #replace NA in X2 with 0
@@ -308,11 +308,11 @@ prepareInputToAllocation_beat.1st <- function (samp_frame, ID, stratum, dom,  ta
             CENS <- domain$CENS
           } else CENS <- rep(0, length(levels(domain$STRATUM)))
           
-         
+          
           stmt <- paste("DOM",idx_d, " <- rep(as.character(dom), length(levels(domain$STRATUM)))", sep="")
           eval(parse(text=stmt))  #define DOMidx_d variable
           
-         
+          
           stmt <- paste("strata <- as.data.frame(cbind(STRATUM=levels(STRATUM),N,", listM,",", listS,",COST,CENS,DOM",idx_d,"),stringsAsFactors = TRUE)", sep="" )
           eval(parse(text = stmt)) #create a dataframe with variable STRATUM, N, M1:Mn, S1:Sn, COST, CENS, DOMidx_d
           for (i in 1:nvarX) {
@@ -321,10 +321,16 @@ prepareInputToAllocation_beat.1st <- function (samp_frame, ID, stratum, dom,  ta
             eval(parse(text = stmt)) #initialize with null vector X variables
           }
           strata$STRATUM <- as.character(strata$STRATUM) #to character
-          for (i in 1:nrow(strata)) {
-            strata[i, c(namesX)] <- unlist(strsplit(strata$STRATUM[i], 
-                                                    "\\*"))
-            #fill X variables with their values (taken from STRATUM)
+          if(length(namesX)!=1){
+            for (i in 1:nrow(strata)) {
+              strata[i, c(namesX)] <- unlist(strsplit(strata$STRATUM[i], 
+                                                      "\\*"))
+              #fill X variables with their values (taken from STRATUM)
+            }
+          }
+          else{
+            strata[, c(namesX)] <-strata$STRATUM
+            # if stratification variables are not provided, then returns stratum
           }
         }
         #for all the other domain, as I have already save the values of CENS, COST, M1:Mn, S1:Sn, X1:Xk, I just need to save the stratum and the domain categories
@@ -379,24 +385,24 @@ prepareInputToAllocation_beat.1st <- function (samp_frame, ID, stratum, dom,  ta
       cat("\n... of which with only one unit: ", sum(stratatot$N == 1))
     }
     stratatot <- stratatot[,c("STRATUM", paste("X", 1:nvarX, sep=""),
-                           paste("DOM", 1:ndom, sep=""), 
-                           "N", paste("M", 1:nvarY, sep=""), 
-                           paste("S", 1:nvarY, sep=""), 
-                           "CENS", "COST")] #reorder columns
+                              paste("DOM", 1:ndom, sep=""), 
+                              "N", paste("M", 1:nvarY, sep=""), 
+                              paste("S", 1:nvarY, sep=""), 
+                              "CENS", "COST")] #reorder columns
     return(list(stratatot=stratatot, numdom=ndom, nvarX=nvarX, nvarY=nvarY))
     
   }
- 
+  
   #library(SamplingStrata)
   # if (is.null(samp_frame$one)) 
   #   samp_frame$one <- 1
   cat("\nCalculating strata...")
   frame <- buildFrame(df = samp_frame,
-                        id = ID,
-                        X = stratum, 
-                        Y = target,
-                        domainvalue = dom)
- # nvarY <- length(grep("Y", colnames(frame)))
+                      id = ID,
+                      X = stratum, 
+                      Y = target,
+                      domainvalue = dom)
+  # nvarY <- length(grep("Y", colnames(frame)))
   stratif <- buildStrata(dataset=frame, progress = TRUE, verbose=TRUE)
   nvarX <- stratif$nvarX
   nvarY <- stratif$nvarY
@@ -409,10 +415,10 @@ prepareInputToAllocation_beat.1st <- function (samp_frame, ID, stratum, dom,  ta
   }
   stratif$DOM1 <- 1 #national domain
   stratif <- stratif[,c("STRATUM", paste("X", 1:nvarX, sep=""),
-                         paste("DOM", 1:(numdom+1), sep=""), 
-                         "N", paste("M", 1:nvarY, sep=""), 
-                         paste("S", 1:nvarY, sep=""), 
-                         "CENS", "COST")] #reorder columns
+                        paste("DOM", 1:(numdom+1), sep=""), 
+                        "N", paste("M", 1:nvarY, sep=""), 
+                        paste("S", 1:nvarY, sep=""), 
+                        "CENS", "COST")] #reorder columns
   
   #adjust colnames
   if(length(grepl("X", names(stratif))) > 1){
@@ -426,10 +432,7 @@ prepareInputToAllocation_beat.1st <- function (samp_frame, ID, stratum, dom,  ta
   
   
   
- 
+  
   return(stratif)
-
+  
 }
-
-    
- 
