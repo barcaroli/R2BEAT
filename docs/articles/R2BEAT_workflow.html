@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>R2BEAT two-stage sampling design workflow starting from a previous survey • R2BEAT</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
@@ -94,7 +94,7 @@
       <h1 data-toc-skip>R2BEAT two-stage sampling design workflow
 starting from a previous survey</h1>
             
-            <h4 data-toc-skip class="date">2024-04-02 <br><br><br>
+            <h4 data-toc-skip class="date">2024-05-26 <br><br><br>
 </h4>
       
       <small class="dont-index">Source: <a href="https://github.com/barcaroli/R2BEAT/blob/HEAD/vignettes/R2BEAT_workflow.Rmd" class="external-link"><code>vignettes/R2BEAT_workflow.Rmd</code></a></small>
@@ -295,30 +295,30 @@ just remains for documentation purposes.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">inp</span><span class="op">$</span><span class="va">deff</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##   stratum STRATUM    DEFF1    DEFF2    DEFF3    DEFF4    b_nar</span></span>
-<span><span class="co">## 1    1000    1000 0.960198 0.999984 1.015715 0.962537 56.50000</span></span>
-<span><span class="co">## 2   10000   10000 0.864671 1.703511 1.417543 0.827580 26.75000</span></span>
-<span><span class="co">## 3   11000   11000 1.820304 1.267734 1.352970 1.345746 23.77778</span></span>
-<span><span class="co">## 4   12000   12000 1.103866 0.510554 0.491751 0.711980 21.00000</span></span>
+<span><span class="co">## 1    1000    1000 0.951705 0.991140 1.006731 0.954024 56.50000</span></span>
+<span><span class="co">## 2   10000   10000 0.856598 1.687606 1.404308 0.819854 26.75000</span></span>
+<span><span class="co">## 3   11000   11000 1.811807 1.261816 1.346654 1.339464 23.77778</span></span>
+<span><span class="co">## 4   12000   12000 1.086363 0.502458 0.483954 0.700691 21.00000</span></span>
 <span><span class="co">## 5   13000   13000 1.000924 1.000924 1.000924 1.000000 95.00000</span></span>
-<span><span class="co">## 6   14000   14000 0.639871 0.865378 0.854025 0.684041 33.66667</span></span></code></pre>
+<span><span class="co">## 6   14000   14000 0.633543 0.856820 0.845580 0.677276 33.66667</span></span></code></pre>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">inp</span><span class="op">$</span><span class="va">effst</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##   stratum STRATUM    EFFST1 EFFST2 EFFST3    EFFST4</span></span>
-<span><span class="co">## 1    1000    1000 0.9689481      1      1 0.9420957</span></span>
-<span><span class="co">## 2   10000   10000 0.9500006      1      1 1.1915489</span></span>
-<span><span class="co">## 3   11000   11000 0.9544521      1      1 1.0546195</span></span>
-<span><span class="co">## 4   12000   12000 1.0429454      1      1 0.9732492</span></span>
-<span><span class="co">## 5   13000   13000 1.0019592      1      1 1.0000000</span></span>
-<span><span class="co">## 6   14000   14000 0.9829169      1      1 1.0974518</span></span></code></pre>
+<span><span class="co">## 1    1000    1000 0.9689494      1      1 0.9420958</span></span>
+<span><span class="co">## 2   10000   10000 0.9500011      1      1 1.1915475</span></span>
+<span><span class="co">## 3   11000   11000 0.9544521      1      1 1.0546196</span></span>
+<span><span class="co">## 4   12000   12000 1.0429461      1      1 0.9732493</span></span>
+<span><span class="co">## 5   13000   13000 0.9914219      1      1 1.0000000</span></span>
+<span><span class="co">## 6   14000   14000 0.9829167      1      1 1.0974521</span></span></code></pre>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">inp</span><span class="op">$</span><span class="va">rho</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##   STRATUM RHO_AR1        RHO_NAR1 RHO_AR2         RHO_NAR2 RHO_AR3        RHO_NAR3 RHO_AR4     RHO_NAR4</span></span>
-<span><span class="co">## 1    1000       1 -0.000717153153       1 -0.0000002882883       1  0.000283153153       1 -0.000675009</span></span>
-<span><span class="co">## 2   10000       1 -0.005255495146       1  0.0273208155340       1  0.016215262136       1 -0.006695922</span></span>
-<span><span class="co">## 3   11000       1  0.036013346341       1  0.0117541756098       1  0.015496243902       1  0.015179093</span></span>
-<span><span class="co">## 4   12000       1  0.005193300000       1 -0.0244723000000       1 -0.025412450000       1 -0.014401000</span></span>
-<span><span class="co">## 5   13000       1  0.000009829787       1  0.0000098297872       1  0.000009829787       1  0.000000000</span></span>
-<span><span class="co">## 6   14000       1 -0.011024357143       1 -0.0041210816327       1 -0.004468622449       1 -0.009672214</span></span></code></pre>
+<pre><code><span><span class="co">##   STRATUM RHO_AR1        RHO_NAR1 RHO_AR2        RHO_NAR2 RHO_AR3        RHO_NAR3 RHO_AR4      RHO_NAR4</span></span>
+<span><span class="co">## 1    1000       1 -0.000870180180       1 -0.000159639640       1  0.000121279279       1 -0.0008283964</span></span>
+<span><span class="co">## 2   10000       1 -0.005569009709       1  0.026703145631       1  0.015701281553       1 -0.0069959612</span></span>
+<span><span class="co">## 3   11000       1  0.035640307317       1  0.011494360976       1  0.015218956098       1  0.0149032976</span></span>
+<span><span class="co">## 4   12000       1  0.004318150000       1 -0.024877100000       1 -0.025802300000       1 -0.0149654500</span></span>
+<span><span class="co">## 5   13000       1  0.000009829787       1  0.000009829787       1  0.000009829787       1  0.0000000000</span></span>
+<span><span class="co">## 6   14000       1 -0.011218071429       1 -0.004383061224       1 -0.004727142857       1 -0.0098793061</span></span></code></pre>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">inp</span><span class="op">$</span><span class="va">psu_file</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##   PSU_ID STRATUM PSU_MOS</span></span>
@@ -420,35 +420,24 @@ optimization of PSU and SSU allocation in strata:</p>
 <span>                  minnumstrat <span class="op">=</span> <span class="fl">2</span>, </span>
 <span>                  <span class="va">minPSUstrat</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    iterations PSU_SR PSU NSR PSU Total    SSU</span></span>
-<span><span class="co">## 1           0      0       0         0   7721</span></span>
-<span><span class="co">## 2           1    111      72       183 109498</span></span>
-<span><span class="co">## 3           2    155     114       269   7925</span></span>
-<span><span class="co">## 4           3    116     132       248   8660</span></span>
-<span><span class="co">## 5           4    146     122       268   8343</span></span>
-<span><span class="co">## 6           5    128     130       258   8580</span></span>
-<span><span class="co">## 7           6    143     124       267   8391</span></span>
-<span><span class="co">## 8           7    131     128       259   8550</span></span>
-<span><span class="co">## 9           8    143     124       267   8392</span></span>
-<span><span class="co">## 10          9    131     128       259   8550</span></span>
-<span><span class="co">## 11         10    143     124       267   8392</span></span>
-<span><span class="co">## 12         11    131     128       259   8550</span></span>
-<span><span class="co">## 13         12    143     124       267   8392</span></span>
-<span><span class="co">## 14         13    131     128       259   8550</span></span>
-<span><span class="co">## 15         14    143     124       267   8392</span></span>
-<span><span class="co">## 16         15    131     128       259   8550</span></span>
-<span><span class="co">## 17         16    143     124       267   8392</span></span>
-<span><span class="co">## 18         17    131     128       259   8550</span></span>
-<span><span class="co">## 19         18    143     124       267   8392</span></span>
-<span><span class="co">## 20         19    131     128       259   8550</span></span>
-<span><span class="co">## 21         20    143     124       267   8392</span></span></code></pre>
+<span><span class="co">## 1           0      0       0         0   7701</span></span>
+<span><span class="co">## 2           1    111      72       183 109442</span></span>
+<span><span class="co">## 3           2    149     116       265   7928</span></span>
+<span><span class="co">## 4           3    117     132       249   8618</span></span>
+<span><span class="co">## 5           4    146     122       268   8297</span></span>
+<span><span class="co">## 6           5    128     130       258   8534</span></span>
+<span><span class="co">## 7           6    143     124       267   8346</span></span>
+<span><span class="co">## 8           7    130     130       260   8500</span></span>
+<span><span class="co">## 9           8    142     124       266   8364</span></span>
+<span><span class="co">## 10          9    131     130       261   8482</span></span></code></pre>
 <p>This is the sensitivity of the solution:</p>
 <div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">alloc</span><span class="op">$</span><span class="va">sensitivity</span></span></code></pre></div>
 <pre><code><span><span class="co">##    Type Dom V1 V2  V3   V4</span></span>
 <span><span class="co">## 2  DOM1   1  1  0   1    1</span></span>
-<span><span class="co">## 6  DOM2   1  1  0   8 1150</span></span>
-<span><span class="co">## 10 DOM2   2  1  1 245    1</span></span>
-<span><span class="co">## 14 DOM2   3  1  1 275    1</span></span></code></pre>
+<span><span class="co">## 6  DOM2   1  1  0   8 1170</span></span>
+<span><span class="co">## 10 DOM2   2  1  1 244    1</span></span>
+<span><span class="co">## 14 DOM2   3  1  1 274    1</span></span></code></pre>
 <p>i.e., for each domain value and for each variable it is reported the
 gain in terms of reduction in the sample size if the corresponding
 precision constraint is reduced of 10%.</p>
@@ -456,10 +445,10 @@ precision constraint is reduced of 10%.</p>
 <div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">alloc</span><span class="op">$</span><span class="va">expected</span></span></code></pre></div>
 <pre><code><span><span class="co">##    Type Dom      V1      V2      V3      V4</span></span>
-<span><span class="co">## 2  DOM1   1 0.01096 0.00746 0.02003 0.02571</span></span>
-<span><span class="co">## 6  DOM2   1 0.01378 0.00689 0.02436 0.08561</span></span>
-<span><span class="co">## 10 DOM2   2 0.02150 0.02086 0.05034 0.06692</span></span>
-<span><span class="co">## 14 DOM2   3 0.03002 0.02466 0.05131 0.03461</span></span></code></pre>
+<span><span class="co">## 2  DOM1   1 0.01095 0.00742 0.01990 0.02556</span></span>
+<span><span class="co">## 6  DOM2   1 0.01378 0.00685 0.02414 0.08601</span></span>
+<span><span class="co">## 10 DOM2   2 0.02150 0.02087 0.05033 0.06695</span></span>
+<span><span class="co">## 14 DOM2   3 0.02994 0.02468 0.05130 0.03444</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="selection-of-psus">Selection of PSUs<a class="anchor" aria-label="anchor" href="#selection-of-psus"></a>
@@ -474,7 +463,7 @@ strata:</p>
 <div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sample_1st</span><span class="op">$</span><span class="va">PSU_stats</span></span></code></pre></div>
 <pre><code><span><span class="co">##    STRATUM PSU PSU_SR PSU_NSR  SSU SSU_SR SSU_NSR</span></span>
-<span><span class="co">## 1     1000   2      2       0  294    294       0</span></span>
+<span><span class="co">## 1     1000   2      2       0  293    293       0</span></span>
 <span><span class="co">## 2     2000  13     13       0  405    405       0</span></span>
 <span><span class="co">## 3     3000  10      0      10  250      0     250</span></span>
 <span><span class="co">## 4     4000   2      0       2   50      0      50</span></span>
@@ -482,23 +471,23 @@ strata:</p>
 <span><span class="co">## 6     6000   3      3       0   82     82       0</span></span>
 <span><span class="co">## 7     7000   2      0       2   50      0      50</span></span>
 <span><span class="co">## 8     8000   2      0       2   50      0      50</span></span>
-<span><span class="co">## 9     9000   1      1       0  810    810       0</span></span>
-<span><span class="co">## 10   10000   6      6       0  644    644       0</span></span>
-<span><span class="co">## 11   11000  53     41      12 1432   1132     300</span></span>
+<span><span class="co">## 9     9000   1      1       0  806    806       0</span></span>
+<span><span class="co">## 10   10000   6      6       0  649    649       0</span></span>
+<span><span class="co">## 11   11000  51     35      16 1396    994     402</span></span>
 <span><span class="co">## 12   12000  10      0      10  250      0     250</span></span>
 <span><span class="co">## 13   13000   1      1       0   30     30       0</span></span>
-<span><span class="co">## 14   14000   4      4       0  607    607       0</span></span>
-<span><span class="co">## 15   15000  38     22      16 1021    621     400</span></span>
-<span><span class="co">## 16   16000  69     31      38 1725    775     950</span></span>
+<span><span class="co">## 14   14000   4      4       0  612    612       0</span></span>
+<span><span class="co">## 15   15000  38     22      16 1024    624     400</span></span>
+<span><span class="co">## 16   16000  65     25      40 1634    626    1008</span></span>
 <span><span class="co">## 17   17000   1      1       0  151    151       0</span></span>
 <span><span class="co">## 18   18000   6      6       0  199    199       0</span></span>
 <span><span class="co">## 19   19000  22      6      16  550    150     400</span></span>
 <span><span class="co">## 20   20000   8      0       8  200      0     200</span></span>
 <span><span class="co">## 21   21000   1      1       0  142    142       0</span></span>
-<span><span class="co">## 22   22000   3      3       0  109    109       0</span></span>
+<span><span class="co">## 22   22000   3      3       0  108    108       0</span></span>
 <span><span class="co">## 23   23000   6      0       6  150      0     150</span></span>
 <span><span class="co">## 24   24000   2      0       2   50      0      50</span></span>
-<span><span class="co">## 25   Total 267    143     124 9436   6336    3100</span></span></code></pre>
+<span><span class="co">## 25   Total 261    131     130 9316   6056    3260</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="selection-of-ssus">Selection of SSUs<a class="anchor" aria-label="anchor" href="#selection-of-ssus"></a>
@@ -513,17 +502,17 @@ proceed to select the sample in this way:</p>
 <span>                   PSU_sampled<span class="op">=</span><span class="va">sample_1st</span><span class="op">$</span><span class="va">sample_PSU</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## </span></span>
 <span><span class="co">## --------------------------------</span></span>
-<span><span class="co">## Total PSUs =  267</span></span>
-<span><span class="co">## Total SSUs =  9436</span></span>
+<span><span class="co">## Total PSUs =  261</span></span>
+<span><span class="co">## Total SSUs =  9316</span></span>
 <span><span class="co">## --------------------------------</span></span></code></pre>
 <p>To check that the total amount of selected units with respect to the
 initial allocation:</p>
 <div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">samp</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] 9436</span></span></code></pre>
+<pre><code><span><span class="co">## [1] 9316</span></span></code></pre>
 <div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">alloc</span><span class="op">$</span><span class="va">alloc</span><span class="op">$</span><span class="va">ALLOC</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">alloc</span><span class="op">$</span><span class="va">alloc</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] 8392</span></span></code></pre>
+<pre><code><span><span class="co">## [1] 8482</span></span></code></pre>
 <p>The difference is due to the fact that the constraint on the minimum
 number of SSUs to be selected for PSU has been enforced, thus resulting
 in an increase of the SSUs with respect to the optimal allocation.</p>
@@ -572,7 +561,7 @@ result we wanted to obtain.</p>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
 </div>
 
       </footer>

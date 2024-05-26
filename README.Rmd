@@ -27,7 +27,7 @@ It is an extension of another open-source software called *Mauss-R* (Multivariat
 
 To complete the suite of tools developed by Istat in order to cover the stratified sample design, we cite *SamplingStrata* (https://CRAN.R-project.org/package=SamplingStrata), that allows to jointly optimize both the stratification of the sampling frame and the allocation, still in the multivariate multidomain case (only for one-stage designs), and *MultiWay.Sample.Allocation*, that allows to determine the optimal sample allocation for multi-way stratified sampling designs and incomplete stratified sampling designs (https://www.istat.it/en/methods-and-tools/methods-and-it-tools/design/design-tools/multiwaysampleallocation).
 
-For a complete illustration of the methodology see the vignette "R2BEAT methodology and use" (https://barcaroli.github.io/R2BEAT/articles/R2BEAT_methodology.html). 
+For a complete illustration of the methodology, see the vignette "R2BEAT methodology and use" (https://barcaroli.github.io/R2BEAT/articles/R2BEAT_methodology.html). 
 
 A complete example is illustrated in the vignette "Two-stage sampling design workflow" (https://barcaroli.github.io/R2BEAT/articles/R2BEAT_workflow.html). 
 
