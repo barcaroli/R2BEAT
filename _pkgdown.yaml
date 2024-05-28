@@ -2,7 +2,7 @@ destination: docs
 title: R2BEAT
 description: Multistage Sampling Allocation and PSU selection
 author: Giulio Barcaroli
-url: https://github.com/barcaroli/R2BEAT
+url: https://barcaroli.github.io/R2BEAT
 template:
   params:
     bootswatch: Italy
