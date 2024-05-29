@@ -17,7 +17,7 @@ setwd("D:/Google Drive/Sampling/R2BEAT/R2BEAT_1.0.6/")
 library(pkgdown)
 # usethis::use_pkgdown()
 # Sys.setenv(R_WIN_USE_SAFE_CALLBACKS = "0")
-build_site()
+devtools::build_site()
 
 
 
