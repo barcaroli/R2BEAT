@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Multistage Sampling Allocation and Sample Selection • R2BEAT</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="bootstrap-toc.css">
 <script src="bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
@@ -26,8 +26,6 @@
 </script>
 </head>
 <body data-spy="scroll" data-target="#toc">
-    
-
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -40,12 +38,18 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">R2BEAT</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.6</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
+<li>
+  <a href="index.html">
+    <span class="fas fa-home fa-lg"></span>
+     
+  </a>
+</li>
 <li>
   <a href="reference/index.html">Reference</a>
 </li>
@@ -73,7 +77,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/barcaroli/R2BEAT/" class="external-link">
+  <a href="https://github.com/barcaroli/R2BEAT/">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -92,46 +96,70 @@
   <div class="contents col-md-9">
 
 
-<div class="section level1">
-<div class="page-header"><h1 id="r2beat-multistage-sampling-design-and-sample-selection">R2BEAT: Multistage Sampling Design and Sample Selection<a class="anchor" aria-label="anchor" href="#r2beat-multistage-sampling-design-and-sample-selection"></a>
-</h1></div>
-<p>Multivariate optimal allocation for different domains in one and two stages stratified sample design. R2BEAT extends the Neyman (1934) – Tschuprow (1923) allocation method to the case of several variables, adopting a generalization of the Bethel’s proposal (1989). R2BEAT develops this methodology but, moreover, it allows to determine the sample allocation in the multivariate and multi-domains case of estimates for two-stage stratified samples. It also allows to perform both Primary Stage Units and Secondary Stage Units selection.</p>
-<p><em>R2BEAT</em> easily manages all the complexity due to the optimal sample allocation in two-stage sampling design and provides several outputs for evaluating the allocation. Its name stands for “R ‘to’ Bethel Extended Allocation for Two-stage”. It is an extension of another open-source software called <em>Mauss-R</em> (Multivariate Allocation of Units in Sampling Surveys), implemented by ISTAT researchers (<a href="https://www.istat.it/en/methods-and-tools/methods-and-it-tools/design/design-tools/mauss-r" class="external-link uri">https://www.istat.it/en/methods-and-tools/methods-and-it-tools/design/design-tools/mauss-r</a>). <em>Mauss-R</em> determines the optimal sample allocation in multivariate and multi-domains estimation, for one-stage stratified samples.</p>
-<p>To complete the suite of tools developed by Istat in order to cover the stratified sample design, we cite <em>SamplingStrata</em> (<a href="https://CRAN.R-project.org/package=SamplingStrata" class="external-link uri">https://CRAN.R-project.org/package=SamplingStrata</a>), that allows to jointly optimize both the stratification of the sampling frame and the allocation, still in the multivariate multidomain case (only for one-stage designs), and <em>MultiWay.Sample.Allocation</em>, that allows to determine the optimal sample allocation for multi-way stratified sampling designs and incomplete stratified sampling designs (<a href="https://www.istat.it/en/methods-and-tools/methods-and-it-tools/design/design-tools/multiwaysampleallocation" class="external-link uri">https://www.istat.it/en/methods-and-tools/methods-and-it-tools/design/design-tools/multiwaysampleallocation</a>).</p>
-<p>For a complete illustration of the methodology, see the vignette “R2BEAT methodology and use” (<a href="https://barcaroli.github.io/R2BEAT/articles/R2BEAT_methodology.html" class="external-link uri">https://barcaroli.github.io/R2BEAT/articles/R2BEAT_methodology.html</a>).</p>
-<p>A complete example is illustrated in the vignette “Two-stage sampling design workflow” (<a href="https://barcaroli.github.io/R2BEAT/articles/R2BEAT_workflow.html" class="external-link uri">https://barcaroli.github.io/R2BEAT/articles/R2BEAT_workflow.html</a>).</p>
-<div class="section level2">
-<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
-</h2>
-<p>You can install the released version of R2BEAT from <a href="https://CRAN.R-project.org" class="external-link">CRAN</a> with:</p>
+<div id="r2beat-multistage-sampling-design-and-sample-selection" class="section level1">
+<div class="page-header"><h1 class="hasAnchor">
+<a href="#r2beat-multistage-sampling-design-and-sample-selection" class="anchor"></a>R2BEAT: Multistage Sampling Design and Sample Selection</h1></div>
+<p>Multivariate optimal allocation for different domains in one and two
+stages stratified sample design. R2BEAT extends the Neyman (1934) –
+Tschuprow (1923) allocation method to the case of several variables,
+adopting a generalization of the Bethel’s proposal (1989). R2BEAT
+develops this methodology but, moreover, it allows to determine the
+sample allocation in the multivariate and multi-domains case of
+estimates for two-stage stratified samples. It also allows to perform
+both Primary Stage Units and Secondary Stage Units selection.</p>
+<p><em>R2BEAT</em> easily manages all the complexity due to the optimal
+sample allocation in two-stage sampling design and provides several
+outputs for evaluating the allocation. Its name stands for “R ‘to’
+Bethel Extended Allocation for Two-stage”. It is an extension of another
+open-source software called <em>Mauss-R</em> (Multivariate Allocation of
+Units in Sampling Surveys), implemented by ISTAT researchers (<a href="https://www.istat.it/en/methods-and-tools/methods-and-it-tools/design/design-tools/mauss-r" class="uri">https://www.istat.it/en/methods-and-tools/methods-and-it-tools/design/design-tools/mauss-r</a>).
+<em>Mauss-R</em> determines the optimal sample allocation in
+multivariate and multi-domains estimation, for one-stage stratified
+samples.</p>
+<p>To complete the suite of tools developed by Istat in order to cover
+the stratified sample design, we cite <em>SamplingStrata</em> (<a href="https://CRAN.R-project.org/package=SamplingStrata" class="uri">https://CRAN.R-project.org/package=SamplingStrata</a>), that
+allows to jointly optimize both the stratification of the sampling frame
+and the allocation, still in the multivariate multidomain case (only for
+one-stage designs), and <em>MultiWay.Sample.Allocation</em>, that allows
+to determine the optimal sample allocation for multi-way stratified
+sampling designs and incomplete stratified sampling designs (<a href="https://www.istat.it/en/methods-and-tools/methods-and-it-tools/design/design-tools/multiwaysampleallocation" class="uri">https://www.istat.it/en/methods-and-tools/methods-and-it-tools/design/design-tools/multiwaysampleallocation</a>).</p>
+<p>For a complete illustration of the methodology, see the vignette
+“R2BEAT methodology and use” (<a href="https://barcaroli.github.io/R2BEAT/articles/R2BEAT_methodology.html" class="uri">https://barcaroli.github.io/R2BEAT/articles/R2BEAT_methodology.html</a>).</p>
+<p>A complete example is illustrated in the vignette “Two-stage sampling
+design workflow” (<a href="https://barcaroli.github.io/R2BEAT/articles/R2BEAT_workflow.html" class="uri">https://barcaroli.github.io/R2BEAT/articles/R2BEAT_workflow.html</a>).</p>
+<div id="installation" class="section level2">
+<h2 class="hasAnchor">
+<a href="#installation" class="anchor"></a>Installation</h2>
+<p>You can install the released version of R2BEAT from <a href="https://CRAN.R-project.org">CRAN</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"R2BEAT"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"R2BEAT"</span><span class="op">)</span></span></code></pre></div>
 <p>or the last version of R2BEAT from github with:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"barcaroli/R2BEAT"</span><span class="op">)</span></span></code></pre></div>
-<div class="section level3">
-<h3 id="examples-with-different-scenarios">Examples with different scenarios<a class="anchor" aria-label="anchor" href="#examples-with-different-scenarios"></a>
-</h3>
-<p>Jupyter notebook: <a href="https://mybinder.org/v2/gh/barcaroli/R2BEAT_workflows/HEAD?filepath=R2BEAT_workflows.ipynb" class="external-link"><img src="https://mybinder.org/badge_logo.svg" alt="Binder"></a></p>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"barcaroli/R2BEAT"</span><span class="op">)</span></span></code></pre></div>
+<div id="examples-with-different-scenarios" class="section level3">
+<h3 class="hasAnchor">
+<a href="#examples-with-different-scenarios" class="anchor"></a>Examples with different scenarios</h3>
+<p>Jupyter notebook: <a href="https://mybinder.org/v2/gh/barcaroli/R2BEAT_workflows/HEAD?filepath=R2BEAT_workflows.ipynb"><img src="https://mybinder.org/badge_logo.svg" alt="Binder"></a></p>
 </div>
-<div class="section level3">
-<h3 id="comparative-evaluation-of-r2beat-with-packages-practools-and-samplesize4surveys">Comparative evaluation of R2BEAT with packages “PracTools” and “samplesize4surveys”<a class="anchor" aria-label="anchor" href="#comparative-evaluation-of-r2beat-with-packages-practools-and-samplesize4surveys"></a>
-</h3>
-<p>Jupyter notebook: <a href="https://mybinder.org/v2/gh/barcaroli/Two-stage-sampling-software-comparison/HEAD?filepath=SW_comparison.ipynb" class="external-link"><img src="https://mybinder.org/badge_logo.svg" alt="Binder"></a></p>
+<div id="comparative-evaluation-of-r2beat-with-packages-practools-and-samplesize4surveys" class="section level3">
+<h3 class="hasAnchor">
+<a href="#comparative-evaluation-of-r2beat-with-packages-practools-and-samplesize4surveys" class="anchor"></a>Comparative evaluation of R2BEAT with packages “PracTools” and
+“samplesize4surveys”</h3>
+<p>Jupyter notebook: <a href="https://mybinder.org/v2/gh/barcaroli/Two-stage-sampling-software-comparison/HEAD?filepath=SW_comparison.ipynb"><img src="https://mybinder.org/badge_logo.svg" alt="Binder"></a></p>
 </div>
 </div>
-<div class="section level2">
-<h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
-</h2>
+<div id="example" class="section level2">
+<h2 class="hasAnchor">
+<a href="#example" class="anchor"></a>Example</h2>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://barcaroli.github.io/R2BEAT/" class="external-link">R2BEAT</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://barcaroli.github.io/R2BEAT/">R2BEAT</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">#-------------------------------------------------------------------------------</span></span>
 <span><span class="co"># Read sampling frame</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://readr.tidyverse.org" class="external-link">readr</a></span><span class="op">)</span></span>
-<span><span class="va">pop</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_rds.html" class="external-link">read_rds</a></span><span class="op">(</span><span class="st">"https://github.com/barcaroli/R2BEAT_workflows/blob/master/pop.RDS?raw=true"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">pop</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://readr.tidyverse.org">readr</a></span><span class="op">)</span></span>
+<span><span class="va">pop</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_rds.html">read_rds</a></span><span class="op">(</span><span class="st">"https://github.com/barcaroli/R2BEAT_workflows/blob/master/pop.RDS?raw=true"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span><span class="op">(</span><span class="va">pop</span><span class="op">)</span></span>
 <span><span class="co"># 'data.frame': 2258507 obs. of  13 variables:</span></span>
 <span><span class="co">#   $ region       : Factor w/ 3 levels "north","center",..: 1 1 1 1 1 1 1 1 1 1 ...</span></span>
 <span><span class="co"># $ province     : Factor w/ 6 levels "north_1","north_2",..: 1 1 1 1 1 1 1 1 1 1 ...</span></span>
@@ -148,11 +176,11 @@
 <span><span class="co"># $ inactive     : num  0 0 1 0 0 0 0 0 0 1 ...</span></span>
 <span><span class="co">#-------------------------------------------------------------------------------</span></span>
 <span><span class="co"># Precision constraints</span></span>
-<span><span class="va">cv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>DOM<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"DOM1"</span>,<span class="st">"DOM2"</span><span class="op">)</span>,</span>
-<span>                         CV1<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.02</span>,<span class="fl">0.03</span><span class="op">)</span>,</span>
-<span>                         CV2<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.03</span>,<span class="fl">0.06</span><span class="op">)</span>,</span>
-<span>                         CV3<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.03</span>,<span class="fl">0.06</span><span class="op">)</span>,</span>
-<span>                         CV4<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.05</span>,<span class="fl">0.08</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">cv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>DOM<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"DOM1"</span>,<span class="st">"DOM2"</span><span class="op">)</span>,</span>
+<span>                         CV1<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.02</span>,<span class="fl">0.03</span><span class="op">)</span>,</span>
+<span>                         CV2<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.03</span>,<span class="fl">0.06</span><span class="op">)</span>,</span>
+<span>                         CV3<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.03</span>,<span class="fl">0.06</span><span class="op">)</span>,</span>
+<span>                         CV4<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.05</span>,<span class="fl">0.08</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">cv</span></span>
 <span><span class="co">#    DOM  CV1  CV2  CV3  CV4</span></span>
 <span><span class="co"># 1 DOM1 0.02 0.03 0.03 0.05</span></span>
@@ -164,7 +192,7 @@
 <span><span class="va">id_PSU</span> <span class="op">&lt;-</span> <span class="st">"municipality"</span>  </span>
 <span><span class="va">id_SSU</span> <span class="op">&lt;-</span> <span class="st">"id_ind"</span>        </span>
 <span><span class="va">strata_var</span> <span class="op">&lt;-</span> <span class="st">"stratum"</span>   </span>
-<span><span class="va">target_vars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"income_hh"</span>,<span class="st">"active"</span>,<span class="st">"inactive"</span>,<span class="st">"unemployed"</span><span class="op">)</span>   </span>
+<span><span class="va">target_vars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"income_hh"</span>,<span class="st">"active"</span>,<span class="st">"inactive"</span>,<span class="st">"unemployed"</span><span class="op">)</span>   </span>
 <span><span class="va">deff_var</span> <span class="op">&lt;-</span> <span class="st">"stratum"</span>     </span>
 <span><span class="va">domain_var</span> <span class="op">&lt;-</span> <span class="st">"region"</span>  </span>
 <span><span class="va">delta</span> <span class="op">=</span>  <span class="fl">1</span>       <span class="co"># households = survey units</span></span>
@@ -182,7 +210,7 @@
 <span>                                 <span class="va">deff_sugg</span><span class="op">)</span></span>
 <span><span class="co">#-------------------------------------------------------------------------------</span></span>
 <span><span class="co"># Optimal allocation</span></span>
-<span><span class="va">alloc</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/beth2.html">beat.2st</a></span><span class="op">(</span>stratif <span class="op">=</span> <span class="va">inp</span><span class="op">$</span><span class="va">strata</span>, </span>
+<span><span class="va">alloc</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/beat.2st.html">beat.2st</a></span><span class="op">(</span>stratif <span class="op">=</span> <span class="va">inp</span><span class="op">$</span><span class="va">strata</span>, </span>
 <span>                  errors <span class="op">=</span> <span class="va">cv</span>, </span>
 <span>                  des_file <span class="op">=</span> <span class="va">inp</span><span class="op">$</span><span class="va">des_file</span>, </span>
 <span>                  psu_file <span class="op">=</span> <span class="va">inp</span><span class="op">$</span><span class="va">psu_file</span>, </span>
@@ -232,7 +260,7 @@
 <span>                         PSU_code<span class="op">=</span><span class="st">"municipality"</span>,</span>
 <span>                         SSU_code<span class="op">=</span><span class="st">"id_ind"</span>,</span>
 <span>                         PSU_sampled<span class="op">=</span><span class="va">sample_1st</span><span class="op">$</span><span class="va">sample_PSU</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">sample_2st</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">sample_2st</span><span class="op">)</span></span>
 <span><span class="co">#   municipality id_ind region province  id_hh stratum stratum_label sex  cl_age active income_hh</span></span>
 <span><span class="co"># 1           10   1570  north  north_1 H49617   12000     north_1_6   2 (64,74]      1  25393.18</span></span>
 <span><span class="co"># 2           10   1632  north  north_1 H49638   12000     north_1_6   1 (64,74]      1  24261.16</span></span>
@@ -254,31 +282,24 @@
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2 data-toc-skip>Links</h2>
+<h2>Links</h2>
 <ul class="list-unstyled">
-<li><a href="https://cloud.r-project.org/package=R2BEAT" class="external-link">View on CRAN</a></li>
-<li><a href="https://github.com/barcaroli/R2BEAT/" class="external-link">Browse source code</a></li>
-<li><a href="https://github.com/barcaroli/R2BEAT/issues" class="external-link">Report a bug</a></li>
+<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=R2BEAT">https://​cloud.r-project.org/​package=R2BEAT</a>
+</li>
+<li>Browse source code at <br><a href="https://github.com/barcaroli/R2BEAT/">https://​github.com/​barcaroli/​R2BEAT/​</a>
+</li>
+<li>Report a bug at <br><a href="https://github.com/barcaroli/R2BEAT/issues">https://​github.com/​barcaroli/​R2BEAT/​issues</a>
+</li>
 </ul>
 </div>
-
 <div class="license">
-<h2 data-toc-skip>License</h2>
+<h2>License</h2>
 <ul class="list-unstyled">
 <li>EUPL</li>
 </ul>
 </div>
-
-
-<div class="citation">
-<h2 data-toc-skip>Citation</h2>
-<ul class="list-unstyled">
-<li><a href="authors.html#citation">Citing R2BEAT</a></li>
-</ul>
-</div>
-
 <div class="developers">
-<h2 data-toc-skip>Developers</h2>
+<h2>Developers</h2>
 <ul class="list-unstyled">
 <li>Andrea Fasulo <br><small class="roles"> Author, maintainer </small>  </li>
 <li>Giulio Barcaroli <br><small class="roles"> Author </small>  </li>
@@ -289,27 +310,24 @@
 </ul>
 </div>
 
-<div class="dev-status">
-<h2 data-toc-skip>Dev status</h2>
+  <div class="dev-status">
+<h2>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://cran.r-project.org/package=R2BEAT" class="external-link"><img src="http://www.r-pkg.org/badges/version/R2BEAT" alt="CRAN"></a></li>
-<li><a href="http://www.r-pkg.org/pkg/R2BEAT" class="external-link"><img src="http://cranlogs.r-pkg.org/badges/R2BEAT?color=brightgreen" alt="Downloads"></a></li>
-<li><a href="http://www.awesomeofficialstatistics.org" class="external-link"><img src="https://awesome.re/mentioned-badge.svg" alt="Mentioned in Awesome Official Statistics"></a></li>
+<li><a href="https://cran.r-project.org/package=R2BEAT"><img src="http://www.r-pkg.org/badges/version/R2BEAT" alt="CRAN"></a></li>
+<li><a href="http://www.r-pkg.org/pkg/R2BEAT"><img src="http://cranlogs.r-pkg.org/badges/R2BEAT?color=brightgreen" alt="Downloads"></a></li>
+<li><a href="http://www.awesomeofficialstatistics.org"><img src="https://awesome.re/mentioned-badge.svg" alt="Mentioned in Awesome Official Statistics"></a></li>
 </ul>
 </div>
-
-  </div>
+</div>
 </div>
 
 
       <footer><div class="copyright">
-  <p></p>
-<p>Developed by Andrea Fasulo, Giulio Barcaroli, Stefano Falorsi, Alessio Guandalini, Ilaria Bombelli, Marco Dionisio Terribili.</p>
+  <p>Developed by Andrea Fasulo, Giulio Barcaroli, Stefano Falorsi, Alessio Guandalini, Ilaria Bombelli, Marco Dionisio Terribili.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
@@ -317,8 +335,6 @@
 
   
 
-
-  
 
   </body>
 </html>
