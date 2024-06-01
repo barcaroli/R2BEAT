@@ -37,7 +37,7 @@ determine the optimal sample allocation for multi-way stratified
 sampling designs and incomplete stratified sampling designs
 (<https://www.istat.it/en/methods-and-tools/methods-and-it-tools/design/design-tools/multiwaysampleallocation>).
 
-For a complete illustration of the methodology, see the vignette “R2BEAT
+For a complete illustration of the methodology see the vignette “R2BEAT
 methodology and use”
 (<https://barcaroli.github.io/R2BEAT/articles/R2BEAT_methodology.html>).
 
