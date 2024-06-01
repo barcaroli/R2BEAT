@@ -18,7 +18,7 @@ library(pkgdown)
 # usethis::use_pkgdown()
 # Sys.setenv(R_WIN_USE_SAFE_CALLBACKS = "0")
 init_site(pkg = ".")
-devtools::build_site()
+pkgdown::build_site()
 
 
 
