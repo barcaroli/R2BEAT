@@ -1,120 +1,120 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>/404.html</loc>
+    <loc>https://barcaroli.github.io/R2BEAT/404.html</loc>
   </url>
   <url>
-    <loc>/articles/R2BEAT_methodology.html</loc>
+    <loc>https://barcaroli.github.io/R2BEAT/articles/R2BEAT_methodology.html</loc>
   </url>
   <url>
-    <loc>/articles/R2BEAT_workflow.html</loc>
+    <loc>https://barcaroli.github.io/R2BEAT/articles/R2BEAT_workflow.html</loc>
   </url>
   <url>
-    <loc>/articles/R2BEAT_workflow_from_frame.html</loc>
+    <loc>https://barcaroli.github.io/R2BEAT/articles/R2BEAT_workflow_from_frame.html</loc>
   </url>
   <url>
-    <loc>/articles/index.html</loc>
+    <loc>https://barcaroli.github.io/R2BEAT/articles/index.html</loc>
   </url>
   <url>
-    <loc>/authors.html</loc>
+    <loc>https://barcaroli.github.io/R2BEAT/authors.html</loc>
   </url>
   <url>
-    <loc>/index.html</loc>
+    <loc>https://barcaroli.github.io/R2BEAT/index.html</loc>
   </url>
   <url>
-    <loc>/news/index.html</loc>
+    <loc>https://barcaroli.github.io/R2BEAT/news/index.html</loc>
   </url>
   <url>
-    <loc>/reference/CVs_hint.html</loc>
+    <loc>https://barcaroli.github.io/R2BEAT/reference/CVs_hint.html</loc>
   </url>
   <url>
-    <loc>/reference/PSU_strat.html</loc>
+    <loc>https://barcaroli.github.io/R2BEAT/reference/PSU_strat.html</loc>
   </url>
   <url>
-    <loc>/reference/adjust_CVs.html</loc>
+    <loc>https://barcaroli.github.io/R2BEAT/reference/adjust_CVs.html</loc>
   </url>
   <url>
-    <loc>/reference/aggrStrata.html</loc>
+    <loc>https://barcaroli.github.io/R2BEAT/reference/aggrStrata.html</loc>
   </url>
   <url>
-    <loc>/reference/allocation.html</loc>
+    <loc>https://barcaroli.github.io/R2BEAT/reference/allocation.html</loc>
   </url>
   <url>
-    <loc>/reference/beat.1cv.html</loc>
+    <loc>https://barcaroli.github.io/R2BEAT/reference/beat.1cv.html</loc>
   </url>
   <url>
-    <loc>/reference/beatcv.html</loc>
+    <loc>https://barcaroli.github.io/R2BEAT/reference/beatcv.html</loc>
   </url>
   <url>
-    <loc>/reference/beth1.html</loc>
+    <loc>https://barcaroli.github.io/R2BEAT/reference/beth1.html</loc>
   </url>
   <url>
-    <loc>/reference/beth2.html</loc>
+    <loc>https://barcaroli.github.io/R2BEAT/reference/beth2.html</loc>
   </url>
   <url>
-    <loc>/reference/check_input.html</loc>
+    <loc>https://barcaroli.github.io/R2BEAT/reference/check_input.html</loc>
   </url>
   <url>
-    <loc>/reference/deft_start.html</loc>
+    <loc>https://barcaroli.github.io/R2BEAT/reference/deft_start.html</loc>
   </url>
   <url>
-    <loc>/reference/design.html</loc>
+    <loc>https://barcaroli.github.io/R2BEAT/reference/design.html</loc>
   </url>
   <url>
-    <loc>/reference/effst.html</loc>
+    <loc>https://barcaroli.github.io/R2BEAT/reference/effst.html</loc>
   </url>
   <url>
-    <loc>/reference/errors.html</loc>
+    <loc>https://barcaroli.github.io/R2BEAT/reference/errors.html</loc>
   </url>
   <url>
-    <loc>/reference/eval_2stage.html</loc>
+    <loc>https://barcaroli.github.io/R2BEAT/reference/eval_2stage.html</loc>
   </url>
   <url>
-    <loc>/reference/expected_CV.html</loc>
+    <loc>https://barcaroli.github.io/R2BEAT/reference/expected_CV.html</loc>
   </url>
   <url>
-    <loc>/reference/index.html</loc>
+    <loc>https://barcaroli.github.io/R2BEAT/reference/index.html</loc>
   </url>
   <url>
-    <loc>/reference/input_to_beat.2st_1.html</loc>
+    <loc>https://barcaroli.github.io/R2BEAT/reference/input_to_beat.2st_1.html</loc>
   </url>
   <url>
-    <loc>/reference/input_to_beat.2st_2.html</loc>
+    <loc>https://barcaroli.github.io/R2BEAT/reference/input_to_beat.2st_2.html</loc>
   </url>
   <url>
-    <loc>/reference/plot_sens.html</loc>
+    <loc>https://barcaroli.github.io/R2BEAT/reference/plot_sens.html</loc>
   </url>
   <url>
-    <loc>/reference/prepareInputToAllocation1.html</loc>
+    <loc>https://barcaroli.github.io/R2BEAT/reference/prepareInputToAllocation1.html</loc>
   </url>
   <url>
-    <loc>/reference/prepareInputToAllocation2.html</loc>
+    <loc>https://barcaroli.github.io/R2BEAT/reference/prepareInputToAllocation2.html</loc>
   </url>
   <url>
-    <loc>/reference/prepareInputToAllocation_beat.1st.html</loc>
+    <loc>https://barcaroli.github.io/R2BEAT/reference/prepareInputToAllocation_beat.1st.html</loc>
   </url>
   <url>
-    <loc>/reference/rho.html</loc>
+    <loc>https://barcaroli.github.io/R2BEAT/reference/rho.html</loc>
   </url>
   <url>
-    <loc>/reference/select_PSU.html</loc>
+    <loc>https://barcaroli.github.io/R2BEAT/reference/select_PSU.html</loc>
   </url>
   <url>
-    <loc>/reference/select_PSU2.html</loc>
+    <loc>https://barcaroli.github.io/R2BEAT/reference/select_PSU2.html</loc>
   </url>
   <url>
-    <loc>/reference/select_SSU.html</loc>
+    <loc>https://barcaroli.github.io/R2BEAT/reference/select_SSU.html</loc>
   </url>
   <url>
-    <loc>/reference/sens_names.html</loc>
+    <loc>https://barcaroli.github.io/R2BEAT/reference/sens_names.html</loc>
   </url>
   <url>
-    <loc>/reference/sensitivity_min_SSU.html</loc>
+    <loc>https://barcaroli.github.io/R2BEAT/reference/sensitivity_min_SSU.html</loc>
   </url>
   <url>
-    <loc>/reference/sensitivity_min_SSU2.html</loc>
+    <loc>https://barcaroli.github.io/R2BEAT/reference/sensitivity_min_SSU2.html</loc>
   </url>
   <url>
-    <loc>/reference/strata.html</loc>
+    <loc>https://barcaroli.github.io/R2BEAT/reference/strata.html</loc>
   </url>
 </urlset>
