@@ -228,15 +228,15 @@ beat.1cv <- function(stratif, errors,alloc, minnumstrat = 2)
 
   
   #create the dataframe to be returned as output
-  out_cv=data.frame(matrix(nrow=nvar*sum(nvalues), ncol=4))
+  out_cv=data.frame(matrix(nrow=nvar*sum(nvalues), ncol=5))
   CVfin <- calcola_cv()
-  colnames(out_cv)=c("TYPE", "DOMAIN/VAR", "PLANNED_CV ", 
+  colnames(out_cv)=c("TYPE", "DOMAIN","VAR", "PLANNED_CV ", 
                      "ACTUAL_CV")
   out_cv[,1]=as.vector(cvDom)
-  out_cv[,2]=paste(as.vector(cvDom2), 
-                          "/V", c(1:ncol(med)), sep="")
-  out_cv[,3]=as.vector(cv)
-  out_cv[,4]= as.vector(CVfin)
+  out_cv[,2]=as.vector(cvDom2) 
+  out_cv[,3]=as.vector(paste("V", c(1:ncol(med)), sep=""))            
+  out_cv[,4]=as.vector(cv)
+  out_cv[,5]= as.vector(CVfin)
 
   return(out_cv)
   
@@ -247,5 +247,4 @@ beat.1cv <- function(stratif, errors,alloc, minnumstrat = 2)
 }
 
 
-  
   
