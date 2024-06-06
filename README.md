@@ -18,11 +18,11 @@ estimates for two-stage stratified samples. It also allows to perform
 both Primary Stage Units and Secondary Stage Units selection.
 
 *R2BEAT* easily manages all the complexity due to the optimal sample
-allocation in two-stage sampling design and provides several outputs for
-evaluating the allocation. Its name stands for “R ‘to’ Bethel Extended
-Allocation for Two-stage”. It is an extension of another open-source
-software called *Mauss-R* (Multivariate Allocation of Units in Sampling
-Surveys), implemented by ISTAT researchers
+allocation in two-stage sampling design, and provides several outputs
+for evaluating the allocation. Its name stands for “R ‘to’ Bethel
+Extended Allocation for Two-stage”. It is an extension of another
+open-source software called *Mauss-R* (Multivariate Allocation of Units
+in Sampling Surveys), implemented by ISTAT researchers
 (<https://www.istat.it/en/methods-and-tools/methods-and-it-tools/design/design-tools/mauss-r>).
 *Mauss-R* determines the optimal sample allocation in multivariate and
 multi-domains estimation, for one-stage stratified samples.
