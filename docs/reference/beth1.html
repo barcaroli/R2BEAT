@@ -219,23 +219,23 @@ The generalized Bethel’s algorithm allows to determine the optimal sample size
 <span class='r-in'><span><span class='co'># Looking at allocation_1$sensitivity we can see that most of the </span></span></span>
 <span class='r-in'><span><span class='co'># sensitivity is in DOM1 for REG1 and REG2 due to V1.</span></span></span>
 <span class='r-in'><span><span class='va'>allocation_1</span><span class='op'>$</span><span class='va'>sensitivity</span></span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>    Type Dom Var Planned CV  Actual CV Sensitivity 10%</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 2  DOM1   1  V1       0.10 0.09999243             925</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 3  DOM1   1  V2       0.99 0.11000705               1</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 4  DOM1   2  V1       0.10 0.10074653             446</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 5  DOM1   2  V2       0.99 0.17034681               1</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 6  DOM2   1  V1       0.99 0.10438375               1</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 7  DOM2   1  V2       0.99 0.11506400               1</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 8  DOM2   2  V1       0.99 0.34767424               1</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 9  DOM2   2  V2       0.99 0.37401960               1</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 10 DOM2   3  V1       0.99 0.32913038               1</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 11 DOM2   3  V2       0.99 0.47150136               1</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 12 DOM2   4  V1       0.99 0.46001541               1</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 13 DOM2   4  V2       0.99 0.85829195               1</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 14 DOM2   5  V1       0.99 0.20278780               1</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 15 DOM2   5  V2       0.99 0.37102939               1</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 16 DOM2   6  V1       0.99 0.12774861               1</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 17 DOM2   6  V2       0.99 0.21579004               1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    Type Dom Var Planned CV Actual CV Sensitivity 10%</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2  DOM1   1  V1       0.10    0.1000             925</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3  DOM1   1  V2       0.99    0.1100               1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4  DOM1   2  V1       0.10    0.0999             446</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5  DOM1   2  V2       0.99    0.1718               1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6  DOM2   1  V1       0.99    0.1044               1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 7  DOM2   1  V2       0.99    0.1151               1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 8  DOM2   2  V1       0.99    0.3477               1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 9  DOM2   2  V2       0.99    0.3740               1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 10 DOM2   3  V1       0.99    0.3253               1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 11 DOM2   3  V2       0.99    0.4718               1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 12 DOM2   4  V1       0.99    0.4599               1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 13 DOM2   4  V2       0.99    0.8582               1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 14 DOM2   5  V1       0.99    0.2024               1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 15 DOM2   5  V2       0.99    0.3717               1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 16 DOM2   6  V1       0.99    0.1268               1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 17 DOM2   6  V2       0.99    0.2186               1</span>
 <span class='r-in'><span><span class='co'># We can relax the constraints increasing the expected coefficients of variation for X1 by 10%</span></span></span>
 <span class='r-in'><span><span class='va'>errors1</span> <span class='op'>&lt;-</span> <span class='va'>errors</span> </span></span>
 <span class='r-in'><span><span class='va'>errors1</span><span class='op'>[</span><span class='fl'>1</span>,<span class='fl'>2</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='va'>errors</span><span class='op'>[</span><span class='fl'>1</span>,<span class='fl'>2</span><span class='op'>]</span><span class='op'>+</span><span class='va'>errors</span><span class='op'>[</span><span class='fl'>1</span>,<span class='fl'>2</span><span class='op'>]</span><span class='op'>*</span><span class='fl'>0.1</span></span></span>
