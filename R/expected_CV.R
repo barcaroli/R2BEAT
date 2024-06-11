@@ -38,9 +38,8 @@
 expected_CV <- function (strata, errors, alloc) 
 {
   data <- beat.1cv(strata, errors, alloc)
-  split_strings <- strsplit(data$`DOMAIN/VAR`, split = "/")
-  data$Dom <- sapply(split_strings, `[`, 1)
-  data$Var <- sapply(split_strings, `[`, 2)
+  data$Dom <- data$DOMAIN
+  data$Var <- data$VAR
   data <- data[, c("TYPE", "Dom", "Var", "ACTUAL_CV")]
   colnames(data) <- c("Type", "Dom", "Var", "Actual CV")
   ndom <- length(unique(data$Type))

@@ -82,12 +82,22 @@ beat.1cv <- function(stratif, errors,alloc, minnumstrat = 2)
   check_n(allocation=alloc, strata=stratif, minnumstrat)
   #
   ordina_variabili <- function(dati, prefisso, n_var) {
-    #ordina le colonne del df,
-    #in modo tale da avere prefisso1,...prefisson_var
+    #sort df columns ,
+    #s.t. they are sorted as follows: prefisso1,...prefisson_var
     if (!is.data.frame(dati)) 
       stop()
-    as.matrix(dati[, paste(prefisso, 1:n_var, sep = ""), 
-                   drop = FALSE])
+    as.matrix(dati[, paste(prefisso, 1:n_var, sep = ""),
+    drop = FALSE])
+    # as.data.frame(dati[, paste(prefisso, 1:n_var, sep = ""), 
+    # drop = FALSE])
+  }
+  ordina_variabili_dom <- function(dati, prefisso, n_var) {
+    #sort df columns ,
+    #s.t. they are sorted as follows: prefisso1,...prefisson_var
+    if (!is.data.frame(dati)) 
+      stop()
+    as.data.frame(dati[, paste(prefisso, 1:n_var, sep = ""),
+    drop = FALSE])
   }
   #
   # --------------------------------------------------------------
@@ -143,7 +153,7 @@ beat.1cv <- function(stratif, errors,alloc, minnumstrat = 2)
   
   # domains
   name_dom <- sapply(1:ndom, function(i) paste("DOM", i, sep = ""))
-  dom <- ordina_variabili(stratif, "DOM", ndom)
+  dom <- ordina_variabili_dom(stratif, "DOM", ndom)
   
   # numbers of different domains of interest (numbers of
   # modalities/categories for each type of domain) if (ndom
@@ -230,7 +240,7 @@ beat.1cv <- function(stratif, errors,alloc, minnumstrat = 2)
   #create the dataframe to be returned as output
   out_cv=data.frame(matrix(nrow=nvar*sum(nvalues), ncol=5))
   CVfin <- calcola_cv()
-  colnames(out_cv)=c("TYPE", "DOMAIN","VAR", "PLANNED_CV ", 
+  colnames(out_cv)=c("TYPE", "DOMAIN","VAR", "PLANNED_CV", 
                      "ACTUAL_CV")
   out_cv[,1]=as.vector(cvDom)
   out_cv[,2]=as.vector(cvDom2) 
