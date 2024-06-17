@@ -1,3 +1,20 @@
+#' build_dummy_variables
+#'  
+#' @description
+#' Function to derive dummy variables from the target variables: it is useful when it is necessary
+#' to differentiate the precision constraints in the different domains of interest 
+#'  
+#' 
+#' @param frame the sampling frame.
+#' @param domain_var the indication of the variable that indicates the domains of interest.
+#' @param initial_target_vars a vector containing the names of the current target variables.
+#' @param cv the set of the current precision constraints
+#' 
+#' @return a list containing: (a) the new frame with the values of the dummy variables; 
+#' (b) the new target variables; (c) the new set of precision constraints
+#' 
+
+
 build_dummy_variables <- function (frame, domain_var, initial_target_vars, cv) 
 {
   new_target_vars <- initial_target_vars
