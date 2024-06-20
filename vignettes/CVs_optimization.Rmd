@@ -31,7 +31,14 @@ knitr::opts_chunk$set(echo = TRUE)
 # devtools::install_github("barcaroli/R2BEAT")
 # devtools::install_github("barcaroli/QGA")
 library(R2BEAT)
-library(QGA)
+if (!require("QGA", character.only = TRUE)) {
+  # Installa il pacchetto
+  install.packages("QGA")
+  
+  # Carica il pacchetto dopo l'installazione
+  library("QGA", character.only = TRUE)
+}
+
 ```
 
 # Introduction
