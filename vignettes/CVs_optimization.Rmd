@@ -1,0 +1,515 @@
+
+---
+title: "R2BEAT \n Optimization of precision constraints" 
+date: "`r Sys.Date()` <br>  <br> <br>"
+output: 
+  bookdown::html_document2:
+    df_print: kable
+    highlight: tango
+    number_sections: yes
+    theme: flatly
+    toc: yes
+    toc_depth: 2
+    toc_float:
+      collapsed: no
+      smooth_scroll: yes
+    toc_title: 
+    # code_folding: hide
+keep_md: TRUE
+#bibliography: 
+#link-citations: yes
+#linkcolor: red
+vignette: >
+  %\VignetteIndexEntry{R2BEAT two-stage sampling design workflow starting from a previous survey}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+# devtools::install_github("barcaroli/R2BEAT")
+# devtools::install_github("barcaroli/QGA")
+library(R2BEAT)
+library(QGA)
+```
+
+# Introduction
+
+1. In a multivariate stratified sampling design procedure, very often the values of the precision constraints (expressed in terms of maximum expected coefficients of variation set on the target estimates) are set without considering the peculiarities of the distributions of the target variables. As a result, few variables (or even only one) may be responsible for the optimization of the allocation, leaving the others completely ineffective. This is because some precision constraints are very tight and the other ones too loose. This is the reason why the R2BEAT package has been provided with an additional function ('CVs_hint') aiming at modifying the initial set of precision constraints to let each target variable influence the optimization process. This is done by considering the variability of the target variables in the different strata: initial precision constraints are adjusted so to relax those pertaining to the variables characterized by a higher variability, and to tighten those related to the variables with less variability.
+
+2. Another issue is related to the characteristics of the allocation of sampling units in the strata: it may happen that it can be very different from the proportional one. In some cases it may be desirable to limit the distance between the two allocations, avoiding the cases of too much oversampling in small strata. 
+It is possible to obtain this, also in this case by changing the precision constraints.
+To get this result, it is possible to make use of a genetic algorithm, that explores the space of the possible combinations of values of the precision constraints, with the aim of maximizing the coefficient of correlation of the two distributions (optimal and proportional allocations).
+
+
+
+# 1. Setting
+
+In this study, we show how it is possible to start from a "neutral" set of precision constraints (equal CVs for all variables for a given domain level), and modify them, so to:
+
+* first, balance the influence of all the variables on the determination of the best allocation, or at least, to avoid that only a small fraction plays a role;
+
+* secondly, get the optimal allocation closer to the proportional one.
+
+We consider a strata dataframe containing information on labor force in a country. Each stratum belongs to three different domain levels:
+
+```{r}
+load("strata.RData")
+# strata$DOM3 <- NULL  # de-comment if you want to execute on 2 domains
+str(strata)
+```
+
+We consider as target variables:
+
+```{r}
+target_vars <- c("active","inactive","unemployed","income_hh")
+target_vars
+```
+
+We initially set the following precision constraints:
+
+```{r}
+# De-comment if you want to execute on 2 domains
+# cv_equal <- as.data.frame(list(DOM = c("DOM1","DOM2"),
+#                          CV1 = c(0.05,0.10),
+#                          CV2 = c(0.05,0.10),
+#                          CV3 = c(0.05,0.10),
+#                          CV4 = c(0.05,0.10)))
+# De-comment if you want to execute on 3 domains
+cv_equal <- as.data.frame(list(DOM = c("DOM1","DOM2","DOM3"),
+                         CV1 = c(0.05,0.10,0.15),
+                         CV2 = c(0.05,0.10,0.15),
+                         CV3 = c(0.05,0.10,0.15),
+                         CV4 = c(0.05,0.10,0.15)))
+cv_equal
+```
+
+and proceed with an initial allocation:
+
+```{r}
+equal <- beat.1st(strata,cv_equal)
+```
+
+with the following total sample size and sensitivity:
+
+```{r}
+sum(equal$alloc$ALLOC[-nrow(equal$alloc)])
+```
+
+
+```{r}
+equal$sensitivity[equal$sensitivity$`Sensitivity 10%` > 1,]
+```
+
+We see that the 3rd variable 'unemployed' is the one that determines almost always the optimal allocation, while the 2nd one ('inactive') has a lower influence. 
+
+
+## 2. Modification of initial precision constraints
+
+We now try to change the initial precision constraints to balance the effect of the target variables.
+
+To this aim, we make use of the function 'CVs_hint'. This function modifies the initial values of CVs by considering the variability of the target variables in the different strata, for each domain level:
+
+```{r}
+cv_mod <- CVs_hint(strata,cv_equal)
+cv_mod
+```
+
+Actually, these new CVs are in some cases much higher than the initial ones. But we can see that the new corresponding sample size is much lower than the initial one:
+
+```{r}
+intermediate1 <- beat.1st(strata,cv_mod)
+sum(intermediate1$alloc$ALLOC[-nrow(intermediate1$alloc)])
+```
+To correctly compare the new values of the CVs to the initial ones, we have to re-calculate them in correspondence to the same required sample size. To do this, we make use of the function 'adjustCVs':
+
+
+```{r}
+target_size <- sum(equal$alloc$ALLOC[-nrow(equal$alloc)])
+cv_mod2 <- adjust_CVs(target_size= target_size,
+                   strata=strata,
+                   errors=cv_mod,
+                   adj_rate = 0.05)
+cv_mod2
+```
+We see now that only in only in a few cases the CVs are slightly higher than in the initial set.
+
+The new sensitivity:
+
+```{r}
+intermediate2 <- beat.1st(strata,cv_mod2)
+intermediate2$sensitivity[intermediate2$sensitivity$`Sensitivity 10%` >1,]
+```
+We see that now all the variables play a role in the determination of the best allocation.
+
+
+# 3. Get the optimal allocation closer to the proportional one
+
+Consider the last obtained solution:
+
+```{r}
+intermediate2$alloc
+```
+
+We can calculate the Pearson correlation coefficient between the optimal and proportional allocations:
+
+```{r}
+cor(intermediate2$alloc$ALLOC[-nrow(intermediate2$alloc)],intermediate2$alloc$PROP[-nrow(intermediate2$alloc)])
+```
+We want to get the optimal allocation closer to the proportional one. For instance, we want that the correlation coefficient be increased to 0.5.
+
+To obtain this result, we make use of a particular genetic algorithm, the quantum genetic algorithm, implemented in the R package QGA.
+
+## 3.1 Fitness function
+
+First, we define the following fitness function:
+ 
+```{r}
+fitness_cvs <- function(solution,eval_func_inputs) {
+  strata <- eval_func_inputs[[1]]
+  vett <- eval_func_inputs[[2]]
+  cv <- eval_func_inputs[[3]]
+  vettmin <- eval_func_inputs[[4]]
+  vettmax <- eval_func_inputs[[5]]
+  nvals <- eval_func_inputs[[6]]
+  nvars <- ncol(cv) - 1
+  cv_corr <- cv
+  n <- 0
+  for (k in c(1:nrow(cv))) {
+    for (m in c(1:nvars)) {
+      n <- n+1
+      cv_corr[k,m+1] <- seq(from=vettmin[n],
+                            to=vettmax[n],
+                            by=(vettmax[n]-vettmin[n])/nvals)[solution[n]]
+    }
+  }
+  cv_corr
+  a <- beat.1st(strata,cv_corr)
+  b <- ks.test(a$alloc$ALLOC[-nrow(a$alloc)],a$alloc$PROP[-nrow(a$alloc)])
+  c <- cor(a$alloc$ALLOC[-nrow(a$alloc)],a$alloc$PROP[-nrow(a$alloc)])
+  #---------- Fitness function ----------------
+  fitness <- c
+  return(fitness)
+}
+```
+## 3.2 Setting the parameters 
+
+We set the parameters required by the QGA function:
+
+```{r}
+nvars <- ncol(cv_mod2) - 1
+vett <- NULL
+for (k in c(1:nrow(cv_mod2))) {
+  vett <- c(vett,cv_mod2[k,c(2:(nvars+1))])
+}
+vett <- unlist(vett)
+vettmin <- vett * 0.6
+vettmax <- vett * 1.4
+Genome = length(vett)
+nvalues_sol = 4096    # 2^12 ==> 12 qubits
+eval_func_inputs = list(strata,
+                        vett,
+                        cv_mod2,
+                        vettmin,
+                        vettmax,
+                        nvalues_sol
+                        )
+popsize = 20
+generation_max = 200
+nvalues_sol = nvalues_sol
+thetainit = 3.1415926535 * 0.5
+thetaend = 3.1415926535 * 0.025
+pop_mutation_rate_init = 1/(popsize + 1)
+pop_mutation_rate_end = 1/(popsize + 1)
+mutation_rate_init = 1/(Genome + 1)
+mutation_rate_end = 1/(Genome + 1)
+mutation_flag = TRUE
+plotting = TRUE
+verbose = FALSE
+progress = FALSE
+eval_fitness = fitness_cvs
+eval_func_inputs = eval_func_inputs
+stop_limit = 0.5
+```
+
+Some explanations regarding the parameters.
+The parameters 'vettmin' and 'vettmax' are fundamental to determine the space of possible solutions.
+
+In fact, consider their values:
+
+```{r}
+vettmin
+```
+
+```{r}
+vettmax
+```
+
+The values in vettmin are the minimum values that the CVs can assume, while the values in vettmax are the maximum ones.
+This means that, for instance, when trying to define the best value for CV1 in the first domain, the genetic algorithm will search in the range from 0.007916888 to 0.01847274. The same for the other CVs and the other domains.
+
+The parameter 'nvalues_sol' indicates the number of possible different values considered for each element in the genome: by setting it to 4096, it means that for each precision constraint, 4096 possible values will be considered, the ones obtained by dividing by 4096 the interval between the minimum and the maximum value set for each precision constraint. 
+
+The parameter 'eval_func_inputs' is a list containing all the information required by the fitness function.
+
+Parameters 'thetainit' and 'thetaend' are the initial and final values expressed in degrees for the rotation gate used in the quantum genetic algorithm. The rotation is high at the beginning of the iterations (to explore mores solutions), lower at the end (to refine the best solution found).
+
+The same for parameters from 'pop_mutation_rate_init' to 'pop_mutation_rate_end', that govern the rate of mutation in the solutions.
+
+Very important is the 'stop_limit' parameter: the iterations are stopped when this limit is reached. In our case it is set to 0.5: this means that when the correlation coefficient reaches this limit, the algorithm stops and output the related solution.
+
+## 3.3 Execution of the genetic algorithm
+
+```{r}
+set.seed(1234)
+solutionQGA <- QGA(popsize,
+                   generation_max,
+                   nvalues_sol,
+                   Genome,
+                   thetainit,
+                   thetaend,
+                   pop_mutation_rate_init,
+                   pop_mutation_rate_end,
+                   mutation_rate_init,
+                   mutation_rate_end,
+                   mutation_flag = TRUE,
+                   plotting = FALSE,
+                   verbose = FALSE,
+                   progress = FALSE,
+                   eval_fitness,
+                   eval_func_inputs,
+                   stop_limit)
+QGA:::plot_Output(solutionQGA[[2]])
+```
+
+So, we have obtained a solution whose correlation coefficient is 0.5, the desired one.
+
+## 4. Analysis of the final solution
+
+First, we consider the new set of precision constraints related to the solution proposed by the genetic algorithm:
+
+```{r}
+solution <- solutionQGA[[1]]
+cv_best <- cv_mod2
+n <- 0
+nvals <- nvalues_sol
+for (k in c(1:nrow(cv_mod2))) {
+  for (m in c(1:nvars)) {
+    n <- n+1
+    diff
+    cv_best[k,m+1] <- seq(from=vettmin[n],
+                          to=vettmax[n],
+                          by=(vettmax[n]-vettmin[n])/nvals)[solution[n]]
+  }
+}
+cv_best
+```
+
+They are, in some cases, higher than the initial ones. 
+
+But consider that, now, the required sample size is lower with these new constraints:
+
+```{r}
+intermediate3 <- beat.1st(strata,cv_best)
+sum(intermediate3$alloc$ALLOC[-nrow(intermediate3$alloc)])
+```
+
+Also in this case, to compare the new precision constraints with the initial ones we perform an adjustment, varying the new set until we reach the previous sample size:
+
+```{r}
+target_size <- sum(intermediate2$alloc$ALLOC[-nrow(intermediate2$alloc)]) 
+cv_final <- adjust_CVs(target_size = target_size,
+                   strata=strata,
+                   errors=cv_best,
+                   adj_rate = 0.05)
+cv_final
+```
+
+It can be seen that now, only in the third domain level the value of CV3 overcomes the previous limits, while in all the other cases they are well below.
+
+We can visualize the overall situation:
+
+```{r}
+par(mfrow=c(1,3))
+plot(t(cv_final[1,c(2:5)]),col="red",type="b",
+     xaxt="n",xlab="",ylab="CV values",ylim=c(0,max(cv_final[1,c(2:5)],cv_mod2[1,c(2:5)])*1.2))
+axis(1, at=c(1:4), lab=c("CV1", "CV2", "CV3", "CV4"),las=2)
+lines(t(cv_mod2[1,c(2:5)]),col="blue",type="b")
+lines(t(cv_equal[1,c(2:5)]),col="darkgreen",type="b")
+title("Domain level DOM1")
+legend("bottomleft", c("Initial CVs","Intermediate CVs","Final CVs"), 
+       fill = c("darkgreen","blue","red"), cex=0.8)
+
+plot(t(cv_final[2,c(2:5)]),col="red",type="b",
+     xaxt="n",xlab="",ylab="CV values",ylim=c(0,max(cv_final[2,c(2:5)],cv_mod2[2,c(2:5)])*1.2))
+axis(1, at=c(1:4), lab=c("CV1", "CV2", "CV3", "CV4"),las=2)
+lines(t(cv_mod2[2,c(2:5)]),col="blue",type="b")
+lines(t(cv_equal[2,c(2:5)]),col="darkgreen",type="b")
+title("Domain level DOM2")
+legend("bottomleft", c("Initial CVs","Intermediate CVs","Final CVs"), 
+       fill = c("darkgreen","blue","red"), cex=0.8)
+
+# De-comment with 3 domains
+plot(t(cv_final[3,c(2:5)]),col="red",type="b",
+     xaxt="n",xlab="",ylab="CV values",ylim=c(0,max(cv_final[3,c(2:5)],cv_mod2[3,c(2:5)])*1.2))
+axis(1, at=c(1:4), lab=c("CV1", "CV2", "CV3", "CV4"),las=2)
+lines(t(cv_mod2[3,c(2:5)]),col="blue",type="b")
+lines(t(cv_equal[3,c(2:5)]),col="darkgreen",type="b")
+title("Domain level DOM3")
+legend("bottomleft", c("Initial CVs","Intermediate CVs","Final CVs"), 
+       fill = c("darkgreen","blue","red"), cex=0.8)
+```
+
+Finally, we analyze the obtained final allocation in the strata.
+
+```{r}
+final <- beat.1st(strata,cv_final)
+sum(final$alloc$ALLOC[-nrow(final$alloc)])
+sum(equal$alloc$ALLOC[-nrow(equal$alloc)])
+a1 <- equal$alloc$ALLOC[-nrow(equal$alloc)]
+a2 <- equal$alloc$PROP[-nrow(equal$alloc)]
+b1 <- final$alloc$ALLOC[-nrow(final$alloc)]
+b2 <- final$alloc$PROP[-nrow(final$alloc)]
+```
+
+
+
+```{r}
+par(mfrow=c(1,1))
+top <- max(a1,a2,b1,b2)
+
+plot(a1,type="b",col="blue",ylim=c(0,top))
+lines(a2,type="h",col="red")
+title("Initial")
+legend("topright", c("Proportional","Optimal"), fill = c("red", "blue"), cex=0.8)
+
+plot(b1,type="b",col="blue",ylim=c(0,top))
+lines(b2,type="h",col="red")
+title("Final")
+legend("topright", c("Proportional","Optimal"), fill = c("red", "blue"), cex=0.8)
+
+```
+
+We may not be satisfied by the situation in the 22nd and 24th sub-domains where the new solution yields a greater distance of the optimal allocations from the proportional ones.
+
+We inspect the sensitivity:
+
+```{r}
+final$sensitivity[final$sensitivity$Dom %in% c(22,24),]
+```
+
+and find that the reason for the oversampling in these two domains is due to the 1st and 4th target variables. We can change their CVs in the 3rd domain level:
+
+
+```{r}
+cv_final[3,2] <- 0.10
+cv_final[3,5] <- 0.10
+```
+
+and verify the new situation:
+
+```{r}
+final2 <- beat.1st(strata,cv_final)
+sum(final2$alloc$ALLOC[-nrow(final2$alloc)])
+b1 <- final2$alloc$ALLOC[-nrow(final2$alloc)]
+b2 <- final2$alloc$PROP[-nrow(final2$alloc)]
+plot(b1,type="b",col="blue",ylim=c(0,top))
+lines(b2,type="h",col="red")
+title("Final")
+legend("topright", c("Proportional","Optimal"), fill = c("red", "blue"), cex=0.8)
+
+```
+Much better.
+
+Again, we re-determine the CVs in order to reach the initial sample size:
+
+```{r}
+target_size <- sum(final$alloc$ALLOC[-nrow(final$alloc)])
+cv_final2 <- adjust_CVs(target_size= target_size,
+                   strata=strata,
+                   errors=cv_final,
+                   adj_rate=0.05)
+cv_final2
+```
+```{r}
+plot(t(cv_final2[3,c(2:5)]),col="red",type="b",
+     xaxt="n",xlab="",ylab="CV values",ylim=c(0,max(cv_final2[3,c(2:5)],cv_mod2[3,c(2:5)])*1.2))
+axis(1, at=c(1:4), lab=c("CV1", "CV2", "CV3", "CV4"),las=2)
+lines(t(cv_mod2[3,c(2:5)]),col="blue",type="b")
+lines(t(cv_equal[3,c(2:5)]),col="darkgreen",type="b")
+title("Domain level DOM3")
+legend("topleft", c("Initial CVs","Intermediate CVs","Final CVs"), 
+       fill = c("darkgreen","blue","red"), cex=0.8)
+```
+
+
+
+
+
+
+
+```{r eval=FALSE, include=FALSE}
+tot <- equal$alloc[,c("STRATUM","PROP","ALLOC")]
+row.names(tot) <- NULL
+tot <- cbind(tot,final2$alloc$ALLOC)
+colnames(tot) <- c("STRATUM","Proportional","Initial optimal","Final optimal")
+tot$PercDifference <- round((tot$`Final optimal` - tot$`Initial optimal`) * 100 /  tot$`Initial optimal`,2)
+tot$abs_diff <- abs(round((tot$`Final optimal` - tot$`Initial optimal`) /  tot$`Initial optimal`,2))
+tot2 <- tot[-nrow(tot),]
+# knitr::kable(tot[,c(1:5)])
+```
+
+Finally, we analyze the changes in the expected CVs:
+
+```{r warning=FALSE}
+a <- beat.1cv(strata,cv_equal,equal$alloc$ALLOC)
+b <- beat.1cv(strata,cv_mod2,intermediate2$alloc$ALLOC)
+c <- beat.1cv(strata,cv_final2,final$alloc$ALLOC)
+row.names(a) <- NULL
+tot <- cbind(a[,c(1,2,4)],b[,4],c[,4])
+colnames(tot)[3:5] <- c("Initial(1)","Intermediate(2)","Final(3)")
+tot$Diff1 <- tot$`Intermediate(2)`- tot$`Initial(1)`
+tot$Diff2 <- tot$`Final(3)`- tot$`Intermediate(2)`
+colnames(tot)[6:7] <- c("Diff.(2-1)","Diff.(3-2)")
+# knitr::kable(tot)
+```
+
+The average change due to the first step (balancing the influence of all variables in the determination of the best allocation):
+
+```{r}
+mean(tot$`Diff.(2-1)`) / mean(tot$Initial)
+```
+
+and the average change due to the second step (bringing the opimal allocation closer to the proportional):
+
+```{r}
+
+mean(tot$`Diff.(3-2)`) / mean(tot$Initial)
+```
+
+We can calculate the same indicators by weighting with the populations in the domains:
+
+```{r}
+# tot$DOMAIN <-  sub("/.*", "", tot$`DOMAIN/VAR`) 
+dom1 <- aggregate(strata$N,by=list(strata$DOM1),FUN=sum)
+dom2 <- aggregate(strata$N,by=list(strata$DOM2),FUN=sum)
+dom3 <- aggregate(strata$N,by=list(strata$DOM3),FUN=sum)
+tot1 <- merge(tot,dom1,by.x="DOMAIN",by.y="Group.1")
+tot2 <- merge(tot,dom2,by.x="DOMAIN",by.y="Group.1")
+tot3 <- merge(tot,dom3,by.x="DOMAIN",by.y="Group.1")
+tottot <- rbind(tot1,tot2,tot3)
+
+AvgInitial <- sum(tottot$`Initial(1)` * tottot$x) / sum(tottot$x)
+AvgDiff2_1 <- sum(tottot$`Diff.(2-1)` * tottot$x) / sum(tottot$x)
+AvgDiff2_1 / AvgInitial
+AvgDiff3_2 <- sum(tottot$`Diff.(3-2)` * tottot$x) / sum(tottot$x)
+AvgDiff3_2 / AvgInitial
+```
+
+
+We can conclude that the first step has a strong impact on the values of the expected CVs, while the second step is negligible from this point of view. 
+
+
+
+
