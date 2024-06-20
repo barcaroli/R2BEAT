@@ -112,7 +112,7 @@ equal$sensitivity[equal$sensitivity$`Sensitivity 10%` > 1,]
 We see that the 3rd variable 'unemployed' is the one that determines almost always the optimal allocation, while the 2nd one ('inactive') has a lower influence. 
 
 
-## 2. Modification of initial precision constraints
+# 2. Modification of initial precision constraints
 
 We now try to change the initial precision constraints to balance the effect of the target variables.
 
