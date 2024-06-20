@@ -292,7 +292,7 @@ QGA:::plot_Output(solutionQGA[[2]])
 
 So, we have obtained a solution whose correlation coefficient is 0.5, the desired one.
 
-## 4. Analysis of the final solution
+# 4. Analysis of the final solution
 
 First, we consider the new set of precision constraints related to the solution proposed by the genetic algorithm:
 
@@ -427,6 +427,7 @@ title("Final")
 legend("topright", c("Proportional","Optimal"), fill = c("red", "blue"), cex=0.8)
 
 ```
+
 Much better.
 
 Again, we re-determine the CVs in order to reach the initial sample size:
