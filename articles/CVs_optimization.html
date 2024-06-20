@@ -515,9 +515,10 @@ algorithm stops and output the related solution.</p>
 <p>So, we have obtained a solution whose correlation coefficient is 0.5,
 the desired one.</p>
 </div>
-<div class="section level3">
-<h3 id="analysis-of-the-final-solution">4. Analysis of the final solution<a class="anchor" aria-label="anchor" href="#analysis-of-the-final-solution"></a>
-</h3>
+</div>
+<div class="section level2">
+<h2 id="analysis-of-the-final-solution">4. Analysis of the final solution<a class="anchor" aria-label="anchor" href="#analysis-of-the-final-solution"></a>
+</h2>
 <p>First, we consider the new set of precision constraints related to
 the solution proposed by the genetic algorithm:</p>
 <div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
@@ -664,8 +665,8 @@ due to the 1st and 4th target variables. We can change their CVs in the
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="va">b2</span>,type<span class="op">=</span><span class="st">"h"</span>,col<span class="op">=</span><span class="st">"red"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span><span class="st">"Final"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">legend</a></span><span class="op">(</span><span class="st">"topright"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Proportional"</span>,<span class="st">"Optimal"</span><span class="op">)</span>, fill <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"red"</span>, <span class="st">"blue"</span><span class="op">)</span>, cex<span class="op">=</span><span class="fl">0.8</span><span class="op">)</span></span></code></pre></div>
-<p><img src="CVs_optimization_files/figure-html/unnamed-chunk-26-1.png" width="700">
-Much better.</p>
+<p><img src="CVs_optimization_files/figure-html/unnamed-chunk-26-1.png" width="700"></p>
+<p>Much better.</p>
 <p>Again, we re-determine the CVs in order to reach the initial sample
 size:</p>
 <div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
@@ -739,7 +740,6 @@ populations in the domains:</p>
 <p>We can conclude that the first step has a strong impact on the values
 of the expected CVs, while the second step is negligible from this point
 of view.</p>
-</div>
 </div>
   </div>
 
