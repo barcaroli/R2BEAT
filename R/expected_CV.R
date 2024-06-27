@@ -72,7 +72,7 @@ expected_CV <- function (strata, errors, alloc)
   max_values <- lapply(split_data, calculate_max)
   max_values <- lapply(max_values, function(x) round(x, 4))
   max_values_df <- do.call(rbind, max_values)
-  row.names(max_values_df) <- unique(exp_cv$Type)
+  # row.names(max_values_df) <- unique(exp_cv$Type)
   max_values_df <- as.data.frame(max_values_df)
   max_values_df$DOM <- c(row.names(max_values_df))
   max_values_df <- max_values_df[,c(ncol(max_values_df),c(1:(ncol(max_values_df)-1))),]
