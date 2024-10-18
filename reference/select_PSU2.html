@@ -4,7 +4,7 @@ It also allows an implicit stratification by giving a set of ordering variables 
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]--></head><body data-spy="scroll" data-target="#toc">
-    
+
 
     <div class="container template-reference-topic">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -29,11 +29,11 @@ It also allows an implicit stratification by giving a set of ordering variables 
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
-     
+
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
-      <a href="../articles/CVs_optimization.html">R2BEAT 
+      <a href="../articles/CVs_optimization.html">R2BEAT
  Optimization of precision constraints</a>
     </li>
     <li>
@@ -52,20 +52,20 @@ It also allows an implicit stratification by giving a set of ordering variables 
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/barcaroli/R2BEAT/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
-     
+
   </a>
 </li>
       </ul></div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-      
+
 
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Select sample of primary stage units (PSU)</h1>
-    
+
     <div class="hidden name"><code>select_PSU2.Rd</code></div>
     </div>
 
@@ -84,27 +84,26 @@ It also allows an implicit stratification by giving a set of ordering variables 
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>alloc</dt>
+    <p></p>
+<dl><dt id="arg-alloc">alloc<a class="anchor" aria-label="anchor" href="#arg-alloc"></a></dt>
 <dd><p>Output of the allocation step (beat.st)</p></dd>
 
- <dt>type</dt>
+ <dt id="arg-type">type<a class="anchor" aria-label="anchor" href="#arg-type"></a></dt>
 <dd><p>Type of SSU allocation ("ALLOC" = optimal, "PROP" = proportional to population size, "EQUAL" = equal size in each stratum)</p></dd>
 
- <dt>var_ord</dt>
+ <dt id="arg-var-ord">var_ord<a class="anchor" aria-label="anchor" href="#arg-var-ord"></a></dt>
 <dd><p>dataframe containing for all PSUs a set of variables to be used to order the PSUs</p></dd>
 
- <dt>des_file</dt>
+ <dt id="arg-des-file">des_file<a class="anchor" aria-label="anchor" href="#arg-des-file"></a></dt>
 <dd><p>dataframe containing information on sampling strata</p></dd>
 
- <dt>psu_file</dt>
+ <dt id="arg-psu-file">psu_file<a class="anchor" aria-label="anchor" href="#arg-psu-file"></a></dt>
 <dd><p>dataframe containing the list of Primary Sampling Units</p></dd>
 
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    
-
-<p>list containing: (i) information on sampled PSUs (ii) list of selected PSUs</p>
+    <p>list containing: (i) information on sampled PSUs (ii) list of selected PSUs</p>
     </div>
     <div id="author">
     <h2>Author</h2>
@@ -113,7 +112,7 @@ It also allows an implicit stratification by giving a set of ordering variables 
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://readr.tidyverse.org" class="external-link">readr</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">pop</span> <span class="op">&lt;-</span> <span class="fu">read_rds</span><span class="op">(</span><span class="st">"https://github.com/barcaroli/R2BEAT_workflows/blob/master/pop.RDS?raw=true"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://barcaroli.github.io/R2BEAT/">R2BEAT</a></span><span class="op">)</span></span></span>
@@ -158,7 +157,7 @@ It also allows an implicit stratification by giving a set of ordering variables 
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">sample_1st</span> <span class="op">&lt;-</span> <span class="fu">select_PSU2</span><span class="op">(</span><span class="va">alloc</span>, type<span class="op">=</span><span class="st">"ALLOC"</span>, var_ord<span class="op">=</span><span class="cn">NULL</span>, des_file<span class="op">=</span><span class="va">des_file</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">sample_1st</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -173,15 +172,15 @@ It also allows an implicit stratification by giving a set of ordering variables 
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
       </footer></div>
 
-  
 
 
-  
+
+
 
   </body></html>
 

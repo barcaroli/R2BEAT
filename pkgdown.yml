@@ -1,13 +1,12 @@
 pandoc: 3.1.11
-pkgdown: 2.0.9
+pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
   CVs_optimization: CVs_optimization.html
   R2BEAT_methodology: R2BEAT_methodology.html
   R2BEAT_workflow_from_frame: R2BEAT_workflow_from_frame.html
   R2BEAT_workflow: R2BEAT_workflow.html
-last_built: 2024-06-27T10:35Z
+last_built: 2024-10-18T12:39Z
 urls:
   reference: https://barcaroli.github.io/R2BEAT/reference
   article: https://barcaroli.github.io/R2BEAT/articles
-
