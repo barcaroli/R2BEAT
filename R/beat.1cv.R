@@ -7,7 +7,7 @@
 #' @return A dataframe with planned and actual CV for each combination of domain, domain category and auxiliary variable.
 beat.1cv <- function(stratif, errors,alloc, minnumstrat = 2) 
 {
-
+  
   
   # Begin body
   # First input data frame
@@ -68,10 +68,11 @@ beat.1cv <- function(stratif, errors,alloc, minnumstrat = 2)
   check_n <- function(allocation=NULL, strata=NULL, minnumstrat) {
     if (!is.null(allocation)) {
       if(any(allocation<minnumstrat & strata$N>minnumstrat)){
-        stop(paste("The allocated sample size is lower than the required minimum number of sampled unit per stratum, even if the stratum size allows to select a higher size. This happens in the following strata: ", paste(strata$STRATUM[which(n<minnumstrat & strata$N>minnumstrat)], "\n", sep="")))
+        error_msg=paste(c(paste("The allocated sample size is lower than the required minimum number of sampled unit per stratum (minnumstrat=", minnumstrat,"), even if the stratum size allows to select a higher size. This happens in the following strata:", sep=""), paste(strata$STRATUM[which(allocation<minnumstrat & strata$N>minnumstrat)],  collapse=";")), collapse=" ")
+        stop(error_msg)
       }
       if(any(strata$CENS==1 & strata$N!=allocation)){
-        stop(paste("The stratum ", strata$STRATUM[which(strata$CENS==1 & strata$N!=n)], " must be censused. \n", sep=""))
+        stop(paste(c(paste("The following stratum(a) must be censused:"), paste(strata$STRATUM[which(strata$CENS==1 & strata$N!=allocation)], collapse="; ")),  collapse=" "))
       }
       
     }
@@ -87,7 +88,7 @@ beat.1cv <- function(stratif, errors,alloc, minnumstrat = 2)
     if (!is.data.frame(dati)) 
       stop()
     as.matrix(dati[, paste(prefisso, 1:n_var, sep = ""),
-    drop = FALSE])
+                   drop = FALSE])
     # as.data.frame(dati[, paste(prefisso, 1:n_var, sep = ""), 
     # drop = FALSE])
   }
@@ -97,7 +98,7 @@ beat.1cv <- function(stratif, errors,alloc, minnumstrat = 2)
     if (!is.data.frame(dati)) 
       stop()
     as.data.frame(dati[, paste(prefisso, 1:n_var, sep = ""),
-    drop = FALSE])
+                       drop = FALSE])
   }
   #
   # --------------------------------------------------------------
@@ -113,7 +114,7 @@ beat.1cv <- function(stratif, errors,alloc, minnumstrat = 2)
   nstrat <- nrow(stratif)
   nvar <- length(grep("CV", names(errors)))
   ndom <- nrow(errors)
-
+  
   
   # ---------------------------------------------------------
   # Initial Data Structures - selection from input variables
@@ -174,9 +175,9 @@ beat.1cv <- function(stratif, errors,alloc, minnumstrat = 2)
       col <- as.factor(data[, vari])
       out <<- cbind(out, outer(col, levels(col), 
                                function(y,x) 
-                                 {
+                               {
                                  ifelse(y == x, 1, 0)
-                                 }))
+                               }))
     })
     out
   }
@@ -199,7 +200,7 @@ beat.1cv <- function(stratif, errors,alloc, minnumstrat = 2)
   # computation of the coefficients of variation CVs for
   # different domains of interest
   # -------------------------------------------------------------
- 
+  
   cvDom <- NULL  #Per stampa
   cvDom2 <- NULL  #per stampa
   for (k in 1:ndom) {
@@ -235,7 +236,7 @@ beat.1cv <- function(stratif, errors,alloc, minnumstrat = 2)
   }
   
   # -----------------------------------------------------------
-
+  
   
   #create the dataframe to be returned as output
   out_cv=data.frame(matrix(nrow=nvar*sum(nvalues), ncol=5))
@@ -247,7 +248,7 @@ beat.1cv <- function(stratif, errors,alloc, minnumstrat = 2)
   out_cv[,3]=as.vector(paste("V", c(1:ncol(med)), sep=""))            
   out_cv[,4]=as.vector(cv)
   out_cv[,5]= as.vector(CVfin)
-
+  
   return(out_cv)
   
   # End body
@@ -257,4 +258,4 @@ beat.1cv <- function(stratif, errors,alloc, minnumstrat = 2)
 }
 
 
-  
+
