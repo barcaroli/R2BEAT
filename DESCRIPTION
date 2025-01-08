@@ -27,4 +27,4 @@ Encoding: UTF-8
 URL: https://barcaroli.github.io/R2BEAT/
 VignetteBuilder: knitr
 BugReports: https://github.com/barcaroli/R2BEAT/issues
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2.9000

@@ -32,3 +32,36 @@ A dataframe with strata information. The output dataframe can be used as input d
 \description{
 The function returns a dataframe, starting from the sampling frame (either universe or sample of a previous survey) with strata information.
 }
+\examples{
+# ---------------- 
+# from population
+# ---------------- 
+data("pop")
+samp_frame=pop
+ID="id_ind"
+stratum="stratum"
+dom=c("region", "province" )
+target=c("unemployed")
+a <- prepareInputToAllocation_beat.1st(samp_frame = samp_frame, 
+                                       ID=ID, 
+                                       stratum=stratum, 
+                                       dom=dom,
+                                       target=target)
+
+# ---------------- 
+# from sample
+# ----------------
+data("sample")
+samp_frame=samp
+ID="id_ind"
+stratum="stratum"
+dom=c("region", "province" )
+target=c("unemployed")
+samp_weight="weight"
+b <- prepareInputToAllocation_beat.1st(samp_frame = samp_frame, 
+                                       ID=ID, 
+                                       stratum=stratum, 
+                                       dom=dom,
+                                       target=target, 
+                                       samp_weight = samp_weight)
+}

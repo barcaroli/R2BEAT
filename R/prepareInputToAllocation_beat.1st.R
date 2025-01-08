@@ -7,6 +7,40 @@
 #' @param target: variable(s) in samp_frame which is the target of the estimate.
 #' @param samp_weight: name of the variable in the sample of another survey specifying the sampling weights. Default is NULL, meaning that population is taken as the reference.
 #' @return A dataframe with strata information. The output dataframe can be used as input dataframe stratif for R2BEAT one-stage sample design (beat.1st)
+#' @examples
+#' # ---------------- 
+#' # from population
+#' # ---------------- 
+#' data("pop")
+#' samp_frame=pop
+#' ID="id_ind"
+#' stratum="stratum"
+#' dom=c("region", "province" )
+#' target=c("unemployed")
+#' a <- prepareInputToAllocation_beat.1st(samp_frame = samp_frame, 
+#'                                        ID=ID, 
+#'                                        stratum=stratum, 
+#'                                        dom=dom,
+#'                                        target=target)
+#' 
+#' # ---------------- 
+#' # from sample
+#' # ----------------
+#' data("sample")
+#' samp_frame=samp
+#' ID="id_ind"
+#' stratum="stratum"
+#' dom=c("region", "province" )
+#' target=c("unemployed")
+#' samp_weight="weight"
+#' b <- prepareInputToAllocation_beat.1st(samp_frame = samp_frame, 
+#'                                        ID=ID, 
+#'                                        stratum=stratum, 
+#'                                        dom=dom,
+#'                                        target=target, 
+#'                                        samp_weight = samp_weight)
+
+
 prepareInputToAllocation_beat.1st <- function (samp_frame, ID, stratum, dom,  target, samp_weight=NULL){
   buildFrame <- function (df, id, X, Y, domainvalue) 
   {
