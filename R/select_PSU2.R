@@ -5,6 +5,7 @@ select_PSU2 <- function (alloc,
                          psu_file = psu_file) 
 {
   allocation <- alloc$alloc[-nrow(alloc$alloc), c("STRATUM",type)]
+  colnames(allocation)[2] <- "ALLOC"
   #------------------------------------------------------------------
   strat <- unique(des_file$STRATUM)
   nstrat <- length(strat)
