@@ -71,7 +71,7 @@ alloc <- beat.2st(stratif = inp$strata,
                   minPSUstrat = 2,
                   minnumstrat = 50
 )
-sample_1st <- select_PSU2(alloc, type="ALLOC", var_ord=NULL, des_file=des_file)
+sample_1st <- select_PSU2(alloc, type="ALLOC", var_ord=NULL, des_file=inp$des_file, psu_file = inp$psu_file)
 head(sample_1st)
 }
 }
