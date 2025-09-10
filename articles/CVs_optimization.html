@@ -93,7 +93,7 @@
       <h1 data-toc-skip>R2BEAT Optimization of precision
 constraints</h1>
             
-            <h4 data-toc-skip class="date">2025-07-10 <br><br><br>
+            <h4 data-toc-skip class="date">2025-09-10 <br><br><br>
 </h4>
       
       <small class="dont-index">Source: <a href="https://github.com/barcaroli/R2BEAT/blob/master/vignettes/CVs_optimization.Rmd" class="external-link"><code>vignettes/CVs_optimization.Rmd</code></a></small>
@@ -200,7 +200,7 @@ in a country. Each stratum belongs to three different domain levels:</p>
 <span><span class="co">## 3 DOM3 0.15 0.15 0.15 0.15</span></span></code></pre>
 <p>and proceed with an initial allocation:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">equal</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/beth1.html">beat.1st</a></span><span class="op">(</span><span class="va">strata</span>,<span class="va">cv_equal</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">equal</span> <span class="op">&lt;-</span> <span class="fu">R2BEAT</span><span class="fu">::</span><span class="fu"><a href="../reference/beth1.html">beat.1st</a></span><span class="op">(</span><span class="va">strata</span>,<span class="va">cv_equal</span><span class="op">)</span></span></code></pre></div>
 <p>with the following total sample size and sensitivity:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">equal</span><span class="op">$</span><span class="va">alloc</span><span class="op">$</span><span class="va">ALLOC</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">equal</span><span class="op">$</span><span class="va">alloc</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
@@ -255,7 +255,7 @@ target variables in the different strata, for each domain level:</p>
 initial ones. But we can see that the new corresponding sample size is
 much lower than the initial one:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">intermediate1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/beth1.html">beat.1st</a></span><span class="op">(</span><span class="va">strata</span>,<span class="va">cv_mod</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">intermediate1</span> <span class="op">&lt;-</span> <span class="fu">R2BEAT</span><span class="fu">::</span><span class="fu"><a href="../reference/beth1.html">beat.1st</a></span><span class="op">(</span><span class="va">strata</span>,<span class="va">cv_mod</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">intermediate1</span><span class="op">$</span><span class="va">alloc</span><span class="op">$</span><span class="va">ALLOC</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">intermediate1</span><span class="op">$</span><span class="va">alloc</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] 2308</span></span></code></pre>
 <p>To correctly compare the new values of the CVs to the initial ones,
@@ -299,7 +299,7 @@ sample size. To do this, we make use of the function ‘adjustCVs’:</p>
 higher than in the initial set.</p>
 <p>The new sensitivity:</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">intermediate2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/beth1.html">beat.1st</a></span><span class="op">(</span><span class="va">strata</span>,<span class="va">cv_mod2</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">intermediate2</span> <span class="op">&lt;-</span> <span class="fu">R2BEAT</span><span class="fu">::</span><span class="fu"><a href="../reference/beth1.html">beat.1st</a></span><span class="op">(</span><span class="va">strata</span>,<span class="va">cv_mod2</span><span class="op">)</span></span>
 <span><span class="va">intermediate2</span><span class="op">$</span><span class="va">sensitivity</span><span class="op">[</span><span class="va">intermediate2</span><span class="op">$</span><span class="va">sensitivity</span><span class="op">$</span><span class="va">`Sensitivity 10%`</span> <span class="op">&gt;</span><span class="fl">1</span>,<span class="op">]</span></span></code></pre></div>
 <pre><code><span><span class="co">##     Type Dom Var Planned CV Actual CV Sensitivity 10%</span></span>
 <span><span class="co">## 21  DOM3   1  V4 0.04628051    0.0462              80</span></span>
@@ -396,7 +396,7 @@ the quantum genetic algorithm, implemented in the R package QGA.</p>
 <span>    <span class="op">}</span></span>
 <span>  <span class="op">}</span></span>
 <span>  <span class="va">cv_corr</span></span>
-<span>  <span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/beth1.html">beat.1st</a></span><span class="op">(</span><span class="va">strata</span>,<span class="va">cv_corr</span><span class="op">)</span></span>
+<span>  <span class="va">a</span> <span class="op">&lt;-</span> <span class="fu">R2BEAT</span><span class="fu">::</span><span class="fu"><a href="../reference/beth1.html">beat.1st</a></span><span class="op">(</span><span class="va">strata</span>,<span class="va">cv_corr</span><span class="op">)</span></span>
 <span>  <span class="va">b</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/ks.test.html" class="external-link">ks.test</a></span><span class="op">(</span><span class="va">a</span><span class="op">$</span><span class="va">alloc</span><span class="op">$</span><span class="va">ALLOC</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">a</span><span class="op">$</span><span class="va">alloc</span><span class="op">)</span><span class="op">]</span>,<span class="va">a</span><span class="op">$</span><span class="va">alloc</span><span class="op">$</span><span class="va">PROP</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">a</span><span class="op">$</span><span class="va">alloc</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
 <span>  <span class="va">c</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">a</span><span class="op">$</span><span class="va">alloc</span><span class="op">$</span><span class="va">ALLOC</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">a</span><span class="op">$</span><span class="va">alloc</span><span class="op">)</span><span class="op">]</span>,<span class="va">a</span><span class="op">$</span><span class="va">alloc</span><span class="op">$</span><span class="va">PROP</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">a</span><span class="op">$</span><span class="va">alloc</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
 <span>  <span class="co">#---------- Fitness function ----------------</span></span>
@@ -543,7 +543,7 @@ the solution proposed by the genetic algorithm:</p>
 <p>But consider that, now, the required sample size is lower with these
 new constraints:</p>
 <div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">intermediate3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/beth1.html">beat.1st</a></span><span class="op">(</span><span class="va">strata</span>,<span class="va">cv_best</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">intermediate3</span> <span class="op">&lt;-</span> <span class="fu">R2BEAT</span><span class="fu">::</span><span class="fu"><a href="../reference/beth1.html">beat.1st</a></span><span class="op">(</span><span class="va">strata</span>,<span class="va">cv_best</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">intermediate3</span><span class="op">$</span><span class="va">alloc</span><span class="op">$</span><span class="va">ALLOC</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">intermediate3</span><span class="op">$</span><span class="va">alloc</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] 10398</span></span></code></pre>
 <p>Also in this case, to compare the new precision constraints with the
@@ -605,7 +605,7 @@ well below.</p>
 <p><img src="CVs_optimization_files/figure-html/unnamed-chunk-21-1.png" width="700"></p>
 <p>Finally, we analyze the obtained final allocation in the strata.</p>
 <div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">final</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/beth1.html">beat.1st</a></span><span class="op">(</span><span class="va">strata</span>,<span class="va">cv_final</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">final</span> <span class="op">&lt;-</span> <span class="fu">R2BEAT</span><span class="fu">::</span><span class="fu"><a href="../reference/beth1.html">beat.1st</a></span><span class="op">(</span><span class="va">strata</span>,<span class="va">cv_final</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">final</span><span class="op">$</span><span class="va">alloc</span><span class="op">$</span><span class="va">ALLOC</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">final</span><span class="op">$</span><span class="va">alloc</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] 19091</span></span></code></pre>
 <div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
@@ -654,7 +654,7 @@ due to the 1st and 4th target variables. We can change their CVs in the
 <span><span class="va">cv_final</span><span class="op">[</span><span class="fl">3</span>,<span class="fl">5</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">0.10</span></span></code></pre></div>
 <p>and verify the new situation:</p>
 <div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">final2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/beth1.html">beat.1st</a></span><span class="op">(</span><span class="va">strata</span>,<span class="va">cv_final</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">final2</span> <span class="op">&lt;-</span> <span class="fu">R2BEAT</span><span class="fu">::</span><span class="fu"><a href="../reference/beth1.html">beat.1st</a></span><span class="op">(</span><span class="va">strata</span>,<span class="va">cv_final</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">final2</span><span class="op">$</span><span class="va">alloc</span><span class="op">$</span><span class="va">ALLOC</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">final2</span><span class="op">$</span><span class="va">alloc</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] 17091</span></span></code></pre>
 <div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
