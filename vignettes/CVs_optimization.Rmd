@@ -95,7 +95,7 @@ cv_equal
 and proceed with an initial allocation:
 
 ```{r}
-equal <- beat.1st(strata,cv_equal)
+equal <- R2BEAT::beat.1st(strata,cv_equal)
 ```
 
 with the following total sample size and sensitivity:
@@ -126,7 +126,7 @@ cv_mod
 Actually, these new CVs are in some cases much higher than the initial ones. But we can see that the new corresponding sample size is much lower than the initial one:
 
 ```{r}
-intermediate1 <- beat.1st(strata,cv_mod)
+intermediate1 <- R2BEAT::beat.1st(strata,cv_mod)
 sum(intermediate1$alloc$ALLOC[-nrow(intermediate1$alloc)])
 ```
 To correctly compare the new values of the CVs to the initial ones, we have to re-calculate them in correspondence to the same required sample size. To do this, we make use of the function 'adjustCVs':
@@ -145,7 +145,7 @@ We see now that only in only in a few cases the CVs are slightly higher than in 
 The new sensitivity:
 
 ```{r}
-intermediate2 <- beat.1st(strata,cv_mod2)
+intermediate2 <- R2BEAT::beat.1st(strata,cv_mod2)
 intermediate2$sensitivity[intermediate2$sensitivity$`Sensitivity 10%` >1,]
 ```
 We see that now all the variables play a role in the determination of the best allocation.
@@ -192,7 +192,7 @@ fitness_cvs <- function(solution,eval_func_inputs) {
     }
   }
   cv_corr
-  a <- beat.1st(strata,cv_corr)
+  a <- R2BEAT::beat.1st(strata,cv_corr)
   b <- ks.test(a$alloc$ALLOC[-nrow(a$alloc)],a$alloc$PROP[-nrow(a$alloc)])
   c <- cor(a$alloc$ALLOC[-nrow(a$alloc)],a$alloc$PROP[-nrow(a$alloc)])
   #---------- Fitness function ----------------
@@ -318,7 +318,7 @@ They are, in some cases, higher than the initial ones.
 But consider that, now, the required sample size is lower with these new constraints:
 
 ```{r}
-intermediate3 <- beat.1st(strata,cv_best)
+intermediate3 <- R2BEAT::beat.1st(strata,cv_best)
 sum(intermediate3$alloc$ALLOC[-nrow(intermediate3$alloc)])
 ```
 
@@ -371,7 +371,7 @@ legend("bottomleft", c("Initial CVs","Intermediate CVs","Final CVs"),
 Finally, we analyze the obtained final allocation in the strata.
 
 ```{r}
-final <- beat.1st(strata,cv_final)
+final <- R2BEAT::beat.1st(strata,cv_final)
 sum(final$alloc$ALLOC[-nrow(final$alloc)])
 sum(equal$alloc$ALLOC[-nrow(equal$alloc)])
 a1 <- equal$alloc$ALLOC[-nrow(equal$alloc)]
@@ -417,7 +417,7 @@ cv_final[3,5] <- 0.10
 and verify the new situation:
 
 ```{r}
-final2 <- beat.1st(strata,cv_final)
+final2 <- R2BEAT::beat.1st(strata,cv_final)
 sum(final2$alloc$ALLOC[-nrow(final2$alloc)])
 b1 <- final2$alloc$ALLOC[-nrow(final2$alloc)]
 b2 <- final2$alloc$PROP[-nrow(final2$alloc)]
