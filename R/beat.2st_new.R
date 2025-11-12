@@ -5,7 +5,7 @@
 #' in a one-stage file_strataied sample design, following the generalized Bethel algorithm.
 #' 
 #' @usage
-#' beat.1st(file_strata,errors,des_file,psu_file,rho,deft_start,effst,epsilon1,mmdiff_deft,maxi,epsilon,minPSUstrat,minnumstrat,maxiter,maxiter1)
+#' beat.2st(file_strata,errors,des_file,psu_file,rho,deft_start,effst,epsilon1,mmdiff_deft,maxi,epsilon,minPSUstrat,minnumstrat,maxiter,maxiter1)
 #'
 #' @param file_strata: dataframe of survey strata, for more details see, e.g.,\code{\link{strata}}. 
 #' @param errors: dataframe of coefficients of variation for each domain, for more details see, e.g.,\code{\link {errors}}.

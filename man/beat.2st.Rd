@@ -4,7 +4,7 @@
 \alias{beat.2st}
 \title{Compute multivariate optimal allocation for different domains in two-stage stratified sample design}
 \usage{
-beat.1st(file_strata,errors,des_file,psu_file,rho,deft_start,effst,epsilon1,mmdiff_deft,maxi,epsilon,minPSUstrat,minnumstrat,maxiter,maxiter1)
+beat.2st(file_strata,errors,des_file,psu_file,rho,deft_start,effst,epsilon1,mmdiff_deft,maxi,epsilon,minPSUstrat,minnumstrat,maxiter,maxiter1)
 }
 \arguments{
 \item{file_strata:}{dataframe of survey strata, for more details see, e.g.,\code{\link{strata}}.}
