@@ -122,30 +122,30 @@ It also allows an implicit stratification by giving a set of ordering variables 
 <span class="r-in"><span>                         CV3<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.03</span>,<span class="fl">0.06</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                         CV4<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.05</span>,<span class="fl">0.08</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">cv</span></span></span>
-<span class="r-in"><span><span class="va">samp_frame</span> <span class="op">&lt;-</span> <span class="va">pop</span></span></span>
-<span class="r-in"><span><span class="va">samp_frame</span><span class="op">$</span><span class="va">one</span> <span class="op">&lt;-</span> <span class="fl">1</span></span></span>
+<span class="r-in"><span><span class="va">frame</span> <span class="op">&lt;-</span> <span class="va">pop</span></span></span>
+<span class="r-in"><span><span class="va">frame</span><span class="op">$</span><span class="va">one</span> <span class="op">&lt;-</span> <span class="fl">1</span></span></span>
 <span class="r-in"><span><span class="va">id_PSU</span> <span class="op">&lt;-</span> <span class="st">"municipality"</span>  </span></span>
 <span class="r-in"><span><span class="va">id_SSU</span> <span class="op">&lt;-</span> <span class="st">"id_ind"</span>        </span></span>
-<span class="r-in"><span><span class="va">strata_var</span> <span class="op">&lt;-</span> <span class="st">"stratum"</span>   </span></span>
-<span class="r-in"><span><span class="va">target_vars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"income_hh"</span>,<span class="st">"active"</span>,<span class="st">"inactive"</span>,<span class="st">"unemployed"</span><span class="op">)</span>   </span></span>
-<span class="r-in"><span><span class="va">deff_var</span> <span class="op">&lt;-</span> <span class="st">"stratum"</span>     </span></span>
-<span class="r-in"><span><span class="va">domain_var</span> <span class="op">&lt;-</span> <span class="st">"region"</span>  </span></span>
+<span class="r-in"><span><span class="va">stratum</span> <span class="op">&lt;-</span> <span class="st">"stratum"</span>   </span></span>
+<span class="r-in"><span><span class="va">target</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"income_hh"</span>,<span class="st">"active"</span>,<span class="st">"inactive"</span>,<span class="st">"unemployed"</span><span class="op">)</span>   </span></span>
+<span class="r-in"><span><span class="va">deff_level</span> <span class="op">&lt;-</span> <span class="st">"stratum"</span>     </span></span>
+<span class="r-in"><span><span class="va">domain</span> <span class="op">&lt;-</span> <span class="st">"region"</span>  </span></span>
 <span class="r-in"><span><span class="va">delta</span> <span class="op">=</span>  <span class="fl">1</span>       <span class="co"># households = survey units</span></span></span>
 <span class="r-in"><span><span class="va">minimum</span> <span class="op">&lt;-</span> <span class="fl">50</span>    <span class="co"># minimum number of SSUs to be interviewed in each selected PSU</span></span></span>
 <span class="r-in"><span><span class="va">deff_sugg</span> <span class="op">&lt;-</span> <span class="fl">1.5</span> <span class="co"># suggestion for the deff value</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">inp</span> <span class="op">&lt;-</span> <span class="fu"><a href="prepareInputToAllocation1.html">prepareInputToAllocation1</a></span><span class="op">(</span><span class="va">samp_frame</span>,</span></span>
+<span class="r-in"><span><span class="va">inp</span> <span class="op">&lt;-</span> <span class="fu"><a href="prepareInputToAllocation1.html">prepareInputToAllocation1</a></span><span class="op">(</span><span class="va">frame</span>,</span></span>
 <span class="r-in"><span>                                 <span class="va">id_PSU</span>,</span></span>
 <span class="r-in"><span>                                 <span class="va">id_SSU</span>,</span></span>
-<span class="r-in"><span>                                 <span class="va">strata_var</span>,</span></span>
-<span class="r-in"><span>                                 <span class="va">target_vars</span>,</span></span>
-<span class="r-in"><span>                                 <span class="va">deff_var</span>,</span></span>
-<span class="r-in"><span>                                 <span class="va">domain_var</span>,</span></span>
+<span class="r-in"><span>                                 <span class="va">stratum</span>,</span></span>
+<span class="r-in"><span>                                 <span class="va">target</span>,</span></span>
+<span class="r-in"><span>                                 <span class="va">deff_level</span>,</span></span>
+<span class="r-in"><span>                                 <span class="va">domain</span>,</span></span>
 <span class="r-in"><span>                                 <span class="va">minimum</span>,</span></span>
 <span class="r-in"><span>                                 <span class="va">delta</span>,</span></span>
 <span class="r-in"><span>                                 <span class="va">deff_sugg</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">inp</span><span class="op">$</span><span class="va">desfile</span><span class="op">$</span><span class="va">MINIMUM</span> <span class="op">&lt;-</span> <span class="fl">50</span></span></span>
-<span class="r-in"><span><span class="va">alloc</span> <span class="op">&lt;-</span> <span class="fu"><a href="beth2.html">beat.2st</a></span><span class="op">(</span>stratif <span class="op">=</span> <span class="va">inp</span><span class="op">$</span><span class="va">strata</span>, </span></span>
+<span class="r-in"><span><span class="va">alloc</span> <span class="op">&lt;-</span> <span class="fu"><a href="beat.2st.html">beat.2st</a></span><span class="op">(</span>file_strata <span class="op">=</span> <span class="va">inp</span><span class="op">$</span><span class="va">strata</span>, </span></span>
 <span class="r-in"><span>                  errors <span class="op">=</span> <span class="va">cv</span>, </span></span>
 <span class="r-in"><span>                  des_file <span class="op">=</span> <span class="va">inp</span><span class="op">$</span><span class="va">des_file</span>, </span></span>
 <span class="r-in"><span>                  psu_file <span class="op">=</span> <span class="va">inp</span><span class="op">$</span><span class="va">psu_file</span>, </span></span>
@@ -155,8 +155,9 @@ It also allows an implicit stratification by giving a set of ordering variables 
 <span class="r-in"><span>                  minPSUstrat <span class="op">=</span> <span class="fl">2</span>,</span></span>
 <span class="r-in"><span>                  minnumstrat <span class="op">=</span> <span class="fl">50</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">sample_1st</span> <span class="op">&lt;-</span> <span class="fu">select_PSU2</span><span class="op">(</span><span class="va">alloc</span>, type<span class="op">=</span><span class="st">"ALLOC"</span>, var_ord<span class="op">=</span><span class="cn">NULL</span>, des_file<span class="op">=</span><span class="va">inp</span><span class="op">$</span><span class="va">des_file</span>, psu_file <span class="op">=</span> <span class="va">inp</span><span class="op">$</span><span class="va">psu_file</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">sample_1st</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">sample_1st</span> <span class="op">&lt;-</span> <span class="fu">select_PSU2</span><span class="op">(</span><span class="va">alloc</span>, type<span class="op">=</span><span class="st">"OPT"</span>, var_ord<span class="op">=</span><span class="cn">NULL</span>, des_file<span class="op">=</span><span class="va">inp</span><span class="op">$</span><span class="va">des_file</span>, psu_file <span class="op">=</span> <span class="va">inp</span><span class="op">$</span><span class="va">psu_file</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">sample_1st</span><span class="op">$</span><span class="va">PSU_stats</span></span></span>
+<span class="r-in"><span><span class="va">sample_1st</span><span class="op">$</span><span class="va">sample_PSUs</span></span></span>
 <span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
@@ -172,7 +173,7 @@ It also allows an implicit stratification by giving a set of ordering variables 
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
       </footer></div>
