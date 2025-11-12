@@ -62,31 +62,31 @@ cv <- as.data.frame(list(DOM=c("DOM1","DOM2"),
                          CV4=c(0.06,0.08)))
 cv
 # parameters
-samp_frame <- pop
+frame <- pop
 errors <- cv
 id_PSU <- "municipality"  
 id_SSU <- "id_ind"        
-strata_var <- "stratum"  
-target_vars <- c("income_hh","active","inactive","unemployed")   # more than one
-deff_var <- "stratum"        
-domain_var <- "region"        
+stratum <- "stratum"  
+target <- c("income_hh","active","inactive","unemployed")   # more than one
+deff_level <- "stratum"        
+domain <- "region"        
 # average dimension of the SSU in terms of elementary survey units
 #delta =  nrow(pop) /length(unique(pop$id_hh))     
 delta =  1  # average dimension of the SSU in terms of elementary survey units
 deff_sugg <- 1.5  # deff (suggested)
-sensitivity_min_SSU(
-            samp_frame,
-            errors,
-            id_PSU,
-            id_SSU,
-            strata_var,
-            target_vars,
-            deff_var,
-            domain_var,
-            delta,
-            deff_sugg,
-            min=1,
-            max=2)
+sens <- sensitivity_min_SSU(
+  frame,
+  errors,
+  id_PSU,
+  id_SSU,
+  stratum,
+  target,
+  deff_level,
+  domain,
+  delta,
+  deff_sugg,
+  min=1,
+  max=2)
 }
 }
 \author{Giulio Barcaroli}

@@ -32,7 +32,7 @@ sensitivity_min_SSU <- function (samp_frame,
     k <- k + 1
     cat("\n", k)
     inp$des_file$MINIMUM = i
-    alloc <- beat.2st(stratif = inp$strata, 
+    alloc <- beat.2st(file_strata = inp$strata, 
                       errors = errors, 
                       des_file = inp$des_file, 
                       psu_file = inp$psu_file, 

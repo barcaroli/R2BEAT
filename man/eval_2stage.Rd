@@ -69,28 +69,28 @@ cv <- as.data.frame(list(DOM=c("DOM1","DOM2"),
                          CV2=c(0.03,0.05),
                          CV3=c(0.03,0.05),
                          CV4=c(0.05,0.08)))
-samp_frame <- pop
+frame <- pop
 id_PSU <- "municipality"  
 id_SSU <- "id_ind"        
-strata_var <- "stratum"   
-target_vars <- c("income_hh","active","inactive","unemployed")   # more than one
-deff_var <- "stratum"     
-domain_var <- "region"  
+stratum <- "stratum"   
+target <- c("income_hh","active","inactive","unemployed")   # more than one
+deff_level <- "stratum"     
+domain <- "region"  
 delta =  1     # households = survey units
 minimum <- 50  # minimum number of SSUs to be interviewed in each selected PSU
 deff_sugg <- 1.5  # suggestion for the deff value
-inp <- prepareInputToAllocation1(samp_frame,
-                                id_PSU,
-                                id_SSU,
-                                strata_var,
-                                target_vars,
-                                deff_var,
-                                domain_var,
-                                minimum,
-                                delta,
-                                deff_sugg)
+inp <- prepareInputToAllocation1(frame,
+                                 id_PSU,
+                                 id_SSU,
+                                 stratum,
+                                 target,
+                                 deff_level,
+                                 domain,
+                                 minimum,
+                                 delta,
+                                 deff_sugg)
 inp$desfile$MINIMUM <- 50
-alloc <- beat.2st(stratif = inp$strata, 
+alloc <- beat.2st(file_strata = inp$strata, 
                   errors = cv, 
                   des_file = inp$des_file, 
                   psu_file = inp$psu_file, 
@@ -99,14 +99,14 @@ alloc <- beat.2st(stratif = inp$strata,
                   effst = inp$effst, 
                   minPSUstrat = 2,
                   minnumstrat = 50
-                  )
-sample_1st <- select_PSU(alloc, type="ALLOC", pps=TRUE)
+)
+sample_1st <- select_PSU(alloc, type="OPT", pps=TRUE)
 
 df=pop
 df$one <- 1
 PSU_code="municipality"
 SSU_code="id_ind"
-target_vars <- c("income_hh",
+target <- c("income_hh",
                  "active",
                  "inactive",
                  "unemployed")  
@@ -115,13 +115,14 @@ PSU_sampled <- sample_1st$sample_PSU
 eval <- eval_2stage(df,
                     PSU_code,
                     SSU_code,
-                    domain_var,
-                    target_vars,
+                    domain,
+                    target,
                     PSU_sampled,
                     nsampl=10, 
-                    writeFiles=TRUE) 
+                    writeFiles=FALSE) 
 eval$coeff_var
 eval$rel_bias
+
 }
 }
 \keyword{ survey }

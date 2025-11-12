@@ -139,34 +139,34 @@ Actually, the 'deff' dataframe is not used in the following steps, it just remai
 
 Here is the way we can produce the above items:
 
-```{r}
+```{r warning=FALSE}
 load("pop.RData")
-samp_frame <- pop
+frame <- pop
 RGdes <- des
 RGcal <- cal
-strata_var <- c("stratum")      
-target_vars <- c("income_hh",
+stratum <- c("stratum")      
+target <- c("income_hh",
                  "active",
                  "inactive",
                  "unemployed")   
 weight_var <- "weight"
-deff_var <- "stratum"            
+deff_level <- "stratum"            
 id_PSU <- c("municipality")      
 id_SSU <- c("id_hh")             
-domain_var <- c("region") 
+domain <- c("region") 
 delta <- 1                   
 minimum <- 25                
 
 inp <- prepareInputToAllocation2(
-        samp_frame,  # sampling frame
+        frame,       # sampling frame
         RGdes,       # ReGenesees design object
         RGcal,       # ReGenesees calibrated object
         id_PSU,      # identification variable of PSUs
         id_SSU,      # identification variable of SSUs
-        strata_var,  # strata variables
-        target_vars, # target variables
-        deff_var,    # deff variables
-        domain_var,  # domain variables
+        stratum,     # strata variables
+        target,      # target variables
+        deff_level,  # deff variables
+        domain,      # domain variables
         delta,       # Average number of SSUs for each selection unit
         minimum      # Minimum number of SSUs to be selected in each PSU
       )
@@ -175,7 +175,7 @@ inp <- prepareInputToAllocation2(
 and these are the results:
 
 ```{r}
-head(inp$strata)
+head(inp$file_strata)
 ```
 
 ```{r}
@@ -205,7 +205,7 @@ It may happen that the population in strata (variable 'N' in 'inp1\$strata' data
 We can check it by applying the function 'check_input' in this way:
 
 ```{r}
-newstrata <- check_input(strata=inp$strata,
+newstrata <- check_input(strata=inp$file_strata,
                          des=inp$des_file,
                          strata_var_strata="STRATUM",
                          strata_var_des="STRATUM")
@@ -217,7 +217,7 @@ Together with the print of the differences between the two populations, the func
 It is preferable to use this new version:
 
 ```{r}
-inp$strata <- newstrata
+inp$file_strata <- newstrata
 ```
 
 # Optimal allocation of units in each stratum
@@ -237,7 +237,7 @@ cv
 set.seed(1234)
 minPSUstrat <- 2
 inp$des_file$MINIMUM <- 25
-alloc <- beat.2st(stratif = inp$strata, 
+alloc <- beat.2st(file_strata = inp$file_strata, 
                   errors = cv, 
                   des_file = inp$des_file, 
                   psu_file = inp$psu_file, 
@@ -268,7 +268,7 @@ Using the function 'select_PSU' execute the selection of PSU in strata:
 
 ```{r}
 set.seed(1234)
-sample_1st <- select_PSU(alloc, type="ALLOC", pps=TRUE, plot=TRUE)
+sample_1st <- select_PSU(alloc, type="OPT", pps=TRUE, plot=TRUE)
 ```
 
 This is the overall sample design:
@@ -292,7 +292,7 @@ To check that the total amount of selected units with respect to the initial all
 
 ```{r}
 nrow(samp)
-sum(alloc$alloc$ALLOC[-nrow(alloc$alloc)])
+sum(alloc$alloc$OPT[-nrow(alloc$alloc)])
 ```
 The difference is due to the fact that the constraint on the minimum number of SSUs to be selected for PSU has been enforced, thus resulting in an increase of the SSUs with respect to the optimal allocation.
 

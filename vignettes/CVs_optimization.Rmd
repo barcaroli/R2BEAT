@@ -70,8 +70,8 @@ str(strata)
 We consider as target variables:
 
 ```{r}
-target_vars <- c("active","inactive","unemployed","income_hh")
-target_vars
+target <- c("active","inactive","unemployed","income_hh")
+target
 ```
 
 We initially set the following precision constraints:
@@ -101,12 +101,12 @@ equal <- R2BEAT::beat.1st(strata,cv_equal)
 with the following total sample size and sensitivity:
 
 ```{r}
-sum(equal$alloc$ALLOC[-nrow(equal$alloc)])
+sum(equal$alloc$OPT[-nrow(equal$alloc)])
 ```
 
 
 ```{r}
-equal$sensitivity[equal$sensitivity$`Sensitivity 10%` > 1,]
+equal$sensitivity[equal$sensitivity$`Sensitivity10%` > 1,]
 ```
 
 We see that the 3rd variable 'unemployed' is the one that determines almost always the optimal allocation, while the 2nd one ('inactive') has a lower influence. 
@@ -127,13 +127,13 @@ Actually, these new CVs are in some cases much higher than the initial ones. But
 
 ```{r}
 intermediate1 <- R2BEAT::beat.1st(strata,cv_mod)
-sum(intermediate1$alloc$ALLOC[-nrow(intermediate1$alloc)])
+sum(intermediate1$alloc$OPT[-nrow(intermediate1$alloc)])
 ```
 To correctly compare the new values of the CVs to the initial ones, we have to re-calculate them in correspondence to the same required sample size. To do this, we make use of the function 'adjustCVs':
 
 
 ```{r}
-target_size <- sum(equal$alloc$ALLOC[-nrow(equal$alloc)])
+target_size <- sum(equal$alloc$OPT[-nrow(equal$alloc)])
 cv_mod2 <- adjust_CVs(target_size= target_size,
                    strata=strata,
                    errors=cv_mod,
@@ -146,7 +146,7 @@ The new sensitivity:
 
 ```{r}
 intermediate2 <- R2BEAT::beat.1st(strata,cv_mod2)
-intermediate2$sensitivity[intermediate2$sensitivity$`Sensitivity 10%` >1,]
+intermediate2$sensitivity[intermediate2$sensitivity$`Sensitivity10%` >1,]
 ```
 We see that now all the variables play a role in the determination of the best allocation.
 
@@ -162,7 +162,7 @@ intermediate2$alloc
 We can calculate the Pearson correlation coefficient between the optimal and proportional allocations:
 
 ```{r}
-cor(intermediate2$alloc$ALLOC[-nrow(intermediate2$alloc)],intermediate2$alloc$PROP[-nrow(intermediate2$alloc)])
+cor(intermediate2$alloc$OPT[-nrow(intermediate2$alloc)],intermediate2$alloc$PROP[-nrow(intermediate2$alloc)])
 ```
 We want to get the optimal allocation closer to the proportional one. For instance, we want that the correlation coefficient be increased to 0.5.
 
@@ -193,8 +193,8 @@ fitness_cvs <- function(solution,eval_func_inputs) {
   }
   cv_corr
   a <- R2BEAT::beat.1st(strata,cv_corr)
-  b <- ks.test(a$alloc$ALLOC[-nrow(a$alloc)],a$alloc$PROP[-nrow(a$alloc)])
-  c <- cor(a$alloc$ALLOC[-nrow(a$alloc)],a$alloc$PROP[-nrow(a$alloc)])
+  b <- ks.test(a$alloc$OPT[-nrow(a$alloc)],a$alloc$PROP[-nrow(a$alloc)])
+  c <- cor(a$alloc$OPT[-nrow(a$alloc)],a$alloc$PROP[-nrow(a$alloc)])
   #---------- Fitness function ----------------
   fitness <- c
   return(fitness)
@@ -319,13 +319,13 @@ But consider that, now, the required sample size is lower with these new constra
 
 ```{r}
 intermediate3 <- R2BEAT::beat.1st(strata,cv_best)
-sum(intermediate3$alloc$ALLOC[-nrow(intermediate3$alloc)])
+sum(intermediate3$alloc$OPT[-nrow(intermediate3$alloc)])
 ```
 
 Also in this case, to compare the new precision constraints with the initial ones we perform an adjustment, varying the new set until we reach the previous sample size:
 
 ```{r}
-target_size <- sum(intermediate2$alloc$ALLOC[-nrow(intermediate2$alloc)]) 
+target_size <- sum(intermediate2$alloc$OPT[-nrow(intermediate2$alloc)]) 
 cv_final <- adjust_CVs(target_size = target_size,
                    strata=strata,
                    errors=cv_best,
@@ -372,11 +372,11 @@ Finally, we analyze the obtained final allocation in the strata.
 
 ```{r}
 final <- R2BEAT::beat.1st(strata,cv_final)
-sum(final$alloc$ALLOC[-nrow(final$alloc)])
-sum(equal$alloc$ALLOC[-nrow(equal$alloc)])
-a1 <- equal$alloc$ALLOC[-nrow(equal$alloc)]
+sum(final$alloc$OPT[-nrow(final$alloc)])
+sum(equal$alloc$OPT[-nrow(equal$alloc)])
+a1 <- equal$alloc$OPT[-nrow(equal$alloc)]
 a2 <- equal$alloc$PROP[-nrow(equal$alloc)]
-b1 <- final$alloc$ALLOC[-nrow(final$alloc)]
+b1 <- final$alloc$OPT[-nrow(final$alloc)]
 b2 <- final$alloc$PROP[-nrow(final$alloc)]
 ```
 
@@ -416,10 +416,10 @@ cv_final[3,5] <- 0.10
 
 and verify the new situation:
 
-```{r}
+```{r }
 final2 <- R2BEAT::beat.1st(strata,cv_final)
-sum(final2$alloc$ALLOC[-nrow(final2$alloc)])
-b1 <- final2$alloc$ALLOC[-nrow(final2$alloc)]
+sum(final2$alloc$OPT[-nrow(final2$alloc)])
+b1 <- final2$alloc$OPT[-nrow(final2$alloc)]
 b2 <- final2$alloc$PROP[-nrow(final2$alloc)]
 plot(b1,type="b",col="blue",ylim=c(0,top))
 lines(b2,type="h",col="red")
@@ -433,7 +433,7 @@ Much better.
 Again, we re-determine the CVs in order to reach the initial sample size:
 
 ```{r}
-target_size <- sum(final$alloc$ALLOC[-nrow(final$alloc)])
+target_size <- sum(final$alloc$OPT[-nrow(final$alloc)])
 cv_final2 <- adjust_CVs(target_size= target_size,
                    strata=strata,
                    errors=cv_final,
@@ -457,10 +457,10 @@ legend("topleft", c("Initial CVs","Intermediate CVs","Final CVs"),
 
 
 
-```{r eval=FALSE, include=FALSE}
-tot <- equal$alloc[,c("STRATUM","PROP","ALLOC")]
+```{r , include=FALSE}
+tot <- equal$alloc[,c("STRATUM","PROP","OPT")]
 row.names(tot) <- NULL
-tot <- cbind(tot,final2$alloc$ALLOC)
+tot <- cbind(tot,final2$alloc$OPT)
 colnames(tot) <- c("STRATUM","Proportional","Initial optimal","Final optimal")
 tot$PercDifference <- round((tot$`Final optimal` - tot$`Initial optimal`) * 100 /  tot$`Initial optimal`,2)
 tot$abs_diff <- abs(round((tot$`Final optimal` - tot$`Initial optimal`) /  tot$`Initial optimal`,2))
@@ -470,10 +470,10 @@ tot2 <- tot[-nrow(tot),]
 
 Finally, we analyze the changes in the expected CVs:
 
-```{r warning=FALSE}
-a <- beat.1cv(strata,cv_equal,equal$alloc$ALLOC)
-b <- beat.1cv(strata,cv_mod2,intermediate2$alloc$ALLOC)
-c <- beat.1cv(strata,cv_final2,final$alloc$ALLOC)
+```{r , warning=FALSE}
+a <- beat.1cv(stratif=strata,errors=cv_equal,alloc=equal$alloc$OPT)
+b <- beat.1cv(strata,cv_mod2,intermediate2$alloc$OPT)
+c <- beat.1cv(strata,cv_final2,final$alloc$OPT)
 row.names(a) <- NULL
 tot <- cbind(a[,c(1,2,4)],b[,4],c[,4])
 colnames(tot)[3:5] <- c("Initial(1)","Intermediate(2)","Final(3)")
@@ -485,20 +485,20 @@ colnames(tot)[6:7] <- c("Diff.(2-1)","Diff.(3-2)")
 
 The average change due to the first step (balancing the influence of all variables in the determination of the best allocation):
 
-```{r}
+```{r }
 mean(tot$`Diff.(2-1)`) / mean(tot$Initial)
 ```
 
 and the average change due to the second step (bringing the opimal allocation closer to the proportional):
 
-```{r}
+```{r }
 
 mean(tot$`Diff.(3-2)`) / mean(tot$Initial)
 ```
 
 We can calculate the same indicators by weighting with the populations in the domains:
 
-```{r}
+```{r }
 # tot$DOMAIN <-  sub("/.*", "", tot$`DOMAIN/VAR`) 
 dom1 <- aggregate(strata$N,by=list(strata$DOM1),FUN=sum)
 dom2 <- aggregate(strata$N,by=list(strata$DOM2),FUN=sum)

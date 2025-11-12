@@ -119,13 +119,13 @@ By analysing the above graph we can decide which values are the most suitable fo
 We therefore assign the following values to the required parameters:
 
 ```{r}
-samp_frame <- pop
+frame <- pop
 id_PSU <- "municipality"  # only one
 id_SSU <- "id_ind"        # only one
-strata_var <- "stratum"   # only one
-target_vars <- c("income_hh","active","inactive","unemployed")   # more than one
-deff_var <- "stratum"     # only one
-domain_var <- "region"    # only one
+stratum <- "stratum"   # only one
+target <- c("income_hh","active","inactive","unemployed")   # more than one
+deff_level <- "stratum"     # only one
+domain <- "region"    # only one
 minimum <- 25     # minimum number of SSUs to be interviewed in each selected PSU
 delta =  1        # average dimension of the SSU in terms of elementary survey units
 deff_sugg <- 1.5  # suggestion for the deff value
@@ -135,13 +135,13 @@ deff_sugg <- 1.5  # suggestion for the deff value
 With already assigned parameters, we can execute the 'prepareInputToAllocation1' function:
 
 ```{r, results='hide'}
-inp <- prepareInputToAllocation1(samp_frame,
+inp <- prepareInputToAllocation1(frame,
                                 id_PSU,
                                 id_SSU,
-                                strata_var,
-                                target_vars,
-                                deff_var,
-                                domain_var,
+                                stratum,
+                                target,
+                                deff_level,
+                                domain,
                                 minimum,
                                 delta,
                                 deff_sugg)
@@ -232,7 +232,7 @@ Using the function 'beat.2st' in 'R2BEAT' package we can perform the optimizatio
 ```{r}
 inp$des_file$MINIMUM <- 25
 minPSUstrat = 2
-alloc <- beat.2st(stratif = inp$strata, 
+alloc <- beat.2st(file_strata = inp$strata, 
                   errors = cv, 
                   des_file = inp$des_file, 
                   psu_file = inp$psu_file, 
@@ -264,7 +264,7 @@ Using the function 'select_PSU' execute the selection of PSU in strata:
 
 ```{r}
 set.seed(1234)
-sample_1st <- select_PSU(alloc, type="ALLOC", pps=TRUE)
+sample_1st <- select_PSU(alloc, type="OPT", pps=TRUE)
 ```
 
 This is the overall sample design:
@@ -290,7 +290,7 @@ To check that the total amount of selected units with respect to the initial all
 
 ```{r}
 nrow(samp)
-sum(alloc$alloc$ALLOC[-nrow(alloc$alloc)])
+sum(alloc$alloc$OPT[-nrow(alloc$alloc)])
 ```
 
 The difference is due to the fact that the constraint on the minimum number of SSUs to be selected for PSU has been enforced, thus resulting in an increase of the SSUs with respect to the optimal allocation.

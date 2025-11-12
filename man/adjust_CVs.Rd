@@ -24,7 +24,7 @@ Function to increase or decrease the precision constraints in order to obtain th
 data(beat.example)
 errors
 a <- beat.1st(strata,errors)
-sum(a$alloc$ALLOC[-nrow(a$alloc)])
+sum(a$alloc$OPT[-nrow(a$alloc)])
 errors_new <- adjust_CVs(9000,strata,errors,adj_rate=0.005)
 errors_new
 }
