@@ -60,8 +60,8 @@ ls <- find.lon.strata(sample.des)
 if (!is.null(ls)) sample.des <- collapse.strata(sample.des)
 ## Calibration with known totals
 totals <- pop.template(sample.des,
-                       calmodel = ~ sex : cl_age, 
-                       partition = ~ region)
+             calmodel = ~ sex : cl_age, 
+             partition = ~ region)
 totals <- fill.template(pop, totals, mem.frac = 10)
 sample.cal <- e.calibrate(sample.des, 
                           totals,
@@ -71,31 +71,31 @@ sample.cal <- e.calibrate(sample.des,
                           bounds = c(0.3, 2.6), 
                           aggregate.stage = 2,
                           force = FALSE)
-frame <- pop
+samp_frame <- pop
 RGdes <- sample.des
 RGcal <- sample.cal
-stratum <- c("stratum")      
-target <- c("income_hh",
+strata_var <- c("stratum")      
+target_vars <- c("income_hh",
                  "active",
                  "inactive",
                  "unemployed")   
 weight_var <- "weight"
-deff_level <- "stratum"            
+deff_var <- "stratum"            
 id_PSU <- c("municipality")      
 id_SSU <- c("id_hh")             
-domain <- c("region") 
+domain_var <- c("region") 
 delta <- 1                   
 minimum <- 50     
 inp <- prepareInputToAllocation2 ( 
-  frame,
+  samp_frame,
   RGdes, 
   RGcal, 
   id_PSU, 
   id_SSU, 
-  stratum, 
-  target, 
-  deff_level, 
-  domain,
+  strata_var, 
+  target_vars, 
+  deff_var, 
+  domain_var,
   delta,
   minimum) 
 cv <- as.data.frame(list(DOM=c("DOM1","DOM2"),
@@ -103,15 +103,15 @@ cv <- as.data.frame(list(DOM=c("DOM1","DOM2"),
                          CV2=c(0.03,0.06),
                          CV3=c(0.03,0.06),
                          CV4=c(0.05,0.08)))
-sens <- sensitivity_min_SSU2 (strata = inp$file_strata, 
-                              des_file = inp$des_file,
-                              psu_file = inp$psu_file,
-                              rho = inp$rho,
-                              effst = inp$effst,
-                              errors = cv, 
-                              min = 15, 
-                              max = 25, 
-                              plot = TRUE) 
+sens <- sensitivity_min_SSU2 (strata = inp$strata, 
+                         des_file = inp$des_file,
+                         psu_file = inp$psu_file,
+                         rho = inp$rho,
+                         effst = inp$effst,
+                         errors = cv, 
+                         min = 15, 
+                         max = 25, 
+                         plot = TRUE) 
 }
 }
 \author{Giulio Barcaroli}

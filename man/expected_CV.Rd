@@ -20,14 +20,15 @@ given an allocation 'alloc' and the current set of precision constraints
 }
 \examples{
 load("./data/sample.RData")
-target <- c("active","inactive","unemployed","income_hh")
-alloc <- prepareInputToAllocation_beat.1st(frame = samp,
+target_vars <- c("active","inactive","unemployed","income_hh")
+strata <- R2BEAT:::prepareInputToAllocation_beat.1st(samp_frame = samp,
                                                      ID = "id_hh",
                                                      stratum = "stratum_label",
                                                      dom = "region",
-                                                     target = target)
-strata <- alloc$file_strata
-
+                                                     target = target_vars)
+strata$CENS <- as.numeric(strata$CENS)
+strata$COST <- as.numeric(strata$COST)
+strata$CENS <- 0
 cv <- as.data.frame(list(DOM = c("DOM1","DOM2"),
                          CV1 = c(0.05,0.10),
                          CV2 = c(0.05,0.10),
@@ -35,7 +36,8 @@ cv <- as.data.frame(list(DOM = c("DOM1","DOM2"),
                          CV4 = c(0.05,0.10)))
 allocation <- beat.1st(strata,cv)
 
-alloc <- allocation$alloc$OPT[-nrow(allocation$alloc)]
+alloc <- allocation$alloc$ALLOC[-nrow(allocation$alloc)]
 exp_cv <- expected_CV(strata,cv,alloc)
 exp_cv
+
 }

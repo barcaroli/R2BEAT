@@ -13,29 +13,30 @@ In case of scenario 2 (at least one previous round of the survey available), pre
 6. des_file
 }
 \usage{
-prepareInputToAllocation2 (frame,
-                           RGdes,
-                           RGcal,
-                           id_PSU,
-                           id_SSU,
-                           stratum,
-                           target,
-                           deff_level,
-                           domain,
-                           delta,
-                           minimum) 
+prepareInputToAllocation2 ( 
+  samp_frame,
+  RGdes, 
+  RGcal, 
+  id_PSU, 
+  id_SSU, 
+  strata_var, 
+  target_vars, 
+  deff_var, 
+  domain_var,
+  delta,
+  minimum) 
 }
 
 \arguments{
- \item{frame}{The dataframe containing sampling units in the reference population.}
+ \item{samp_frame}{The dataframe containing sampling units in the reference population.}
  \item{RGdes}{The 'design' ReGenesees object.}
  \item{RGcal}{The 'calibration' ReGenesees object.}
  \item{id_PSU}{variables used as identifiers in sampling frame.}
  \item{id_SSU}{variables used as identifiers in sampling frame.}
- \item{stratum}{stratification variable used in sampling frame.}
- \item{target}{target variables.}
- \item{deff_level}{stratification variable to be used when calculating deff.}
- \item{domain}{the variable used to identify the domain of interest.}
+ \item{strata_var}{stratification variable used in sampling frame.}
+ \item{target_vars}{target variables.}
+ \item{deff_var}{stratification variable to be used when calculating deff.}
+ \item{domain_var}{the variable used to identify the domain of interest.}
  \item{delta}{average number of analysis units per sampling unit.}
  \item{minimum}{minimum number of SSU to be selected from a PSU.}
 }
@@ -76,32 +77,33 @@ sample.cal <- e.calibrate(sample.des,
                           bounds = c(0.3, 2.6), 
                           aggregate.stage = 2,
                           force = FALSE)
-frame <- pop
+samp_frame <- pop
 RGdes <- sample.des
 RGcal <- sample.cal
-stratum <- c("stratum")      
-target <- c("income_hh",
-             "active",
-             "inactive",
-             "unemployed")   
+strata_var <- c("stratum")      
+target_vars <- c("income_hh",
+                 "active",
+                 "inactive",
+                 "unemployed")   
 weight_var <- "weight"
-deff_level <- "stratum"            
+deff_var <- "stratum"            
 id_PSU <- c("municipality")      
 id_SSU <- c("id_hh")             
-domain <- c("region") 
+domain_var <- c("region") 
 delta <- 1                   
 minimum <- 50     
-inp <- prepareInputToAllocation2 (frame,
-                           RGdes,
-                           RGcal,
-                           id_PSU,
-                           id_SSU,
-                           stratum,
-                           target,
-                           deff_level,
-                           domain,
-                           delta,
-                           minimum) 
+inp <- prepareInputToAllocation2 ( 
+  samp_frame,
+  RGdes, 
+  RGcal, 
+  id_PSU, 
+  id_SSU, 
+  strata_var, 
+  target_vars, 
+  deff_var, 
+  domain_var,
+  delta,
+  minimum) 
 head(inp$strata)
 head(inp$deff)
 head(inp$effst)

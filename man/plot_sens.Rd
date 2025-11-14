@@ -36,14 +36,14 @@ cv <- as.data.frame(list(DOM=c("DOM1","DOM2"),
                          CV4=c(0.04,0.08)))
 cv
 # parameters
-frame <- pop
+samp_frame <- pop
 errors <- cv
 id_PSU <- "municipality"  
 id_SSU <- "id_ind"        
-stratum <- "stratum"  
-target <- c("income_hh","active","inactive","unemployed")   # more than one
-deff_level <- "stratum"        
-domain <- "region"        
+strata_var <- "stratum"  
+target_vars <- c("income_hh","active","inactive","unemployed")   # more than one
+deff_var <- "stratum"        
+domain_var <- "region"        
 minimum <- 50 # minimum number of SSUs to be interviewed in each selected PSU
 # average dimension of the SSU in terms of elementary survey units
 #delta =  nrow(pop) /length(unique(pop$id_hh))     
@@ -52,14 +52,14 @@ deff_sugg <- 1.5
 min <- 30
 max <- 80
 sens <- sensitivity_min_SSU (
-  frame,
+  samp_frame,
   errors,
   id_PSU,
   id_SSU,
-  stratum,
-  target,
-  deff_level,
-  domain,
+  strata_var,
+  target_vars,
+  deff_var,
+  domain_var,
   minimum,
   delta,
   deff_sugg,
