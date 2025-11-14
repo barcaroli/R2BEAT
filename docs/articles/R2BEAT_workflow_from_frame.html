@@ -91,7 +91,7 @@
       <h1 data-toc-skip>R2BEAT two-stage sampling design workflow
 starting from the sampling frame</h1>
             
-            <h4 data-toc-skip class="date">2025-11-12 <br><br><br>
+            <h4 data-toc-skip class="date">2025-11-14 <br><br><br>
 </h4>
       
       <small class="dont-index">Source: <a href="https://github.com/barcaroli/R2BEAT/blob/HEAD/vignettes/R2BEAT_workflow_from_frame.Rmd" class="external-link"><code>vignettes/R2BEAT_workflow_from_frame.Rmd</code></a></small>
@@ -225,26 +225,26 @@ suitable for the sample design.</p>
 <p>We therefore assign the following values to the required
 parameters:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">frame</span> <span class="op">&lt;-</span> <span class="va">pop</span></span>
+<code class="sourceCode R"><span><span class="va">samp_frame</span> <span class="op">&lt;-</span> <span class="va">pop</span></span>
 <span><span class="va">id_PSU</span> <span class="op">&lt;-</span> <span class="st">"municipality"</span>  <span class="co"># only one</span></span>
 <span><span class="va">id_SSU</span> <span class="op">&lt;-</span> <span class="st">"id_ind"</span>        <span class="co"># only one</span></span>
-<span><span class="va">stratum</span> <span class="op">&lt;-</span> <span class="st">"stratum"</span>   <span class="co"># only one</span></span>
-<span><span class="va">target</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"income_hh"</span>,<span class="st">"active"</span>,<span class="st">"inactive"</span>,<span class="st">"unemployed"</span><span class="op">)</span>   <span class="co"># more than one</span></span>
-<span><span class="va">deff_level</span> <span class="op">&lt;-</span> <span class="st">"stratum"</span>     <span class="co"># only one</span></span>
-<span><span class="va">domain</span> <span class="op">&lt;-</span> <span class="st">"region"</span>    <span class="co"># only one</span></span>
+<span><span class="va">strata_var</span> <span class="op">&lt;-</span> <span class="st">"stratum"</span>   <span class="co"># only one</span></span>
+<span><span class="va">target_vars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"income_hh"</span>,<span class="st">"active"</span>,<span class="st">"inactive"</span>,<span class="st">"unemployed"</span><span class="op">)</span>   <span class="co"># more than one</span></span>
+<span><span class="va">deff_var</span> <span class="op">&lt;-</span> <span class="st">"stratum"</span>     <span class="co"># only one</span></span>
+<span><span class="va">domain_var</span> <span class="op">&lt;-</span> <span class="st">"region"</span>    <span class="co"># only one</span></span>
 <span><span class="va">minimum</span> <span class="op">&lt;-</span> <span class="fl">25</span>     <span class="co"># minimum number of SSUs to be interviewed in each selected PSU</span></span>
 <span><span class="va">delta</span> <span class="op">=</span>  <span class="fl">1</span>        <span class="co"># average dimension of the SSU in terms of elementary survey units</span></span>
 <span><span class="va">deff_sugg</span> <span class="op">&lt;-</span> <span class="fl">1.5</span>  <span class="co"># suggestion for the deff value</span></span></code></pre></div>
 <p>With already assigned parameters, we can execute the
 ‘prepareInputToAllocation1’ function:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">inp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/prepareInputToAllocation1.html">prepareInputToAllocation1</a></span><span class="op">(</span><span class="va">frame</span>,</span>
+<code class="sourceCode R"><span><span class="va">inp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/prepareInputToAllocation1.html">prepareInputToAllocation1</a></span><span class="op">(</span><span class="va">samp_frame</span>,</span>
 <span>                                <span class="va">id_PSU</span>,</span>
 <span>                                <span class="va">id_SSU</span>,</span>
-<span>                                <span class="va">stratum</span>,</span>
-<span>                                <span class="va">target</span>,</span>
-<span>                                <span class="va">deff_level</span>,</span>
-<span>                                <span class="va">domain</span>,</span>
+<span>                                <span class="va">strata_var</span>,</span>
+<span>                                <span class="va">target_vars</span>,</span>
+<span>                                <span class="va">deff_var</span>,</span>
+<span>                                <span class="va">domain_var</span>,</span>
 <span>                                <span class="va">minimum</span>,</span>
 <span>                                <span class="va">delta</span>,</span>
 <span>                                <span class="va">deff_sugg</span><span class="op">)</span></span></code></pre></div>
@@ -488,7 +488,7 @@ optimization of PSU and SSU allocation in strata:</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">inp</span><span class="op">$</span><span class="va">des_file</span><span class="op">$</span><span class="va">MINIMUM</span> <span class="op">&lt;-</span> <span class="fl">25</span></span>
 <span><span class="va">minPSUstrat</span> <span class="op">=</span> <span class="fl">2</span></span>
-<span><span class="va">alloc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/beat.2st.html">beat.2st</a></span><span class="op">(</span>file_strata <span class="op">=</span> <span class="va">inp</span><span class="op">$</span><span class="va">strata</span>, </span>
+<span><span class="va">alloc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/beth2.html">beat.2st</a></span><span class="op">(</span>stratif <span class="op">=</span> <span class="va">inp</span><span class="op">$</span><span class="va">strata</span>, </span>
 <span>                  errors <span class="op">=</span> <span class="va">cv</span>, </span>
 <span>                  des_file <span class="op">=</span> <span class="va">inp</span><span class="op">$</span><span class="va">des_file</span>, </span>
 <span>                  psu_file <span class="op">=</span> <span class="va">inp</span><span class="op">$</span><span class="va">psu_file</span>, </span>
@@ -505,10 +505,10 @@ optimization of PSU and SSU allocation in strata:</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">alloc</span><span class="op">$</span><span class="va">sensitivity</span></span></code></pre></div>
 <pre><code><span><span class="co">##    Type Dom V1 V2  V3   V4</span></span>
-<span><span class="co">## 1  DOM1   1  1  0   1    1</span></span>
-<span><span class="co">## 5  DOM2   1  1  0   1 1148</span></span>
-<span><span class="co">## 9  DOM2   2  1  0   1  239</span></span>
-<span><span class="co">## 13 DOM2   3 26  1 186    1</span></span></code></pre>
+<span><span class="co">## 2  DOM1   1  1  0   1    1</span></span>
+<span><span class="co">## 6  DOM2   1  1  0   1 1148</span></span>
+<span><span class="co">## 10 DOM2   2  1  0   1  239</span></span>
+<span><span class="co">## 14 DOM2   3 26  1 186    1</span></span></code></pre>
 <p>i.e., for each domain value and for each variable it is reported the
 gain in terms of reduction in the sample size if the corresponding
 precision constraint is reduced of 10%.</p>
@@ -516,10 +516,10 @@ precision constraint is reduced of 10%.</p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">alloc</span><span class="op">$</span><span class="va">expected</span></span></code></pre></div>
 <pre><code><span><span class="co">##    Type Dom     V1     V2     V3     V4</span></span>
-<span><span class="co">## 1  DOM1   1 0.0118 0.0100 0.0262 0.0386</span></span>
-<span><span class="co">## 5  DOM2   1 0.0121 0.0074 0.0259 0.0800</span></span>
-<span><span class="co">## 9  DOM2   2 0.0259 0.0213 0.0530 0.0799</span></span>
-<span><span class="co">## 13 DOM2   3 0.0299 0.0342 0.0599 0.0469</span></span></code></pre>
+<span><span class="co">## 2  DOM1   1 0.0118 0.0100 0.0262 0.0386</span></span>
+<span><span class="co">## 6  DOM2   1 0.0121 0.0074 0.0259 0.0800</span></span>
+<span><span class="co">## 10 DOM2   2 0.0259 0.0213 0.0530 0.0799</span></span>
+<span><span class="co">## 14 DOM2   3 0.0299 0.0342 0.0599 0.0469</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="selection-of-psus">Selection of PSUs<a class="anchor" aria-label="anchor" href="#selection-of-psus"></a>
@@ -528,7 +528,7 @@ precision constraint is reduced of 10%.</p>
 strata:</p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1234</span><span class="op">)</span></span>
-<span><span class="va">sample_1st</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/select_PSU.html">select_PSU</a></span><span class="op">(</span><span class="va">alloc</span>, type<span class="op">=</span><span class="st">"OPT"</span>, pps<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">sample_1st</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/select_PSU.html">select_PSU</a></span><span class="op">(</span><span class="va">alloc</span>, type<span class="op">=</span><span class="st">"ALLOC"</span>, pps<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="R2BEAT_workflow_from_frame_files/figure-html/unnamed-chunk-16-1.png" width="576"></p>
 <p>This is the overall sample design:</p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
@@ -582,7 +582,7 @@ initial allocation:</p>
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">samp</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] 8737</span></span></code></pre>
 <div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">alloc</span><span class="op">$</span><span class="va">alloc</span><span class="op">$</span><span class="va">OPT</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">alloc</span><span class="op">$</span><span class="va">alloc</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">alloc</span><span class="op">$</span><span class="va">alloc</span><span class="op">$</span><span class="va">ALLOC</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">alloc</span><span class="op">$</span><span class="va">alloc</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] 7999</span></span></code></pre>
 <p>The difference is due to the fact that the constraint on the minimum
 number of SSUs to be selected for PSU has been enforced, thus resulting
