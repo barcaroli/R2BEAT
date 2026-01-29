@@ -1,5 +1,5 @@
 #exportPattern("^[[:alpha:]]+")
-export(beat.1st,beat.2st,beat.cv,check_input,eval_2stage,plot_sens,prepareInputToAllocation1,prepareInputToAllocation2,select_PSU,select_SSU,select_PSU2,sensitivity_min_SSU,sensitivity_min_SSU2,input_to_beat.2st_1,input_to_beat.2st_2,build_dummy_variables,sens_names,beat.1cv,prepareInputToAllocation_beat.1st,expected_CV,aggrStrata,adjust_CVs,CVs_hint,pareto)
+export(beat.1st,beat.2st,beat.cv,check_input,eval_2stage,plot_sens,prepareInputToAllocation1,prepareInputToAllocation2,select_PSU,select_SSU,select_PSU2,sensitivity_min_SSU,sensitivity_min_SSU2,input_to_beat.2st_1,input_to_beat.2st_2,build_dummy_variables,sens_names,beat.1cv,prepareInputToAllocation_beat.1st,expected_CV,aggrStrata,adjust_CVs,CVs_hint,pareto,beat.1cv_2
 importFrom("stats", "aggregate")
 importFrom("utils", "read.table", "write.table")
 #importFrom("plyr", "ldply","ddply",".")
