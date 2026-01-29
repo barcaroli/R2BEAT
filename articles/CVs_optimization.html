@@ -93,7 +93,7 @@
       <h1 data-toc-skip>R2BEAT Optimization of precision
 constraints</h1>
             
-            <h4 data-toc-skip class="date">2025-11-14 <br><br><br>
+            <h4 data-toc-skip class="date">2026-01-29 <br><br><br>
 </h4>
       
       <small class="dont-index">Source: <a href="https://github.com/barcaroli/R2BEAT/blob/master/vignettes/CVs_optimization.Rmd" class="external-link"><code>vignettes/CVs_optimization.Rmd</code></a></small>
@@ -508,7 +508,7 @@ algorithm stops and output the related solution.</p>
 <span>                   <span class="va">stop_limit</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## </span></span>
 <span><span class="co">##  *** Best fitness:  0.5099748</span></span></code></pre>
-<p><img src="CVs_optimization_files/figure-html/unnamed-chunk-17-1.png" class="r-plt" width="700"></p>
+<p><img src="CVs_optimization_files/figure-html/unnamed-chunk-17-1.png" class="r-plt" alt="" width="700"></p>
 <div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">QGA</span><span class="fu">:::</span><span class="fu">plot_Output</span><span class="op">(</span><span class="va">solutionQGA</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <p>So, we have obtained a solution whose correlation coefficient is 0.5,
@@ -602,7 +602,7 @@ well below.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span><span class="st">"Domain level DOM3"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">legend</a></span><span class="op">(</span><span class="st">"bottomleft"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Initial CVs"</span>,<span class="st">"Intermediate CVs"</span>,<span class="st">"Final CVs"</span><span class="op">)</span>, </span>
 <span>       fill <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"darkgreen"</span>,<span class="st">"blue"</span>,<span class="st">"red"</span><span class="op">)</span>, cex<span class="op">=</span><span class="fl">0.8</span><span class="op">)</span></span></code></pre></div>
-<p><img src="CVs_optimization_files/figure-html/unnamed-chunk-21-1.png" class="r-plt" width="700"></p>
+<p><img src="CVs_optimization_files/figure-html/unnamed-chunk-21-1.png" class="r-plt" alt="" width="700"></p>
 <p>Finally, we analyze the obtained final allocation in the strata.</p>
 <div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">final</span> <span class="op">&lt;-</span> <span class="fu">R2BEAT</span><span class="fu">::</span><span class="fu"><a href="../reference/beth1.html">beat.1st</a></span><span class="op">(</span><span class="va">strata</span>,<span class="va">cv_final</span><span class="op">)</span></span>
@@ -624,13 +624,13 @@ well below.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="va">a2</span>,type<span class="op">=</span><span class="st">"h"</span>,col<span class="op">=</span><span class="st">"red"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span><span class="st">"Initial"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">legend</a></span><span class="op">(</span><span class="st">"topright"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Proportional"</span>,<span class="st">"Optimal"</span><span class="op">)</span>, fill <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"red"</span>, <span class="st">"blue"</span><span class="op">)</span>, cex<span class="op">=</span><span class="fl">0.8</span><span class="op">)</span></span></code></pre></div>
-<p><img src="CVs_optimization_files/figure-html/unnamed-chunk-23-1.png" class="r-plt" width="700"></p>
+<p><img src="CVs_optimization_files/figure-html/unnamed-chunk-23-1.png" class="r-plt" alt="" width="700"></p>
 <div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">b1</span>,type<span class="op">=</span><span class="st">"b"</span>,col<span class="op">=</span><span class="st">"blue"</span>,ylim<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="va">top</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="va">b2</span>,type<span class="op">=</span><span class="st">"h"</span>,col<span class="op">=</span><span class="st">"red"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span><span class="st">"Final"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">legend</a></span><span class="op">(</span><span class="st">"topright"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Proportional"</span>,<span class="st">"Optimal"</span><span class="op">)</span>, fill <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"red"</span>, <span class="st">"blue"</span><span class="op">)</span>, cex<span class="op">=</span><span class="fl">0.8</span><span class="op">)</span></span></code></pre></div>
-<p><img src="CVs_optimization_files/figure-html/unnamed-chunk-23-2.png" class="r-plt" width="700"></p>
+<p><img src="CVs_optimization_files/figure-html/unnamed-chunk-23-2.png" class="r-plt" alt="" width="700"></p>
 <p>We may not be satisfied by the situation in the 22nd and 24th
 sub-domains where the new solution yields a greater distance of the
 optimal allocations from the proportional ones.</p>
@@ -664,7 +664,7 @@ due to the 1st and 4th target variables. We can change their CVs in the
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="va">b2</span>,type<span class="op">=</span><span class="st">"h"</span>,col<span class="op">=</span><span class="st">"red"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span><span class="st">"Final"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">legend</a></span><span class="op">(</span><span class="st">"topright"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Proportional"</span>,<span class="st">"Optimal"</span><span class="op">)</span>, fill <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"red"</span>, <span class="st">"blue"</span><span class="op">)</span>, cex<span class="op">=</span><span class="fl">0.8</span><span class="op">)</span></span></code></pre></div>
-<p><img src="CVs_optimization_files/figure-html/unnamed-chunk-26-1.png" class="r-plt" width="700"></p>
+<p><img src="CVs_optimization_files/figure-html/unnamed-chunk-26-1.png" class="r-plt" alt="" width="700"></p>
 <p>Much better.</p>
 <p>Again, we re-determine the CVs in order to reach the initial sample
 size:</p>
@@ -693,7 +693,7 @@ size:</p>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span><span class="st">"Domain level DOM3"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">legend</a></span><span class="op">(</span><span class="st">"topleft"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Initial CVs"</span>,<span class="st">"Intermediate CVs"</span>,<span class="st">"Final CVs"</span><span class="op">)</span>, </span>
 <span>       fill <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"darkgreen"</span>,<span class="st">"blue"</span>,<span class="st">"red"</span><span class="op">)</span>, cex<span class="op">=</span><span class="fl">0.8</span><span class="op">)</span></span></code></pre></div>
-<p><img src="CVs_optimization_files/figure-html/unnamed-chunk-28-1.png" class="r-plt" width="700"></p>
+<p><img src="CVs_optimization_files/figure-html/unnamed-chunk-28-1.png" class="r-plt" alt="" width="700"></p>
 <p>Finally, we analyze the changes in the expected CVs:</p>
 <div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/beat.1cv.html">beat.1cv</a></span><span class="op">(</span><span class="va">strata</span>,<span class="va">cv_equal</span>,<span class="va">equal</span><span class="op">$</span><span class="va">alloc</span><span class="op">$</span><span class="va">ALLOC</span><span class="op">)</span></span>
