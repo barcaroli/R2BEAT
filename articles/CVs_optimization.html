@@ -1043,17 +1043,6 @@ algorithm stops and output the related solution.</p>
 <span>                          by<span class="op">=</span><span class="op">(</span><span class="va">vettmax</span><span class="op">[</span><span class="va">n</span><span class="op">]</span><span class="op">-</span><span class="va">vettmin</span><span class="op">[</span><span class="va">n</span><span class="op">]</span><span class="op">)</span><span class="op">/</span><span class="va">nvals</span><span class="op">)</span><span class="op">[</span><span class="va">solution</span><span class="op">[</span><span class="va">n</span><span class="op">]</span><span class="op">]</span></span>
 <span>  <span class="op">}</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span></span>
-<span>  <span class="va">cv_ga</span>,</span>
-<span>  digits <span class="op">=</span> <span class="fl">3</span>,</span>
-<span>  caption <span class="op">=</span> <span class="st">"GA precision constraints"</span>,</span>
-<span>  format <span class="op">=</span> <span class="st">"html"</span></span>
-<span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">kableExtra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html" class="external-link">kable_styling</a></span><span class="op">(</span></span>
-<span>    bootstrap_options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"striped"</span>, <span class="st">"condensed"</span><span class="op">)</span>,</span>
-<span>    full_width <span class="op">=</span> <span class="cn">FALSE</span></span>
-<span>  <span class="op">)</span></span></code></pre></div>
 <table class="table table table-striped table-condensed" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <caption>
 GA precision constraints
@@ -1129,7 +1118,7 @@ DOM3
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ga_solution</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/beth1.html">beat.1st</a></span><span class="op">(</span><span class="va">strata</span>,<span class="va">cv_ga</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">ga_solution</span><span class="op">$</span><span class="va">alloc</span><span class="op">$</span><span class="va">ALLOC</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">ga_solution</span><span class="op">$</span><span class="va">alloc</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] 51622</span></span></code></pre>
@@ -1140,7 +1129,7 @@ DOM3
 <p>With these new precision constraints, the sample size is slightly
 greater than the affordable. So, we apply again the “pareto”
 function:</p>
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">out2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pareto.html">pareto</a></span><span class="op">(</span></span>
 <span>  strata <span class="op">=</span> <span class="va">strata</span>,</span>
 <span>  current_cvs <span class="op">=</span> <span class="va">cv_ga</span>,</span>
@@ -1176,7 +1165,7 @@ function:</p>
 <h2 id="analysis-of-the-final-solution">4. Analysis of the final solution<a class="anchor" aria-label="anchor" href="#analysis-of-the-final-solution"></a>
 </h2>
 <p>These is the final set of precision constraints:</p>
-<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cv_final</span> <span class="op">&lt;-</span> <span class="va">out2</span><span class="op">$</span><span class="va">errors_scaled</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">cv_final</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">cv_final</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"CV"</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">nvars</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <table class="table table table-striped table-condensed" style="width: auto !important; margin-left: auto; margin-right: auto;">
@@ -1255,18 +1244,18 @@ DOM3
 </tbody>
 </table>
 <p>that produces the following sample size:</p>
-<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">final_sol</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/beth1.html">beat.1st</a></span><span class="op">(</span><span class="va">strata</span>,<span class="va">cv_final</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">final_sol</span><span class="op">$</span><span class="va">alloc</span><span class="op">$</span><span class="va">ALLOC</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">final_sol</span><span class="op">$</span><span class="va">alloc</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] 50000</span></span></code></pre>
 <p>in line with the affordable sample size.</p>
 <p>What about the closeness of the final optimal allocation to the
 proportional one?</p>
-<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="va">pareto_alloc</span><span class="op">$</span><span class="va">alloc</span></span>
 <span><span class="va">df</span> <span class="op">&lt;-</span> <span class="va">df</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span>,<span class="op">]</span></span>
 <span><span class="va">rng</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">df</span><span class="op">$</span><span class="va">ALLOC</span>,<span class="va">df</span><span class="op">$</span><span class="va">PROP</span><span class="op">)</span><span class="op">)</span>   </span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">ALLOC</span>  <span class="op">~</span>  <span class="va">PROP</span>, </span>
+<span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">ALLOC</span>  <span class="op">~</span>  <span class="va">PROP</span>, </span>
 <span>     data <span class="op">=</span> <span class="va">df</span>,</span>
 <span>     main <span class="op">=</span> <span class="st">"Optimal vs Proportional allocation - Before GA adjustment"</span>,</span>
 <span>     ylab <span class="op">=</span> <span class="st">"Optimal"</span>,</span>
@@ -1300,11 +1289,11 @@ proportional one?</p>
 <span>  cex <span class="op">=</span> <span class="fl">0.9</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p><img src="CVs_optimization_files/figure-html/unnamed-chunk-28-1.png" class="r-plt" alt="" width="700"></p>
-<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="va">final_sol</span><span class="op">$</span><span class="va">alloc</span></span>
 <span><span class="va">df</span> <span class="op">&lt;-</span> <span class="va">df</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span>,<span class="op">]</span></span>
 <span><span class="va">rng</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">df</span><span class="op">$</span><span class="va">ALLOC</span>,<span class="va">df</span><span class="op">$</span><span class="va">PROP</span><span class="op">)</span><span class="op">)</span>   </span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">ALLOC</span>  <span class="op">~</span>  <span class="va">PROP</span>, </span>
+<span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">ALLOC</span>  <span class="op">~</span>  <span class="va">PROP</span>, </span>
 <span>     data <span class="op">=</span> <span class="va">df</span>,</span>
 <span>     main <span class="op">=</span> <span class="st">"Optimal vs Proportional allocation - After GA adjustment"</span>,</span>
 <span>     ylab <span class="op">=</span> <span class="st">"Optimal"</span>,</span>
@@ -1342,7 +1331,7 @@ So, we obtained a final optimal solution that is much more close to the
 proportional one with respect to the one obtained with the first
 application of the “pareto” function.</p>
 <p>It is worth noting that the final correlation:</p>
-<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">final_sol</span><span class="op">$</span><span class="va">alloc</span><span class="op">$</span><span class="va">ALLOC</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">final_sol</span><span class="op">$</span><span class="va">alloc</span><span class="op">)</span><span class="op">]</span>,<span class="va">final_sol</span><span class="op">$</span><span class="va">alloc</span><span class="op">$</span><span class="va">PROP</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">final_sol</span><span class="op">$</span><span class="va">alloc</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] 0.7230641</span></span></code></pre>
 <p>is not the one that we indicated to and obtained by the genetic
@@ -1361,7 +1350,7 @@ equal CVs;</p></li>
 get the resulting optimal allocation closer to the proportional one (and
 adjusted once again with the “pareto” function.</p></li>
 </ul>
-<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">plot_domain</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">dom_label</span>, <span class="va">cv_pareto</span>, <span class="va">cv_ga</span>, <span class="va">cv_final</span>,</span>
 <span>                        <span class="va">series_cols</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"red"</span>, <span class="st">"blue"</span>,<span class="st">"yellow"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  </span>
