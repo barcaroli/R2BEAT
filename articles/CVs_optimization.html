@@ -87,13 +87,14 @@
 
 
 
-      </header><div class="row">
+      </header><script src="CVs_optimization_files/kePrint-0.0.1/kePrint.js"></script><link href="CVs_optimization_files/lightable-0.0.1/lightable.css" rel="stylesheet">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>R2BEAT Optimization of precision
 constraints</h1>
             
-            <h4 data-toc-skip class="date">2026-01-29 <br><br><br>
+            <h4 data-toc-skip class="date">2026-01-30 <br><br><br>
 </h4>
       
       <small class="dont-index">Source: <a href="https://github.com/barcaroli/R2BEAT/blob/master/vignettes/CVs_optimization.Rmd" class="external-link"><code>vignettes/CVs_optimization.Rmd</code></a></small>
@@ -110,19 +111,14 @@ constraints</h1>
 <li><p>In a multivariate stratified sampling design procedure, very
 often the values of the precision constraints (expressed in terms of
 maximum expected coefficients of variation set on the target estimates)
-are set without considering the peculiarities of the distributions of
-the target variables. As a result, few variables (or even only one) may
-be responsible for the optimization of the allocation, leaving the
-others completely ineffective. This is because some precision
-constraints are very tight and the other ones too loose. This is the
-reason why the R2BEAT package has been provided with an additional
-function (‘CVs_hint’) aiming at modifying the initial set of precision
-constraints to let each target variable influence the optimization
-process. This is done by considering the variability of the target
-variables in the different strata: initial precision constraints are
-adjusted so to relax those pertaining to the variables characterized by
-a higher variability, and to tighten those related to the variables with
-less variability.</p></li>
+are set taking into account the budget constraints that oblige to a
+given affordable sample size. This implies that an expert has to fine
+tune the precision constraints (increasing and decreasing them) until a
+satisfactory set is determined. When the number of variables and/or
+domains is not small, this job can be very expensive. To handle this
+issue, a new function, the “pareto” one, has been developed, in order to
+determine an optimal solution in terms of precision constraints, given
+the affordable sample size.</p></li>
 <li><p>Another issue is related to the characteristics of the allocation
 of sampling units in the strata: it may happen that it can be very
 different from the proportional one. In some cases it may be desirable
@@ -137,11 +133,12 @@ allocations).</p></li>
 </ol>
 </div>
 <div class="section level2">
-<h2 id="setting">1. Setting<a class="anchor" aria-label="anchor" href="#setting"></a>
+<h2 id="setting">Setting<a class="anchor" aria-label="anchor" href="#setting"></a>
 </h2>
-<p>In this study, we show how it is possible to start from a “neutral”
-set of precision constraints (equal CVs for all variables for a given
-domain level), and modify them, so to:</p>
+<p>In this study, we assume that the affordable sample size (given the
+budget) is set to 50,000. We show how it is possible to start from a
+“neutral” set of precision constraints (equal CVs for all variables for
+a given domain level), and modify them, so to:</p>
 <ul>
 <li><p>first, balance the influence of all the variables on the
 determination of the best allocation, or at least, to avoid that only a
@@ -183,200 +180,725 @@ in a country. Each stratum belongs to three different domain levels:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># De-comment if you want to execute on 2 domains</span></span>
 <span><span class="co"># cv_equal &lt;- as.data.frame(list(DOM = c("DOM1","DOM2"),</span></span>
-<span><span class="co">#                          CV1 = c(0.05,0.10),</span></span>
-<span><span class="co">#                          CV2 = c(0.05,0.10),</span></span>
-<span><span class="co">#                          CV3 = c(0.05,0.10),</span></span>
-<span><span class="co">#                          CV4 = c(0.05,0.10)))</span></span>
+<span><span class="co">#                          CV1 = c(0.05,0.05),</span></span>
+<span><span class="co">#                          CV2 = c(0.05,0.05),</span></span>
+<span><span class="co">#                          CV3 = c(0.05,0.05),</span></span>
+<span><span class="co">#                          CV4 = c(0.05,0.05)))</span></span>
 <span><span class="co"># De-comment if you want to execute on 3 domains</span></span>
 <span><span class="va">cv_equal</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>DOM <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"DOM1"</span>,<span class="st">"DOM2"</span>,<span class="st">"DOM3"</span><span class="op">)</span>,</span>
-<span>                         CV1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.05</span>,<span class="fl">0.10</span>,<span class="fl">0.15</span><span class="op">)</span>,</span>
-<span>                         CV2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.05</span>,<span class="fl">0.10</span>,<span class="fl">0.15</span><span class="op">)</span>,</span>
-<span>                         CV3 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.05</span>,<span class="fl">0.10</span>,<span class="fl">0.15</span><span class="op">)</span>,</span>
-<span>                         CV4 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.05</span>,<span class="fl">0.10</span>,<span class="fl">0.15</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">cv_equal</span></span></code></pre></div>
-<pre><code><span><span class="co">##    DOM  CV1  CV2  CV3  CV4</span></span>
-<span><span class="co">## 1 DOM1 0.05 0.05 0.05 0.05</span></span>
-<span><span class="co">## 2 DOM2 0.10 0.10 0.10 0.10</span></span>
-<span><span class="co">## 3 DOM3 0.15 0.15 0.15 0.15</span></span></code></pre>
+<span>                         CV1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.05</span>,<span class="fl">0.05</span>,<span class="fl">0.05</span><span class="op">)</span>,</span>
+<span>                         CV2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.05</span>,<span class="fl">0.05</span>,<span class="fl">0.05</span><span class="op">)</span>,</span>
+<span>                         CV3 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.05</span>,<span class="fl">0.05</span>,<span class="fl">0.05</span><span class="op">)</span>,</span>
+<span>                         CV4 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.05</span>,<span class="fl">0.05</span>,<span class="fl">0.05</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<table class="table table table-striped table-condensed" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+Coefficients of variation by domain
+</caption>
+<thead><tr>
+<th style="text-align:left;">
+DOM
+</th>
+<th style="text-align:right;">
+CV1
+</th>
+<th style="text-align:right;">
+CV2
+</th>
+<th style="text-align:right;">
+CV3
+</th>
+<th style="text-align:right;">
+CV4
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+DOM1
+</td>
+<td style="text-align:right;">
+0.05
+</td>
+<td style="text-align:right;">
+0.05
+</td>
+<td style="text-align:right;">
+0.05
+</td>
+<td style="text-align:right;">
+0.05
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+DOM2
+</td>
+<td style="text-align:right;">
+0.05
+</td>
+<td style="text-align:right;">
+0.05
+</td>
+<td style="text-align:right;">
+0.05
+</td>
+<td style="text-align:right;">
+0.05
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+DOM3
+</td>
+<td style="text-align:right;">
+0.05
+</td>
+<td style="text-align:right;">
+0.05
+</td>
+<td style="text-align:right;">
+0.05
+</td>
+<td style="text-align:right;">
+0.05
+</td>
+</tr>
+</tbody>
+</table>
 <p>and proceed with an initial allocation:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">equal</span> <span class="op">&lt;-</span> <span class="fu">R2BEAT</span><span class="fu">::</span><span class="fu"><a href="../reference/beth1.html">beat.1st</a></span><span class="op">(</span><span class="va">strata</span>,<span class="va">cv_equal</span><span class="op">)</span></span></code></pre></div>
-<p>with the following total sample size and sensitivity:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<p>with the following total sample size:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">equal</span><span class="op">$</span><span class="va">alloc</span><span class="op">$</span><span class="va">ALLOC</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">equal</span><span class="op">$</span><span class="va">alloc</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] 16973</span></span></code></pre>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">equal</span><span class="op">$</span><span class="va">sensitivity</span><span class="op">[</span><span class="va">equal</span><span class="op">$</span><span class="va">sensitivity</span><span class="op">$</span><span class="va">`Sensitivity 10%`</span> <span class="op">&gt;</span> <span class="fl">1</span>,<span class="op">]</span></span></code></pre></div>
-<pre><code><span><span class="co">##     Type Dom Var Planned CV Actual CV Sensitivity 10%</span></span>
-<span><span class="co">## 20  DOM3   1  V3       0.15    0.1499              75</span></span>
-<span><span class="co">## 24  DOM3   2  V3       0.15    0.1500              81</span></span>
-<span><span class="co">## 28  DOM3   3  V3       0.15    0.1500              77</span></span>
-<span><span class="co">## 32  DOM3   4  V3       0.15    0.1500              63</span></span>
-<span><span class="co">## 36  DOM3   5  V3       0.15    0.1500              50</span></span>
-<span><span class="co">## 40  DOM3   6  V3       0.15    0.1498              50</span></span>
-<span><span class="co">## 44  DOM3   7  V3       0.15    0.1499              52</span></span>
-<span><span class="co">## 48  DOM3   8  V3       0.15    0.1498              41</span></span>
-<span><span class="co">## 52  DOM3   9  V3       0.15    0.1500             338</span></span>
-<span><span class="co">## 56  DOM3  10  V3       0.15    0.1500             400</span></span>
-<span><span class="co">## 60  DOM3  11  V3       0.15    0.1500             449</span></span>
-<span><span class="co">## 64  DOM3  12  V3       0.15    0.1500             398</span></span>
-<span><span class="co">## 68  DOM3  13  V3       0.15    0.1500             259</span></span>
-<span><span class="co">## 72  DOM3  14  V3       0.15    0.1499             255</span></span>
-<span><span class="co">## 76  DOM3  15  V3       0.15    0.1500             296</span></span>
-<span><span class="co">## 80  DOM3  16  V3       0.15    0.1500             259</span></span>
-<span><span class="co">## 83  DOM3  17  V2       0.15    0.1498              36</span></span>
-<span><span class="co">## 87  DOM3  18  V2       0.15    0.1496              34</span></span>
-<span><span class="co">## 91  DOM3  19  V2       0.15    0.1497              33</span></span>
-<span><span class="co">## 95  DOM3  20  V2       0.15    0.1498              28</span></span>
-<span><span class="co">## 99  DOM3  21  V2       0.15    0.1496              35</span></span>
-<span><span class="co">## 103 DOM3  22  V2       0.15    0.1497              37</span></span>
-<span><span class="co">## 107 DOM3  23  V2       0.15    0.1498              33</span></span>
-<span><span class="co">## 111 DOM3  24  V2       0.15    0.1494              25</span></span></code></pre>
-<p>We see that the 3rd variable ‘unemployed’ is the one that determines
-almost always the optimal allocation, while the 2nd one (‘inactive’) has
-a lower influence.</p>
+<pre><code><span><span class="co">## [1] 137129</span></span></code></pre>
 </div>
 <div class="section level2">
-<h2 id="modification-of-initial-precision-constraints">2. Modification of initial precision constraints<a class="anchor" aria-label="anchor" href="#modification-of-initial-precision-constraints"></a>
+<h2 id="modification-of-initial-precision-constraints-to-be-compliant-with-the-sample-size-constraint">2. Modification of initial precision constraints to be compliant
+with the sample size constraint<a class="anchor" aria-label="anchor" href="#modification-of-initial-precision-constraints-to-be-compliant-with-the-sample-size-constraint"></a>
 </h2>
-<p>We now try to change the initial precision constraints to balance the
-effect of the target variables.</p>
-<p>To this aim, we make use of the function ‘CVs_hint’. This function
-modifies the initial values of CVs by considering the variability of the
-target variables in the different strata, for each domain level:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">cv_mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CVs_hint.html">CVs_hint</a></span><span class="op">(</span><span class="va">strata</span>,<span class="va">cv_equal</span><span class="op">)</span></span>
-<span><span class="va">cv_mod</span></span></code></pre></div>
-<pre><code><span><span class="co">##    DOM        CV1       CV2       CV3        CV4</span></span>
-<span><span class="co">## 1 DOM1 0.03604821 0.0947973 0.1326679 0.04540080</span></span>
-<span><span class="co">## 2 DOM2 0.07808286 0.1897451 0.3435119 0.08979977</span></span>
-<span><span class="co">## 3 DOM3 0.12188868 0.2824164 0.5094129 0.12909995</span></span></code></pre>
-<p>Actually, these new CVs are in some cases much higher than the
-initial ones. But we can see that the new corresponding sample size is
-much lower than the initial one:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">intermediate1</span> <span class="op">&lt;-</span> <span class="fu">R2BEAT</span><span class="fu">::</span><span class="fu"><a href="../reference/beth1.html">beat.1st</a></span><span class="op">(</span><span class="va">strata</span>,<span class="va">cv_mod</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">intermediate1</span><span class="op">$</span><span class="va">alloc</span><span class="op">$</span><span class="va">ALLOC</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">intermediate1</span><span class="op">$</span><span class="va">alloc</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] 2308</span></span></code></pre>
-<p>To correctly compare the new values of the CVs to the initial ones,
-we have to re-calculate them in correspondence to the same required
-sample size. To do this, we make use of the function ‘adjustCVs’:</p>
+<p>We now change the initial precision constraints to reach the desired
+sample size.</p>
+<p>To this aim, we make use of the function ‘pareto’. This function
+determines an optimal set of precision constraints, compliant with the
+constraint in term of sample size.</p>
+<p>Prior to the execution, we set some upper limits to the resulting
+precision constraints:</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">caps</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  DOM <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"DOM3"</span><span class="op">)</span>,</span>
+<span>  VAR <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"V1"</span>,<span class="st">"V2"</span>,<span class="st">"V3"</span>,<span class="st">"V4"</span><span class="op">)</span>,</span>
+<span>  MAX_CV <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.10</span>,<span class="fl">0.10</span>,<span class="fl">0.10</span>,<span class="fl">0.10</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">caps</span></span></code></pre></div>
+<pre><code><span><span class="co">##    DOM VAR MAX_CV</span></span>
+<span><span class="co">## 1 DOM3  V1    0.1</span></span>
+<span><span class="co">## 2 DOM3  V2    0.1</span></span>
+<span><span class="co">## 3 DOM3  V3    0.1</span></span>
+<span><span class="co">## 4 DOM3  V4    0.1</span></span></code></pre>
+<p>In this way, we indicate that whatever solution of the “pareto”
+function must be such that in DOM3 no CV can exceed these values.</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pareto.html">pareto</a></span><span class="op">(</span></span>
+<span>  strata <span class="op">=</span> <span class="va">strata</span>,</span>
+<span>  current_cvs <span class="op">=</span> <span class="va">cv_equal</span>,</span>
+<span>  target_size <span class="op">=</span> <span class="fl">50000</span>,</span>
+<span>  tolerance <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>  cv_caps <span class="op">=</span> <span class="va">caps</span>,</span>
+<span>  beat1cv_fun <span class="op">=</span> <span class="va">beat.1cv_2</span>,</span>
+<span>  max_iter <span class="op">=</span> <span class="fl">50</span>,</span>
+<span>  max_same_iter <span class="op">=</span> <span class="fl">20</span>,</span>
+<span>  plot <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  plot_dir <span class="op">=</span> <span class="st">"outputs"</span>,</span>
+<span>  plot_prefix <span class="op">=</span> <span class="st">"domains"</span>,</span>
+<span>  show_targets <span class="op">=</span> <span class="cn">TRUE</span>,     </span>
+<span>  show_caps <span class="op">=</span> <span class="cn">TRUE</span>      </span>
+<span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Start: t=1.0000000000 -&gt; n=137129 </span></span>
+<span><span class="co">## Bracket-up: t=1.2500000000 -&gt; n=91446 </span></span>
+<span><span class="co">## Bracket-up: t=1.5625000000 -&gt; n=60184 </span></span>
+<span><span class="co">## Bracket-up: t=1.9531250000 -&gt; n=39246 </span></span>
+<span><span class="co">##   --&gt; Bracket found (t_lo=1.0000000000 infeasible, t_hi=1.9531250000 feasible) </span></span>
+<span><span class="co">## Bisect 01: t=1.476562500000 -&gt; n=66988 </span></span>
+<span><span class="co">## Bisect 02: t=1.714843750000 -&gt; n=50407 </span></span>
+<span><span class="co">## Bisect 03: t=1.833984375000 -&gt; n=44309 </span></span>
+<span><span class="co">## Bisect 04: t=1.774414062500 -&gt; n=47213 </span></span>
+<span><span class="co">## Bisect 05: t=1.744628906250 -&gt; n=48769 </span></span>
+<span><span class="co">## Bisect 06: t=1.729736328125 -&gt; n=49578 </span></span>
+<span><span class="co">## Bisect 07: t=1.722290039062 -&gt; n=49988 </span></span>
+<span><span class="co">## Bisect 08: t=1.718566894531 -&gt; n=50195 </span></span>
+<span><span class="co">## Bisect 09: t=1.720428466797 -&gt; n=50093 </span></span>
+<span><span class="co">## Bisect 10: t=1.721359252930 -&gt; n=50041 </span></span>
+<span><span class="co">## Bisect 11: t=1.721824645996 -&gt; n=50015 </span></span>
+<span><span class="co">## Bisect 12: t=1.722057342529 -&gt; n=50000</span></span></code></pre>
+<pre><code><span><span class="co">## PNG saved: /home/runner/work/R2BEAT/R2BEAT/vignettes/outputs/domains_nmax_50000_tol_5_t_1.722057_convergence.png</span></span></code></pre>
+<p><img src="CVs_optimization_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" alt="" width="700"><img src="CVs_optimization_files/figure-html/unnamed-chunk-8-2.png" class="r-plt" alt="" width="700"><img src="CVs_optimization_files/figure-html/unnamed-chunk-8-3.png" class="r-plt" alt="" width="700"><img src="CVs_optimization_files/figure-html/unnamed-chunk-8-4.png" class="r-plt" alt="" width="700"></p>
+<pre><code><span><span class="co">## PNG saved: /home/runner/work/R2BEAT/R2BEAT/vignettes/outputs/domains_nmax_50000_tol_5_t_1.722057_allocation.png</span></span></code></pre>
+<p><img src="CVs_optimization_files/figure-html/unnamed-chunk-8-5.png" class="r-plt" alt="" width="700"></p>
+<pre><code><span><span class="co">## PDF saved: /home/runner/work/R2BEAT/R2BEAT/vignettes/outputs/domains_CV_and_alloc_nmax_50000_tol_5_t_1.722057342529.pdf</span></span></code></pre>
+<p>Now, the sample size is in line with the budget constraint:</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">target_size</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">equal</span><span class="op">$</span><span class="va">alloc</span><span class="op">$</span><span class="va">ALLOC</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">equal</span><span class="op">$</span><span class="va">alloc</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="va">cv_mod2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/adjust_CVs.html">adjust_CVs</a></span><span class="op">(</span>target_size<span class="op">=</span> <span class="va">target_size</span>,</span>
-<span>                   strata<span class="op">=</span><span class="va">strata</span>,</span>
-<span>                   errors<span class="op">=</span><span class="va">cv_mod</span>,</span>
-<span>                   adj_rate <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## </span></span>
-<span><span class="co">##  Size:  2552</span></span>
-<span><span class="co">##  Size:  2830</span></span>
-<span><span class="co">##  Size:  3129</span></span>
-<span><span class="co">##  Size:  3466</span></span>
-<span><span class="co">##  Size:  3839</span></span>
-<span><span class="co">##  Size:  4249</span></span>
-<span><span class="co">##  Size:  4707</span></span>
-<span><span class="co">##  Size:  5212</span></span>
-<span><span class="co">##  Size:  5769</span></span>
-<span><span class="co">##  Size:  6386</span></span>
-<span><span class="co">##  Size:  7071</span></span>
-<span><span class="co">##  Size:  7828</span></span>
-<span><span class="co">##  Size:  8665</span></span>
-<span><span class="co">##  Size:  9592</span></span>
-<span><span class="co">##  Size:  10617</span></span>
-<span><span class="co">##  Size:  11744</span></span>
-<span><span class="co">##  Size:  13001</span></span>
-<span><span class="co">##  Size:  14381</span></span>
-<span><span class="co">##  Size:  15907</span></span>
-<span><span class="co">##  Size:  17597</span></span>
-<span><span class="co">##  Size:  17597</span></span></code></pre>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">out</span><span class="op">$</span><span class="va">allocation</span><span class="op">$</span><span class="va">n</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] 50000</span></span></code></pre>
+<p>These are the new CVs:</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">cv_mod2</span></span></code></pre></div>
-<pre><code><span><span class="co">##    DOM        CV1        CV2        CV3        CV4</span></span>
-<span><span class="co">## 1 DOM1 0.01292278 0.03398350 0.04755956 0.01627555</span></span>
-<span><span class="co">## 2 DOM2 0.02799160 0.06802096 0.12314418 0.03219195</span></span>
-<span><span class="co">## 3 DOM3 0.04369537 0.10124231 0.18261737 0.04628051</span></span></code></pre>
-<p>We see now that only in only in a few cases the CVs are slightly
-higher than in the initial set.</p>
-<p>The new sensitivity:</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">intermediate2</span> <span class="op">&lt;-</span> <span class="fu">R2BEAT</span><span class="fu">::</span><span class="fu"><a href="../reference/beth1.html">beat.1st</a></span><span class="op">(</span><span class="va">strata</span>,<span class="va">cv_mod2</span><span class="op">)</span></span>
-<span><span class="va">intermediate2</span><span class="op">$</span><span class="va">sensitivity</span><span class="op">[</span><span class="va">intermediate2</span><span class="op">$</span><span class="va">sensitivity</span><span class="op">$</span><span class="va">`Sensitivity 10%`</span> <span class="op">&gt;</span><span class="fl">1</span>,<span class="op">]</span></span></code></pre></div>
-<pre><code><span><span class="co">##     Type Dom Var Planned CV Actual CV Sensitivity 10%</span></span>
-<span><span class="co">## 21  DOM3   1  V4 0.04628051    0.0462              80</span></span>
-<span><span class="co">## 25  DOM3   2  V4 0.04628051    0.0462              82</span></span>
-<span><span class="co">## 27  DOM3   3  V2 0.10124231    0.1012              65</span></span>
-<span><span class="co">## 30  DOM3   4  V1 0.04369537    0.0437              61</span></span>
-<span><span class="co">## 34  DOM3   5  V1 0.04369537    0.0436              66</span></span>
-<span><span class="co">## 38  DOM3   6  V1 0.04369537    0.0437              66</span></span>
-<span><span class="co">## 42  DOM3   7  V1 0.04369537    0.0436              16</span></span>
-<span><span class="co">## 43  DOM3   7  V2 0.10124231    0.1012              48</span></span>
-<span><span class="co">## 46  DOM3   8  V1 0.04369537    0.0436              76</span></span>
-<span><span class="co">## 52  DOM3   9  V3 0.18261737    0.1825             230</span></span>
-<span><span class="co">## 56  DOM3  10  V3 0.18261737    0.1826             272</span></span>
-<span><span class="co">## 60  DOM3  11  V3 0.18261737    0.1826             304</span></span>
-<span><span class="co">## 64  DOM3  12  V3 0.18261737    0.1826             272</span></span>
-<span><span class="co">## 68  DOM3  13  V3 0.18261737    0.1825             175</span></span>
-<span><span class="co">## 72  DOM3  14  V3 0.18261737    0.1826             173</span></span>
-<span><span class="co">## 76  DOM3  15  V3 0.18261737    0.1826             201</span></span>
-<span><span class="co">## 80  DOM3  16  V3 0.18261737    0.1826             176</span></span>
-<span><span class="co">## 85  DOM3  17  V4 0.04628051    0.0462              79</span></span>
-<span><span class="co">## 86  DOM3  18  V1 0.04369537    0.0437              91</span></span>
-<span><span class="co">## 90  DOM3  19  V1 0.04369537    0.0437             120</span></span>
-<span><span class="co">## 94  DOM3  20  V1 0.04369537    0.0437             143</span></span>
-<span><span class="co">## 98  DOM3  21  V1 0.04369537    0.0437              89</span></span>
-<span><span class="co">## 105 DOM3  22  V4 0.04628051    0.0463             272</span></span>
-<span><span class="co">## 106 DOM3  23  V1 0.04369537    0.0437             165</span></span>
-<span><span class="co">## 110 DOM3  24  V1 0.04369537    0.0437             206</span></span></code></pre>
-<p>We see that now all the variables play a role in the determination of
-the best allocation.</p>
+<code class="sourceCode R"><span><span class="va">cv_pareto</span> <span class="op">&lt;-</span> <span class="va">out</span><span class="op">$</span><span class="va">expectedCV</span> </span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">cv_pareto</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">cv_pareto</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"CV"</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">cv_pareto</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.table</a></span><span class="op">(</span><span class="va">cv_pareto</span>,<span class="st">"./outputs/2.pareto_cvs.csv"</span>,sep<span class="op">=</span><span class="st">","</span>,quote<span class="op">=</span><span class="cn">F</span>,row.names<span class="op">=</span><span class="cn">F</span><span class="op">)</span></span></code></pre></div>
+<table class="table table table-striped table-condensed" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+Pareto coefficients of variation
+</caption>
+<thead><tr>
+<th style="text-align:left;">
+DOM
+</th>
+<th style="text-align:right;">
+CV1
+</th>
+<th style="text-align:right;">
+CV2
+</th>
+<th style="text-align:right;">
+CV3
+</th>
+<th style="text-align:right;">
+CV4
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+DOM1
+</td>
+<td style="text-align:right;">
+0.005
+</td>
+<td style="text-align:right;">
+0.013
+</td>
+<td style="text-align:right;">
+0.020
+</td>
+<td style="text-align:right;">
+0.006
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+DOM2
+</td>
+<td style="text-align:right;">
+0.019
+</td>
+<td style="text-align:right;">
+0.034
+</td>
+<td style="text-align:right;">
+0.037
+</td>
+<td style="text-align:right;">
+0.015
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+DOM3
+</td>
+<td style="text-align:right;">
+0.076
+</td>
+<td style="text-align:right;">
+0.086
+</td>
+<td style="text-align:right;">
+0.086
+</td>
+<td style="text-align:right;">
+0.074
+</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="section level2">
 <h2 id="get-the-optimal-allocation-closer-to-the-proportional-one">3. Get the optimal allocation closer to the proportional one<a class="anchor" aria-label="anchor" href="#get-the-optimal-allocation-closer-to-the-proportional-one"></a>
 </h2>
 <p>Consider the last obtained solution:</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">intermediate2</span><span class="op">$</span><span class="va">alloc</span></span></code></pre></div>
-<pre><code><span><span class="co">##               STRATUM ALLOC        PROP      EQUAL</span></span>
-<span><span class="co">## north_1_3   north_1_3  1146   736.19049   733.2083</span></span>
-<span><span class="co">## north_1_4   north_1_4  1357   835.74840   733.2083</span></span>
-<span><span class="co">## north_1_5   north_1_5  1520  1592.96610   733.2083</span></span>
-<span><span class="co">## north_1_6   north_1_6  1359   425.40035   733.2083</span></span>
-<span><span class="co">## north_2_3   north_2_3   875   816.54619   733.2083</span></span>
-<span><span class="co">## north_2_4   north_2_4   862   665.73743   733.2083</span></span>
-<span><span class="co">## north_2_5   north_2_5  1001  1450.38573   733.2083</span></span>
-<span><span class="co">## north_2_6   north_2_6   876   791.74201   733.2083</span></span>
-<span><span class="co">## center_1_3 center_1_3   400  1561.49670   733.2083</span></span>
-<span><span class="co">## center_1_4 center_1_4   410  2066.31644   733.2083</span></span>
-<span><span class="co">## center_1_5 center_1_5   323   899.59178   733.2083</span></span>
-<span><span class="co">## center_1_6 center_1_6   304   124.21132   733.2083</span></span>
-<span><span class="co">## center_2_3 center_2_3   330   801.70018   733.2083</span></span>
-<span><span class="co">## center_2_4 center_2_4   328   373.22113   733.2083</span></span>
-<span><span class="co">## center_2_5 center_2_5   317   235.43337   733.2083</span></span>
-<span><span class="co">## center_2_6 center_2_6   377   198.25091   733.2083</span></span>
-<span><span class="co">## south_1_3   south_1_3   395   484.95101   733.2083</span></span>
-<span><span class="co">## south_1_4   south_1_4   452   585.63565   733.2083</span></span>
-<span><span class="co">## south_1_5   south_1_5   599  1090.20941   733.2083</span></span>
-<span><span class="co">## south_1_6   south_1_6   711   452.78334   733.2083</span></span>
-<span><span class="co">## south_2_3   south_2_3   444   435.82668   733.2083</span></span>
-<span><span class="co">## south_2_4   south_2_4  1357   328.19909   733.2083</span></span>
-<span><span class="co">## south_2_5   south_2_5   825   561.87093   733.2083</span></span>
-<span><span class="co">## south_2_6   south_2_6  1029    82.58537   733.2083</span></span>
-<span><span class="co">##                 Total 17597 17597.00000 17597.0000</span></span></code></pre>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">pareto_alloc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/beth1.html">beat.1st</a></span><span class="op">(</span><span class="va">strata</span>,<span class="va">cv_pareto</span><span class="op">)</span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span></span>
+<span>  <span class="va">pareto_alloc</span><span class="op">$</span><span class="va">alloc</span>,</span>
+<span>  digits <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>  caption <span class="op">=</span> <span class="st">"Pareto allocation"</span>,</span>
+<span>  format <span class="op">=</span> <span class="st">"html"</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">kableExtra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html" class="external-link">kable_styling</a></span><span class="op">(</span></span>
+<span>    bootstrap_options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"striped"</span>, <span class="st">"condensed"</span><span class="op">)</span>,</span>
+<span>    full_width <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<table class="table table table-striped table-condensed" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+Pareto allocation
+</caption>
+<thead><tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:left;">
+STRATUM
+</th>
+<th style="text-align:right;">
+ALLOC
+</th>
+<th style="text-align:right;">
+PROP
+</th>
+<th style="text-align:right;">
+EQUAL
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+north_1_3
+</td>
+<td style="text-align:left;">
+north_1_3
+</td>
+<td style="text-align:right;">
+4938
+</td>
+<td style="text-align:right;">
+2091.890
+</td>
+<td style="text-align:right;">
+2083.417
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+north_1_4
+</td>
+<td style="text-align:left;">
+north_1_4
+</td>
+<td style="text-align:right;">
+5840
+</td>
+<td style="text-align:right;">
+2374.785
+</td>
+<td style="text-align:right;">
+2083.417
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+north_1_5
+</td>
+<td style="text-align:left;">
+north_1_5
+</td>
+<td style="text-align:right;">
+6661
+</td>
+<td style="text-align:right;">
+4526.424
+</td>
+<td style="text-align:right;">
+2083.417
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+north_1_6
+</td>
+<td style="text-align:left;">
+north_1_6
+</td>
+<td style="text-align:right;">
+5614
+</td>
+<td style="text-align:right;">
+1208.778
+</td>
+<td style="text-align:right;">
+2083.417
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+north_2_3
+</td>
+<td style="text-align:left;">
+north_2_3
+</td>
+<td style="text-align:right;">
+3819
+</td>
+<td style="text-align:right;">
+2320.222
+</td>
+<td style="text-align:right;">
+2083.417
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+north_2_4
+</td>
+<td style="text-align:left;">
+north_2_4
+</td>
+<td style="text-align:right;">
+3743
+</td>
+<td style="text-align:right;">
+1891.698
+</td>
+<td style="text-align:right;">
+2083.417
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+north_2_5
+</td>
+<td style="text-align:left;">
+north_2_5
+</td>
+<td style="text-align:right;">
+4416
+</td>
+<td style="text-align:right;">
+4121.281
+</td>
+<td style="text-align:right;">
+2083.417
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+north_2_6
+</td>
+<td style="text-align:left;">
+north_2_6
+</td>
+<td style="text-align:right;">
+3822
+</td>
+<td style="text-align:right;">
+2249.741
+</td>
+<td style="text-align:right;">
+2083.417
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+center_1_3
+</td>
+<td style="text-align:left;">
+center_1_3
+</td>
+<td style="text-align:right;">
+1127
+</td>
+<td style="text-align:right;">
+4437.004
+</td>
+<td style="text-align:right;">
+2083.417
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+center_1_4
+</td>
+<td style="text-align:left;">
+center_1_4
+</td>
+<td style="text-align:right;">
+1220
+</td>
+<td style="text-align:right;">
+5871.453
+</td>
+<td style="text-align:right;">
+2083.417
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+center_1_5
+</td>
+<td style="text-align:left;">
+center_1_5
+</td>
+<td style="text-align:right;">
+1152
+</td>
+<td style="text-align:right;">
+2556.196
+</td>
+<td style="text-align:right;">
+2083.417
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+center_1_6
+</td>
+<td style="text-align:left;">
+center_1_6
+</td>
+<td style="text-align:right;">
+910
+</td>
+<td style="text-align:right;">
+352.947
+</td>
+<td style="text-align:right;">
+2083.417
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+center_2_3
+</td>
+<td style="text-align:left;">
+center_2_3
+</td>
+<td style="text-align:right;">
+743
+</td>
+<td style="text-align:right;">
+2278.037
+</td>
+<td style="text-align:right;">
+2083.417
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+center_2_4
+</td>
+<td style="text-align:left;">
+center_2_4
+</td>
+<td style="text-align:right;">
+743
+</td>
+<td style="text-align:right;">
+1060.510
+</td>
+<td style="text-align:right;">
+2083.417
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+center_2_5
+</td>
+<td style="text-align:left;">
+center_2_5
+</td>
+<td style="text-align:right;">
+772
+</td>
+<td style="text-align:right;">
+668.986
+</td>
+<td style="text-align:right;">
+2083.417
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+center_2_6
+</td>
+<td style="text-align:left;">
+center_2_6
+</td>
+<td style="text-align:right;">
+605
+</td>
+<td style="text-align:right;">
+563.331
+</td>
+<td style="text-align:right;">
+2083.417
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+south_1_3
+</td>
+<td style="text-align:left;">
+south_1_3
+</td>
+<td style="text-align:right;">
+536
+</td>
+<td style="text-align:right;">
+1377.992
+</td>
+<td style="text-align:right;">
+2083.417
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+south_1_4
+</td>
+<td style="text-align:left;">
+south_1_4
+</td>
+<td style="text-align:right;">
+509
+</td>
+<td style="text-align:right;">
+1664.088
+</td>
+<td style="text-align:right;">
+2083.417
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+south_1_5
+</td>
+<td style="text-align:left;">
+south_1_5
+</td>
+<td style="text-align:right;">
+496
+</td>
+<td style="text-align:right;">
+3097.838
+</td>
+<td style="text-align:right;">
+2083.417
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+south_1_6
+</td>
+<td style="text-align:left;">
+south_1_6
+</td>
+<td style="text-align:right;">
+416
+</td>
+<td style="text-align:right;">
+1286.587
+</td>
+<td style="text-align:right;">
+2083.417
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+south_2_3
+</td>
+<td style="text-align:left;">
+south_2_3
+</td>
+<td style="text-align:right;">
+520
+</td>
+<td style="text-align:right;">
+1238.405
+</td>
+<td style="text-align:right;">
+2083.417
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+south_2_4
+</td>
+<td style="text-align:left;">
+south_2_4
+</td>
+<td style="text-align:right;">
+543
+</td>
+<td style="text-align:right;">
+932.580
+</td>
+<td style="text-align:right;">
+2083.417
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+south_2_5
+</td>
+<td style="text-align:left;">
+south_2_5
+</td>
+<td style="text-align:right;">
+492
+</td>
+<td style="text-align:right;">
+1596.560
+</td>
+<td style="text-align:right;">
+2083.417
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+south_2_6
+</td>
+<td style="text-align:left;">
+south_2_6
+</td>
+<td style="text-align:right;">
+365
+</td>
+<td style="text-align:right;">
+234.667
+</td>
+<td style="text-align:right;">
+2083.417
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+Total
+</td>
+<td style="text-align:right;">
+50002
+</td>
+<td style="text-align:right;">
+50002.000
+</td>
+<td style="text-align:right;">
+50002.000
+</td>
+</tr>
+</tbody>
+</table>
 <p>We can calculate the Pearson correlation coefficient between the
 optimal and proportional allocations:</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">intermediate2</span><span class="op">$</span><span class="va">alloc</span><span class="op">$</span><span class="va">ALLOC</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">intermediate2</span><span class="op">$</span><span class="va">alloc</span><span class="op">)</span><span class="op">]</span>,<span class="va">intermediate2</span><span class="op">$</span><span class="va">alloc</span><span class="op">$</span><span class="va">PROP</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">intermediate2</span><span class="op">$</span><span class="va">alloc</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] 0.09962086</span></span></code></pre>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">pareto_alloc</span><span class="op">$</span><span class="va">alloc</span><span class="op">$</span><span class="va">ALLOC</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">pareto_alloc</span><span class="op">$</span><span class="va">alloc</span><span class="op">)</span><span class="op">]</span>,<span class="va">pareto_alloc</span><span class="op">$</span><span class="va">alloc</span><span class="op">$</span><span class="va">PROP</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">pareto_alloc</span><span class="op">$</span><span class="va">alloc</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] 0.3467993</span></span></code></pre>
 <p>We want to get the optimal allocation closer to the proportional one.
 For instance, we want that the correlation coefficient be increased to
-0.5.</p>
+0.9.</p>
 <p>To obtain this result, we make use of a particular genetic algorithm,
 the quantum genetic algorithm, implemented in the R package QGA.</p>
 <div class="section level3">
 <h3 id="fitness-function">3.1 Fitness function<a class="anchor" aria-label="anchor" href="#fitness-function"></a>
 </h3>
 <p>First, we define the following fitness function:</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fitness_cvs</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">solution</span>,<span class="va">eval_func_inputs</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">strata</span> <span class="op">&lt;-</span> <span class="va">eval_func_inputs</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
 <span>  <span class="va">vett</span> <span class="op">&lt;-</span> <span class="va">eval_func_inputs</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span></span>
@@ -397,7 +919,7 @@ the quantum genetic algorithm, implemented in the R package QGA.</p>
 <span>  <span class="op">}</span></span>
 <span>  <span class="va">cv_corr</span></span>
 <span>  <span class="va">a</span> <span class="op">&lt;-</span> <span class="fu">R2BEAT</span><span class="fu">::</span><span class="fu"><a href="../reference/beth1.html">beat.1st</a></span><span class="op">(</span><span class="va">strata</span>,<span class="va">cv_corr</span><span class="op">)</span></span>
-<span>  <span class="va">b</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/ks.test.html" class="external-link">ks.test</a></span><span class="op">(</span><span class="va">a</span><span class="op">$</span><span class="va">alloc</span><span class="op">$</span><span class="va">ALLOC</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">a</span><span class="op">$</span><span class="va">alloc</span><span class="op">)</span><span class="op">]</span>,<span class="va">a</span><span class="op">$</span><span class="va">alloc</span><span class="op">$</span><span class="va">PROP</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">a</span><span class="op">$</span><span class="va">alloc</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
+<span>  <span class="co"># b &lt;- ks.test(a$alloc$ALLOC[-nrow(a$alloc)],a$alloc$PROP[-nrow(a$alloc)])</span></span>
 <span>  <span class="va">c</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">a</span><span class="op">$</span><span class="va">alloc</span><span class="op">$</span><span class="va">ALLOC</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">a</span><span class="op">$</span><span class="va">alloc</span><span class="op">)</span><span class="op">]</span>,<span class="va">a</span><span class="op">$</span><span class="va">alloc</span><span class="op">$</span><span class="va">PROP</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">a</span><span class="op">$</span><span class="va">alloc</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
 <span>  <span class="co">#---------- Fitness function ----------------</span></span>
 <span>  <span class="va">fitness</span> <span class="op">&lt;-</span> <span class="va">c</span></span>
@@ -408,26 +930,27 @@ the quantum genetic algorithm, implemented in the R package QGA.</p>
 <h3 id="setting-the-parameters">3.2 Setting the parameters<a class="anchor" aria-label="anchor" href="#setting-the-parameters"></a>
 </h3>
 <p>We set the parameters required by the QGA function:</p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">nvars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">cv_mod2</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span></span>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">nvars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">cv_pareto</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span></span>
 <span><span class="va">vett</span> <span class="op">&lt;-</span> <span class="cn">NULL</span></span>
-<span><span class="kw">for</span> <span class="op">(</span><span class="va">k</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">cv_mod2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">vett</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">vett</span>,<span class="va">cv_mod2</span><span class="op">[</span><span class="va">k</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="op">(</span><span class="va">nvars</span><span class="op">+</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="kw">for</span> <span class="op">(</span><span class="va">k</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">cv_pareto</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">vett</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">vett</span>,<span class="va">cv_pareto</span><span class="op">[</span><span class="va">k</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="op">(</span><span class="va">nvars</span><span class="op">+</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span><span class="va">vett</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="va">vett</span><span class="op">)</span></span>
-<span><span class="va">vettmin</span> <span class="op">&lt;-</span> <span class="va">vett</span> <span class="op">*</span> <span class="fl">0.6</span></span>
-<span><span class="va">vettmax</span> <span class="op">&lt;-</span> <span class="va">vett</span> <span class="op">*</span> <span class="fl">1.4</span></span>
+<span><span class="va">vettmin</span> <span class="op">&lt;-</span> <span class="va">vett</span> <span class="op">*</span> <span class="fl">0.65</span></span>
+<span><span class="va">vettmax</span> <span class="op">&lt;-</span> <span class="va">vett</span> <span class="op">*</span> <span class="fl">1.35</span></span>
 <span><span class="va">Genome</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">vett</span><span class="op">)</span></span>
-<span><span class="va">nvalues_sol</span> <span class="op">=</span> <span class="fl">4096</span>    <span class="co"># 2^12 ==&gt; 12 qubits</span></span>
+<span><span class="co"># Genome = nrow(strata)</span></span>
+<span><span class="va">nvalues_sol</span> <span class="op">=</span> <span class="fl">16384</span>    <span class="co"># 2^14 ==&gt; 14 qubits</span></span>
 <span><span class="va">eval_func_inputs</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">strata</span>,</span>
 <span>                        <span class="va">vett</span>,</span>
-<span>                        <span class="va">cv_mod2</span>,</span>
+<span>                        <span class="va">cv_pareto</span>,</span>
 <span>                        <span class="va">vettmin</span>,</span>
 <span>                        <span class="va">vettmax</span>,</span>
 <span>                        <span class="va">nvalues_sol</span></span>
 <span>                        <span class="op">)</span></span>
-<span><span class="va">popsize</span> <span class="op">=</span> <span class="fl">20</span></span>
-<span><span class="va">generation_max</span> <span class="op">=</span> <span class="fl">200</span></span>
+<span><span class="va">popsize</span> <span class="op">=</span> <span class="fl">10</span></span>
+<span><span class="va">generation_max</span> <span class="op">=</span> <span class="fl">100</span></span>
 <span><span class="va">nvalues_sol</span> <span class="op">=</span> <span class="va">nvalues_sol</span></span>
 <span><span class="va">thetainit</span> <span class="op">=</span> <span class="fl">3.1415926535</span> <span class="op">*</span> <span class="fl">0.5</span></span>
 <span><span class="va">thetaend</span> <span class="op">=</span> <span class="fl">3.1415926535</span> <span class="op">*</span> <span class="fl">0.025</span></span>
@@ -441,32 +964,29 @@ the quantum genetic algorithm, implemented in the R package QGA.</p>
 <span><span class="va">progress</span> <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="va">eval_fitness</span> <span class="op">=</span> <span class="va">fitness_cvs</span></span>
 <span><span class="va">eval_func_inputs</span> <span class="op">=</span> <span class="va">eval_func_inputs</span></span>
-<span><span class="va">stop_limit</span> <span class="op">=</span> <span class="fl">0.5</span></span></code></pre></div>
+<span><span class="va">stop_limit</span> <span class="op">=</span> <span class="fl">0.95</span></span></code></pre></div>
 <p>Some explanations regarding the parameters. The parameters ‘vettmin’
 and ‘vettmax’ are fundamental to determine the space of possible
 solutions.</p>
 <p>In fact, consider their values:</p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">vettmin</span></span></code></pre></div>
-<pre><code><span><span class="co">##         CV1         CV2         CV3         CV4         CV1         CV2 </span></span>
-<span><span class="co">## 0.007753667 0.020390099 0.028535739 0.009765329 0.016794963 0.040812574 </span></span>
-<span><span class="co">##         CV3         CV4         CV1         CV2         CV3         CV4 </span></span>
-<span><span class="co">## 0.073886510 0.019315172 0.026217225 0.060745389 0.109570421 0.027768309</span></span></code></pre>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<pre><code><span><span class="co">##        CV1        CV2        CV3        CV4        CV1        CV2        CV3 </span></span>
+<span><span class="co">## 0.00319410 0.00841165 0.01288560 0.00357630 0.01225900 0.02237235 0.02419040 </span></span>
+<span><span class="co">##        CV4        CV1        CV2        CV3        CV4 </span></span>
+<span><span class="co">## 0.00997685 0.04932265 0.05596305 0.05596695 0.04803565</span></span></code></pre>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">vettmax</span></span></code></pre></div>
 <pre><code><span><span class="co">##        CV1        CV2        CV3        CV4        CV1        CV2        CV3 </span></span>
-<span><span class="co">## 0.01809189 0.04757690 0.06658339 0.02278577 0.03918825 0.09522934 0.17240186 </span></span>
+<span><span class="co">## 0.00663390 0.01747035 0.02676240 0.00742770 0.02546100 0.04646565 0.05024160 </span></span>
 <span><span class="co">##        CV4        CV1        CV2        CV3        CV4 </span></span>
-<span><span class="co">## 0.04506873 0.06117352 0.14173924 0.25566432 0.06479272</span></span></code></pre>
+<span><span class="co">## 0.02072115 0.10243935 0.11623095 0.11623905 0.09976635</span></span></code></pre>
 <p>The values in vettmin are the minimum values that the CVs can assume,
-while the values in vettmax are the maximum ones. This means that, for
-instance, when trying to define the best value for CV1 in the first
-domain, the genetic algorithm will search in the range from 0.007916888
-to 0.01847274. The same for the other CVs and the other domains.</p>
+while the values in vettmax are the maximum ones.</p>
 <p>The parameter ‘nvalues_sol’ indicates the number of possible
 different values considered for each element in the genome: by setting
-it to 4096, it means that for each precision constraint, 4096 possible
-values will be considered, the ones obtained by dividing by 4096 the
+it to 16384, it means that for each precision constraint, 16384 possible
+values will be considered, the ones obtained by dividing by 16384 the
 interval between the minimum and the maximum value set for each
 precision constraint.</p>
 <p>The parameter ‘eval_func_inputs’ is a list containing all the
@@ -487,258 +1007,425 @@ algorithm stops and output the related solution.</p>
 <div class="section level3">
 <h3 id="execution-of-the-genetic-algorithm">3.3 Execution of the genetic algorithm<a class="anchor" aria-label="anchor" href="#execution-of-the-genetic-algorithm"></a>
 </h3>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">solutionQGA</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">fitness_best</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">solutionQGA</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] 0.9375261</span></span></code></pre>
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">ndoms</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">cv_pareto</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#plot vett</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">vett</span>, col<span class="op">=</span><span class="st">"black"</span>, type<span class="op">=</span><span class="st">"l"</span>,xaxt <span class="op">=</span> <span class="st">"n"</span>, ylim<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">vettmin</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">vettmax</span><span class="op">)</span><span class="op">)</span>, xlab<span class="op">=</span><span class="st">""</span>, ylab<span class="op">=</span><span class="st">""</span>, main<span class="op">=</span><span class="st">"Region of variation for CVs"</span><span class="op">)</span> <span class="co"># xaxt = "n" disables the xaxis ticks</span></span>
+<span><span class="co"># Generate the vector of labels</span></span>
+<span><span class="va">vector_labels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"DOM"</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">ndoms</span>, each <span class="op">=</span> <span class="va">nvars</span><span class="op">)</span>, </span>
+<span>                       <span class="st">"_V"</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">nvars</span>, times <span class="op">=</span> <span class="va">ndoms</span><span class="op">)</span>, </span>
+<span>                       sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
+<span><span class="co"># xticks</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/axis.html" class="external-link">axis</a></span><span class="op">(</span>side<span class="op">=</span><span class="fl">1</span>,at<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">vett</span><span class="op">)</span><span class="op">)</span>,labels<span class="op">=</span><span class="va">vector_labels</span>, las<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span>
+<span><span class="co"># vettmin and vettmax</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="va">vettmin</span>, col<span class="op">=</span><span class="st">"red"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="va">vettmax</span>, col<span class="op">=</span><span class="st">"blue"</span><span class="op">)</span></span>
+<span><span class="co"># add legend</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">legend</a></span><span class="op">(</span><span class="st">"topleft"</span>, legend<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"cv_input"</span>, <span class="st">"cv_min"</span>, <span class="st">"cv_max"</span><span class="op">)</span>, col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"black"</span>, <span class="st">"red"</span>, <span class="st">"blue"</span><span class="op">)</span>, lty<span class="op">=</span><span class="fl">1</span>, cex<span class="op">=</span><span class="fl">0.5</span><span class="op">)</span></span>
+<span><span class="fu">QGA</span><span class="fu">:::</span><span class="fu">plot_Output</span><span class="op">(</span><span class="va">solutionQGA</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
+<p><img src="CVs_optimization_files/figure-html/unnamed-chunk-20-1.png" class="r-plt" alt="" width="700"></p>
+<p>We decode the QGA solution:</p>
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">solution</span> <span class="op">&lt;-</span> <span class="va">solutionQGA</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
+<span><span class="va">cv_ga</span> <span class="op">&lt;-</span> <span class="va">cv_pareto</span></span>
+<span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">0</span></span>
+<span><span class="va">nvals</span> <span class="op">&lt;-</span> <span class="va">nvalues_sol</span></span>
+<span><span class="kw">for</span> <span class="op">(</span><span class="va">k</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">cv_pareto</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="kw">for</span> <span class="op">(</span><span class="va">m</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">nvars</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">n</span> <span class="op">&lt;-</span> <span class="va">n</span><span class="op">+</span><span class="fl">1</span></span>
+<span>    <span class="va">diff</span></span>
+<span>    <span class="va">cv_ga</span><span class="op">[</span><span class="va">k</span>,<span class="va">m</span><span class="op">+</span><span class="fl">1</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span>from<span class="op">=</span><span class="va">vettmin</span><span class="op">[</span><span class="va">n</span><span class="op">]</span>,</span>
+<span>                          to<span class="op">=</span><span class="va">vettmax</span><span class="op">[</span><span class="va">n</span><span class="op">]</span>,</span>
+<span>                          by<span class="op">=</span><span class="op">(</span><span class="va">vettmax</span><span class="op">[</span><span class="va">n</span><span class="op">]</span><span class="op">-</span><span class="va">vettmin</span><span class="op">[</span><span class="va">n</span><span class="op">]</span><span class="op">)</span><span class="op">/</span><span class="va">nvals</span><span class="op">)</span><span class="op">[</span><span class="va">solution</span><span class="op">[</span><span class="va">n</span><span class="op">]</span><span class="op">]</span></span>
+<span>  <span class="op">}</span></span>
+<span><span class="op">}</span></span></code></pre></div>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1234</span><span class="op">)</span></span>
-<span><span class="va">solutionQGA</span> <span class="op">&lt;-</span> <span class="fu">QGA</span><span class="op">(</span><span class="va">popsize</span>,</span>
-<span>                   <span class="va">generation_max</span>,</span>
-<span>                   <span class="va">nvalues_sol</span>,</span>
-<span>                   <span class="va">Genome</span>,</span>
-<span>                   <span class="va">thetainit</span>,</span>
-<span>                   <span class="va">thetaend</span>,</span>
-<span>                   <span class="va">pop_mutation_rate_init</span>,</span>
-<span>                   <span class="va">pop_mutation_rate_end</span>,</span>
-<span>                   <span class="va">mutation_rate_init</span>,</span>
-<span>                   <span class="va">mutation_rate_end</span>,</span>
-<span>                   mutation_flag <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>                   plotting <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>                   verbose <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>                   progress <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>                   <span class="va">eval_fitness</span>,</span>
-<span>                   <span class="va">eval_func_inputs</span>,</span>
-<span>                   <span class="va">stop_limit</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## </span></span>
-<span><span class="co">##  *** Best fitness:  0.5099748</span></span></code></pre>
-<p><img src="CVs_optimization_files/figure-html/unnamed-chunk-17-1.png" class="r-plt" alt="" width="700"></p>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">QGA</span><span class="fu">:::</span><span class="fu">plot_Output</span><span class="op">(</span><span class="va">solutionQGA</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
-<p>So, we have obtained a solution whose correlation coefficient is 0.5,
-the desired one.</p>
+<code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span></span>
+<span>  <span class="va">cv_ga</span>,</span>
+<span>  digits <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>  caption <span class="op">=</span> <span class="st">"GA precision constraints"</span>,</span>
+<span>  format <span class="op">=</span> <span class="st">"html"</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">kableExtra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html" class="external-link">kable_styling</a></span><span class="op">(</span></span>
+<span>    bootstrap_options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"striped"</span>, <span class="st">"condensed"</span><span class="op">)</span>,</span>
+<span>    full_width <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<table class="table table table-striped table-condensed" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+GA precision constraints
+</caption>
+<thead><tr>
+<th style="text-align:left;">
+DOM
+</th>
+<th style="text-align:right;">
+CV1
+</th>
+<th style="text-align:right;">
+CV2
+</th>
+<th style="text-align:right;">
+CV3
+</th>
+<th style="text-align:right;">
+CV4
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+DOM1
+</td>
+<td style="text-align:right;">
+0.003
+</td>
+<td style="text-align:right;">
+0.008
+</td>
+<td style="text-align:right;">
+0.015
+</td>
+<td style="text-align:right;">
+0.004
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+DOM2
+</td>
+<td style="text-align:right;">
+0.017
+</td>
+<td style="text-align:right;">
+0.046
+</td>
+<td style="text-align:right;">
+0.048
+</td>
+<td style="text-align:right;">
+0.016
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+DOM3
+</td>
+<td style="text-align:right;">
+0.100
+</td>
+<td style="text-align:right;">
+0.106
+</td>
+<td style="text-align:right;">
+0.116
+</td>
+<td style="text-align:right;">
+0.091
+</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">ga_solution</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/beth1.html">beat.1st</a></span><span class="op">(</span><span class="va">strata</span>,<span class="va">cv_ga</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">ga_solution</span><span class="op">$</span><span class="va">alloc</span><span class="op">$</span><span class="va">ALLOC</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">ga_solution</span><span class="op">$</span><span class="va">alloc</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] 51622</span></span></code></pre>
+</div>
+<div class="section level3">
+<h3 id="re-execution-of-the-pareto-function">3.4 Re-execution of the “pareto” function<a class="anchor" aria-label="anchor" href="#re-execution-of-the-pareto-function"></a>
+</h3>
+<p>With these new precision constraints, the sample size is slightly
+greater than the affordable. So, we apply again the “pareto”
+function:</p>
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">out2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pareto.html">pareto</a></span><span class="op">(</span></span>
+<span>  strata <span class="op">=</span> <span class="va">strata</span>,</span>
+<span>  current_cvs <span class="op">=</span> <span class="va">cv_ga</span>,</span>
+<span>  target_size <span class="op">=</span> <span class="fl">50000</span>,</span>
+<span>  tolerance <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>  cv_caps <span class="op">=</span> <span class="va">caps</span>,</span>
+<span>  beat1cv_fun <span class="op">=</span> <span class="va">beat.1cv_2</span>,</span>
+<span>  max_iter <span class="op">=</span> <span class="fl">50</span>,</span>
+<span>  max_same_iter <span class="op">=</span> <span class="fl">20</span>,</span>
+<span>  plot <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  plot_dir <span class="op">=</span> <span class="st">"outputs"</span>,</span>
+<span>  plot_prefix <span class="op">=</span> <span class="st">"domains"</span>,</span>
+<span>  show_targets <span class="op">=</span> <span class="cn">TRUE</span>,     </span>
+<span>  show_caps <span class="op">=</span> <span class="cn">TRUE</span>      </span>
+<span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Start: t=1.0000000000 -&gt; n=55073 </span></span>
+<span><span class="co">## Bracket-up: t=1.2500000000 -&gt; n=43992 </span></span>
+<span><span class="co">##   --&gt; Bracket found (t_lo=1.0000000000 infeasible, t_hi=1.2500000000 feasible) </span></span>
+<span><span class="co">## Bisect 01: t=1.125000000000 -&gt; n=48144 </span></span>
+<span><span class="co">## Bisect 02: t=1.062500000000 -&gt; n=51130 </span></span>
+<span><span class="co">## Bisect 03: t=1.093750000000 -&gt; n=49535 </span></span>
+<span><span class="co">## Bisect 04: t=1.078125000000 -&gt; n=50307 </span></span>
+<span><span class="co">## Bisect 05: t=1.085937500000 -&gt; n=49914 </span></span>
+<span><span class="co">## Bisect 06: t=1.082031250000 -&gt; n=50107 </span></span>
+<span><span class="co">## Bisect 07: t=1.083984375000 -&gt; n=50011 </span></span>
+<span><span class="co">## Bisect 08: t=1.084960937500 -&gt; n=49963 </span></span>
+<span><span class="co">## Bisect 09: t=1.084472656250 -&gt; n=49989 </span></span>
+<span><span class="co">## Bisect 10: t=1.084228515625 -&gt; n=50000</span></span></code></pre>
+<p><img src="CVs_optimization_files/figure-html/unnamed-chunk-24-1.png" class="r-plt" alt="" width="700"><img src="CVs_optimization_files/figure-html/unnamed-chunk-24-2.png" class="r-plt" alt="" width="700"><img src="CVs_optimization_files/figure-html/unnamed-chunk-24-3.png" class="r-plt" alt="" width="700"><img src="CVs_optimization_files/figure-html/unnamed-chunk-24-4.png" class="r-plt" alt="" width="700"><img src="CVs_optimization_files/figure-html/unnamed-chunk-24-5.png" class="r-plt" alt="" width="700"></p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="analysis-of-the-final-solution">4. Analysis of the final solution<a class="anchor" aria-label="anchor" href="#analysis-of-the-final-solution"></a>
 </h2>
-<p>First, we consider the new set of precision constraints related to
-the solution proposed by the genetic algorithm:</p>
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">solution</span> <span class="op">&lt;-</span> <span class="va">solutionQGA</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
-<span><span class="va">cv_best</span> <span class="op">&lt;-</span> <span class="va">cv_mod2</span></span>
-<span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">0</span></span>
-<span><span class="va">nvals</span> <span class="op">&lt;-</span> <span class="va">nvalues_sol</span></span>
-<span><span class="kw">for</span> <span class="op">(</span><span class="va">k</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">cv_mod2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="kw">for</span> <span class="op">(</span><span class="va">m</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">nvars</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="va">n</span> <span class="op">&lt;-</span> <span class="va">n</span><span class="op">+</span><span class="fl">1</span></span>
-<span>    <span class="va">diff</span></span>
-<span>    <span class="va">cv_best</span><span class="op">[</span><span class="va">k</span>,<span class="va">m</span><span class="op">+</span><span class="fl">1</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span>from<span class="op">=</span><span class="va">vettmin</span><span class="op">[</span><span class="va">n</span><span class="op">]</span>,</span>
-<span>                          to<span class="op">=</span><span class="va">vettmax</span><span class="op">[</span><span class="va">n</span><span class="op">]</span>,</span>
-<span>                          by<span class="op">=</span><span class="op">(</span><span class="va">vettmax</span><span class="op">[</span><span class="va">n</span><span class="op">]</span><span class="op">-</span><span class="va">vettmin</span><span class="op">[</span><span class="va">n</span><span class="op">]</span><span class="op">)</span><span class="op">/</span><span class="va">nvals</span><span class="op">)</span><span class="op">[</span><span class="va">solution</span><span class="op">[</span><span class="va">n</span><span class="op">]</span><span class="op">]</span></span>
-<span>  <span class="op">}</span></span>
-<span><span class="op">}</span></span>
-<span><span class="va">cv_best</span></span></code></pre></div>
-<pre><code><span><span class="co">##    DOM         CV1        CV2        CV3        CV4</span></span>
-<span><span class="co">## 1 DOM1 0.007766286 0.04269841 0.02931601 0.02277941</span></span>
-<span><span class="co">## 2 DOM2 0.033376709 0.05598444 0.10041542 0.02157238</span></span>
-<span><span class="co">## 3 DOM3 0.060516387 0.13693418 0.25327460 0.06462098</span></span></code></pre>
-<p>They are, in some cases, higher than the initial ones.</p>
-<p>But consider that, now, the required sample size is lower with these
-new constraints:</p>
+<p>These is the final set of precision constraints:</p>
 <div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">intermediate3</span> <span class="op">&lt;-</span> <span class="fu">R2BEAT</span><span class="fu">::</span><span class="fu"><a href="../reference/beth1.html">beat.1st</a></span><span class="op">(</span><span class="va">strata</span>,<span class="va">cv_best</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">intermediate3</span><span class="op">$</span><span class="va">alloc</span><span class="op">$</span><span class="va">ALLOC</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">intermediate3</span><span class="op">$</span><span class="va">alloc</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] 10398</span></span></code></pre>
-<p>Also in this case, to compare the new precision constraints with the
-initial ones we perform an adjustment, varying the new set until we
-reach the previous sample size:</p>
-<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">target_size</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">intermediate2</span><span class="op">$</span><span class="va">alloc</span><span class="op">$</span><span class="va">ALLOC</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">intermediate2</span><span class="op">$</span><span class="va">alloc</span><span class="op">)</span><span class="op">]</span><span class="op">)</span> </span>
-<span><span class="va">cv_final</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/adjust_CVs.html">adjust_CVs</a></span><span class="op">(</span>target_size <span class="op">=</span> <span class="va">target_size</span>,</span>
-<span>                   strata<span class="op">=</span><span class="va">strata</span>,</span>
-<span>                   errors<span class="op">=</span><span class="va">cv_best</span>,</span>
-<span>                   adj_rate <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## </span></span>
-<span><span class="co">##  Size:  11507</span></span>
-<span><span class="co">##  Size:  12738</span></span>
-<span><span class="co">##  Size:  14096</span></span>
-<span><span class="co">##  Size:  15597</span></span>
-<span><span class="co">##  Size:  17256</span></span>
-<span><span class="co">##  Size:  19091</span></span>
-<span><span class="co">##  Size:  19091</span></span></code></pre>
-<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">cv_final</span></span></code></pre></div>
-<pre><code><span><span class="co">##    DOM         CV1        CV2        CV3        CV4</span></span>
-<span><span class="co">## 1 DOM1 0.005708934 0.03138725 0.02154996 0.01674496</span></span>
-<span><span class="co">## 2 DOM2 0.024534948 0.04115370 0.07381456 0.01585768</span></span>
-<span><span class="co">## 3 DOM3 0.044485106 0.10065921 0.18618010 0.04750236</span></span></code></pre>
-<p>It can be seen that now, only in the third domain level the value of
-CV3 overcomes the previous limits, while in all the other cases they are
-well below.</p>
-<p>We can visualize the overall situation:</p>
-<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">3</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">cv_final</span><span class="op">[</span><span class="fl">1</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>,col<span class="op">=</span><span class="st">"red"</span>,type<span class="op">=</span><span class="st">"b"</span>,</span>
-<span>     xaxt<span class="op">=</span><span class="st">"n"</span>,xlab<span class="op">=</span><span class="st">""</span>,ylab<span class="op">=</span><span class="st">"CV values"</span>,ylim<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">cv_final</span><span class="op">[</span><span class="fl">1</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span><span class="op">]</span>,<span class="va">cv_mod2</span><span class="op">[</span><span class="fl">1</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span><span class="op">]</span><span class="op">)</span><span class="op">*</span><span class="fl">1.2</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/axis.html" class="external-link">axis</a></span><span class="op">(</span><span class="fl">1</span>, at<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span>, lab<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CV1"</span>, <span class="st">"CV2"</span>, <span class="st">"CV3"</span>, <span class="st">"CV4"</span><span class="op">)</span>,las<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">cv_mod2</span><span class="op">[</span><span class="fl">1</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>,col<span class="op">=</span><span class="st">"blue"</span>,type<span class="op">=</span><span class="st">"b"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">cv_equal</span><span class="op">[</span><span class="fl">1</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>,col<span class="op">=</span><span class="st">"darkgreen"</span>,type<span class="op">=</span><span class="st">"b"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span><span class="st">"Domain level DOM1"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">legend</a></span><span class="op">(</span><span class="st">"bottomleft"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Initial CVs"</span>,<span class="st">"Intermediate CVs"</span>,<span class="st">"Final CVs"</span><span class="op">)</span>, </span>
-<span>       fill <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"darkgreen"</span>,<span class="st">"blue"</span>,<span class="st">"red"</span><span class="op">)</span>, cex<span class="op">=</span><span class="fl">0.8</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">cv_final</span><span class="op">[</span><span class="fl">2</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>,col<span class="op">=</span><span class="st">"red"</span>,type<span class="op">=</span><span class="st">"b"</span>,</span>
-<span>     xaxt<span class="op">=</span><span class="st">"n"</span>,xlab<span class="op">=</span><span class="st">""</span>,ylab<span class="op">=</span><span class="st">"CV values"</span>,ylim<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">cv_final</span><span class="op">[</span><span class="fl">2</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span><span class="op">]</span>,<span class="va">cv_mod2</span><span class="op">[</span><span class="fl">2</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span><span class="op">]</span><span class="op">)</span><span class="op">*</span><span class="fl">1.2</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/axis.html" class="external-link">axis</a></span><span class="op">(</span><span class="fl">1</span>, at<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span>, lab<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CV1"</span>, <span class="st">"CV2"</span>, <span class="st">"CV3"</span>, <span class="st">"CV4"</span><span class="op">)</span>,las<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">cv_mod2</span><span class="op">[</span><span class="fl">2</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>,col<span class="op">=</span><span class="st">"blue"</span>,type<span class="op">=</span><span class="st">"b"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">cv_equal</span><span class="op">[</span><span class="fl">2</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>,col<span class="op">=</span><span class="st">"darkgreen"</span>,type<span class="op">=</span><span class="st">"b"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span><span class="st">"Domain level DOM2"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">legend</a></span><span class="op">(</span><span class="st">"bottomleft"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Initial CVs"</span>,<span class="st">"Intermediate CVs"</span>,<span class="st">"Final CVs"</span><span class="op">)</span>, </span>
-<span>       fill <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"darkgreen"</span>,<span class="st">"blue"</span>,<span class="st">"red"</span><span class="op">)</span>, cex<span class="op">=</span><span class="fl">0.8</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># De-comment with 3 domains</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">cv_final</span><span class="op">[</span><span class="fl">3</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>,col<span class="op">=</span><span class="st">"red"</span>,type<span class="op">=</span><span class="st">"b"</span>,</span>
-<span>     xaxt<span class="op">=</span><span class="st">"n"</span>,xlab<span class="op">=</span><span class="st">""</span>,ylab<span class="op">=</span><span class="st">"CV values"</span>,ylim<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">cv_final</span><span class="op">[</span><span class="fl">3</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span><span class="op">]</span>,<span class="va">cv_mod2</span><span class="op">[</span><span class="fl">3</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span><span class="op">]</span><span class="op">)</span><span class="op">*</span><span class="fl">1.2</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/axis.html" class="external-link">axis</a></span><span class="op">(</span><span class="fl">1</span>, at<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span>, lab<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CV1"</span>, <span class="st">"CV2"</span>, <span class="st">"CV3"</span>, <span class="st">"CV4"</span><span class="op">)</span>,las<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">cv_mod2</span><span class="op">[</span><span class="fl">3</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>,col<span class="op">=</span><span class="st">"blue"</span>,type<span class="op">=</span><span class="st">"b"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">cv_equal</span><span class="op">[</span><span class="fl">3</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>,col<span class="op">=</span><span class="st">"darkgreen"</span>,type<span class="op">=</span><span class="st">"b"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span><span class="st">"Domain level DOM3"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">legend</a></span><span class="op">(</span><span class="st">"bottomleft"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Initial CVs"</span>,<span class="st">"Intermediate CVs"</span>,<span class="st">"Final CVs"</span><span class="op">)</span>, </span>
-<span>       fill <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"darkgreen"</span>,<span class="st">"blue"</span>,<span class="st">"red"</span><span class="op">)</span>, cex<span class="op">=</span><span class="fl">0.8</span><span class="op">)</span></span></code></pre></div>
-<p><img src="CVs_optimization_files/figure-html/unnamed-chunk-21-1.png" class="r-plt" alt="" width="700"></p>
-<p>Finally, we analyze the obtained final allocation in the strata.</p>
-<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">final</span> <span class="op">&lt;-</span> <span class="fu">R2BEAT</span><span class="fu">::</span><span class="fu"><a href="../reference/beth1.html">beat.1st</a></span><span class="op">(</span><span class="va">strata</span>,<span class="va">cv_final</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">final</span><span class="op">$</span><span class="va">alloc</span><span class="op">$</span><span class="va">ALLOC</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">final</span><span class="op">$</span><span class="va">alloc</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] 19091</span></span></code></pre>
-<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">equal</span><span class="op">$</span><span class="va">alloc</span><span class="op">$</span><span class="va">ALLOC</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">equal</span><span class="op">$</span><span class="va">alloc</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] 16973</span></span></code></pre>
-<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">a1</span> <span class="op">&lt;-</span> <span class="va">equal</span><span class="op">$</span><span class="va">alloc</span><span class="op">$</span><span class="va">ALLOC</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">equal</span><span class="op">$</span><span class="va">alloc</span><span class="op">)</span><span class="op">]</span></span>
-<span><span class="va">a2</span> <span class="op">&lt;-</span> <span class="va">equal</span><span class="op">$</span><span class="va">alloc</span><span class="op">$</span><span class="va">PROP</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">equal</span><span class="op">$</span><span class="va">alloc</span><span class="op">)</span><span class="op">]</span></span>
-<span><span class="va">b1</span> <span class="op">&lt;-</span> <span class="va">final</span><span class="op">$</span><span class="va">alloc</span><span class="op">$</span><span class="va">ALLOC</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">final</span><span class="op">$</span><span class="va">alloc</span><span class="op">)</span><span class="op">]</span></span>
-<span><span class="va">b2</span> <span class="op">&lt;-</span> <span class="va">final</span><span class="op">$</span><span class="va">alloc</span><span class="op">$</span><span class="va">PROP</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">final</span><span class="op">$</span><span class="va">alloc</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
-<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">top</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">a1</span>,<span class="va">a2</span>,<span class="va">b1</span>,<span class="va">b2</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">a1</span>,type<span class="op">=</span><span class="st">"b"</span>,col<span class="op">=</span><span class="st">"blue"</span>,ylim<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="va">top</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="va">a2</span>,type<span class="op">=</span><span class="st">"h"</span>,col<span class="op">=</span><span class="st">"red"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span><span class="st">"Initial"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">legend</a></span><span class="op">(</span><span class="st">"topright"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Proportional"</span>,<span class="st">"Optimal"</span><span class="op">)</span>, fill <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"red"</span>, <span class="st">"blue"</span><span class="op">)</span>, cex<span class="op">=</span><span class="fl">0.8</span><span class="op">)</span></span></code></pre></div>
-<p><img src="CVs_optimization_files/figure-html/unnamed-chunk-23-1.png" class="r-plt" alt="" width="700"></p>
-<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">b1</span>,type<span class="op">=</span><span class="st">"b"</span>,col<span class="op">=</span><span class="st">"blue"</span>,ylim<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="va">top</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="va">b2</span>,type<span class="op">=</span><span class="st">"h"</span>,col<span class="op">=</span><span class="st">"red"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span><span class="st">"Final"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">legend</a></span><span class="op">(</span><span class="st">"topright"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Proportional"</span>,<span class="st">"Optimal"</span><span class="op">)</span>, fill <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"red"</span>, <span class="st">"blue"</span><span class="op">)</span>, cex<span class="op">=</span><span class="fl">0.8</span><span class="op">)</span></span></code></pre></div>
-<p><img src="CVs_optimization_files/figure-html/unnamed-chunk-23-2.png" class="r-plt" alt="" width="700"></p>
-<p>We may not be satisfied by the situation in the 22nd and 24th
-sub-domains where the new solution yields a greater distance of the
-optimal allocations from the proportional ones.</p>
-<p>We inspect the sensitivity:</p>
-<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">final</span><span class="op">$</span><span class="va">sensitivity</span><span class="op">[</span><span class="va">final</span><span class="op">$</span><span class="va">sensitivity</span><span class="op">$</span><span class="va">Dom</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">22</span>,<span class="fl">24</span><span class="op">)</span>,<span class="op">]</span></span></code></pre></div>
-<pre><code><span><span class="co">##     Type Dom Var Planned CV Actual CV Sensitivity 10%</span></span>
-<span><span class="co">## 102 DOM3  22  V1 0.04448511    0.0340               1</span></span>
-<span><span class="co">## 103 DOM3  22  V2 0.10065921    0.0553               1</span></span>
-<span><span class="co">## 104 DOM3  22  V3 0.18618010    0.0329               0</span></span>
-<span><span class="co">## 105 DOM3  22  V4 0.04750236    0.0475             251</span></span>
-<span><span class="co">## 110 DOM3  24  V1 0.04448511    0.0445             199</span></span>
-<span><span class="co">## 111 DOM3  24  V2 0.10065921    0.0504               1</span></span>
-<span><span class="co">## 112 DOM3  24  V3 0.18618010    0.0352               0</span></span>
-<span><span class="co">## 113 DOM3  24  V4 0.04750236    0.0227               1</span></span></code></pre>
-<p>and find that the reason for the oversampling in these two domains is
-due to the 1st and 4th target variables. We can change their CVs in the
-3rd domain level:</p>
-<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">cv_final</span><span class="op">[</span><span class="fl">3</span>,<span class="fl">2</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">0.10</span></span>
-<span><span class="va">cv_final</span><span class="op">[</span><span class="fl">3</span>,<span class="fl">5</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">0.10</span></span></code></pre></div>
-<p>and verify the new situation:</p>
-<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">final2</span> <span class="op">&lt;-</span> <span class="fu">R2BEAT</span><span class="fu">::</span><span class="fu"><a href="../reference/beth1.html">beat.1st</a></span><span class="op">(</span><span class="va">strata</span>,<span class="va">cv_final</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">final2</span><span class="op">$</span><span class="va">alloc</span><span class="op">$</span><span class="va">ALLOC</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">final2</span><span class="op">$</span><span class="va">alloc</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] 17091</span></span></code></pre>
-<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">b1</span> <span class="op">&lt;-</span> <span class="va">final2</span><span class="op">$</span><span class="va">alloc</span><span class="op">$</span><span class="va">ALLOC</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">final2</span><span class="op">$</span><span class="va">alloc</span><span class="op">)</span><span class="op">]</span></span>
-<span><span class="va">b2</span> <span class="op">&lt;-</span> <span class="va">final2</span><span class="op">$</span><span class="va">alloc</span><span class="op">$</span><span class="va">PROP</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">final2</span><span class="op">$</span><span class="va">alloc</span><span class="op">)</span><span class="op">]</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">b1</span>,type<span class="op">=</span><span class="st">"b"</span>,col<span class="op">=</span><span class="st">"blue"</span>,ylim<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="va">top</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="va">b2</span>,type<span class="op">=</span><span class="st">"h"</span>,col<span class="op">=</span><span class="st">"red"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span><span class="st">"Final"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">legend</a></span><span class="op">(</span><span class="st">"topright"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Proportional"</span>,<span class="st">"Optimal"</span><span class="op">)</span>, fill <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"red"</span>, <span class="st">"blue"</span><span class="op">)</span>, cex<span class="op">=</span><span class="fl">0.8</span><span class="op">)</span></span></code></pre></div>
-<p><img src="CVs_optimization_files/figure-html/unnamed-chunk-26-1.png" class="r-plt" alt="" width="700"></p>
-<p>Much better.</p>
-<p>Again, we re-determine the CVs in order to reach the initial sample
-size:</p>
-<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">target_size</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">final</span><span class="op">$</span><span class="va">alloc</span><span class="op">$</span><span class="va">ALLOC</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">final</span><span class="op">$</span><span class="va">alloc</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="va">cv_final2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/adjust_CVs.html">adjust_CVs</a></span><span class="op">(</span>target_size<span class="op">=</span> <span class="va">target_size</span>,</span>
-<span>                   strata<span class="op">=</span><span class="va">strata</span>,</span>
-<span>                   errors<span class="op">=</span><span class="va">cv_final</span>,</span>
-<span>                   adj_rate<span class="op">=</span><span class="fl">0.05</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## </span></span>
-<span><span class="co">##  Size:  18916</span></span>
-<span><span class="co">##  Size:  20933</span></span>
-<span><span class="co">##  Size:  20933</span></span></code></pre>
-<div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">cv_final2</span></span></code></pre></div>
-<pre><code><span><span class="co">##    DOM         CV1        CV2        CV3        CV4</span></span>
-<span><span class="co">## 1 DOM1 0.005152313 0.02832700 0.01944884 0.01511233</span></span>
-<span><span class="co">## 2 DOM2 0.022142790 0.03714122 0.06661764 0.01431156</span></span>
-<span><span class="co">## 3 DOM3 0.090250000 0.09084494 0.16802754 0.09025000</span></span></code></pre>
-<div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">cv_final2</span><span class="op">[</span><span class="fl">3</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>,col<span class="op">=</span><span class="st">"red"</span>,type<span class="op">=</span><span class="st">"b"</span>,</span>
-<span>     xaxt<span class="op">=</span><span class="st">"n"</span>,xlab<span class="op">=</span><span class="st">""</span>,ylab<span class="op">=</span><span class="st">"CV values"</span>,ylim<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">cv_final2</span><span class="op">[</span><span class="fl">3</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span><span class="op">]</span>,<span class="va">cv_mod2</span><span class="op">[</span><span class="fl">3</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span><span class="op">]</span><span class="op">)</span><span class="op">*</span><span class="fl">1.2</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/axis.html" class="external-link">axis</a></span><span class="op">(</span><span class="fl">1</span>, at<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span>, lab<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CV1"</span>, <span class="st">"CV2"</span>, <span class="st">"CV3"</span>, <span class="st">"CV4"</span><span class="op">)</span>,las<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">cv_mod2</span><span class="op">[</span><span class="fl">3</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>,col<span class="op">=</span><span class="st">"blue"</span>,type<span class="op">=</span><span class="st">"b"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">cv_equal</span><span class="op">[</span><span class="fl">3</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>,col<span class="op">=</span><span class="st">"darkgreen"</span>,type<span class="op">=</span><span class="st">"b"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span><span class="st">"Domain level DOM3"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">legend</a></span><span class="op">(</span><span class="st">"topleft"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Initial CVs"</span>,<span class="st">"Intermediate CVs"</span>,<span class="st">"Final CVs"</span><span class="op">)</span>, </span>
-<span>       fill <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"darkgreen"</span>,<span class="st">"blue"</span>,<span class="st">"red"</span><span class="op">)</span>, cex<span class="op">=</span><span class="fl">0.8</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">cv_final</span> <span class="op">&lt;-</span> <span class="va">out2</span><span class="op">$</span><span class="va">errors_scaled</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">cv_final</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">cv_final</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"CV"</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">nvars</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<table class="table table table-striped table-condensed" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+Final precision constraints
+</caption>
+<thead><tr>
+<th style="text-align:left;">
+DOM
+</th>
+<th style="text-align:right;">
+CV1
+</th>
+<th style="text-align:right;">
+CV2
+</th>
+<th style="text-align:right;">
+CV3
+</th>
+<th style="text-align:right;">
+CV4
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+DOM1
+</td>
+<td style="text-align:right;">
+0.004
+</td>
+<td style="text-align:right;">
+0.009
+</td>
+<td style="text-align:right;">
+0.016
+</td>
+<td style="text-align:right;">
+0.004
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+DOM2
+</td>
+<td style="text-align:right;">
+0.019
+</td>
+<td style="text-align:right;">
+0.050
+</td>
+<td style="text-align:right;">
+0.052
+</td>
+<td style="text-align:right;">
+0.018
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+DOM3
+</td>
+<td style="text-align:right;">
+0.100
+</td>
+<td style="text-align:right;">
+0.100
+</td>
+<td style="text-align:right;">
+0.100
+</td>
+<td style="text-align:right;">
+0.098
+</td>
+</tr>
+</tbody>
+</table>
+<p>that produces the following sample size:</p>
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">final_sol</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/beth1.html">beat.1st</a></span><span class="op">(</span><span class="va">strata</span>,<span class="va">cv_final</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">final_sol</span><span class="op">$</span><span class="va">alloc</span><span class="op">$</span><span class="va">ALLOC</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">final_sol</span><span class="op">$</span><span class="va">alloc</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] 50000</span></span></code></pre>
+<p>in line with the affordable sample size.</p>
+<p>What about the closeness of the final optimal allocation to the
+proportional one?</p>
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="va">pareto_alloc</span><span class="op">$</span><span class="va">alloc</span></span>
+<span><span class="va">df</span> <span class="op">&lt;-</span> <span class="va">df</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span>,<span class="op">]</span></span>
+<span><span class="va">rng</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">df</span><span class="op">$</span><span class="va">ALLOC</span>,<span class="va">df</span><span class="op">$</span><span class="va">PROP</span><span class="op">)</span><span class="op">)</span>   </span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">ALLOC</span>  <span class="op">~</span>  <span class="va">PROP</span>, </span>
+<span>     data <span class="op">=</span> <span class="va">df</span>,</span>
+<span>     main <span class="op">=</span> <span class="st">"Optimal vs Proportional allocation - Before GA adjustment"</span>,</span>
+<span>     ylab <span class="op">=</span> <span class="st">"Optimal"</span>,</span>
+<span>     xlab <span class="op">=</span> <span class="st">"Proportional"</span>,</span>
+<span>     xlim <span class="op">=</span> <span class="va">rng</span>,</span>
+<span>     ylim <span class="op">=</span> <span class="va">rng</span>,</span>
+<span>     pch <span class="op">=</span> <span class="fl">21</span>,</span>
+<span>     bg  <span class="op">=</span> <span class="st">"steelblue"</span>, </span>
+<span>     col <span class="op">=</span> <span class="st">"black"</span>,</span>
+<span>     cex <span class="op">=</span> <span class="fl">1.2</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>a <span class="op">=</span> <span class="fl">0</span>, b <span class="op">=</span> <span class="fl">1</span>, col <span class="op">=</span> <span class="st">"red"</span>, lwd <span class="op">=</span> <span class="fl">2</span>, lty <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/text.html" class="external-link">text</a></span><span class="op">(</span></span>
+<span>  x <span class="op">=</span> <span class="va">rng</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">*</span> <span class="fl">0.8</span>,</span>
+<span>  y <span class="op">=</span> <span class="va">rng</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">*</span> <span class="fl">0.9</span>,</span>
+<span>  labels <span class="op">=</span> <span class="st">"y = x"</span>,</span>
+<span>  col <span class="op">=</span> <span class="st">"red"</span>,</span>
+<span>  pos <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>  cex <span class="op">=</span> <span class="fl">0.9</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">ALLOC</span><span class="op">~</span><span class="va">PROP</span>, data <span class="op">=</span> <span class="va">df</span><span class="op">)</span></span>
+<span><span class="va">coefs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
+<span><span class="va">r2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span><span class="op">$</span><span class="va">r.squared</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span><span class="va">fit</span>, col <span class="op">=</span> <span class="st">"darkgreen"</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/text.html" class="external-link">text</a></span><span class="op">(</span></span>
+<span>  x <span class="op">=</span> <span class="va">rng</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">*</span> <span class="fl">0.75</span>,</span>
+<span>  y <span class="op">=</span> <span class="va">rng</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">*</span> <span class="fl">0.5</span>,</span>
+<span>  labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"y = %.2f + %.2f x\nR² = %.2f"</span>,</span>
+<span>                   <span class="va">coefs</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="va">coefs</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, <span class="va">r2</span><span class="op">)</span>,</span>
+<span>  col <span class="op">=</span> <span class="st">"darkgreen"</span>,</span>
+<span>  pos <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>  cex <span class="op">=</span> <span class="fl">0.9</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <p><img src="CVs_optimization_files/figure-html/unnamed-chunk-28-1.png" class="r-plt" alt="" width="700"></p>
-<p>Finally, we analyze the changes in the expected CVs:</p>
-<div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/beat.1cv.html">beat.1cv</a></span><span class="op">(</span><span class="va">strata</span>,<span class="va">cv_equal</span>,<span class="va">equal</span><span class="op">$</span><span class="va">alloc</span><span class="op">$</span><span class="va">ALLOC</span><span class="op">)</span></span>
-<span><span class="va">b</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/beat.1cv.html">beat.1cv</a></span><span class="op">(</span><span class="va">strata</span>,<span class="va">cv_mod2</span>,<span class="va">intermediate2</span><span class="op">$</span><span class="va">alloc</span><span class="op">$</span><span class="va">ALLOC</span><span class="op">)</span></span>
-<span><span class="va">c</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/beat.1cv.html">beat.1cv</a></span><span class="op">(</span><span class="va">strata</span>,<span class="va">cv_final2</span>,<span class="va">final</span><span class="op">$</span><span class="va">alloc</span><span class="op">$</span><span class="va">ALLOC</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/row.names.html" class="external-link">row.names</a></span><span class="op">(</span><span class="va">a</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="cn">NULL</span></span>
-<span><span class="va">tot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">a</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">4</span><span class="op">)</span><span class="op">]</span>,<span class="va">b</span><span class="op">[</span>,<span class="fl">4</span><span class="op">]</span>,<span class="va">c</span><span class="op">[</span>,<span class="fl">4</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">tot</span><span class="op">)</span><span class="op">[</span><span class="fl">3</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Initial(1)"</span>,<span class="st">"Intermediate(2)"</span>,<span class="st">"Final(3)"</span><span class="op">)</span></span>
-<span><span class="va">tot</span><span class="op">$</span><span class="va">Diff1</span> <span class="op">&lt;-</span> <span class="va">tot</span><span class="op">$</span><span class="va">`Intermediate(2)`</span><span class="op">-</span> <span class="va">tot</span><span class="op">$</span><span class="va">`Initial(1)`</span></span>
-<span><span class="va">tot</span><span class="op">$</span><span class="va">Diff2</span> <span class="op">&lt;-</span> <span class="va">tot</span><span class="op">$</span><span class="va">`Final(3)`</span><span class="op">-</span> <span class="va">tot</span><span class="op">$</span><span class="va">`Intermediate(2)`</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">tot</span><span class="op">)</span><span class="op">[</span><span class="fl">6</span><span class="op">:</span><span class="fl">7</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Diff.(2-1)"</span>,<span class="st">"Diff.(3-2)"</span><span class="op">)</span></span>
-<span><span class="co"># knitr::kable(tot)</span></span></code></pre></div>
-<p>The average change due to the first step (balancing the influence of
-all variables in the determination of the best allocation):</p>
-<div class="sourceCode" id="cb63"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">tot</span><span class="op">$</span><span class="va">`Diff.(2-1)`</span><span class="op">)</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">tot</span><span class="op">$</span><span class="va">Initial</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] -0.3774151</span></span></code></pre>
-<p>and the average change due to the second step (bringing the opimal
-allocation closer to the proportional):</p>
-<div class="sourceCode" id="cb65"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">tot</span><span class="op">$</span><span class="va">`Diff.(3-2)`</span><span class="op">)</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">tot</span><span class="op">$</span><span class="va">Initial</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] 0.07574547</span></span></code></pre>
-<p>We can calculate the same indicators by weighting with the
-populations in the domains:</p>
-<div class="sourceCode" id="cb67"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># tot$DOMAIN &lt;-  sub("/.*", "", tot$`DOMAIN/VAR`) </span></span>
-<span><span class="va">dom1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/aggregate.html" class="external-link">aggregate</a></span><span class="op">(</span><span class="va">strata</span><span class="op">$</span><span class="va">N</span>,by<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">strata</span><span class="op">$</span><span class="va">DOM1</span><span class="op">)</span>,FUN<span class="op">=</span><span class="va">sum</span><span class="op">)</span></span>
-<span><span class="va">dom2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/aggregate.html" class="external-link">aggregate</a></span><span class="op">(</span><span class="va">strata</span><span class="op">$</span><span class="va">N</span>,by<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">strata</span><span class="op">$</span><span class="va">DOM2</span><span class="op">)</span>,FUN<span class="op">=</span><span class="va">sum</span><span class="op">)</span></span>
-<span><span class="va">dom3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/aggregate.html" class="external-link">aggregate</a></span><span class="op">(</span><span class="va">strata</span><span class="op">$</span><span class="va">N</span>,by<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">strata</span><span class="op">$</span><span class="va">DOM3</span><span class="op">)</span>,FUN<span class="op">=</span><span class="va">sum</span><span class="op">)</span></span>
-<span><span class="va">tot1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/merge.html" class="external-link">merge</a></span><span class="op">(</span><span class="va">tot</span>,<span class="va">dom1</span>,by.x<span class="op">=</span><span class="st">"DOMAIN"</span>,by.y<span class="op">=</span><span class="st">"Group.1"</span><span class="op">)</span></span>
-<span><span class="va">tot2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/merge.html" class="external-link">merge</a></span><span class="op">(</span><span class="va">tot</span>,<span class="va">dom2</span>,by.x<span class="op">=</span><span class="st">"DOMAIN"</span>,by.y<span class="op">=</span><span class="st">"Group.1"</span><span class="op">)</span></span>
-<span><span class="va">tot3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/merge.html" class="external-link">merge</a></span><span class="op">(</span><span class="va">tot</span>,<span class="va">dom3</span>,by.x<span class="op">=</span><span class="st">"DOMAIN"</span>,by.y<span class="op">=</span><span class="st">"Group.1"</span><span class="op">)</span></span>
-<span><span class="va">tottot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">tot1</span>,<span class="va">tot2</span>,<span class="va">tot3</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="va">final_sol</span><span class="op">$</span><span class="va">alloc</span></span>
+<span><span class="va">df</span> <span class="op">&lt;-</span> <span class="va">df</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span>,<span class="op">]</span></span>
+<span><span class="va">rng</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">df</span><span class="op">$</span><span class="va">ALLOC</span>,<span class="va">df</span><span class="op">$</span><span class="va">PROP</span><span class="op">)</span><span class="op">)</span>   </span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">ALLOC</span>  <span class="op">~</span>  <span class="va">PROP</span>, </span>
+<span>     data <span class="op">=</span> <span class="va">df</span>,</span>
+<span>     main <span class="op">=</span> <span class="st">"Optimal vs Proportional allocation - After GA adjustment"</span>,</span>
+<span>     ylab <span class="op">=</span> <span class="st">"Optimal"</span>,</span>
+<span>     xlab <span class="op">=</span> <span class="st">"Proportional"</span>,</span>
+<span>     xlim <span class="op">=</span> <span class="va">rng</span>,</span>
+<span>     ylim <span class="op">=</span> <span class="va">rng</span>,</span>
+<span>     pch <span class="op">=</span> <span class="fl">21</span>,</span>
+<span>     bg  <span class="op">=</span> <span class="st">"steelblue"</span>, </span>
+<span>     col <span class="op">=</span> <span class="st">"black"</span>,</span>
+<span>     cex <span class="op">=</span> <span class="fl">1.2</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>a <span class="op">=</span> <span class="fl">0</span>, b <span class="op">=</span> <span class="fl">1</span>, col <span class="op">=</span> <span class="st">"red"</span>, lwd <span class="op">=</span> <span class="fl">2</span>, lty <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/text.html" class="external-link">text</a></span><span class="op">(</span></span>
+<span>  x <span class="op">=</span> <span class="va">rng</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">*</span> <span class="fl">0.8</span>,</span>
+<span>  y <span class="op">=</span> <span class="va">rng</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">*</span> <span class="fl">0.9</span>,</span>
+<span>  labels <span class="op">=</span> <span class="st">"y = x"</span>,</span>
+<span>  col <span class="op">=</span> <span class="st">"red"</span>,</span>
+<span>  pos <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>  cex <span class="op">=</span> <span class="fl">0.9</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">ALLOC</span><span class="op">~</span><span class="va">PROP</span>, data <span class="op">=</span> <span class="va">df</span><span class="op">)</span></span>
+<span><span class="va">coefs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
+<span><span class="va">r2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span><span class="op">$</span><span class="va">r.squared</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span><span class="va">fit</span>, col <span class="op">=</span> <span class="st">"darkgreen"</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/text.html" class="external-link">text</a></span><span class="op">(</span></span>
+<span>  x <span class="op">=</span> <span class="va">rng</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">*</span> <span class="fl">0.75</span>,</span>
+<span>  y <span class="op">=</span> <span class="va">rng</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">*</span> <span class="fl">0.5</span>,</span>
+<span>  labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"y = %.2f + %.2f x\nR² = %.2f"</span>,</span>
+<span>                   <span class="va">coefs</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="va">coefs</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, <span class="va">r2</span><span class="op">)</span>,</span>
+<span>  col <span class="op">=</span> <span class="st">"darkgreen"</span>,</span>
+<span>  pos <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>  cex <span class="op">=</span> <span class="fl">0.9</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p><img src="CVs_optimization_files/figure-html/unnamed-chunk-28-2.png" class="r-plt" alt="" width="700">
+So, we obtained a final optimal solution that is much more close to the
+proportional one with respect to the one obtained with the first
+application of the “pareto” function.</p>
+<p>It is worth noting that the final correlation:</p>
+<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">final_sol</span><span class="op">$</span><span class="va">alloc</span><span class="op">$</span><span class="va">ALLOC</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">final_sol</span><span class="op">$</span><span class="va">alloc</span><span class="op">)</span><span class="op">]</span>,<span class="va">final_sol</span><span class="op">$</span><span class="va">alloc</span><span class="op">$</span><span class="va">PROP</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">final_sol</span><span class="op">$</span><span class="va">alloc</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] 0.7230641</span></span></code></pre>
+<p>is not the one that we indicated to and obtained by the genetic
+algorithm. This is due to the fact that when re-applying the “pareto”
+function, we lost some of the correlation. If we want a higher value of
+it we should get back to the genetic algorithm and set a higher value
+for the desired correlation.</p>
+<p>Finally, we want to compare the different sets of the precision
+constraints:</p>
+<ul>
+<li><p>the initial ones (those obtained by a time consuming human
+interaction);</p></li>
+<li><p>those obtained by applying the “pareto” function to the set of
+equal CVs;</p></li>
+<li><p>the final ones, obtained by executing the genetic algorithm to
+get the resulting optimal allocation closer to the proportional one (and
+adjusted once again with the “pareto” function.</p></li>
+</ul>
+<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">plot_domain</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">dom_label</span>, <span class="va">cv_pareto</span>, <span class="va">cv_ga</span>, <span class="va">cv_final</span>,</span>
+<span>                        <span class="va">series_cols</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"red"</span>, <span class="st">"blue"</span>,<span class="st">"yellow"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  </span>
+<span>  <span class="va">vnames</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">cv_pareto</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="va">op</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>no.readonly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/on.exit.html" class="external-link">on.exit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span><span class="va">op</span><span class="op">)</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">8</span>, <span class="fl">4</span>, <span class="fl">4</span>, <span class="fl">2</span><span class="op">)</span> <span class="op">+</span> <span class="fl">0.1</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="va">ymax</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">cv_pareto</span>, <span class="va">cv_ga</span>, <span class="va">cv_final</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">*</span> <span class="fl">1.15</span></span>
+<span>  </span>
+<span>  <span class="va">heights</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span>Pareto <span class="op">=</span> <span class="va">cv_pareto</span>, GA <span class="op">=</span> <span class="va">cv_ga</span>, Final <span class="op">=</span> <span class="va">cv_final</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="va">bp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/barplot.html" class="external-link">barplot</a></span><span class="op">(</span></span>
+<span>    <span class="va">heights</span>,</span>
+<span>    beside <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>    names.arg <span class="op">=</span> <span class="va">vnames</span>,</span>
+<span>    las <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>    cex.names <span class="op">=</span> <span class="fl">0.8</span>,</span>
+<span>    ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="va">ymax</span><span class="op">)</span>,</span>
+<span>    main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"CV by variable - Domain:"</span>, <span class="va">dom_label</span><span class="op">)</span>,</span>
+<span>    ylab <span class="op">=</span> <span class="st">"CV"</span>,</span>
+<span>    col  <span class="op">=</span> <span class="va">series_cols</span></span>
+<span>  <span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co"># bp è una matrice 2 x nvar con le x dei bar; prendiamo i centri del gruppo</span></span>
+<span>  <span class="va">x_centers</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">colMeans</a></span><span class="op">(</span><span class="va">bp</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co"># linea tratteggiata (cv_ga)</span></span>
+<span>  <span class="co"># lines(x_centers, ga_vals, type = "b", lty = 2, pch = 16)</span></span>
+<span>  </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">legend</a></span><span class="op">(</span></span>
+<span>    <span class="st">"topleft"</span>,</span>
+<span>    legend <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Pareto CVs"</span>, <span class="st">"GA CVs"</span>, <span class="st">"Final CVs"</span><span class="op">)</span>,</span>
+<span>    col    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">series_cols</span><span class="op">)</span>,</span>
+<span>    pch    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">15</span>, <span class="fl">15</span>, <span class="fl">15</span><span class="op">)</span>,</span>
+<span>    bty    <span class="op">=</span> <span class="st">"n"</span>,</span>
+<span>    cex <span class="op">=</span> <span class="fl">0.7</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">}</span></span>
 <span></span>
-<span><span class="va">AvgInitial</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">tottot</span><span class="op">$</span><span class="va">`Initial(1)`</span> <span class="op">*</span> <span class="va">tottot</span><span class="op">$</span><span class="va">x</span><span class="op">)</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">tottot</span><span class="op">$</span><span class="va">x</span><span class="op">)</span></span>
-<span><span class="va">AvgDiff2_1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">tottot</span><span class="op">$</span><span class="va">`Diff.(2-1)`</span> <span class="op">*</span> <span class="va">tottot</span><span class="op">$</span><span class="va">x</span><span class="op">)</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">tottot</span><span class="op">$</span><span class="va">x</span><span class="op">)</span></span>
-<span><span class="va">AvgDiff2_1</span> <span class="op">/</span> <span class="va">AvgInitial</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] -0.3867286</span></span></code></pre>
-<div class="sourceCode" id="cb69"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">AvgDiff3_2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">tottot</span><span class="op">$</span><span class="va">`Diff.(3-2)`</span> <span class="op">*</span> <span class="va">tottot</span><span class="op">$</span><span class="va">x</span><span class="op">)</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">tottot</span><span class="op">$</span><span class="va">x</span><span class="op">)</span></span>
-<span><span class="va">AvgDiff3_2</span> <span class="op">/</span> <span class="va">AvgInitial</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] -0.07358291</span></span></code></pre>
-<p>We can conclude that the first step has a strong impact on the values
-of the expected CVs, while the second step is negligible from this point
-of view.</p>
+<span></span>
+<span><span class="va">doms</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">cv_pareto</span><span class="op">$</span><span class="va">DOM</span><span class="op">)</span></span>
+<span><span class="va">ncols</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">cv_pareto</span><span class="op">)</span></span>
+<span><span class="va">vcols</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">cv_pareto</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">cv_pareto</span><span class="op">)</span><span class="op">]</span></span>
+<span></span>
+<span><span class="kw">for</span> <span class="op">(</span><span class="va">d</span> <span class="kw">in</span> <span class="va">doms</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">pareto_row</span>     <span class="op">&lt;-</span> <span class="va">cv_pareto</span><span class="op">[</span><span class="va">cv_pareto</span><span class="op">$</span><span class="va">DOM</span>  <span class="op">==</span> <span class="va">d</span>, <span class="va">vcols</span>, drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span></span>
+<span>  <span class="va">ga_row</span> <span class="op">&lt;-</span> <span class="va">cv_ga</span><span class="op">[</span><span class="va">cv_ga</span><span class="op">$</span><span class="va">DOM</span> <span class="op">==</span> <span class="va">d</span>, <span class="va">vcols</span>, drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span></span>
+<span>  <span class="va">final_row</span>     <span class="op">&lt;-</span> <span class="va">cv_final</span><span class="op">[</span><span class="va">cv_final</span><span class="op">$</span><span class="va">DOM</span>  <span class="op">==</span> <span class="va">d</span>, <span class="va">vcols</span>, drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span></span>
+<span>  </span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">pareto_row</span><span class="op">)</span> <span class="op">!=</span> <span class="fl">1</span> <span class="op">||</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">ga_row</span><span class="op">)</span> <span class="op">!=</span> <span class="fl">1</span> <span class="op">||</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">final_row</span><span class="op">)</span> <span class="op">!=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/warning.html" class="external-link">warning</a></span><span class="op">(</span><span class="st">"Dominio "</span>, <span class="va">d</span>, <span class="st">": righe non univoche nei file. Salto."</span><span class="op">)</span></span>
+<span>    <span class="kw">next</span></span>
+<span>  <span class="op">}</span></span>
+<span>  </span>
+<span>  <span class="va">pareto_vals</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">pareto_row</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span><span class="op">)</span></span>
+<span>  <span class="va">ga_vals</span>     <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">ga_row</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span><span class="op">)</span></span>
+<span>  <span class="va">final_vals</span>     <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">final_row</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">pareto_vals</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">ga_vals</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">final_vals</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">vcols</span></span>
+<span>  <span class="fu">plot_domain</span><span class="op">(</span>dom_label <span class="op">=</span> <span class="va">d</span>, cv_pareto <span class="op">=</span> <span class="va">pareto_vals</span>, cv_ga <span class="op">=</span> <span class="va">ga_vals</span>, cv_final <span class="op">=</span> <span class="va">final_vals</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<p><img src="CVs_optimization_files/figure-html/unnamed-chunk-30-1.png" class="r-plt" alt="" width="700"><img src="CVs_optimization_files/figure-html/unnamed-chunk-30-2.png" class="r-plt" alt="" width="700"><img src="CVs_optimization_files/figure-html/unnamed-chunk-30-3.png" class="r-plt" alt="" width="700"></p>
 </div>
   </div>
 
