@@ -1,5 +1,8 @@
-# Pareto frontier allocation: 
-
+# Pareto frontier allocation: adjusts a global scaling factor t on domain/variable CV
+# targets, computes allocations via R2BEAT, and finds the smallest feasible total
+# sample size within the target/tolerance band using bracketing + bisection, while
+# honoring optional CV caps. The resulting solution is the closest-to-target
+# feasible allocation on the Pareto frontier between precision and cost.
 #
 # Parameters:
 #   strata         Data frame with strata information. Required columns: STRATUM,
@@ -38,9 +41,9 @@ pareto <- function(strata,
                    eps_inact = 1e-12,
                    bracket_fac = 1.25,
                    max_iter = 50,
-                   max_same_iter = max_iter,  # stop if n(t) repeats this many times in bracketing (caps plateau)
+                   max_same_iter = max_iter,  
                    minnumstrat = 2,
-                   beat1cv_fun = NULL,      # e.g., beat.1cv_new
+                   beat1cv_fun = NULL,      
                    verbose = TRUE,
                    plot = FALSE,
                    plot_dir = "outputs",
@@ -48,7 +51,7 @@ pareto <- function(strata,
                    save_pdf = TRUE,
                    show_targets = TRUE,     
                    show_caps = FALSE,
-                   plot_convergence = TRUE  # NEW: plot convergence trajectory
+                   plot_convergence = TRUE  
 ) {
   
   # ---- checks ----
@@ -193,7 +196,10 @@ pareto <- function(strata,
   alloc_for_t <- function(t) {
     e_t <- scale_errors(errors_base, t)
     a <- R2BEAT::beat.1st(stratif = strata, errors = e_t)
-    list(errors = e_t, alloc = a, n_tot = sum(a$n))
+    # beat.1st alloc table includes a total row; drop it to match strata rows
+    n_vec <- a$alloc$ALLOC
+    if (length(n_vec) == (nrow(strata) + 1L)) n_vec <- n_vec[-length(n_vec)]
+    list(errors = e_t, alloc = a, n_tot = sum(n_vec))
   }
   n_for_t <- function(t) alloc_for_t(t)$n_tot
   
@@ -298,15 +304,19 @@ pareto <- function(strata,
   # If already in tolerance band after bracketing
   if (in_band(n_hi)) {
     res <- alloc_for_t(t_hi)
-    alloc_df <- data.frame(STRATUM = strata$STRATUM, n = res$alloc$n)
+    n_vec <- res$alloc$alloc$ALLOC
+    if (length(n_vec) == (nrow(strata) + 1L)) n_vec <- n_vec[-length(n_vec)]
+    alloc_df <- data.frame(STRATUM = strata$STRATUM, n = n_vec)
     
     # ---- expected CV ----
     expectedCV <- NULL
     expectedCV_spec <- NULL
     
-    if (is.null(beat1cv_fun) && exists("beat.1cv_new", mode="function")) beat1cv_fun <- get("beat.1cv_new")
+    if (is.null(beat1cv_fun) && exists("beat.1cv_2", mode="function")) beat1cv_fun <- get("beat.1cv_2")
     if (!is.null(beat1cv_fun)) {
-      cv_out <- beat1cv_fun(stratif = strata, alloc = res$alloc$n, minnumstrat = minnumstrat)
+      n_vec <- res$alloc$alloc$ALLOC
+      if (length(n_vec) == (nrow(strata) + 1L)) n_vec <- n_vec[-length(n_vec)]
+      cv_out <- beat1cv_fun(stratif = strata, alloc = n_vec, minnumstrat = minnumstrat)
       expectedCV <- cv_out$expectedCV
       expectedCV_spec <- cv_out$expectedCV_spec
     }
@@ -360,16 +370,20 @@ pareto <- function(strata,
   }
   
   res <- alloc_for_t(best_t)
-  alloc_df <- data.frame(STRATUM = strata$STRATUM, n = res$alloc$n)
+  n_vec <- res$alloc$alloc$ALLOC
+  if (length(n_vec) == (nrow(strata) + 1L)) n_vec <- n_vec[-length(n_vec)]
+  alloc_df <- data.frame(STRATUM = strata$STRATUM, n = n_vec)
   
   # ---- expected CV ----
   expectedCV <- NULL
   expectedCV_spec <- NULL
   binding_tbl <- NULL
   
-  if (is.null(beat1cv_fun) && exists("beat.1cv_new", mode="function")) beat1cv_fun <- get("beat.1cv_new")
+  if (is.null(beat1cv_fun) && exists("beat.1cv_2", mode="function")) beat1cv_fun <- get("beat.1cv_2")
   if (!is.null(beat1cv_fun)) {
-    cv_out <- beat1cv_fun(stratif = strata, alloc = res$alloc$n, minnumstrat = minnumstrat)
+    n_vec <- res$alloc$alloc$ALLOC
+    if (length(n_vec) == (nrow(strata) + 1L)) n_vec <- n_vec[-length(n_vec)]
+    cv_out <- beat1cv_fun(stratif = strata, alloc = n_vec, minnumstrat = minnumstrat)
     expectedCV <- cv_out$expectedCV
     expectedCV_spec <- cv_out$expectedCV_spec
   }

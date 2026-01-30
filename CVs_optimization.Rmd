@@ -112,7 +112,7 @@ sum(equal$alloc$ALLOC[-nrow(equal$alloc)])
 
 # 2. Modification of initial precision constraints to be compliant with the sample size constraint
 
-We now change the initial precision constraints to reach the desired sample size.
+We now change the initial precision constraints to balance the effect of the target variables.
 
 To this aim, we make use of the function 'pareto'. This function determines an optimal set of precision constraints, compliant with the constraint in term of sample size.
 
@@ -122,12 +122,12 @@ Prior to the execution, we set some upper limits to the resulting precision cons
 caps <- data.frame(
   DOM = c("DOM3"),
   VAR = c("V1","V2","V3","V4"),
-  MAX_CV = c(0.10,0.10,0.10,0.10)
+  MAX_CV = c(0.12,0.12,0.40,0.40)
 )
 caps
 ```
 
-In this way, we indicate that whatever solution of the "pareto" function must be such that in DOM3 no CV can exceed these values.
+In this way, we indicate that whatever solution of the "pareto" function must be such that in DOM3 no CV can exceed the 12% value.
 
 ```{r message=TRUE, warning=FALSE}
 out <- pareto(
@@ -147,31 +147,30 @@ out <- pareto(
 )
 ```
 
-
-Now, the sample size is in line with the budget constraint:
-
-```{r}
-sum(out$allocation$n)
-```
-These are the new CVs:
+Actually, these new CVs are in some cases higher than the initial ones. But we can see that the new corresponding sample size is in line with the sample size constraints:
 
 ```{r warning=FALSE}
-cv_pareto <- out$expectedCV 
-colnames(cv_pareto)[2:ncol(cv_pareto)] <- paste0("CV",c(1:ncol(cv_pareto)))
+cv_new <- out$expectedCV 
+colnames(cv_new)[2:ncol(cv_new)] <- paste0("CV",c(1:16))
+alloc_pareto <- beat.1st(strata,cv_new)
+cv_pareto <- beat.1cv_2(strata,alloc_pareto$alloc$ALLOC)$expectedCV
+colnames(cv_pareto)[2:ncol(cv_pareto)] <- paste0("CV",c(1:(ncol(cv_pareto)-1)))
 write.table(cv_pareto,"./outputs/2.pareto_cvs.csv",sep=",",quote=F,row.names=F)
+sum(alloc_pareto$alloc$ALLOC[-nrow(alloc_pareto$alloc)])
+```
+
+```{r message=FALSE, warning=FALSE}
 knitr::kable(
   cv_pareto,
   digits = 3,
-  caption = "Pareto coefficients of variation",
+  caption = "Pareto Coefficients of variation",
   format = "html"
 ) |>
   kableExtra::kable_styling(
     bootstrap_options = c("striped", "condensed"),
     full_width = FALSE
   )
-
 ```
-
 
 
 # 3. Get the optimal allocation closer to the proportional one
@@ -179,9 +178,8 @@ knitr::kable(
 Consider the last obtained solution:
 
 ```{r message=FALSE, warning=FALSE}
-pareto_alloc <- beat.1st(strata,cv_pareto)
 knitr::kable(
-  pareto_alloc$alloc,
+  alloc_pareto$alloc,
   digits = 3,
   caption = "Pareto allocation",
   format = "html"
@@ -195,10 +193,10 @@ knitr::kable(
 We can calculate the Pearson correlation coefficient between the optimal and proportional allocations:
 
 ```{r}
-cor(pareto_alloc$alloc$ALLOC[-nrow(pareto_alloc$alloc)],pareto_alloc$alloc$PROP[-nrow(pareto_alloc$alloc)])
+cor(alloc_pareto$alloc$ALLOC[-nrow(alloc_pareto$alloc)],alloc_pareto$alloc$PROP[-nrow(alloc_pareto$alloc)])
 ```
 
-We want to get the optimal allocation closer to the proportional one. For instance, we want that the correlation coefficient be increased to 0.9.
+We want to get the optimal allocation closer to the proportional one. For instance, we want that the correlation coefficient be increased to 0.85.
 
 To obtain this result, we make use of a particular genetic algorithm, the quantum genetic algorithm, implemented in the R package QGA.
 
@@ -246,10 +244,9 @@ for (k in c(1:nrow(cv_pareto))) {
   vett <- c(vett,cv_pareto[k,c(2:(nvars+1))])
 }
 vett <- unlist(vett)
-vettmin <- vett * 0.65
-vettmax <- vett * 1.35
+vettmin <- vett * 0.9
+vettmax <- vett * 1.1
 Genome = length(vett)
-# Genome = nrow(strata)
 nvalues_sol = 16384    # 2^14 ==> 14 qubits
 eval_func_inputs = list(strata,
                         vett,
@@ -259,7 +256,7 @@ eval_func_inputs = list(strata,
                         nvalues_sol
                         )
 popsize = 10
-generation_max = 100
+generation_max = 50
 nvalues_sol = nvalues_sol
 thetainit = 3.1415926535 * 0.5
 thetaend = 3.1415926535 * 0.025
@@ -273,7 +270,7 @@ verbose = FALSE
 progress = FALSE
 eval_fitness = fitness_cvs
 eval_func_inputs = eval_func_inputs
-stop_limit = 0.95
+stop_limit = 0.85
 ```
 
 Some explanations regarding the parameters.
@@ -290,6 +287,8 @@ vettmax
 ```
 
 The values in vettmin are the minimum values that the CVs can assume, while the values in vettmax are the maximum ones.
+This means that, for instance, when trying to define the best value for CV1 in the first domain, the genetic algorithm will search in the range from 0.0029478 to 0.0068782. The same for the other CVs and the other domains.
+
 
 The parameter 'nvalues_sol' indicates the number of possible different values considered for each element in the genome: by setting it to 16384, it means that for each precision constraint, 16384 possible values will be considered, the ones obtained by dividing by 16384 the interval between the minimum and the maximum value set for each precision constraint. 
 
@@ -324,12 +323,9 @@ solutionQGA <- QGA(popsize,
                    stop_limit)
 ```
 
-
 ```{r}
 solutionQGA[[2]]$fitness_best[nrow(solutionQGA[[2]])]
 ```
-
-
 ```{r}
 ndoms = nrow(cv_pareto)
 par(mfrow=c(1,2))
@@ -350,25 +346,11 @@ QGA:::plot_Output(solutionQGA[[2]])
 ```
 
 
-We decode the QGA solution:
-
-```{r}
-solution <- solutionQGA[[1]]
-cv_ga <- cv_pareto
-n <- 0
-nvals <- nvalues_sol
-for (k in c(1:nrow(cv_pareto))) {
-  for (m in c(1:nvars)) {
-    n <- n+1
-    diff
-    cv_ga[k,m+1] <- seq(from=vettmin[n],
-                          to=vettmax[n],
-                          by=(vettmax[n]-vettmin[n])/nvals)[solution[n]]
-  }
-}
-```
-
 ```{r warning=FALSE}
+solution <- solutionQGA[[1]]
+cv_ga <- beat.1cv_2(strata,solution)$expectedCV
+colnames(cv_ga)[2:ncol(cv_ga)] <- c(paste0("CV",c(1:nvars)))
+
 knitr::kable(
   cv_ga,
   digits = 3,
@@ -388,7 +370,7 @@ sum(ga_solution$alloc$ALLOC[-nrow(ga_solution$alloc)])
 
 ## 3.4 Re-execution of the "pareto" function
 
-With these new precision constraints, the sample size is slightly greater than the affordable. 
+With these new precision constraints, the sample size is clearly well below under the affordable. 
 So, we apply again the "pareto" function:
 
 ```{r message=FALSE, warning=FALSE}
@@ -397,7 +379,7 @@ out2 <- pareto(
   current_cvs = cv_ga,
   target_size = 50000,
   tolerance = 5,
-  cv_caps = caps,
+  cv_caps = NULL,
   beat1cv_fun = beat.1cv_2,
   max_iter = 50,
   max_same_iter = 20,
@@ -442,7 +424,7 @@ What about the closeness of the final optimal allocation to the proportional one
 
 
 ```{r }
-df <- pareto_alloc$alloc
+df <- alloc_pareto$alloc
 df <- df[-nrow(df),]
 rng = c(0, max(df$ALLOC,df$PROP))   
 plot(ALLOC  ~  PROP, 
@@ -524,7 +506,6 @@ It is worth noting that the final correlation:
 ```{r}
 cor(final_sol$alloc$ALLOC[-nrow(final_sol$alloc)],final_sol$alloc$PROP[-nrow(final_sol$alloc)])
 ```
-
 is not the one that we indicated to and obtained by the genetic algorithm. This is due to the fact that when re-applying the "pareto" function, we lost some of the correlation. If we want a higher value of it we should get back to the genetic algorithm and set a higher value for the desired correlation.
 
 Finally, we want to compare the different sets of the precision constraints:
