@@ -18,6 +18,11 @@ knitr::opts_chunk$set(
 
 ## Major changes
 
+
+* Added the function 'pareto' that permits to scale up or down the required sample size varying the set of precision constraints in an optimal way (on the Pareto frontier)
+
+* Added the function 'beat.1cv_2' that produces a different output than the on produced by 'beat.1cv_2'
+
 * Increased the performance of the function 'prepareInputToAllocation_beat.1st'
 
 * Added the function 'build_dummy_variables', to derive dummy variables from the target variables: it is useful when it is necessary to differentiate the precision constraints in the different domains of interest
