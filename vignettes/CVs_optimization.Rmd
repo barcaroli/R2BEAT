@@ -377,7 +377,7 @@ for (k in c(1:nrow(cv_pareto))) {
 ```
 
 
-```{r message=FALSE, warning=FALSE}
+```{r echo=FALSE, message=FALSE, warning=FALSE}
 knitr::kable(
   cv_ga,
   digits = 3,
@@ -457,7 +457,7 @@ What about the closeness of the final optimal allocation to the proportional one
 df <- pareto_alloc$alloc
 df <- df[-nrow(df),]
 rng = c(0, max(df$ALLOC,df$PROP))   
-plot(ALLOC  ~  PROP, 
+p1 <- plot(ALLOC  ~  PROP, 
      data = df,
      main = "Optimal vs Proportional allocation - Before GA adjustment",
      ylab = "Optimal",
@@ -495,7 +495,7 @@ text(
 df <- final_sol$alloc
 df <- df[-nrow(df),]
 rng = c(0, max(df$ALLOC,df$PROP))   
-plot(ALLOC  ~  PROP, 
+p2 <- plot(ALLOC  ~  PROP, 
      data = df,
      main = "Optimal vs Proportional allocation - After GA adjustment",
      ylab = "Optimal",
