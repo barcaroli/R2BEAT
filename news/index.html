@@ -71,7 +71,10 @@
 <h2 class="page-header" data-toc-text="1.0.6" id="r2beat-106">R2BEAT 1.0.6<a class="anchor" aria-label="anchor" href="#r2beat-106"></a></h2>
 <div class="section level3">
 <h3 id="major-changes-1-0-6">Major changes<a class="anchor" aria-label="anchor" href="#major-changes-1-0-6"></a></h3>
-<ul><li><p>Added the function ‘build_dummy_variables’, to derive dummy variables from the target variables: it is useful when it is necessary to differentiate the precision constraints in the different domains of interest</p></li>
+<ul><li><p>Added the function ‘pareto’ that permits to scale up or down the required sample size varying the set of precision constraints in an optimal way (on the Pareto frontier)</p></li>
+<li><p>Added the function ‘beat.1cv_2’ that produces a different output than the on produced by ‘beat.1cv_2’</p></li>
+<li><p>Increased the performance of the function ‘prepareInputToAllocation_beat.1st’</p></li>
+<li><p>Added the function ‘build_dummy_variables’, to derive dummy variables from the target variables: it is useful when it is necessary to differentiate the precision constraints in the different domains of interest</p></li>
 <li><p>Added the function ‘prepareInputToAllocation_beat.1st’ that generates the ‘strata’ dataframe as input for the Bethel allocation (one stage)</p></li>
 <li><p>Added the function ‘CVs_hint’ that suggests new values for the precision constraints, depending on the variability of the target variables in the strata</p></li>
 <li><p>Added the function ‘adjust_CVs’ that, after determining the best allocation with given precision constraints (CVs) allows to reach a desired sample size by adjusting proportionally the values of the CVs</p></li>
