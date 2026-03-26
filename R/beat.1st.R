@@ -1,5 +1,5 @@
 beat.1st <- function (stratif, errors, minnumstrat = 2, maxiter = 200, maxiter1 = 25, 
-          epsilon = 10^(-11)) 
+                      epsilon = 10^(-11)) 
 {
   test_stages <- try(test_stages, TRUE)
   if (test_stages == 2) {
@@ -31,10 +31,8 @@ beat.1st <- function (stratif, errors, minnumstrat = 2, maxiter = 200, maxiter1 
   varloop <- c(1:nvar)
   strloop <- c(1:nstrat)
   domloop <- c(1:ndom)
-  med <- as.matrix(stratif[, names(stratif) %in% sapply(1:nvar, 
-                                                        function(i) paste("M", i, sep = ""))])
-  esse <- as.matrix(stratif[, names(stratif) %in% sapply(1:nvar, 
-                                                         function(i) paste("S", i, sep = ""))])
+  med <- as.matrix(stratif[, sapply(1:nvar, function(i) paste("M", i, sep = ""))])
+  esse <- as.matrix(stratif[, sapply(1:nvar, function(i) paste("S", i, sep = ""))])
   nom_dom <- sapply(1:ndom, function(i) paste("DOM", i, sep = ""))
   dom <- as.vector(stratif[, names(stratif) %in% nom_dom])
   N <- as.vector(stratif$N)
@@ -66,8 +64,7 @@ beat.1st <- function (stratif, errors, minnumstrat = 2, maxiter = 200, maxiter1 
     s <- cbind(s, disj[, i] * esse)
   }
   for (k in domloop) {
-    cvx <- as.matrix(errors[k, names(errors) %in% sapply(1:nvar, 
-                                                         function(i) paste("CV", i, sep = ""))])
+    cvx <- as.matrix(errors[k, sapply(1:nvar, function(i) paste("CV", i, sep = ""))])
     ndomvalues <- c(1:nvalues[k])
     for (k1 in ndomvalues) {
       cv <- cbind(cv, cvx)
@@ -133,44 +130,31 @@ beat.1st <- function (stratif, errors, minnumstrat = 2, maxiter = 200, maxiter1 
   num_strati <- length(N)
   sampleSize <- sum(n)
   popSize <- sum(N)
-  sampleSize_nocens <- sum(n[which(stratif$CENS==0)])
-  popSize_nocens <- sum(N[which(stratif$CENS==0)])
-  uguale <- ifelse(cens==0, sampleSize_nocens/sum(stratif$CENS==0), N)
-  proporzionale = ifelse(cens==0, sampleSize_nocens * N/popSize_nocens, N)
+  sampleSize_nocens <- sum(n[which(stratif$CENS == 0)])
+  popSize_nocens <- sum(N[which(stratif$CENS == 0)])
+  uguale <- ifelse(cens == 0, sampleSize_nocens/sum(stratif$CENS == 
+                                                      0), N)
+  proporzionale = ifelse(cens == 0, sampleSize_nocens * N/popSize_nocens, 
+                         N)
   Bethel_sample <- cbind(stratif, n)
   colnames(Bethel_sample)[length(colnames(Bethel_sample))] <- "n"
   nomi <- c("STRATUM", "ALLOC", "PROP", "EQUAL")
   df = NULL
-  df <- cbind(df, as.character(stratif$STRATUM), n, proporzionale, uguale)
+  df <- cbind(df, as.character(stratif$STRATUM), n, proporzionale, 
+              uguale)
   tot <- apply(matrix(as.numeric(df[, 2:4]), ncol = 3), 2, 
                sum)
   df <- rbind(df, c("Total", tot))
   colnames(df) <- nomi
   calcola_cv <- function() {
-    
     NTOT <- c(rep(0, nvar))
     CVfin <- c(rep(0, nvar))
-    #
-    # -------------------------------------------------------------
-    # Populations in strata for different domains of interest
-    # NTOTj
-    # -------------------------------------------------------------
     NTOT <- colSums((m > 0) * N)
-    #
-    # ------------------------------------------------------------
-    # Computation of the CVs
-    # ------------------------------------------------------------
     varfin <- rowSums(t((s * N)^2 * (1 - round(n)/N)/round(n))/NTOT^2)
     totm <- rowSums(t(m * N))
-    
     CVfin <- round(sqrt(varfin/(totm/NTOT)^2), digits = 4)
     return(CVfin)
   }
-  
-  # -----------------------------------------------------------
-  
-  
-  #create the dataframe to be returned as output
   CVfin <- calcola_cv()
   g <- 0
   for (i in strloop) {
