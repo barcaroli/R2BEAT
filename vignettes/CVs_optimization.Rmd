@@ -275,8 +275,8 @@ The values in vettmin are the minimum values that the CVs can assume, while the 
 
 NOTE: the higher the difference between the current correlation and the desired one, the wider the acceptable intervals of variation of the CVs: in this case we assumed plus and minus 50% for each CV.
 
-```{r include=FALSE}
-set.seed(1234)
+```{r message=FALSE, warning=FALSE}
+set.seed(1234) 
 solution_genalg <- rbga(stringMin=vettmin, 
                         stringMax=vettmax,
                         evalFunc=fitness_cvs,
