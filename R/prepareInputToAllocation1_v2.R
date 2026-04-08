@@ -34,7 +34,7 @@ prepareInputToAllocation1 <- function(samp_frame, id_PSU, id_SSU,
                                           strata_var, target_vars,
                                           deff_var, domain_var,
                                           minimum, delta, deff_sugg)
-{
+{ 
   # buildFrameDF and buildStrataDF are internal (non-exported) R2BEAT functions.
   # When prepareInputToAllocation1_v2 is sourced as a standalone file (outside
   # the R2BEAT package namespace), they must be fetched explicitly.
