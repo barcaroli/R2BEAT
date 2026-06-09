@@ -42,7 +42,7 @@ allows to run three different workflows:
 2. optimization of two-stage sample design and selection starting from the frame;
 3. optimization of two-stage sample design and selection starting from a previous round of the survey.
 
-Before launching, remember to install the github version:
+Before launching, remember to install the github version (1.0.6):
 
 pak::pak("barcaroli/R2BEAT")
 
