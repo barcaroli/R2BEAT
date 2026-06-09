@@ -45,6 +45,8 @@ A complete example is illustrated in the vignette “Two-stage sampling
 design workflow”
 (<https://barcaroli.github.io/R2BEAT/articles/R2BEAT_workflow.html>).
 
+# \*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*
+
 This shiny app:
 
 <https://giulio-barcaroli.shinyapps.io/r2beat/>
@@ -56,6 +58,12 @@ allows to run three different workflows:
     the frame;
 3.  optimization of two-stage sample design and selection starting from
     a previous round of the survey.
+
+Before launching, remember to install the github version:
+
+pak::pak(“barcaroli/R2BEAT”)
+
+# \*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*
 
 ## Installation
 
