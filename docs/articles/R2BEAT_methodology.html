@@ -144,7 +144,7 @@ individuals depending on the aim of the survey <em>N</em>);</li>
 <li>cost of interviews per stratum (<em>COST</em>);</li>
 <li>number of PSUs to be selected in each stratum (<em>MINCS</em>);</li>
 <li>average dimension of SSUs in each stratum (<em>DELTA</em>,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Δ</mi><annotation encoding="application/x-tex">\Delta</annotation></semantics></math>);</li>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="normal">Δ</mi><annotation encoding="application/x-tex">\Delta</annotation></semantics></math>);</li>
 <li>minimum number of SSUs to be interviewed in each selected PSU
 (<em>MINIMUM</em>);</li>
 <li>mean of each target variables in each strata (<em>M</em>,
@@ -169,7 +169,7 @@ and quantitative variable is needed. In the case of binary variables,
 the estimated population standard deviation of variable
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>
 is equal to</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>S</mi><mo accent="true">̂</mo></mover><mo>=</mo><msqrt><mrow><msub><mover><mi>p</mi><mo accent="true">̂</mo></mover><mi>i</mi></msub><mo>×</mo><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><msub><mover><mi>p</mi><mo accent="true">̂</mo></mover><mi>i</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow></msqrt></mrow><annotation encoding="application/x-tex"> 
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>S</mi><mo accent="true">̂</mo></mover><mo>=</mo><msqrt><mrow><msub><mover><mi>p</mi><mo accent="true">̂</mo></mover><mi>i</mi></msub><mo>×</mo><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><msub><mover><mi>p</mi><mo accent="true">̂</mo></mover><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo></mrow></msqrt></mrow><annotation encoding="application/x-tex"> 
 \hat{S} = \sqrt{\hat{p}_i \times (1 - \hat{p}_i)} 
 </annotation></semantics></math></p>
 <p>where
@@ -223,7 +223,7 @@ The design effect measures how much the sampling variance under the
 adopted sampling design is inflated with respect to simple random sample
 (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mi>r</mi><mi>s</mi></mrow><annotation encoding="application/x-tex">srs</annotation></semantics></math>),
 with the same sample size. In formula:
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtable><mtr><mtd columnalign="right" style="text-align: right"><mi>d</mi><mi>e</mi><mi>f</mi><mi>f</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mover><mover><mi>Y</mi><mo accent="true">‾</mo></mover><mo accent="true">̂</mo></mover><mi>i</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow></mtd><mtd columnalign="center" style="text-align: center"><mo>=</mo></mtd><mtd columnalign="left" style="text-align: left"><mfrac><mrow><mtext mathvariant="normal">var</mtext><msub><mrow><mo stretchy="true" form="prefix">(</mo><msub><mover><mover><mi>Y</mi><mo accent="true">‾</mo></mover><mo accent="true">̂</mo></mover><mi>i</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mi>d</mi><mi>e</mi><mi>s</mi></mrow></msub></mrow><mrow><mtext mathvariant="normal">var</mtext><msub><mrow><mo stretchy="true" form="prefix">(</mo><msub><mover><mover><mi>Y</mi><mo accent="true">‾</mo></mover><mo accent="true">̂</mo></mover><mi>i</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mi>s</mi><mi>r</mi><mi>s</mi></mrow></msub></mrow></mfrac></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"></mtd><mtd columnalign="center" style="text-align: center"><mo>=</mo></mtd><mtd columnalign="left" style="text-align: left"><mn>1</mn><mo>+</mo><msub><mover><mi>ρ</mi><mo accent="true">̂</mo></mover><mi>i</mi></msub><mspace width="0.222em"></mspace><mrow><mo stretchy="true" form="prefix">(</mo><mi>b</mi><mo>−</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="false" form="postfix">)</mo></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{eqnarray}
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtable><mtr><mtd columnalign="right" style="text-align: right"><mi>d</mi><mi>e</mi><mi>f</mi><mi>f</mi><mo stretchy="false" form="prefix">(</mo><msub><mover><mover><mi>Y</mi><mo accent="true">‾</mo></mover><mo accent="true">̂</mo></mover><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo></mtd><mtd columnalign="center" style="text-align: center"><mo>=</mo></mtd><mtd columnalign="left" style="text-align: left"><mfrac><mrow><mtext mathvariant="normal">var</mtext><mo stretchy="false" form="prefix">(</mo><msub><mover><mover><mi>Y</mi><mo accent="true">‾</mo></mover><mo accent="true">̂</mo></mover><mi>i</mi></msub><msub><mo stretchy="false" form="postfix">)</mo><mrow><mi>d</mi><mi>e</mi><mi>s</mi></mrow></msub></mrow><mrow><mtext mathvariant="normal">var</mtext><mo stretchy="false" form="prefix">(</mo><msub><mover><mover><mi>Y</mi><mo accent="true">‾</mo></mover><mo accent="true">̂</mo></mover><mi>i</mi></msub><msub><mo stretchy="false" form="postfix">)</mo><mrow><mi>s</mi><mi>r</mi><mi>s</mi></mrow></msub></mrow></mfrac></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"></mtd><mtd columnalign="center" style="text-align: center"><mo>=</mo></mtd><mtd columnalign="left" style="text-align: left"><mn>1</mn><mo>+</mo><msub><mover><mi>ρ</mi><mo accent="true">̂</mo></mover><mi>i</mi></msub><mspace width="0.222em"></mspace><mo stretchy="false" form="prefix">(</mo><mi>b</mi><mo>−</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="postfix">)</mo></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{eqnarray}
     \label{deff}
     deff (\hat{\bar{Y}}_{i}) &amp; = &amp; \frac{\text{var}(\hat{\bar{Y}}_{i})_{des}}{\text{var}(\hat{\bar{Y}}_{i})_{srs}}  \\
     \label{deff1}
@@ -244,7 +244,7 @@ are included for sure in the sample, or to Not-Self-Representing (NSR)
 strata, where they are selected by chance. In practice, this assignment
 is usually performed by comparing their measure of size (<em>MOS</em>)
 with respect to the threshold:
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>λ</mi><mo>=</mo><mfrac><mrow><mover><mi>m</mi><mo accent="true">‾</mo></mover><mspace width="0.222em"></mspace><mi>Δ</mi></mrow><mi>f</mi></mfrac></mrow><annotation encoding="application/x-tex">\begin{equation}
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>λ</mi><mo>=</mo><mfrac><mrow><mover><mi>m</mi><mo accent="true">‾</mo></mover><mspace width="0.222em"></mspace><mi mathvariant="normal">Δ</mi></mrow><mi>f</mi></mfrac></mrow><annotation encoding="application/x-tex">\begin{equation}
     \label{threshold}
     \lambda = \frac{\bar{m} \ \Delta}{f}
 \end{equation}</annotation></semantics></math> where
@@ -253,7 +253,7 @@ is the minimum number of SSUs to be interviewed in each selected PSU
 (<em>MINIMUM</em>),
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo>=</mo><mi>n</mi><mi>/</mi><mi>N</mi></mrow><annotation encoding="application/x-tex">f=n/N</annotation></semantics></math>
 is the sampling fraction and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Δ</mi><annotation encoding="application/x-tex">\Delta</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="normal">Δ</mi><annotation encoding="application/x-tex">\Delta</annotation></semantics></math>
 (<em>DELTA</em>) is the average dimension of the SSU in terms of
 elementary survey units. Then <em>DELTA</em> must be set equal to 1 if,
 for the survey, the selection units are the same as the elementary units
@@ -266,7 +266,7 @@ while the remaining PSUs are NSR.</p>
 <p>Then the extended expression of
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi><mi>e</mi><mi>f</mi><mi>f</mi></mrow><annotation encoding="application/x-tex">deff</annotation></semantics></math>
 is
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi><mi>e</mi><mi>f</mi><mi>f</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mover><mover><mi>Y</mi><mo accent="true">‾</mo></mover><mo accent="true">̂</mo></mover><mi>i</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mfrac><msubsup><mi>N</mi><mrow><mi>S</mi><mi>R</mi></mrow><mn>2</mn></msubsup><msub><mi>n</mi><mrow><mi>S</mi><mi>R</mi></mrow></msub></mfrac><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>+</mo><mrow><mo stretchy="true" form="prefix">(</mo><msub><mover><mi>ρ</mi><mo accent="true">̂</mo></mover><mrow><mi>i</mi><mo>,</mo><mi>S</mi><mi>R</mi></mrow></msub><mspace width="0.222em"></mspace><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>b</mi><mrow><mi>S</mi><mi>R</mi></mrow></msub><mo>−</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow><mo>+</mo><mfrac><msubsup><mi>N</mi><mrow><mi>N</mi><mi>S</mi><mi>R</mi></mrow><mn>2</mn></msubsup><msub><mi>n</mi><mrow><mi>N</mi><mi>S</mi><mi>R</mi></mrow></msub></mfrac><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>+</mo><mrow><mo stretchy="true" form="prefix">(</mo><msub><mover><mi>ρ</mi><mo accent="true">̂</mo></mover><mrow><mi>i</mi><mo>,</mo><mi>N</mi><mi>S</mi><mi>R</mi></mrow></msub><mspace width="0.222em"></mspace><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>b</mi><mrow><mi>N</mi><mi>S</mi><mi>R</mi></mrow></msub><mo>−</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\begin{equation} 
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi><mi>e</mi><mi>f</mi><mi>f</mi><mo stretchy="false" form="prefix">(</mo><msub><mover><mover><mi>Y</mi><mo accent="true">‾</mo></mover><mo accent="true">̂</mo></mover><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mfrac><msubsup><mi>N</mi><mrow><mi>S</mi><mi>R</mi></mrow><mn>2</mn></msubsup><msub><mi>n</mi><mrow><mi>S</mi><mi>R</mi></mrow></msub></mfrac><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>+</mo><mo stretchy="false" form="prefix">(</mo><msub><mover><mi>ρ</mi><mo accent="true">̂</mo></mover><mrow><mi>i</mi><mo>,</mo><mi>S</mi><mi>R</mi></mrow></msub><mspace width="0.222em"></mspace><mo stretchy="false" form="prefix">(</mo><msub><mi>b</mi><mrow><mi>S</mi><mi>R</mi></mrow></msub><mo>−</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="postfix">)</mo><mo>+</mo><mfrac><msubsup><mi>N</mi><mrow><mi>N</mi><mi>S</mi><mi>R</mi></mrow><mn>2</mn></msubsup><msub><mi>n</mi><mrow><mi>N</mi><mi>S</mi><mi>R</mi></mrow></msub></mfrac><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>+</mo><mo stretchy="false" form="prefix">(</mo><msub><mover><mi>ρ</mi><mo accent="true">̂</mo></mover><mrow><mi>i</mi><mo>,</mo><mi>N</mi><mi>S</mi><mi>R</mi></mrow></msub><mspace width="0.222em"></mspace><mo stretchy="false" form="prefix">(</mo><msub><mi>b</mi><mrow><mi>N</mi><mi>S</mi><mi>R</mi></mrow></msub><mo>−</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\begin{equation} 
     deff (\hat{\bar{Y}}_{i}) 
     =  \frac{N_{SR}^2}{n_{SR}} (1 + (\hat{\rho}_{i,SR} \  (b_{SR} - 1)) +
     \frac{N_{NSR}^2}{n_{NSR}} (1 + (\hat{\rho}_{i,NSR} \ (b_{NSR} - 1))
@@ -319,19 +319,18 @@ size can be expected when applying the calibration estimator in place of
 the HT.</p>
 <p>The optimal allocation is defined by <em>R2BEAT</em> solving the
 minimum optimization problem</p>
-<p><span class="math display">$$
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mo stretchy="true" form="prefix">{</mo><mtable><mtr><mtd columnalign="left" style="text-align: left"><mi>C</mi><mo>=</mo><mtext mathvariant="normal">min</mtext></mtd></mtr><mtr><mtd columnalign="left" style="text-align: left"><mi>σ</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mover><mover><mi>Y</mi><mo accent="true">‾</mo></mover><mo accent="true">̂</mo></mover><mrow><mi>i</mi><mo>,</mo><mi>h</mi></mrow></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>≤</mo><mi>δ</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mover><mover><mi>Y</mi><mo accent="true">‾</mo></mover><mo accent="true">̂</mo></mover><mrow><mi>i</mi><mo>,</mo><mi>h</mi></mrow></msub><mo stretchy="true" form="postfix">)</mo></mrow><mspace width="1.19em"></mspace><mtable><mtr><mtd columnalign="center" style="text-align: center"><mi>i</mi><mo>=</mo><mn>1</mn><mo>,</mo><mi>…</mi><mo>,</mo><mi>J</mi></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mi>h</mi><mo>=</mo><mn>1</mn><mo>,</mo><mi>…</mi><mo>,</mo><mi>L</mi></mtd></mtr></mtable></mtd></mtr></mtable></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">
 \left\lbrace
-\begin{array}{l}
+\begin{array}{l} 
     C = \text{min} \\
-    \sigma\left(\hat{\bar{Y}}_{i,h}\right) \leq \delta
-\left(\hat{\bar{Y}}_{i,h} \right)
+    \sigma\left(\hat{\bar{Y}}_{i,h}\right) \leq \delta \left(\hat{\bar{Y}}_{i,h} \right)
     \hspace{0.5cm} \begin{array}{c}
         i = 1, \dots, J \\
-        h = 1, \dots, L
+        h = 1, \dots, L 
     \end{array}
 \end{array}
 \right.,
-$$</span></p>
+</annotation></semantics></math></p>
 <p>where
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>C</mi><annotation encoding="application/x-tex">C</annotation></semantics></math>
 is the global cost of the survey (if <em>COST</em> is equal to 1 in all
@@ -404,7 +403,7 @@ Stage Units (SSUs).</p>
 <div class="section level2">
 <h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
-<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div id="refs" class="references csl-bib-body hanging-indent">
 <div id="ref-bethel1989" class="csl-entry">
 Bethel, J. 1989. <span>“Sample Allocation in Multivariate
 Surveys.”</span> <em>Survey Methodology</em> 15 (1): 47–57.
@@ -439,7 +438,7 @@ Observations.”</span> <em>Metron</em> 2: 646–83.
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
       </footer>
