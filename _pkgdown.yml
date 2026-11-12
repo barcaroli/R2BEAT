@@ -1,2 +1,14 @@
 url: https://barcaroli.github.io/R2BEAT/
-
+destination: docs
+title: R2BEAT
+template:
+  includes:
+    in_header: |
+      <!-- Google tag (gtag.js) -->
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-MZ196ZQ4KB"></script>
+      <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-MZ196ZQ4KB');
+      </script>

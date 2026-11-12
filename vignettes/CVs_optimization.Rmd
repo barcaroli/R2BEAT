@@ -215,7 +215,7 @@ cor(pareto_alloc$alloc$ALLOC[-nrow(pareto_alloc$alloc)],pareto_alloc$alloc$PROP[
 
 We want to get the optimal allocation closer to the proportional one. For instance, we want that the correlation coefficient be increased to 0.95.
 
-To obtain this result, we make use of a particular genetic algorithm, the quantum genetic algorithm, implemented in the R package 'genalg'.
+To obtain this result, we make use of the genetic algorithm implemented in the R package 'genalg'.
 
 First, we define the following fitness function:
  
@@ -413,8 +413,8 @@ What about the closeness of the final optimal allocation to the proportional one
 ```{r message=FALSE, warning=FALSE}
 df <- pareto_alloc$alloc
 df <- df[-nrow(df),]
-rng = c(0, max(df$ALLOC,df$PROP))   
-p1 <- plot(ALLOC  ~  PROP, 
+rng = c(0, max(df$ALLOC,df$PROP))
+p1 <- plot(ALLOC  ~  PROP,
      data = df,
      main = "Optimal vs Proportional allocation - Before GA adjustment",
      ylab = "Optimal",
@@ -422,7 +422,7 @@ p1 <- plot(ALLOC  ~  PROP,
      xlim = rng,
      ylim = rng,
      pch = 21,
-     bg  = "steelblue", 
+     bg  = "steelblue",
      col = "black",
      cex = 1.2)
 abline(a = 0, b = 1, col = "red", lwd = 2, lty = 2)
@@ -436,13 +436,13 @@ text(
 )
 fit <- lm(ALLOC~PROP, data = df)
 coefs <- coef(fit)
-r2 <- summary(fit)$r.squared
+r_corr <- cor(df$ALLOC, df$PROP)
 abline(fit, col = "darkgreen", lwd = 2)
 text(
   x = rng[2] * 0.75,
   y = rng[2] * 0.5,
-  labels = sprintf("y = %.2f + %.2f x\nR² = %.2f",
-                   coefs[1], coefs[2], r2),
+  labels = sprintf("y = %.2f + %.2f x\nr = %.2f",
+                   coefs[1], coefs[2], r_corr),
   col = "darkgreen",
   pos = 4,
   cex = 0.9
@@ -451,8 +451,8 @@ text(
 
 df <- final_sol$alloc
 df <- df[-nrow(df),]
-rng = c(0, max(df$ALLOC,df$PROP))   
-p2 <- plot(ALLOC  ~  PROP, 
+rng = c(0, max(df$ALLOC,df$PROP))
+p2 <- plot(ALLOC  ~  PROP,
      data = df,
      main = "Optimal vs Proportional allocation - After GA adjustment",
      ylab = "Optimal",
@@ -460,7 +460,7 @@ p2 <- plot(ALLOC  ~  PROP,
      xlim = rng,
      ylim = rng,
      pch = 21,
-     bg  = "steelblue", 
+     bg  = "steelblue",
      col = "black",
      cex = 1.2)
 abline(a = 0, b = 1, col = "red", lwd = 2, lty = 2)
@@ -474,13 +474,13 @@ text(
 )
 fit <- lm(ALLOC~PROP, data = df)
 coefs <- coef(fit)
-r2 <- summary(fit)$r.squared
+r_corr <- cor(df$ALLOC, df$PROP)
 abline(fit, col = "darkgreen", lwd = 2)
 text(
   x = rng[2] * 0.75,
   y = rng[2] * 0.5,
-  labels = sprintf("y = %.2f + %.2f x\nR² = %.2f",
-                   coefs[1], coefs[2], r2),
+  labels = sprintf("y = %.2f + %.2f x\nr = %.2f",
+                   coefs[1], coefs[2], r_corr),
   col = "darkgreen",
   pos = 4,
   cex = 0.9
