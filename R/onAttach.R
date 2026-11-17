@@ -10,6 +10,8 @@
   packageStartupMessage("\n", appendLF = FALSE)
   packageStartupMessage("Get a complete documentation on https://barcaroli.github.io/R2BEAT/", appendLF = FALSE)
   packageStartupMessage("\n", appendLF = FALSE)
+  packageStartupMessage("An interactive Shiny app is available: launch it with R2BEAT::runR2BEATapp()", appendLF = FALSE)
+  packageStartupMessage("\n", appendLF = FALSE)
 }
 
 
