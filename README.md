@@ -59,9 +59,14 @@ allows to run three different workflows:
 3.  optimization of two-stage sample design and selection starting from
     a previous round of the survey.
 
-Before launching, remember to install the github version (1.0.6):
+The same app is bundled in the package (version 1.0.6 or later) and can
+be run locally with the command below (the packages it needs are
+installed automatically if missing):
 
-pak::pak(“barcaroli/R2BEAT”)
+``` r
+pak::pak("barcaroli/R2BEAT")   # github version (1.0.6)
+R2BEAT::runR2BEATapp()
+```
 
 # \*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*
 

@@ -5,6 +5,16 @@
 
 ## Major changes
 
+- Added the Shiny application, now bundled in the package (folder
+  ‘inst/shiny/R2BEAT_app’) and launched with the new function
+  ‘runR2BEATapp()’. It gives access to three workflows: optimization of
+  precision constraints (one stage, with ‘pareto’ and a genetic
+  algorithm), two-stage design and selection starting from the sampling
+  frame, and two-stage design and selection starting from a previous
+  survey (ReGenesees objects). Packages ‘shiny’, ‘shinyjs’,
+  ‘shinydashboard’, ‘DT’, ‘ggplot2’ and ‘genalg’ (in Suggests) are
+  required: if missing, ‘runR2BEATapp()’ installs them from CRAN
+
 - Added the function ‘pareto’ that permits to scale up or down the
   required sample size varying the set of precision constraints in an
   optimal way (on the Pareto frontier)
